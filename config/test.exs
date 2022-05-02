@@ -15,7 +15,7 @@ config :anacount, Anacount.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :anacount_web, AnacountWeb.Endpoint,
+config :anacount_api, AnacountAPI.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "GHLDzAtB0iRfyK+gf+IQv69IFSZXgXQoYGyektl5fk90x/dxOW2WZ2OhH3XYvpK3",
   server: false

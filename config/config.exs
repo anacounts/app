@@ -25,14 +25,14 @@ config :anacount, Anacount.Mailer, adapter: Swoosh.Adapters.Local
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :anacount_web,
+config :anacount_api,
   ecto_repos: [Anacount.Repo],
   generators: [context_app: :anacount]
 
 # Configures the endpoint
-config :anacount_web, AnacountWeb.Endpoint,
+config :anacount_api, AnacountAPI.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: AnacountWeb.ErrorView, accepts: ~w(json), layout: false],
+  render_errors: [view: AnacountAPI.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Anacount.PubSub,
   live_view: [signing_salt: "F5OA2rrK"]
 
