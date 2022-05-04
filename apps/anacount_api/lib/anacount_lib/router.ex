@@ -3,6 +3,7 @@ defmodule AnacountAPI.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Anacount.Context
   end
 
   scope "/api/v1" do
