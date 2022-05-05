@@ -1,4 +1,4 @@
-defmodule Anacount.Accounts.UserToken do
+defmodule Anacount.Auth.UserToken do
   @moduledoc """
   Authentication tokens for users.
   Provides function to build tokens, fetch the related user, validitate them.
@@ -7,7 +7,7 @@ defmodule Anacount.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
 
-  alias Anacount.Accounts.User
+  alias Anacount.Auth.User
 
   @hash_algorithm :sha256
   @rand_size 32

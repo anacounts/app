@@ -10,7 +10,7 @@ defmodule Anacount.Context do
 
   import Plug.Conn
 
-  alias Anacount.Accounts
+  alias Anacount.Auth
 
   def init(opts), do: opts
 
@@ -32,7 +32,7 @@ defmodule Anacount.Context do
   end
 
   defp authorize(token) do
-    if user = Accounts.get_user_by_session_token(token) do
+    if user = Auth.get_user_by_session_token(token) do
       {:ok, user}
     else
       {:error, "invalid authorization token"}

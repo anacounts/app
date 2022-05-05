@@ -1,10 +1,10 @@
-defmodule AnacountAPI.Resolvers.Accounts do
+defmodule AnacountAPI.Resolvers.Auth do
   @moduledoc """
   Resolve queries and mutations from
-  the `AnacountAPI.Schema.AccountTypes` module.
+  the `AnacountAPI.Schema.AuthTypes` module.
   """
 
-  alias Anacount.Accounts
+  alias Anacount.Auth
 
   def find_profile(_parent, _args, %{context: %{current_user: user}}) do
     {:ok, user}
@@ -15,8 +15,8 @@ defmodule AnacountAPI.Resolvers.Accounts do
   end
 
   def do_log_in(_parent, %{email: email, password: password}, _resolution) do
-    if user = Accounts.get_user_by_email_and_password(email, password) do
-      token = Accounts.generate_user_session_token(user)
+    if user = Auth.get_user_by_email_and_password(email, password) do
+      token = Auth.generate_user_session_token(user)
 
       {:ok, token}
     else
@@ -25,10 +25,10 @@ defmodule AnacountAPI.Resolvers.Accounts do
   end
 
   def do_register(_parent, args, _resolution) do
-    case Accounts.register_user(args) do
+    case Auth.register_user(args) do
       {:ok, user} ->
         {:ok, _} =
-          Accounts.deliver_user_confirmation_instructions(
+          Auth.deliver_user_confirmation_instructions(
             user,
             &"/accounts/register/confirm?confirmation_token=#{&1}"
           )

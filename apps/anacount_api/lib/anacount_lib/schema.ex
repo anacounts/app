@@ -6,14 +6,14 @@ defmodule AnacountAPI.Schema do
   use Absinthe.Schema
 
   import_types(Absinthe.Type.Custom)
-  import_types(AnacountAPI.Schema.AccountTypes)
+  import_types(AnacountAPI.Schema.AuthTypes)
 
   query do
-    import_fields(:account_queries)
+    import_fields(:auth_queries)
   end
 
   mutation do
-    import_fields(:account_mutations)
+    import_fields(:auth_mutations)
   end
 
   # if it's a field for the mutation object, add this middleware to the end

@@ -1,4 +1,4 @@
-defmodule Anacount.Accounts do
+defmodule Anacount.Auth do
   @moduledoc """
   Manage user accounts. Provides registering, authentication,
   token creation whether for session, email and password change and reset.
@@ -7,9 +7,9 @@ defmodule Anacount.Accounts do
 
   alias Anacount.Repo
 
-  alias Anacount.Accounts.User
-  alias Anacount.Accounts.UserNotifier
-  alias Anacount.Accounts.UserToken
+  alias Anacount.Auth.User
+  alias Anacount.Auth.UserNotifier
+  alias Anacount.Auth.UserToken
 
   ## Database getters
 

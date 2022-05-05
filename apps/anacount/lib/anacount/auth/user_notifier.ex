@@ -1,4 +1,4 @@
-defmodule Anacount.Accounts.UserNotifier do
+defmodule Anacount.Auth.UserNotifier do
   @moduledoc """
   Send emails for accounts related operations.
 

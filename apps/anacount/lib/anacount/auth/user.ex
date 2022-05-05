@@ -1,4 +1,4 @@
-defmodule Anacount.Accounts.User do
+defmodule Anacount.Auth.User do
   @moduledoc """
   Users of the application.
   """
