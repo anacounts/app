@@ -10,8 +10,8 @@
 import Config
 
 # Configure Mix tasks and generators
-config :anacount,
-  ecto_repos: [Anacount.Repo]
+config :anacounts,
+  ecto_repos: [Anacounts.Repo]
 
 # Configures the mailer
 #
@@ -20,20 +20,20 @@ config :anacount,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :anacount, Anacount.Mailer, adapter: Swoosh.Adapters.Local
+config :anacounts, Anacounts.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :anacount_api,
-  ecto_repos: [Anacount.Repo],
-  generators: [context_app: :anacount]
+config :anacounts_api,
+  ecto_repos: [Anacounts.Repo],
+  generators: [context_app: :anacounts]
 
 # Configures the endpoint
-config :anacount_api, AnacountAPI.Endpoint,
+config :anacounts_api, AnacountsAPI.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: AnacountAPI.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: Anacount.PubSub,
+  render_errors: [view: AnacountsAPI.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: Anacounts.PubSub,
   live_view: [signing_salt: "F5OA2rrK"]
 
 # Configures Elixir's Logger

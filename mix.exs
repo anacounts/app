@@ -1,4 +1,4 @@
-defmodule Anacount.Umbrella.MixProject do
+defmodule Anacounts.Umbrella.MixProject do
   use Mix.Project
 
   def project do
