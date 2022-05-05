@@ -1,4 +1,8 @@
 defmodule AnacountAPI.Schema do
+  @moduledoc """
+  Schema of the GraphQL API. Entrypoint of Absinthe types.
+  """
+
   use Absinthe.Schema
 
   import_types(Absinthe.Type.Custom)

@@ -1,4 +1,9 @@
 defmodule AnacountAPI.Resolvers.Accounts do
+  @moduledoc """
+  Resolve queries and mutations from
+  the `AnacountAPI.Schema.AccountTypes` module.
+  """
+
   alias Anacount.Accounts
 
   def find_profile(_parent, _args, %{context: %{current_user: user}}) do

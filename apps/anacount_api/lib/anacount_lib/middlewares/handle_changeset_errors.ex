@@ -1,6 +1,13 @@
 defmodule AnacountAPI.Middlewares.HandleChangesetErrors do
+  @moduledoc """
+  A middleware that enables mutations to return `{:error, %Ecto.Changeset{}}`.
+  Treats, translates and format errors before sending them back.
+
+  Enabled by overriding the `middleware` callback in the main schema.
+  """
+
   @behaviour Absinthe.Middleware
-  def call(resolution, _) do
+  def call(resolution, _opts) do
     %{resolution | errors: Enum.flat_map(resolution.errors, &handle_error/1)}
   end
 

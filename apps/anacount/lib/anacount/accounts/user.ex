@@ -1,4 +1,8 @@
 defmodule Anacount.Accounts.User do
+  @moduledoc """
+  Users of the application.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -113,7 +117,7 @@ defmodule Anacount.Accounts.User do
     Bcrypt.verify_pass(password, hashed_password)
   end
 
-  def valid_password?(_, _) do
+  def valid_password?(_user_or_nil, _password) do
     Bcrypt.no_user_verify()
     false
   end

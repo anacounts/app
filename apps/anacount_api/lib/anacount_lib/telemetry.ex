@@ -1,4 +1,8 @@
 defmodule AnacountAPI.Telemetry do
+  @moduledoc """
+  Reports metrics information to the dashboard and console.
+  """
+
   use Supervisor
   import Telemetry.Metrics
 
@@ -6,7 +10,7 @@ defmodule AnacountAPI.Telemetry do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
 
-  @impl true
+  @impl Supervisor
   def init(_arg) do
     children = [
       # Telemetry poller will execute the given period measurements

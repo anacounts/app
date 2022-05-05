@@ -1,4 +1,10 @@
 defmodule Anacount.Accounts do
+  @moduledoc """
+  Manage user accounts. Provides registering, authentication,
+  token creation whether for session, email and password change and reset.
+  Find user accounts using their email or id.
+  """
+
   alias Anacount.Repo
 
   alias Anacount.Accounts.User
@@ -170,7 +176,7 @@ defmodule Anacount.Accounts do
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
+      {:error, :user, changeset, _changes} -> {:error, changeset}
     end
   end
 
@@ -197,7 +203,9 @@ defmodule Anacount.Accounts do
   Deletes the signed token with the given context.
   """
   def delete_session_token(token) do
-    Repo.delete_all(UserToken.token_and_context_query(token, "session"))
+    UserToken.token_and_context_query(token, "session")
+    |> Repo.delete_all()
+
     :ok
   end
 
@@ -290,7 +298,7 @@ defmodule Anacount.Accounts do
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
+      {:error, :user, changeset, _changes} -> {:error, changeset}
     end
   end
 end

@@ -1,4 +1,11 @@
 defmodule Anacount.Context do
+  @moduledoc """
+  Provides account context to the Absinthe resolvers.
+  Sets a `context.current_user` option in the resolution object
+  if a user can be retrieved from the "authorization" token.
+  If not, an empty context is set instead.
+  """
+
   @behaviour Plug
 
   import Plug.Conn

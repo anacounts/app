@@ -1,4 +1,8 @@
 defmodule AnacountAPI.Schema.AccountTypes do
+  @moduledoc """
+  Objects related to the `Anacount.Accounts` module.
+  """
+
   use Absinthe.Schema.Notation
 
   alias AnacountAPI.Resolvers

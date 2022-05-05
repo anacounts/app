@@ -1,4 +1,11 @@
 defmodule Anacount.Accounts.UserNotifier do
+  @moduledoc """
+  Send emails for accounts related operations.
+
+  Can send confirmation instructions, password reset instructions,
+  email update instructions.
+  """
+
   import Swoosh.Email
 
   alias Anacount.Mailer
