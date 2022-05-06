@@ -7,19 +7,34 @@ defmodule AnacountsAPI.Schema.AuthTypes do
 
   alias AnacountsAPI.Resolvers
 
-  @desc "A user of the app"
-  object :user do
+  ## Entities
+
+  @desc "A user of the app. May be extended to provide more information based on the context"
+  interface :base_user do
+    field(:id, :id)
+    field(:email, :string)
+  end
+
+  @desc "The profile of authenticated user"
+  object :profile do
+    interface(:base_user)
+    is_type_of(&match?(%{confirmed_at: _}, &1))
+
     field(:id, :id)
     field(:email, :string)
     field(:confirmed_at, :naive_datetime)
   end
 
+  ## Queries
+
   object :auth_queries do
     @desc "Get the current user information"
-    field :profile, :user do
+    field :profile, :profile do
       resolve(&Resolvers.Auth.find_profile/3)
     end
   end
+
+  ## Mutations
 
   object :auth_mutations do
     @desc "Validates the authentication information of a user, and sends back an auth token"

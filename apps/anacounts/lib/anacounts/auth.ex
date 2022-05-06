@@ -1,8 +1,8 @@
 defmodule Anacounts.Auth do
   @moduledoc """
-  Manage user accounts. Provides registering, authentication,
-  token creation whether for session, email and password change and reset.
-  Find user accounts using their email or id.
+  Manage user accounts.
+  Provides with registering, authentication, token creation whether for
+  session, email and password change and reset.
   """
 
   alias Anacounts.Repo

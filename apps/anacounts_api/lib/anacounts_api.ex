@@ -24,6 +24,12 @@ defmodule AnacountsAPI do
     end
   end
 
+  def resolver do
+    quote do
+      import AnacountsAPI.Resolver
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """

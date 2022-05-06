@@ -6,11 +6,27 @@ defmodule Anacounts.Auth.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Anacounts.Accounts
+
+  @type id :: integer()
+  @type t :: %__MODULE__{
+          id: id(),
+          email: String.t(),
+          password: String.t(),
+          hashed_password: String.t(),
+          confirmed_at: NaiveDateTime.t(),
+          books: [Accounts.Book.t()],
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "users" do
     field(:email, :string)
     field(:password, :string, virtual: true, redact: true)
     field(:hashed_password, :string, redact: true)
     field(:confirmed_at, :naive_datetime)
+
+    many_to_many :books, Accounts.Book, join_through: Accounts.BookUser
 
     timestamps()
   end
