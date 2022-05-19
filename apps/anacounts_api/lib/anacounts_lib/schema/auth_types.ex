@@ -20,9 +20,17 @@ defmodule AnacountsAPI.Schema.AuthTypes do
     interface(:base_user)
     is_type_of(&match?(%{confirmed_at: _}, &1))
 
+    # authentication
     field(:id, :id)
     field(:email, :string)
     field(:confirmed_at, :naive_datetime)
+
+    # display information
+    field(:display_name, :string)
+
+    field(:avatar_url, :string) do
+      resolve(&Resolvers.Auth.get_profile_avatar_url/3)
+    end
   end
 
   ## Queries
@@ -52,5 +60,18 @@ defmodule AnacountsAPI.Schema.AuthTypes do
 
       resolve(&Resolvers.Auth.do_register/3)
     end
+
+    @desc "Update the user profile"
+    field :update_profile, :profile do
+      arg(:attrs, non_null(:profile_input))
+
+      resolve(&Resolvers.Auth.do_update_profile/3)
+    end
+  end
+
+  ## Input objects
+  @desc "Used to update profile"
+  input_object :profile_input do
+    field(:display_name, non_null(:string))
   end
 end

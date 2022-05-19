@@ -50,7 +50,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
   object :accounts_mutations do
     field :create_book, :book do
-      arg(:book, non_null(:book_input))
+      arg(:attrs, non_null(:book_input))
 
       resolve(&Resolvers.Accounts.do_create_book/3)
     end
@@ -58,6 +58,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
   ## Input objects
 
+  @desc "Used to make operations (insert, update) on books"
   input_object :book_input do
     field(:name, non_null(:string))
   end

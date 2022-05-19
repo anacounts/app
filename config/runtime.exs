@@ -34,7 +34,16 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  # For production, don't forget to configure the url host
+  # to something meaningful, Phoenix uses this information
+  # when generating URLs.
+
+  host =
+    System.get_env("HOST") ||
+      raise "environment variable BACK_HOST_URL is missing."
+
   config :anacounts_api, AnacountsAPI.Endpoint,
+    url: [host: host, port: 80],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -42,6 +51,16 @@ if config_env() == :prod do
       port: String.to_integer(System.get_env("PORT") || "4000")
     ],
     secret_key_base: secret_key_base
+
+  # The domain on which is hosted the front-end.
+  # This is used for CORS, to allow the front-end to query
+  # from the API.
+  front_host =
+    System.get_env("FRONT_HOST") ||
+      raise "environment variable FRONT_HOST is missing."
+
+  # Set allowed origins for CORS Plug
+  config :cors_plug, origin: [front_host]
 
   # ## Using releases
   #

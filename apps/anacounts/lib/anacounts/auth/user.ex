@@ -21,10 +21,14 @@ defmodule Anacounts.Auth.User do
         }
 
   schema "users" do
+    # authentification
     field(:email, :string)
     field(:password, :string, virtual: true, redact: true)
     field(:hashed_password, :string, redact: true)
     field(:confirmed_at, :naive_datetime)
+
+    # display information
+    field(:display_name, :string)
 
     many_to_many :books, Accounts.Book, join_through: Accounts.BookUser
 
@@ -51,6 +55,12 @@ defmodule Anacounts.Auth.User do
     |> cast(attrs, [:email, :password])
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  def update_profile_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:display_name])
+    |> validate_display_name()
   end
 
   defp validate_email(changeset) do
@@ -82,6 +92,12 @@ defmodule Anacounts.Auth.User do
     else
       changeset
     end
+  end
+
+  defp validate_display_name(changeset) do
+    changeset
+    |> validate_required(:display_name)
+    |> validate_length(:display_name, max: 255)
   end
 
   @doc """
