@@ -13,9 +13,9 @@ defmodule AnacountsAPI.Resolvers.Auth do
     {:ok, user}
   end
 
-  ## Auth mutations
-
   def find_profile(_parent, _args, _resolution), do: not_logged_in()
+
+  ## Auth mutations
 
   def do_log_in(_parent, %{email: email, password: password}, _resolution) do
     if user = Auth.get_user_by_email_and_password(email, password) do
@@ -42,6 +42,12 @@ defmodule AnacountsAPI.Resolvers.Auth do
         result
     end
   end
+
+  def do_update_profile(_parent, %{attrs: attrs}, %{context: %{current_user: user}}) do
+    Auth.update_user_profile(user, attrs)
+  end
+
+  def do_update_profile(_parent, _args, _resolution), do: not_logged_in()
 
   ## Field resolution
   def find_book_users(book, _args, %{context: %{current_user: _user}}) do

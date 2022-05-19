@@ -67,6 +67,15 @@ defmodule Anacounts.Auth do
   end
 
   @doc """
+  Updates the profile of a user.
+  """
+  def update_user_profile(user, attrs) do
+    user
+    |> User.update_profile_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
   ## Examples
       iex> change_user_registration(user)
