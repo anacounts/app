@@ -3,6 +3,8 @@ defmodule AnacountsAPI.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug
+
     plug Anacounts.Context
   end
 

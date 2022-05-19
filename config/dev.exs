@@ -50,6 +50,9 @@ config :anacounts_api, AnacountsAPI.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
+# Set allowed origins for CORS Plug
+config :cors_plug, origin: ["http://localhost:3000"]
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
