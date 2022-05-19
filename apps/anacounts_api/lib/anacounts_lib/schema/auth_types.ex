@@ -27,6 +27,10 @@ defmodule AnacountsAPI.Schema.AuthTypes do
 
     # display information
     field(:display_name, :string)
+
+    field(:avatar_url, :string) do
+      resolve(&Resolvers.Auth.get_profile_avatar_url/3)
+    end
   end
 
   ## Queries
