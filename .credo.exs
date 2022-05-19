@@ -142,7 +142,6 @@
           {Credo.Check.Refactor.NegatedConditionsWithElse, []},
           {Credo.Check.Refactor.NegatedIsNil, []},
           {Credo.Check.Refactor.Nesting, []},
-          {Credo.Check.Refactor.PipeChainStart, []},
           {Credo.Check.Refactor.RedundantWithClauseResult, []},
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.RejectReject, []},
@@ -189,6 +188,7 @@
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Readability.BlockPipe, []},
           {Credo.Check.Readability.SinglePipe, []},
+          {Credo.Check.Refactor.PipeChainStart, []},
           {Credo.Check.Warning.LazyLogging, []},
           {Credo.Check.Warning.LeakyEnvironment, []},
 

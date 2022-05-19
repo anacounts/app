@@ -1,3 +1,7 @@
+# Disable checking that there are too many dependencies
+# Unfortunately, there isn't much we can do about this, this is a design decision
+# of Phoenix to group many things here.
+# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule AnacountsAPI.Endpoint do
   use Phoenix.Endpoint, otp_app: :anacounts_api
   use Absinthe.Phoenix.Endpoint

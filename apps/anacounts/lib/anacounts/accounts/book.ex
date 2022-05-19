@@ -1,4 +1,8 @@
 defmodule Anacounts.Accounts.Book do
+  @moduledoc """
+  The entity grouping users and transfers.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query

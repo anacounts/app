@@ -1,4 +1,8 @@
 defmodule Anacounts.Accounts.BookUser do
+  @moduledoc """
+  The link between a book and a user.
+  It contains the role of the user for this particular book.
+  """
   use Ecto.Schema
   import Ecto.Query
 
