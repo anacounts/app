@@ -1,4 +1,13 @@
 defmodule Anacounts.Accounts.Role do
+  @moduledoc """
+  Position a user has in a book. A user may have different roles in
+  different books, but can only have one role in a particular book.
+  The role of a user in a book defines its ability to do or not to do
+  different actions - renaming or deleteing it, adding members, etc.
+
+  The creator of a book always has a "creator" role, which gives him
+  all the rights there can be on the book they created.
+  """
   alias Anacounts.Accounts.Rights
 
   @type t :: atom()
