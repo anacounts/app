@@ -14,7 +14,11 @@ defmodule AnacountsAPI.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      gettext: [
+        write_reference_comments: false,
+        sort_by_msgid: true
+      ]
     ]
   end
 
