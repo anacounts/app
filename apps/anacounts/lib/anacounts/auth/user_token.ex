@@ -56,12 +56,10 @@ defmodule Anacounts.Auth.UserToken do
   not expired (after @session_validity_in_days).
   """
   def verify_session_token_query(token) do
-    case Base.url_decode64(token, padding: false) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-
+    case token_and_context_query(token, "session") do
+      {:ok, token_and_context_query} ->
         query =
-          from(token in token_and_context_query(hashed_token, "session"),
+          from(token in token_and_context_query,
             join: user in assoc(token, :user),
             where: token.inserted_at > ago(@session_validity_in_days, "day"),
             select: user
@@ -114,13 +112,12 @@ defmodule Anacounts.Auth.UserToken do
   see `verify_change_email_token_query/2`.
   """
   def verify_email_token_query(token, context) do
-    case Base.url_decode64(token, padding: false) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+    case token_and_context_query(token, context) do
+      {:ok, token_and_context_query} ->
         days = days_for_context(context)
 
         query =
-          from(token in token_and_context_query(hashed_token, context),
+          from(token in token_and_context_query,
             join: user in assoc(token, :user),
             where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
             select: user
@@ -148,12 +145,10 @@ defmodule Anacounts.Auth.UserToken do
   The context must always start with "change:".
   """
   def verify_change_email_token_query(token, "change:" <> _email = context) do
-    case Base.url_decode64(token, padding: false) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-
+    case token_and_context_query(token, context) do
+      {:ok, token_and_context_query} ->
         query =
-          from(token in token_and_context_query(hashed_token, context),
+          from(token in token_and_context_query,
             where: token.inserted_at > ago(@change_email_validity_in_days, "day")
           )
 
@@ -168,7 +163,15 @@ defmodule Anacounts.Auth.UserToken do
   Returns the token struct for the given token value and context.
   """
   def token_and_context_query(token, context) do
-    from(__MODULE__, where: [token: ^token, context: ^context])
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+
+        {:ok, from(__MODULE__, where: [token: ^hashed_token, context: ^context])}
+
+      :error ->
+        :error
+    end
   end
 
   @doc """
