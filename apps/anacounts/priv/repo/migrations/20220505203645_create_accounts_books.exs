@@ -9,7 +9,7 @@ defmodule Anacounts.Repo.Migrations.CreateAccountsBooksTables do
       timestamps()
     end
 
-    create table(:accounts_book_users) do
+    create table(:accounts_book_members) do
       add :book_id, references(:accounts_books, on_delete: :delete_all, on_update: :update_all),
         null: false
 

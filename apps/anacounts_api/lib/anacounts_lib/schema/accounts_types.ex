@@ -15,13 +15,13 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:name, :string)
     field(:inserted_at, :naive_datetime)
 
-    field(:users, list_of(:book_user)) do
-      resolve(&Resolvers.Auth.find_book_users/3)
+    field(:members, list_of(:book_member)) do
+      resolve(&Resolvers.Auth.find_book_members/3)
     end
   end
 
   @desc "One of the users attached to a book"
-  object :book_user do
+  object :book_member do
     interface(:base_user)
     is_type_of(&match?(%{role: _}, &1))
 

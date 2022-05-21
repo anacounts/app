@@ -87,15 +87,15 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   ## External field resolution
 
-  def find_book_users(book, _args, %{context: %{current_user: _user}}) do
-    Anacounts.Accounts.find_book_users(book)
-    |> Enum.map(&book_user_schema_to_book_user_type/1)
+  def find_book_members(book, _args, %{context: %{current_user: _user}}) do
+    Anacounts.Accounts.find_book_members(book)
+    |> Enum.map(&book_member_schema_to_book_member_type/1)
     |> wrap()
   end
 
-  def find_book_users(_parent, _args, _resolution), do: not_logged_in()
+  def find_book_members(_parent, _args, _resolution), do: not_logged_in()
 
-  defp book_user_schema_to_book_user_type(%{user: %{id: id, email: email}, role: role}) do
+  defp book_member_schema_to_book_member_type(%{user: %{id: id, email: email}, role: role}) do
     %{
       id: id,
       email: email,
