@@ -1,4 +1,4 @@
-defmodule Anacounts.Accounts.BookUser do
+defmodule Anacounts.Accounts.BookMember do
   @moduledoc """
   The link between a book and a user.
   It contains the role of the user for this particular book.
@@ -9,7 +9,7 @@ defmodule Anacounts.Accounts.BookUser do
   alias Anacounts.Accounts
   alias Anacounts.Auth
 
-  schema "accounts_book_users" do
+  schema "accounts_book_members" do
     belongs_to :book, Accounts.Book
     belongs_to :user, Auth.User
 

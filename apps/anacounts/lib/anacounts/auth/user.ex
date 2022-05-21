@@ -30,7 +30,7 @@ defmodule Anacounts.Auth.User do
     # display information
     field(:display_name, :string)
 
-    many_to_many :books, Accounts.Book, join_through: Accounts.BookUser
+    many_to_many :books, Accounts.Book, join_through: Accounts.BookMember
 
     timestamps()
   end

@@ -9,7 +9,7 @@ defmodule Anacounts.Accounts do
   alias Anacounts.Repo
 
   alias Anacounts.Accounts.Book
-  alias Anacounts.Accounts.BookUser
+  alias Anacounts.Accounts.BookMember
   alias Anacounts.Auth.User
 
   @spec get_book(Book.id(), User.t()) :: Book.t() | nil
@@ -27,10 +27,10 @@ defmodule Anacounts.Accounts do
     |> Repo.all()
   end
 
-  @spec find_book_users(Book.t()) :: [BookUser.t()]
-  def find_book_users(book) do
+  @spec find_book_members(Book.t()) :: [BookMember.t()]
+  def find_book_members(book) do
     query =
-      from ub in BookUser.book_query(book),
+      from ub in BookMember.book_query(book),
         join: u in assoc(ub, :user),
         preload: [user: u]
 

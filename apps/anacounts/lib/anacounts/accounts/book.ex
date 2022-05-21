@@ -15,7 +15,7 @@ defmodule Anacounts.Accounts.Book do
           id: id(),
           name: String.t(),
           deleted_at: NaiveDateTime.t(),
-          book_users: [Accounts.BookUser.t()],
+          members: [Accounts.BookMember.t()],
           users: [Auth.User.t()],
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -26,8 +26,8 @@ defmodule Anacounts.Accounts.Book do
     field :deleted_at, :naive_datetime
 
     # user relation
-    has_many :book_users, Accounts.BookUser
-    many_to_many :users, Auth.User, join_through: Accounts.BookUser
+    has_many :members, Accounts.BookMember
+    many_to_many :users, Auth.User, join_through: Accounts.BookMember
 
     timestamps()
   end
@@ -51,7 +51,7 @@ defmodule Anacounts.Accounts.Book do
 
   defp put_creator(changeset, creator) do
     changeset
-    |> put_change(:book_users, [
+    |> put_change(:members, [
       %{
         user: creator,
         role: :creator
