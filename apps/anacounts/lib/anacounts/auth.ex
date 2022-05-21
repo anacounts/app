@@ -212,8 +212,10 @@ defmodule Anacounts.Auth do
   Deletes the signed token with the given context.
   """
   def delete_session_token(token) do
-    UserToken.token_and_context_query(token, "session")
-    |> Repo.delete_all()
+    case UserToken.token_and_context_query(token, "session") do
+      {:ok, query} ->
+        Repo.delete_all(query)
+    end
 
     :ok
   end
