@@ -1,5 +1,7 @@
 defmodule Anacounts.AccountsFixtures do
-  alias Anacounts.Accounts
+  @moduledoc """
+  Fixtures for the `Accounts` context
+  """
 
   def valid_book_name, do: "A valid book name !"
   def invalid_book_name, do: nil
@@ -20,7 +22,7 @@ defmodule Anacounts.AccountsFixtures do
     {:ok, book} =
       attrs
       |> valid_book_attributes()
-      |> then(&Accounts.create_book(user, &1))
+      |> then(&Anacounts.Accounts.create_book(user, &1))
 
     book
   end
