@@ -70,6 +70,7 @@ defmodule Anacounts.Auth.User do
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, Anacounts.Repo)
     |> unique_constraint(:email)
+    |> unique_constraint(:email, name: "users_lower_email_index")
   end
 
   defp validate_password(changeset, opts) do
