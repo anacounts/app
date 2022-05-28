@@ -26,8 +26,6 @@ defmodule AnacountsAPI.ConnCase do
       import Phoenix.ConnTest
       import AnacountsAPI.ConnCase
 
-      alias AnacountsAPI.Router.Helpers, as: Routes
-
       # The default endpoint for testing
       @endpoint AnacountsAPI.Endpoint
     end

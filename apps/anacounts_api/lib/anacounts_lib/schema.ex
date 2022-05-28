@@ -21,6 +21,8 @@ defmodule AnacountsAPI.Schema do
 
   # if it's a field for the mutation object, add this middleware to the end
   def middleware(middleware, _field, %{identifier: :mutation}) do
+    # The custom middlewares must be at the end of the list
+    # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
     middleware ++ [AnacountsAPI.Middlewares.HandleChangesetErrors]
   end
 

@@ -146,7 +146,9 @@
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.RejectReject, []},
           {Credo.Check.Refactor.UnlessWithElse, []},
-          {Credo.Check.Refactor.VariableRebinding, []},
+          # Allow variable rebinding in api test
+          # It's common to reassign `conn` with the result of the query
+          {Credo.Check.Refactor.VariableRebinding, files: [excluded: "apps/anacounts_api/test"]},
           {Credo.Check.Refactor.WithClauses, []},
 
           #
