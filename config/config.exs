@@ -32,12 +32,7 @@ config :anacounts_api,
 # Configures the endpoint
 config :anacounts_api, AnacountsAPI.Endpoint,
   url: [host: "localhost"],
-  render_errors: [
-    view: AnacountsAPI.ErrorView,
-    format: "json",
-    accepts: ~w(json),
-    template: false
-  ],
+  render_errors: [view: AnacountsAPI.ErrorView, format: "json", accepts: ~w(json)],
   pubsub_server: Anacounts.PubSub,
   live_view: [signing_salt: "F5OA2rrK"]
 
