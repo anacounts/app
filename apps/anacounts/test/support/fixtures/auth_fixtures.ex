@@ -13,6 +13,13 @@ defmodule Anacounts.AuthFixtures do
     })
   end
 
+  def valid_register_attributes do
+    %{
+      email: unique_user_email(),
+      password: valid_user_password()
+    }
+  end
+
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs

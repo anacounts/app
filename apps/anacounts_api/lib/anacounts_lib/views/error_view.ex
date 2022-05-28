@@ -5,15 +5,12 @@ defmodule AnacountsAPI.ErrorView do
                         false
                       )
 
-  # If you want to customize a particular status code
-  # for a certain format, you may uncomment below.
-
-  def render("500.json", assigns) do
+  def render(template, assigns) do
     %{
       "errors" => [
         %{
           "locations" => [%{"column" => -1, "line" => -1}],
-          "message" => "Internal Server Error"
+          "message" => Phoenix.Controller.status_message_from_template(template)
         }
         |> maybe_add_details(@send_error_details, assigns)
       ]

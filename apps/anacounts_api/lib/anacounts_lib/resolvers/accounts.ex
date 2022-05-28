@@ -24,7 +24,7 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   ## Accounts mutations
 
-  def do_create_book(_parent, %{book: book_attrs}, %{context: %{current_user: user}}) do
+  def do_create_book(_parent, %{attrs: book_attrs}, %{context: %{current_user: user}}) do
     Accounts.create_book(user, book_attrs)
   end
 
