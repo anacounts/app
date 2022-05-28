@@ -22,7 +22,7 @@ config :anacounts_api, AnacountsAPI.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  debug_errors: true,
+  send_error_details: true,
   secret_key_base: "Y8PSvX0+ZmmWKSfOyF3MRuaFKjHRwPA8IZKDm3A8RjiRF4jIoNq6cE07D1XWEdvV",
   watchers: []
 
