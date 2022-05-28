@@ -21,7 +21,7 @@ defmodule AnacountsAPI.Schema do
 
   # if it's a field for the mutation object, add this middleware to the end
   def middleware(middleware, _field, %{identifier: :mutation}) do
-    [AnacountsAPI.Middlewares.HandleChangesetErrors | middleware]
+    middleware ++ [AnacountsAPI.Middlewares.HandleChangesetErrors]
   end
 
   # if it's any other object keep things as is
