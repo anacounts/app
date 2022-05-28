@@ -4,17 +4,10 @@ defmodule Anacounts.AccountsFixtures do
   """
 
   def valid_book_name, do: "A valid book name !"
-  def invalid_book_name, do: nil
 
   def valid_book_attributes(attrs \\ %{}) do
     Map.merge(attrs, %{
       name: valid_book_name()
-    })
-  end
-
-  def invalid_book_attributes(attrs \\ %{}) do
-    Map.merge(attrs, %{
-      name: invalid_book_name()
     })
   end
 

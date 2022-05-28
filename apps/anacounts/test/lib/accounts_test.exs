@@ -69,7 +69,10 @@ defmodule Anacounts.AccountsTest do
     end
 
     test "fails when giving invalid parameters", %{user: user} do
-      {:error, changeset} = Accounts.create_book(user, invalid_book_attributes())
+      {:error, changeset} =
+        Accounts.create_book(user, %{
+          name: nil
+        })
 
       assert "can't be blank" in errors_on(changeset).name
     end
