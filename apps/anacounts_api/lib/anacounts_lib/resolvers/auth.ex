@@ -36,7 +36,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
             &"/accounts/register/confirm?confirmation_token=#{&1}"
           )
 
-        {:ok, "confirmation instructions sent"}
+        {:ok, "ok"}
 
       {:error, _changeset} = result ->
         result
