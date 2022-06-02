@@ -7,7 +7,12 @@ defmodule Anacounts.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        anacounts_api: [
+          applications: [anacounts: :permanent, anacounts_api: :permanent]
+        ]
+      ]
     ]
   end
 
