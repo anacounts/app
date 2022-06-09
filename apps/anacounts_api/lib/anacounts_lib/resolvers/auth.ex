@@ -35,6 +35,14 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   def do_invalidate_token(_parent, _args, _resolution), do: not_logged_in()
 
+  def do_invalidate_all_tokens(_parent, _args, %{context: %{current_user: user}}) do
+    Auth.delete_all_user_tokens(user)
+
+    wrap("ok")
+  end
+
+  def do_invalidate_all_tokens(_parent, _args, _resolution), do: not_logged_in()
+
   def do_register(_parent, args, _resolution) do
     case Auth.register_user(args) do
       {:ok, user} ->
@@ -44,7 +52,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
             &"/accounts/register/confirm?confirmation_token=#{&1}"
           )
 
-        {:ok, "ok"}
+        wrap("ok")
 
       {:error, _changeset} = result ->
         result
