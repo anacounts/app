@@ -1,6 +1,8 @@
 defmodule AnacountsAPI.Schema.AuthTypesTest do
   use AnacountsAPI.ConnCase
 
+  import Ecto.Query, only: [from: 2]
+
   import Anacounts.AuthFixtures
   import AnacountsAPI.Helpers.Tests, only: [test_logged_in: 2]
 
@@ -113,6 +115,77 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
     end
   end
 
+  describe "mutation: invalidate_token" do
+    @invalidate_token_mutation """
+    mutation InvalidateToken($token: String!) {
+      invalidateToken(token: $token)
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    test "deletes a token", %{conn: conn, user: user} do
+      token = Anacounts.Auth.generate_user_session_token(user)
+
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @invalidate_token_mutation,
+          "variables" => %{"token" => token}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"invalidateToken" => "ok"}
+             }
+
+      assert Anacounts.Auth.get_user_by_session_token(token) == nil
+    end
+
+    test "does not delete a token from a remote user", %{conn: conn} do
+      remote_user = user_fixture()
+      token = Anacounts.Auth.generate_user_session_token(remote_user)
+
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @invalidate_token_mutation,
+          "variables" => %{"token" => token}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"invalidateToken" => "ok"}
+             }
+
+      assert Anacounts.Auth.get_user_by_session_token(token) == remote_user
+    end
+  end
+
+  describe "mutation: invalidate_all_tokens" do
+    @invalidate_all_tokens_mutation """
+    mutation InvalidateAllTokens {
+      invalidateAllTokens
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    test "deletes all tokens of the current user", %{conn: conn, user: user} do
+      _user_token = Anacounts.Auth.generate_user_session_token(user)
+
+      conn = post(conn, "/api/v1", %{"query" => @invalidate_all_tokens_mutation})
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"invalidateAllTokens" => "ok"}
+             }
+
+      user_tokens =
+        from(Anacounts.Auth.UserToken, where: [user_id: ^user.id])
+        |> Anacounts.Repo.all()
+
+      assert Enum.empty?(user_tokens)
+    end
+  end
+
   describe "mutation: register" do
     @register_mutation """
     mutation Register($email: String!, $password: String!) {
@@ -128,7 +201,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
         })
 
       assert json_response(conn, 200) == %{
-               "data" => %{"register" => "confirmation instructions sent"}
+               "data" => %{"register" => "ok"}
              }
     end
 
