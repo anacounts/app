@@ -53,6 +53,13 @@ defmodule AnacountsAPI.Schema.AuthTypes do
       resolve(&Resolvers.Auth.do_log_in/3)
     end
 
+    @desc "Invalidates the token"
+    field :invalidate_token, :string do
+      arg(:token, non_null(:string))
+
+      resolve(&Resolvers.Auth.do_invalidate_token/3)
+    end
+
     @desc "Registers a new user"
     field :register, :string do
       arg(:email, non_null(:string))

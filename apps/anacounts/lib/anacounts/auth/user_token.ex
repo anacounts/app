@@ -163,11 +163,34 @@ defmodule Anacounts.Auth.UserToken do
   Returns the token struct for the given token value and context.
   """
   def token_and_context_query(token, context) do
+    case token_query(token) do
+      {:ok, query} ->
+        {:ok, from(query, where: [context: ^context])}
+
+      :error ->
+        :error
+    end
+  end
+
+  @doc """
+  Returns the token struct for the given token value and user.
+  """
+  def token_and_user_query(token, user) do
+    case token_query(token) do
+      {:ok, query} ->
+        {:ok, from(query, where: [user_id: ^user.id])}
+
+      :error ->
+        :error
+    end
+  end
+
+  defp token_query(token) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
 
-        {:ok, from(__MODULE__, where: [token: ^hashed_token, context: ^context])}
+        {:ok, from(__MODULE__, where: [token: ^hashed_token])}
 
       :error ->
         :error

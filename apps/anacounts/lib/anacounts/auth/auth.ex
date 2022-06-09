@@ -220,6 +220,18 @@ defmodule Anacounts.Auth do
     :ok
   end
 
+  @doc """
+  Delete the token belonging to the user.
+  """
+  def delete_user_token(user, token) do
+    case UserToken.token_and_user_query(token, user) do
+      {:ok, query} ->
+        Repo.delete_all(query)
+    end
+
+    :ok
+  end
+
   ## Confirmation
 
   @doc """

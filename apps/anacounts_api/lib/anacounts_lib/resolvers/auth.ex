@@ -27,6 +27,14 @@ defmodule AnacountsAPI.Resolvers.Auth do
     end
   end
 
+  def do_invalidate_token(_parent, %{token: token}, %{context: %{current_user: user}}) do
+    Auth.delete_user_token(user, token)
+
+    wrap("ok")
+  end
+
+  def do_invalidate_token(_parent, _args, _resolution), do: not_logged_in()
+
   def do_register(_parent, args, _resolution) do
     case Auth.register_user(args) do
       {:ok, user} ->
