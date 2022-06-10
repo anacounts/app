@@ -178,11 +178,9 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
                "data" => %{"invalidateAllTokens" => "ok"}
              }
 
-      user_tokens =
-        from(Anacounts.Auth.UserToken, where: [user_id: ^user.id])
-        |> Anacounts.Repo.all()
-
-      assert Enum.empty?(user_tokens)
+      assert from(Anacounts.Auth.UserToken, where: [user_id: ^user.id])
+             |> Anacounts.Repo.all()
+             |> Enum.empty?()
     end
   end
 
