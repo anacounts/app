@@ -163,11 +163,34 @@ defmodule Anacounts.Auth.UserToken do
   Returns the token struct for the given token value and context.
   """
   def token_and_context_query(token, context) do
+    case token_query(token) do
+      {:ok, query} ->
+        {:ok, from(query, where: [context: ^context])}
+
+      :error ->
+        :error
+    end
+  end
+
+  @doc """
+  Returns the token struct for the given token value and user.
+  """
+  def token_and_user_query(token, user) do
+    case token_query(token) do
+      {:ok, query} ->
+        {:ok, from(query, where: [user_id: ^user.id])}
+
+      :error ->
+        :error
+    end
+  end
+
+  defp token_query(token) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
 
-        {:ok, from(__MODULE__, where: [token: ^hashed_token, context: ^context])}
+        {:ok, from(__MODULE__, where: [token: ^hashed_token])}
 
       :error ->
         :error
@@ -178,10 +201,11 @@ defmodule Anacounts.Auth.UserToken do
   Gets all tokens for the given user for the given contexts.
   """
   def user_and_contexts_query(user, :all) do
-    from(t in __MODULE__, where: t.user_id == ^user.id)
+    from __MODULE__, where: [user_id: ^user.id]
   end
 
   def user_and_contexts_query(user, [_ | _] = contexts) do
-    from(t in __MODULE__, where: t.user_id == ^user.id and t.context in ^contexts)
+    from t in __MODULE__,
+      where: t.user_id == ^user.id and t.context in ^contexts
   end
 end
