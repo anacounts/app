@@ -364,11 +364,11 @@ defmodule Anacounts.AuthTest do
     end
   end
 
-  describe "delete_user_token/2" do
+  describe "delete_token_of_user/2" do
     test "deletes the token" do
       user = user_fixture()
       token = Auth.generate_user_session_token(user)
-      assert Auth.delete_user_token(user, token) == :ok
+      assert Auth.delete_token_of_user(token, user) == :ok
       refute Auth.get_user_by_session_token(token)
     end
 
@@ -376,18 +376,18 @@ defmodule Anacounts.AuthTest do
       user = user_fixture()
       remote_user = user_fixture()
       token = Auth.generate_user_session_token(remote_user)
-      assert Auth.delete_user_token(user, token) == :ok
+      assert Auth.delete_token_of_user(token, user) == :ok
       assert Auth.get_user_by_session_token(token) == remote_user
     end
   end
 
-  describe "delete_all_user_tokens/1" do
+  describe "delete_all_tokens_of_user/1" do
     test "deletes all tokens from a user" do
       user = user_fixture()
 
       token = Auth.generate_user_session_token(user)
 
-      assert Auth.delete_all_user_tokens(user) == :ok
+      assert Auth.delete_all_tokens_of_user(user) == :ok
 
       refute Auth.get_user_by_session_token(token)
 

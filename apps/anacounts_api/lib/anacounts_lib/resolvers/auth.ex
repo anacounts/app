@@ -28,7 +28,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
   end
 
   def do_invalidate_token(_parent, %{token: token}, %{context: %{current_user: user}}) do
-    Auth.delete_user_token(user, token)
+    Auth.delete_token_of_user(token, user)
 
     wrap("ok")
   end
@@ -36,7 +36,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
   def do_invalidate_token(_parent, _args, _resolution), do: not_logged_in()
 
   def do_invalidate_all_tokens(_parent, _args, %{context: %{current_user: user}}) do
-    Auth.delete_all_user_tokens(user)
+    Auth.delete_all_tokens_of_user(user)
 
     wrap("ok")
   end
