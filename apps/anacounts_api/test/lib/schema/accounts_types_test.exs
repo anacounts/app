@@ -16,7 +16,6 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
         insertedAt
         members {
           id
-          email
           role
         }
       }
@@ -44,7 +43,6 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                    "members" => [
                      %{
                        "id" => to_string(user.id),
-                       "email" => user.email,
                        "role" => "creator"
                      }
                    ]
@@ -106,7 +104,6 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
         insertedAt
         members {
           id
-          email
           role
         }
       }
@@ -124,7 +121,6 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
         })
 
       user_id = to_string(user.id)
-      user_email = user.email
 
       assert %{
                "data" => %{
@@ -135,7 +131,6 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                    "members" => [
                      %{
                        "id" => ^user_id,
-                       "email" => ^user_email,
                        "role" => "creator"
                      }
                    ]

@@ -111,11 +111,17 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   def find_book_members(_parent, _args, _resolution), do: not_logged_in()
 
-  defp book_member_schema_to_book_member_type(%{user: %{id: id, email: email}, role: role}) do
+  defp book_member_schema_to_book_member_type(%{
+         user: %{id: id, email: email, display_name: display_name},
+         role: role
+       }) do
     %{
       id: id,
-      email: email,
-      role: role
+      display_name: display_name,
+      role: role,
+
+      # email is required to resolve fields of the `book_member` type (e.g. `avatar_url`)
+      email: email
     }
   end
 end
