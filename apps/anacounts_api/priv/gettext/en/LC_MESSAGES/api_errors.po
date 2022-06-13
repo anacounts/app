@@ -16,5 +16,9 @@ msgid "Not found"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Unauthorized"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "You must be logged in"
 msgstr ""
