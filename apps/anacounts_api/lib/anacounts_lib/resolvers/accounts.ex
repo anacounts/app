@@ -29,4 +29,16 @@ defmodule AnacountsAPI.Resolvers.Accounts do
   end
 
   def do_create_book(_parent, _args, _resolution), do: not_logged_in()
+
+  def do_delete_book(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    book = Accounts.get_book(id, user)
+
+    if is_nil(book) do
+      {:error, :not_found}
+    else
+      Accounts.delete_book(book, user)
+    end
+  end
+
+  def do_delete_book(_parent, _args, _resolution), do: not_logged_in()
 end

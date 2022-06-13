@@ -10,6 +10,7 @@ defmodule Anacounts.Accounts do
 
   alias Anacounts.Accounts.Book
   alias Anacounts.Accounts.BookMember
+  alias Anacounts.Accounts.Rights
   alias Anacounts.Auth.User
 
   @spec get_book(Book.id(), User.t()) :: Book.t() | nil
@@ -46,5 +47,32 @@ defmodule Anacounts.Accounts do
     %Book{}
     |> Book.creation_changeset(user, attrs)
     |> Repo.insert()
+  end
+
+  @spec delete_book(Book.t(), User.t()) ::
+          {:ok, Book.t()}
+          | {:error, Ecto.Changeset.t()}
+          | {:error, :not_found}
+          | {:error, :unauthorized}
+  def delete_book(book, user) do
+    membership = get_membership(book, user)
+
+    cond do
+      is_nil(membership) ->
+        {:error, :not_found}
+
+      not Rights.member_has_right?(membership, :delete_book) ->
+        {:error, :unauthorized}
+
+      true ->
+        book
+        |> Book.delete_changeset()
+        |> Repo.update()
+    end
+  end
+
+  @spec get_membership(Book.t(), User.t()) :: BookMember.t() | nil
+  defp get_membership(book, user) do
+    Repo.get_by(BookMember, book_id: book.id, user_id: user.id)
   end
 end

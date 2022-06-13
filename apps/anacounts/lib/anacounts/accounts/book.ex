@@ -59,6 +59,11 @@ defmodule Anacounts.Accounts.Book do
     ])
   end
 
+  def delete_changeset(book) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(book, deleted_at: now)
+  end
+
   @spec base_query :: Ecto.Query.t()
   def base_query do
     from b in __MODULE__, where: is_nil(b.deleted_at)

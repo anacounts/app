@@ -55,10 +55,18 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
   ## Mutations
 
   object :accounts_mutations do
+    @desc "Creates a new book"
     field :create_book, :book do
       arg(:attrs, non_null(:book_input))
 
       resolve(&Resolvers.Accounts.do_create_book/3)
+    end
+
+    @desc "Delete an existing book"
+    field :delete_book, :book do
+      arg(:id, non_null(:id))
+
+      resolve(&Resolvers.Accounts.do_delete_book/3)
     end
   end
 

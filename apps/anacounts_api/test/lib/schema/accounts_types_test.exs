@@ -143,4 +143,77 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test_logged_in(@create_book_mutation, %{"attrs" => valid_book_attributes()})
   end
+
+  describe "mutation: delete_book" do
+    @delete_book_mutation """
+    mutation DeleteBook($id: ID!) {
+      deleteBook(id: $id) {
+        id
+      }
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    setup :setup_book_fixture
+
+    test "deletes the book", %{conn: conn, book: book} do
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @delete_book_mutation,
+          "variables" => %{"id" => book.id}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"deleteBook" => %{"id" => to_string(book.id)}}
+             }
+    end
+
+    test "errors with `:not_found` if it does not exist", %{conn: conn} do
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @delete_book_mutation,
+          "variables" => %{"id" => 0}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"deleteBook" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "not_found",
+                   "path" => ["deleteBook"]
+                 }
+               ]
+             }
+    end
+
+    test "errors with `:not_found` if it does not belong to the user", %{conn: conn} do
+      remote_user = user_fixture()
+      book = book_fixture(remote_user)
+
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @delete_book_mutation,
+          "variables" => %{"id" => book.id}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"deleteBook" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "not_found",
+                   "path" => ["deleteBook"]
+                 }
+               ]
+             }
+    end
+
+    # TODO Add when it's possible to add a book member
+    # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
+
+    test_logged_in(@delete_book_mutation, %{"id" => "0"})
+  end
 end
