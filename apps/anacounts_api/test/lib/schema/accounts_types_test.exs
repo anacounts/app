@@ -211,7 +211,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
              }
     end
 
-    # TODO Add when it's possible to add a book member
+    # XXX Add when it's possible to add a book member
     # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
 
     test_logged_in(@delete_book_mutation, %{"id" => "0"})

@@ -4,10 +4,10 @@ defmodule AnacountsAPI.Middlewares.NormalizeErrors do
 
   Enabled by overriding the `middleware` callback in the main schema.
   """
+  @behaviour Absinthe.Middleware
 
   import AnacountsAPI.Gettext
 
-  @behaviour Absinthe.Middleware
   def call(resolution, _opts) do
     %{resolution | errors: Enum.map(resolution.errors, &handle_error/1)}
   end

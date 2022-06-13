@@ -101,7 +101,7 @@ defmodule Anacounts.AccountsTest do
       assert Accounts.delete_book(book, remote_user) == {:error, :not_found}
     end
 
-    # TODO Add when it's possible to add a book member
+    # XXX Add when it's possible to add a book member
     # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
   end
 end
