@@ -45,7 +45,7 @@ defmodule Anacounts.Accounts do
   @spec create_book(User.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
   def create_book(user, attrs) do
     %Book{}
-    |> Book.creation_changeset(user, attrs)
+    |> Book.create_changeset(user, attrs)
     |> Repo.insert()
   end
 
