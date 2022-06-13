@@ -182,7 +182,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                "errors" => [
                  %{
                    "locations" => [%{"column" => 3, "line" => 2}],
-                   "message" => "not_found",
+                   "message" => "Not found",
                    "path" => ["deleteBook"]
                  }
                ]
@@ -204,7 +204,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                "errors" => [
                  %{
                    "locations" => [%{"column" => 3, "line" => 2}],
-                   "message" => "not_found",
+                   "message" => "Not found",
                    "path" => ["deleteBook"]
                  }
                ]

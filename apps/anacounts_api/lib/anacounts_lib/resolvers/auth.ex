@@ -30,7 +30,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
   def do_invalidate_token(_parent, %{token: token}, %{context: %{current_user: user}}) do
     Auth.delete_token_of_user(token, user)
 
-    wrap("ok")
+    {:ok, "ok"}
   end
 
   def do_invalidate_token(_parent, _args, _resolution), do: not_logged_in()
@@ -38,7 +38,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
   def do_invalidate_all_tokens(_parent, _args, %{context: %{current_user: user}}) do
     Auth.delete_all_tokens_of_user(user)
 
-    wrap("ok")
+    {:ok, "ok"}
   end
 
   def do_invalidate_all_tokens(_parent, _args, _resolution), do: not_logged_in()
@@ -52,7 +52,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
             &"/accounts/register/confirm?confirmation_token=#{&1}"
           )
 
-        wrap("ok")
+        {:ok, "ok"}
 
       {:error, _changeset} = result ->
         result
@@ -68,8 +68,8 @@ defmodule AnacountsAPI.Resolvers.Auth do
   ## Field resolution
 
   def get_profile_avatar_url(user, _args, _resolution) do
-    gravatar_email_url(user.email)
-    |> wrap()
+    url = gravatar_email_url(user.email)
+    {:ok, url}
   end
 
   # Follow Gravatar instructions to generate URLs to request images.
@@ -104,9 +104,11 @@ defmodule AnacountsAPI.Resolvers.Auth do
   ## External field resolution
 
   def find_book_members(book, _args, %{context: %{current_user: _user}}) do
-    Anacounts.Accounts.find_book_members(book)
-    |> Enum.map(&book_member_schema_to_book_member_type/1)
-    |> wrap()
+    members =
+      Anacounts.Accounts.find_book_members(book)
+      |> Enum.map(&book_member_schema_to_book_member_type/1)
+
+    {:ok, members}
   end
 
   def find_book_members(_parent, _args, _resolution), do: not_logged_in()
