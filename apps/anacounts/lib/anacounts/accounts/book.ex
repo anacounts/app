@@ -36,7 +36,7 @@ defmodule Anacounts.Accounts.Book do
   A book changeset for creation.
   The user given will be considered the first member and creator of the book.
   """
-  def creation_changeset(book, user, attrs) do
+  def create_changeset(book, user, attrs) do
     book
     |> cast(attrs, [:name])
     |> validate_name()
@@ -57,6 +57,11 @@ defmodule Anacounts.Accounts.Book do
         role: :creator
       }
     ])
+  end
+
+  def delete_changeset(book) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(book, deleted_at: now)
   end
 
   @spec base_query :: Ecto.Query.t()

@@ -5,8 +5,16 @@ defmodule Anacounts.Accounts.Rights do
   defines their capacity to do or not to do some actions on the book.
   These capacities are represented by rights.
   """
+
+  alias Anacounts.Accounts
+
   @type t :: atom()
 
-  @all []
+  @all [:delete_book]
   def all, do: @all
+
+  @spec member_has_right?(Accounts.BookMember.t(), t()) :: boolean()
+  def member_has_right?(member, right) do
+    Accounts.Role.has_right?(member.role, right)
+  end
 end

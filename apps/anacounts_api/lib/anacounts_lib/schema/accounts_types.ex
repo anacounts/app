@@ -22,11 +22,17 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
   @desc "One of the users attached to a book"
   object :book_member do
-    interface(:base_user)
-    is_type_of(&match?(%{role: _}, &1))
-
+    # identification
     field(:id, :id)
-    field(:email, :string)
+
+    # display information
+    field(:display_name, :string)
+
+    field(:avatar_url, :string) do
+      resolve(&Resolvers.Auth.get_profile_avatar_url/3)
+    end
+
+    # relation to book
     field(:role, :string)
   end
 
@@ -49,10 +55,18 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
   ## Mutations
 
   object :accounts_mutations do
+    @desc "Creates a new book"
     field :create_book, :book do
       arg(:attrs, non_null(:book_input))
 
       resolve(&Resolvers.Accounts.do_create_book/3)
+    end
+
+    @desc "Delete an existing book"
+    field :delete_book, :book do
+      arg(:id, non_null(:id))
+
+      resolve(&Resolvers.Accounts.do_delete_book/3)
     end
   end
 

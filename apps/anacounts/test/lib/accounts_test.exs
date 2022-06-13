@@ -3,6 +3,7 @@ defmodule Anacounts.AccountsTest do
 
   import Anacounts.AccountsFixtures
   import Anacounts.AuthFixtures
+
   alias Anacounts.Accounts
 
   describe "get_book/2" do
@@ -76,5 +77,31 @@ defmodule Anacounts.AccountsTest do
 
       assert "can't be blank" in errors_on(changeset).name
     end
+  end
+
+  describe "delete_book/2" do
+    setup :setup_user_fixture
+    setup :setup_book_fixture
+
+    test "deletes the book", %{user: user, book: book} do
+      assert {:ok, deleted} = Accounts.delete_book(book, user)
+      assert deleted.id == book.id
+
+      assert deleted_book = Repo.get(Accounts.Book, book.id)
+      assert deleted_book.deleted_at
+    end
+
+    test "returns `:not_found` if it does not exist", %{user: user} do
+      assert Accounts.delete_book(%Accounts.Book{id: 0}, user) == {:error, :not_found}
+    end
+
+    test "returns `:not_found` if it does not belong to the user", %{book: book} do
+      remote_user = user_fixture()
+
+      assert Accounts.delete_book(book, remote_user) == {:error, :not_found}
+    end
+
+    # XXX Add when it's possible to add a book member
+    # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
   end
 end
