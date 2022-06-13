@@ -8,7 +8,7 @@ defmodule AnacountsAPI.Resolver do
   @doc """
   Wraps an Ecto `get` result into a Absinthe compatible value.
   """
-  def wrap(nil), do: {:error, dgettext("api_errors", "Not found")}
+  def wrap(nil), do: {:error, :not_found}
   def wrap(value), do: {:ok, value}
 
   @doc """
