@@ -40,7 +40,7 @@ if config_env() == :prod do
 
   host =
     System.get_env("HOST") ||
-      raise "environment variable BACK_HOST_URL is missing."
+      raise "environment variable HOST is missing."
 
   config :anacounts_api, AnacountsAPI.Endpoint,
     url: [host: host, port: 80],
@@ -64,13 +64,9 @@ if config_env() == :prod do
 
   # ## Using releases
   #
-  # If you are doing OTP releases, you need to instruct Phoenix
-  # to start each relevant endpoint:
-  #
-  #     config :anacounts_api, AnacountsAPI.Endpoint, server: true
-  #
-  # Then you can assemble a release by calling `mix release`.
-  # See `mix help release` for more information.
+  # Configure for OTP releases, instruct Phoenix to start the endpoint
+
+  config :anacounts_api, AnacountsAPI.Endpoint, server: true
 
   # ## Configuring the mailer
   #
