@@ -84,14 +84,11 @@ defmodule Anacounts.AccountsTest do
     setup :setup_book_fixture
 
     test "deletes the book", %{user: user, book: book} do
-      assert {:ok, deleted} = Accounts.delete_book(book, user)
+      assert {:ok, deleted} = Accounts.delete_book(book)
       assert deleted.id == book.id
 
       assert deleted_book = Repo.get(Accounts.Book, book.id)
       assert deleted_book.deleted_at
     end
-
-    # XXX Add when it's possible to add a book member
-    # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
   end
 end
