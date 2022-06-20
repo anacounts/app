@@ -68,6 +68,13 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
       resolve(&Resolvers.Accounts.do_delete_book/3)
     end
+
+    field :invite_user, :book_member do
+      arg(:book_id, non_null(:id))
+      arg(:email, non_null(:string))
+
+      resolve(&Resolvers.Accounts.do_invite_user/3)
+    end
   end
 
   ## Input objects

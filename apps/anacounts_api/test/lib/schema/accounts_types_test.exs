@@ -216,4 +216,76 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test_logged_in(@delete_book_mutation, %{"id" => "0"})
   end
+
+  describe "mutation: invite_user" do
+    @invite_user_mutation """
+    mutation InviteUser($book_id: ID!, $email: String!) {
+      inviteUser(book_id: $book_id, email: $email) {
+        role
+      }
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    setup :setup_book_fixture
+    setup :setup_book_member_fixture
+
+    # XXX In the end, `invite_user` will only send an invite
+    # Tests will need to be updated
+
+    test "responds with the new book member", %{conn: conn, book: book} do
+      remote_user = user_fixture()
+
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @invite_user_mutation,
+          "variables" => %{"book_id" => book.id, "email" => remote_user.email}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "inviteUser" => %{
+                   "role" => "member"
+                 }
+               }
+             }
+    end
+
+    test "does not allow users without rights to send invitations", %{
+      conn: conn,
+      book: book,
+      book_member_user: book_member_user
+    } do
+      # XXX In the end, `invite_user` will only send an invite
+      # `another_user` won't be necessary anymore
+      another_user = user_fixture()
+
+      conn = log_user_in(conn, book_member_user)
+
+      conn =
+        post(conn, "/api/v1", %{
+          "query" => @invite_user_mutation,
+          "variables" => %{"book_id" => book.id, "email" => another_user.email}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"inviteUser" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Unauthorized",
+                   "path" => ["inviteUser"]
+                 }
+               ]
+             }
+    end
+
+    # XXX To write once the mutation actually sends invitations
+    # test "sends an email with invitation link"
+    # test "allows to invite non registered users"
+
+    test_logged_in(@invite_user_mutation, %{"book_id" => "0", "email" => "anacounts@example.com"})
+  end
 end

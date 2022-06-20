@@ -10,8 +10,11 @@ defmodule Anacounts.Accounts.Rights do
 
   @type t :: atom()
 
-  @all [:delete_book]
-  def all, do: @all
+  @creator_rights [:invite_new_member, :delete_book]
+  def creator_rights, do: @creator_rights
+
+  @member_rights []
+  def member_rights, do: @member_rights
 
   @spec member_has_right?(Accounts.BookMember.t(), t()) :: boolean()
   def member_has_right?(member, right) do
