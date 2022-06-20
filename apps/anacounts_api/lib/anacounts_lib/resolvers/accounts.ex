@@ -39,6 +39,15 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   def do_delete_book(_parent, _args, _resolution), do: not_logged_in()
 
+  def do_invite_user(_parent, %{book_id: book_id, email: email}, %{context: %{current_user: user}}) do
+    with {:ok, member} <- fetch_membership(book_id, user),
+         :ok <- has_rights?(member, :invite_new_member) do
+      Accounts.Members.invite_user(book_id, email)
+    end
+  end
+
+  def do_invite_user(_parent, _args, _resolution), do: not_logged_in()
+
   defp fetch_book(book_id, user) do
     if book = Accounts.get_book(book_id, user) do
       {:ok, book}
