@@ -10,12 +10,13 @@ defmodule Anacounts.Accounts.Role do
   """
   alias Anacounts.Accounts.Rights
 
+  # XXX Use hex's enum_type module: https://hexdocs.pm/enum_type
+
   @type t :: atom()
 
   @roles %{
-    creator: Rights.all(),
-    administrator: [],
-    member: []
+    creator: Rights.creator_rights(),
+    member: Rights.member_rights()
   }
 
   @role_ids Map.keys(@roles)

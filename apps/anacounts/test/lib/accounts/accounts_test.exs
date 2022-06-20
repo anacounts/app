@@ -91,16 +91,6 @@ defmodule Anacounts.AccountsTest do
       assert deleted_book.deleted_at
     end
 
-    test "returns `:not_found` if it does not exist", %{user: user} do
-      assert Accounts.delete_book(%Accounts.Book{id: 0}, user) == {:error, :not_found}
-    end
-
-    test "returns `:not_found` if it does not belong to the user", %{book: book} do
-      remote_user = user_fixture()
-
-      assert Accounts.delete_book(book, remote_user) == {:error, :not_found}
-    end
-
     # XXX Add when it's possible to add a book member
     # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
   end
