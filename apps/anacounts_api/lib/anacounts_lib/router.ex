@@ -8,16 +8,6 @@ defmodule AnacountsAPI.Router do
     plug Anacounts.Context
   end
 
-  scope "/api/v1" do
-    pipe_through :api
-
-    forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: AnacountsAPI.Schema,
-      interface: :playground
-
-    forward "/", Absinthe.Plug, schema: AnacountsAPI.Schema
-  end
-
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
@@ -41,5 +31,15 @@ defmodule AnacountsAPI.Router do
     scope "/dev" do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  scope "/" do
+    pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: AnacountsAPI.Schema,
+      interface: :playground
+
+    forward "/", Absinthe.Plug, schema: AnacountsAPI.Schema
   end
 end
