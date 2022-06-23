@@ -9,6 +9,13 @@ defmodule Anacounts.Transfers do
   alias Anacounts.Auth
   alias Anacounts.Transfers.MoneyTransfer
 
+  @spec find_transfers_in_book(Book.id()) :: [MoneyTransfer.t()]
+  def find_transfers_in_book(book_id) do
+    MoneyTransfer.base_query()
+    |> MoneyTransfer.where_book_id(book_id)
+    |> Repo.all()
+  end
+
   @spec create_transfer(Accounts.Book.t(), Auth.User.id(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def create_transfer(book_id, user_id, attrs) do

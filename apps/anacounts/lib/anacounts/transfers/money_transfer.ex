@@ -67,4 +67,13 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     changeset
     |> validate_inclusion(:type, @transfer_types)
   end
+
+  def base_query() do
+    from __MODULE__, as: :money_transfer
+  end
+
+  def where_book_id(query, book_id) do
+    from [money_transfer: money_transfer] in query,
+      where: money_transfer.book_id == ^book_id
+  end
 end

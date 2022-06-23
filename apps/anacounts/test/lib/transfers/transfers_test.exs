@@ -7,6 +7,18 @@ defmodule Anacounts.TransfersTest do
 
   alias Anacounts.Transfers
 
+  describe "find_transfers_in_book/1" do
+    setup :setup_user_fixture
+    setup :setup_book_fixture
+
+    test "find all transfers in book", %{book: book, user: user} do
+      transfer = money_transfer_fixture(book, user)
+
+      assert [found_transfer] = Transfers.find_transfers_in_book(book.id)
+      assert found_transfer.id == transfer.id
+    end
+  end
+
   describe "create_transfer/3" do
     setup :setup_user_fixture
     setup :setup_book_fixture
