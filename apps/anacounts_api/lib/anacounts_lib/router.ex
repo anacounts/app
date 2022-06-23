@@ -1,5 +1,11 @@
+# Disable checking that there are too many dependencies
+# Unfortunately, there isn't much we can do about this, this is a design decision
+# of Phoenix to group many things here.
+# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule AnacountsAPI.Router do
   use AnacountsAPI, :router
+
+  alias AnacountsAPI.Controllers
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -31,6 +37,10 @@ defmodule AnacountsAPI.Router do
     scope "/dev" do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  scope "/metrics" do
+    get "/health_check", Controllers.MetricsController, :health_check
   end
 
   scope "/" do
