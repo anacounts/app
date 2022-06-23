@@ -1,6 +1,3 @@
-msgid "are still associated with this entry"
-msgstr ""
-
 ## This is a PO Template file.
 ##
 ## `msgid`s here are often extracted from source code.
@@ -10,6 +7,10 @@ msgstr ""
 ## Run `mix gettext.extract` to bring this file up to
 ## date. Leave `msgstr`s empty as changing them here has no
 ## effect: edit them in PO (`.po`) files instead.
+
+msgid "are still associated with this entry"
+msgstr ""
+
 ## From Ecto.Changeset.cast/4
 msgid "can't be blank"
 msgstr ""
@@ -97,4 +98,8 @@ msgstr[1] ""
 
 ## From Anacounts.Accounts.BookMember
 msgid "user is already a member of this book"
+msgstr ""
+
+## From Anacounts.Transfers.Peer
+msgid "user is already a peer of this money transfer"
 msgstr ""

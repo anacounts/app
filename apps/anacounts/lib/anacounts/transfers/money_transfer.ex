@@ -38,4 +38,33 @@ defmodule Anacounts.Transfers.MoneyTransfer do
 
     timestamps()
   end
+
+  def create_changeset(book_id, holder_id, attrs) do
+    %__MODULE__{}
+    |> cast(attrs, [:amount, :type, :date])
+    |> put_change(:book_id, book_id)
+    |> put_change(:holder_id, holder_id)
+    |> validate_required([:book_id, :holder_id, :amount])
+    |> validate_book_id()
+    |> validate_holder_id()
+    |> validate_type()
+    |> cast_assoc(:peers, with: &Transfers.Peer.create_money_transfer_changeset/2)
+  end
+
+  defp validate_book_id(changeset) do
+    changeset
+    |> validate_required(:book_id)
+    |> foreign_key_constraint(:book_id)
+  end
+
+  defp validate_holder_id(changeset) do
+    changeset
+    |> validate_required(:holder_id)
+    |> foreign_key_constraint(:holder_id)
+  end
+
+  defp validate_type(changeset) do
+    changeset
+    |> validate_inclusion(:type, @transfer_types)
+  end
 end

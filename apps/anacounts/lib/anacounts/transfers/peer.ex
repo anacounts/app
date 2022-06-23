@@ -23,4 +23,26 @@ defmodule Anacounts.Transfers.Peer do
 
     field :weight, :decimal, default: Decimal.new(1)
   end
+
+  def create_money_transfer_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:transfer_id, :user_id, :weight])
+    |> foreign_key_constraint(:transfer_id)
+    |> validate_user_id()
+    |> validate_unique_transfer_and_user_id()
+  end
+
+  defp validate_user_id(changeset) do
+    changeset
+    |> validate_required(:user_id)
+    |> foreign_key_constraint(:user_id)
+  end
+
+  defp validate_unique_transfer_and_user_id(changeset) do
+    changeset
+    |> unique_constraint([:transfer_id, :user_id],
+      message: "user is already a peer of this money transfer",
+      error_key: :user_id
+    )
+  end
 end
