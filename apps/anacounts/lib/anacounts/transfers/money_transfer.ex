@@ -34,7 +34,9 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     belongs_to :book, Accounts.Book
     belongs_to :holder, Auth.User
 
-    has_many :peers, Transfers.Peer, foreign_key: :transfer_id
+    has_many :peers, Transfers.Peer,
+      foreign_key: :transfer_id,
+      on_replace: :delete_if_exists
 
     timestamps()
   end
@@ -49,6 +51,14 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     |> validate_holder_id()
     |> validate_type()
     |> cast_assoc(:peers, with: &Transfers.Peer.create_money_transfer_changeset/2)
+  end
+
+  def update_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:amount, :type, :date])
+    |> validate_required([:amount])
+    |> validate_type()
+    |> cast_assoc(:peers, with: &Transfers.Peer.update_money_transfer_changeset/2)
   end
 
   defp validate_book_id(changeset) do

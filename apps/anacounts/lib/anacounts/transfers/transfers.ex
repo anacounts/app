@@ -22,4 +22,13 @@ defmodule Anacounts.Transfers do
     MoneyTransfer.create_changeset(book_id, user_id, attrs)
     |> Repo.insert()
   end
+
+  @spec update_transfer(MoneyTransfer.t(), map()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def update_transfer(transfer, attrs) do
+    transfer_with_preloads = Repo.preload(transfer, :peers)
+
+    MoneyTransfer.update_changeset(transfer_with_preloads, attrs)
+    |> Repo.update()
+  end
 end

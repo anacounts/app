@@ -32,6 +32,23 @@ defmodule Anacounts.Transfers.Peer do
     |> validate_unique_transfer_and_user_id()
   end
 
+  def update_money_transfer_changeset(struct, attrs)
+
+  # new peer built, must set a `user_id`
+  def update_money_transfer_changeset(%{id: nil} = struct, attrs) do
+    struct
+    |> cast(attrs, [:user_id, :weight])
+    |> validate_user_id()
+    |> validate_unique_transfer_and_user_id()
+  end
+
+  # updating an existing peer, cannot change `user_id`
+  def update_money_transfer_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:weight])
+    |> validate_unique_transfer_and_user_id()
+  end
+
   defp validate_user_id(changeset) do
     changeset
     |> validate_required(:user_id)
