@@ -31,4 +31,10 @@ defmodule Anacounts.Transfers do
     MoneyTransfer.update_changeset(transfer_with_preloads, attrs)
     |> Repo.update()
   end
+
+  @spec delete_transfer(MoneyTransfer.t()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def delete_transfer(transfer) do
+    Repo.delete(transfer)
+  end
 end

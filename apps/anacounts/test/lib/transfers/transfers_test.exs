@@ -5,6 +5,8 @@ defmodule Anacounts.TransfersTest do
   import Anacounts.AuthFixtures
   import Anacounts.TransfersFixtures
 
+  alias Anacounts.Repo
+
   alias Anacounts.Transfers
 
   describe "find_transfers_in_book/1" do
@@ -192,6 +194,25 @@ defmodule Anacounts.TransfersTest do
       assert errors_on(changeset) == %{
                peers: [%{}, %{user_id: ["user is already a peer of this money transfer"]}]
              }
+    end
+  end
+
+  describe "delete_transfer/1" do
+    setup :setup_user_fixture
+    setup :setup_book_fixture
+    setup :setup_money_transfer_fixture
+
+    test "deletes the money transfer", %{money_transfer: money_transfer} do
+      assert {:ok, deleted_transfer} = Transfers.delete_transfer(money_transfer)
+      assert deleted_transfer.id == money_transfer.id
+    end
+
+    test "deleted related peers", %{book: book, user: user} do
+      money_transfer = money_transfer_fixture(book, user, %{peers: [%{user_id: user.id}]})
+
+      assert {:ok, _deleted_transfer} = Transfers.delete_transfer(money_transfer)
+
+      refute Repo.get_by(Transfers.Peer, transfer_id: money_transfer.id)
     end
   end
 end
