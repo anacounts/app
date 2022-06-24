@@ -83,7 +83,7 @@ defmodule Anacounts.AccountsTest do
     setup :setup_user_fixture
     setup :setup_book_fixture
 
-    test "deletes the book", %{user: user, book: book} do
+    test "deletes the book", %{book: book} do
       assert {:ok, deleted} = Accounts.delete_book(book)
       assert deleted.id == book.id
 
