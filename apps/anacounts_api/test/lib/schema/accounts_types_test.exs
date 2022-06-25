@@ -29,7 +29,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test "returns the book information", %{conn: conn, book: book, user: user} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @book_query,
           "variables" => %{"id" => book.id}
         })
@@ -53,7 +53,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test "returns an error if the book does not exist", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @book_query,
           "variables" => %{"id" => "0"}
         })
@@ -75,7 +75,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
       other_book = book_fixture(other_user)
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @book_query,
           "variables" => %{"id" => other_book.id}
         })
@@ -115,7 +115,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test "create a new book", %{conn: conn, user: user} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @create_book_mutation,
           "variables" => %{"attrs" => valid_book_attributes()}
         })
@@ -160,7 +160,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test "deletes the book", %{conn: conn, book: book} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @delete_book_mutation,
           "variables" => %{"id" => book.id}
         })
@@ -172,7 +172,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
     test "errors with `:not_found` if it does not exist", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @delete_book_mutation,
           "variables" => %{"id" => 0}
         })
@@ -194,7 +194,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
       book = book_fixture(remote_user)
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @delete_book_mutation,
           "variables" => %{"id" => book.id}
         })
@@ -239,7 +239,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
       remote_user = user_fixture()
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @invite_user_mutation,
           "variables" => %{"book_id" => book.id, "email" => remote_user.email}
         })
@@ -265,7 +265,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
       conn = log_user_in(conn, book_member_user)
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @invite_user_mutation,
           "variables" => %{"book_id" => book.id, "email" => another_user.email}
         })
