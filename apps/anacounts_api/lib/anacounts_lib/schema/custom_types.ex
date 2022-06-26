@@ -15,9 +15,8 @@ defmodule AnacountsAPI.Schema.CustomTypes do
   @spec parse_money(Input.String.t()) :: {:ok, DateTime.t()} | :error
   @spec parse_money(Input.Null.t()) :: {:ok, nil}
   defp parse_money(%Input.String{value: value}) do
-    with [raw_amount, currency] <- String.split(value, "/"),
-         {amount, ""} <- Integer.parse(raw_amount) do
-      {:ok, Money.new(amount, currency)}
+    with [raw_amount, currency] <- String.split(value, "/") do
+      Money.parse(raw_amount, currency)
     else
       _ -> :error
     end
