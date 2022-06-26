@@ -12,11 +12,22 @@ defmodule Anacounts.Accounts do
   alias Anacounts.Accounts.BookMember
   alias Anacounts.Auth.User
 
-  @spec get_book(Book.id(), User.t()) :: Book.t() | nil
-  def get_book(id, user) do
+  @spec get_book_of_user(Book.id(), User.t()) :: Book.t() | nil
+  def get_book_of_user(id, user) do
     Book.user_query(user)
     |> Repo.get(id)
   end
+
+  @doc """
+  Gets a single book.
+  Raises `Ecto.NoResultsError` if the Book does not exist.
+  ## Examples
+      iex> get_book!(123)
+      %Book{}
+      iex> get_book!(456)
+      ** (Ecto.NoResultsError)
+  """
+  def get_book!(id), do: Repo.get!(Book, id)
 
   @doc """
   Get all books of a specific user, whatever role they may have.
@@ -26,6 +37,17 @@ defmodule Anacounts.Accounts do
     Book.user_query(user)
     |> Repo.all()
   end
+
+  @doc """
+  Gets a single book member.
+  Raises `Ecto.NoResultsError` if the BookMember does not exist.
+  ## Examples
+      iex> get_member!(123)
+      %BookMember{}
+      iex> get_member!(456)
+      ** (Ecto.NoResultsError)
+  """
+  def get_member!(id), do: Repo.get!(BookMember, id)
 
   @spec find_book_members(Book.t()) :: [BookMember.t()]
   def find_book_members(book) do

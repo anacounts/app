@@ -7,7 +7,7 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   alias Anacounts.Accounts
 
-  ## Accounts queries
+  ## Queries
 
   def find_book(_parent, %{id: id}, %{context: %{current_user: user}}) do
     fetch_book(id, user)
@@ -21,7 +21,7 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   def find_books(_parent, _args, _resolution), do: not_logged_in()
 
-  ## Accounts mutations
+  ## Mutations
 
   def do_create_book(_parent, %{attrs: book_attrs}, %{context: %{current_user: user}}) do
     Accounts.create_book(user, book_attrs)
@@ -49,7 +49,7 @@ defmodule AnacountsAPI.Resolvers.Accounts do
   def do_invite_user(_parent, _args, _resolution), do: not_logged_in()
 
   defp fetch_book(book_id, user) do
-    if book = Accounts.get_book(book_id, user) do
+    if book = Accounts.get_book_of_user(book_id, user) do
       {:ok, book}
     else
       {:error, :not_found}
@@ -70,5 +70,19 @@ defmodule AnacountsAPI.Resolvers.Accounts do
     else
       {:error, :unauthorized}
     end
+  end
+
+  ## External field resolution
+
+  def find_money_transfer_book(%{book_id: book_id}, _args, _resolution) do
+    Accounts.get_book!(book_id)
+  end
+
+  def find_money_transfer_holder(%{holder_id: holder_id}, _args, _resolution) do
+    Accounts.get_member!(holder_id)
+  end
+
+  def find_transfer_peer_user(%{member_id: member_id}, _args, _resolution) do
+    Accounts.get_member!(member_id)
   end
 end

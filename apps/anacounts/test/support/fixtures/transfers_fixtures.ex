@@ -19,13 +19,13 @@ defmodule Anacounts.TransfersFixtures do
     |> Map.merge(attrs)
   end
 
-  def money_transfer_fixture(book, user, attrs \\ %{}) do
+  def money_transfer_fixture(book, member, attrs \\ %{}) do
     valid_attrs = valid_money_transfer_attributes(attrs)
-    {:ok, transfer} = Transfers.create_transfer(book.id, user.id, valid_attrs)
+    {:ok, transfer} = Transfers.create_transfer(book.id, member.id, valid_attrs)
     transfer
   end
 
-  def setup_money_transfer_fixture(%{book: book, user: user} = context) do
-    Map.put(context, :money_transfer, money_transfer_fixture(book, user))
+  def setup_money_transfer_fixture(%{book: book, book_member: book_member} = context) do
+    Map.put(context, :money_transfer, money_transfer_fixture(book, book_member))
   end
 end

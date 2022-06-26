@@ -101,5 +101,5 @@ msgid "user is already a member of this book"
 msgstr ""
 
 ## From Anacounts.Transfers.Peer
-msgid "user is already a peer of this money transfer"
+msgid "member is already a peer of this money transfer"
 msgstr ""

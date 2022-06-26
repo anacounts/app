@@ -10,7 +10,6 @@ defmodule Anacounts.Transfers.MoneyTransfer do
   import Ecto.Query
 
   alias Anacounts.Accounts
-  alias Anacounts.Auth
   alias Anacounts.Transfers
 
   # the types
@@ -22,7 +21,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
           amount: Money.t(),
           type: :payment | :income | :reimbursement,
           book: Accounts.Book.t(),
-          holder: Auth.User.t(),
+          holder: Accounts.BookMember.t(),
           peers: Transfers.Peer.t()
         }
 
@@ -32,7 +31,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     field :date, :utc_datetime
 
     belongs_to :book, Accounts.Book
-    belongs_to :holder, Auth.User
+    belongs_to :holder, Accounts.BookMember
 
     has_many :peers, Transfers.Peer,
       foreign_key: :transfer_id,

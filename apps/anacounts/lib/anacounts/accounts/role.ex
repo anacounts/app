@@ -10,8 +10,6 @@ defmodule Anacounts.Accounts.Role do
   """
   alias Anacounts.Accounts.Rights
 
-  # XXX Use hex's enum_type module: https://hexdocs.pm/enum_type
-
   @type t :: atom()
 
   @roles %{

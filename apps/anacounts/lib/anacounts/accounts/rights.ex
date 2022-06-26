@@ -1,19 +1,27 @@
 defmodule Anacounts.Accounts.Rights do
   @moduledoc """
-  The ability to do some action on a book.
-  Users have a role in their book with an associated role. This role
-  defines their capacity to do or not to do some actions on the book.
-  These capacities are represented by rights.
+  Rights are the ability to do one or more actions in a book.
+
+  Member are associated a role in a book. The role is represented by
+  Anacounts.Accounts.Role. It defines their capacity to do or not to do
+  some actions on the book. These capacities are represented by rights.
+
+  ## List of rights
+
+  - delete_book: Allow to delete a book
+  - handle_money_transfers: Allow to create, update, and delete money transfers
+  - invite_new_member: Allow to invite a new member in the book
+
   """
 
   alias Anacounts.Accounts
 
   @type t :: atom()
 
-  @creator_rights [:invite_new_member, :delete_book]
+  @creator_rights [:delete_book, :handle_money_transfers, :invite_new_member]
   def creator_rights, do: @creator_rights
 
-  @member_rights []
+  @member_rights [:handle_money_transfers]
   def member_rights, do: @member_rights
 
   @spec member_has_right?(Accounts.BookMember.t(), t()) :: boolean()

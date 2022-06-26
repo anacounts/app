@@ -18,6 +18,10 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:members, list_of(:book_member)) do
       resolve(&Resolvers.Auth.find_book_members/3)
     end
+
+    field(:money_transfers, list_of(:money_transfer)) do
+      resolve(&Resolvers.Transfers.find_book_transfers/3)
+    end
   end
 
   @desc "One of the users attached to a book"
@@ -25,6 +29,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     # identification
     field(:id, :id)
 
+    # TODO Replace with `field :user, :user`
     # display information
     field(:display_name, :string)
 

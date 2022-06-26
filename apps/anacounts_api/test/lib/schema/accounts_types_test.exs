@@ -138,7 +138,7 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                }
              } = json_response(conn, 200)
 
-      assert Accounts.get_book(book_id, user)
+      assert Accounts.get_book_of_user(book_id, user)
     end
 
     test_logged_in(@create_book_mutation, %{"attrs" => valid_book_attributes()})
@@ -211,8 +211,29 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
              }
     end
 
-    # XXX Add when it's possible to add a book member
-    # test "errors with `:unauthorized` if the user does not have `:delete_book` right", %{user: user}
+    test "not authorized if the user does not have right", %{conn: conn, book: book} do
+      other_user = user_fixture()
+      _other_member = book_member_fixture(book, other_user)
+
+      conn = log_user_in(conn, other_user)
+
+      conn =
+        post(conn, "/", %{
+          "query" => @delete_book_mutation,
+          "variables" => %{"id" => book.id}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"deleteBook" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Unauthorized",
+                   "path" => ["deleteBook"]
+                 }
+               ]
+             }
+    end
 
     test_logged_in(@delete_book_mutation, %{"id" => "0"})
   end
@@ -282,7 +303,9 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
              }
     end
 
-    # XXX To write once the mutation actually sends invitations
+    # XXX In the end, `invite_user` will only send an invite
+    # These are tests to write once the mutation actually sends invitations
+
     # test "sends an email with invitation link"
     # test "allows to invite non registered users"
 

@@ -8,7 +8,7 @@ defmodule Anacounts.Repo.Migrations.CreateTransfersIndexes do
     create index(:transfers_money_transfers, :holder_id, concurrently: true)
 
     create index(:transfers_peers, :transfer_id, concurrently: true)
-    create index(:transfers_peers, :user_id, concurrently: true)
-    create unique_index(:transfers_peers, [:transfer_id, :user_id], concurrently: true)
+    create index(:transfers_peers, :member_id, concurrently: true)
+    create unique_index(:transfers_peers, [:transfer_id, :member_id], concurrently: true)
   end
 end

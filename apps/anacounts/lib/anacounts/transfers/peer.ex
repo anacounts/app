@@ -5,61 +5,71 @@ defmodule Anacounts.Transfers.Peer do
 
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
-  alias Anacounts.Auth
+  alias Anacounts.Accounts
   alias Anacounts.Transfers
 
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
           transfer: Transfers.MoneyTransfer.t(),
-          user: Auth.User.t(),
+          member: Accounts.BookMember.t(),
           weight: Decimal.t()
         }
 
   schema "transfers_peers" do
     belongs_to :transfer, Transfers.MoneyTransfer
-    belongs_to :user, Auth.User
+    belongs_to :member, Accounts.BookMember
 
     field :weight, :decimal, default: Decimal.new(1)
   end
 
   def create_money_transfer_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:transfer_id, :user_id, :weight])
+    |> cast(attrs, [:transfer_id, :member_id, :weight])
     |> foreign_key_constraint(:transfer_id)
-    |> validate_user_id()
-    |> validate_unique_transfer_and_user_id()
+    |> validate_member_id()
+    |> validate_unique_by_transfer_and_member()
   end
 
   def update_money_transfer_changeset(struct, attrs)
 
-  # new peer built, must set a `user_id`
+  # new peer built, must set a `member_id`
   def update_money_transfer_changeset(%{id: nil} = struct, attrs) do
     struct
-    |> cast(attrs, [:user_id, :weight])
-    |> validate_user_id()
-    |> validate_unique_transfer_and_user_id()
+    |> cast(attrs, [:member_id, :weight])
+    |> validate_member_id()
+    |> validate_unique_by_transfer_and_member()
   end
 
-  # updating an existing peer, cannot change `user_id`
+  # updating an existing peer, cannot change `member_id`
   def update_money_transfer_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:weight])
-    |> validate_unique_transfer_and_user_id()
+    |> validate_unique_by_transfer_and_member()
   end
 
-  defp validate_user_id(changeset) do
+  defp validate_member_id(changeset) do
     changeset
-    |> validate_required(:user_id)
-    |> foreign_key_constraint(:user_id)
+    |> validate_required(:member_id)
+    |> foreign_key_constraint(:member_id)
   end
 
-  defp validate_unique_transfer_and_user_id(changeset) do
+  defp validate_unique_by_transfer_and_member(changeset) do
     changeset
-    |> unique_constraint([:transfer_id, :user_id],
-      message: "user is already a peer of this money transfer",
-      error_key: :user_id
+    |> unique_constraint([:transfer_id, :member_id],
+      message: "member is already a peer of this money transfer",
+      error_key: :member_id
     )
+  end
+
+  def base_query do
+    from __MODULE__, as: :peer
+  end
+
+  def where_transfer_id(query, transfer_id) do
+    from [peer: peer] in query,
+      where: peer.transfer_id == ^transfer_id
   end
 end
