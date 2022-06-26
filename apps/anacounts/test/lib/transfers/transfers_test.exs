@@ -35,6 +35,7 @@ defmodule Anacounts.TransfersTest do
                  valid_money_transfer_attributes()
                )
 
+      assert transfer.label == valid_money_transfer_label()
       assert transfer.amount == valid_money_transfer_amount()
       assert transfer.type == valid_money_transfer_type()
       assert transfer.date == valid_money_transfer_date()
@@ -106,12 +107,14 @@ defmodule Anacounts.TransfersTest do
 
       assert {:ok, updated} =
                Transfers.update_transfer(money_transfer, %{
+                 label: "my very own label !",
                  amount: Money.new(299, :EUR),
                  type: :income,
                  date: ~U[2020-06-29T17:31:28Z],
                  peers: [%{member_id: other_member.id}]
                })
 
+      assert updated.label == "my very own label !"
       assert updated.amount == Money.new(299, :EUR)
       assert updated.type == :income
       assert updated.date == ~U[2020-06-29T17:31:28Z]

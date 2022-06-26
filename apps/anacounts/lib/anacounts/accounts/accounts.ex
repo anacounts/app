@@ -4,8 +4,6 @@ defmodule Anacounts.Accounts do
   Allows to create a book, add or remove money transfers, add users, ...
   """
 
-  import Ecto.Query
-
   alias Anacounts.Repo
 
   alias Anacounts.Accounts.Book
@@ -51,12 +49,8 @@ defmodule Anacounts.Accounts do
 
   @spec find_book_members(Book.t()) :: [BookMember.t()]
   def find_book_members(book) do
-    query =
-      from ub in BookMember.book_query(book),
-        join: u in assoc(ub, :user),
-        preload: [user: u]
-
-    Repo.all(query)
+    BookMember.book_query(book)
+    |> Repo.all()
   end
 
   @doc """

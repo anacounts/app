@@ -3,6 +3,7 @@ defmodule Anacounts.Repo.Migrations.CreateTransfersTable do
 
   def change do
     create table(:transfers_money_transfers) do
+      add :label, :string, null: false
       add :amount, :money_with_currency, null: false
       add :type, :string, null: false
       add :date, :utc_datetime, default: fragment("now()"), null: false

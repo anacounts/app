@@ -34,6 +34,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
+              "label" => "Ha, whatever",
               "amount" => "1999/EUR",
               "date" => "2022-02-10T23:04:12Z",
               "type" => "INCOME",
@@ -65,6 +66,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
+              "label" => "Here's a transfer label",
               "amount" => "399/USD",
               "type" => "REIMBURSEMENT"
             }
@@ -85,6 +87,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => other_book.id,
+              "label" => "Look at me !",
               "amount" => "199/AED",
               "type" => "PAYMENT",
               "peers" => []
@@ -106,7 +109,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
     end
 
     test_logged_in(@create_money_transfer_mutation, %{
-      "attrs" => %{"bookId" => 0, "amount" => "0/EUR", "type" => "INCOME"}
+      "attrs" => %{"bookId" => 0, "label" => "label", "amount" => "0/EUR", "type" => "INCOME"}
     })
   end
 
@@ -114,6 +117,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
     @update_money_transfer_mutation """
     mutation UpdateMoneyTransfer($transferId: ID!, $attrs: MoneyTransferUpdateInput!) {
       updateMoneyTransfer(transferId: $transferId, attrs: $attrs) {
+        label
         amount
         type
         date
@@ -142,6 +146,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "transferId" => money_transfer.id,
             "attrs" => %{
+              "label" => "hey, here's a label",
               "date" => "2024-04-04T04:04:04Z",
               "amount" => "280/ALL",
               "peers" => [
@@ -154,6 +159,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
       assert json_response(conn, 200) == %{
                "data" => %{
                  "updateMoneyTransfer" => %{
+                   "label" => "hey, here's a label",
                    "amount" => "280/ALL",
                    "type" => "PAYMENT",
                    "date" => "2024-04-04T04:04:04Z",

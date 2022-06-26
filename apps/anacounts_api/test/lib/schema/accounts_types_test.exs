@@ -15,8 +15,11 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
         name
         insertedAt
         members {
-          id
           role
+
+          user {
+            id
+          }
         }
       }
     }
@@ -42,8 +45,8 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                    "insertedAt" => NaiveDateTime.to_iso8601(book.inserted_at),
                    "members" => [
                      %{
-                       "id" => to_string(user.id),
-                       "role" => "creator"
+                       "role" => "creator",
+                       "user" => %{"id" => to_string(user.id)}
                      }
                    ]
                  }
@@ -102,9 +105,13 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
         id
         name
         insertedAt
+
         members {
-          id
           role
+
+          user {
+            id
+          }
         }
       }
     }
@@ -130,8 +137,10 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
                    "insertedAt" => _inserted_at,
                    "members" => [
                      %{
-                       "id" => ^user_id,
-                       "role" => "creator"
+                       "role" => "creator",
+                       "user" => %{
+                         "id" => ^user_id
+                       }
                      }
                    ]
                  }

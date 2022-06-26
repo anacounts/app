@@ -5,12 +5,14 @@ defmodule Anacounts.TransfersFixtures do
 
   alias Anacounts.Transfers
 
+  def valid_money_transfer_label, do: "This is a money transfer"
   def valid_money_transfer_amount, do: Money.new(179_99, :EUR)
   def valid_money_transfer_date, do: ~U[2022-06-23 14:02:51Z]
   def valid_money_transfer_type, do: :payment
 
   def valid_money_transfer_attributes(attrs \\ %{}) do
     %{
+      label: valid_money_transfer_label(),
       amount: valid_money_transfer_amount(),
       date: valid_money_transfer_date(),
       type: valid_money_transfer_type(),

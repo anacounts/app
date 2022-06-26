@@ -18,6 +18,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
   object :money_transfer do
     field(:id, :id)
 
+    field(:label, :string)
     field(:amount, :money)
     field(:type, :money_transfer_type)
     field(:date, :datetime)
@@ -90,6 +91,8 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
   """
   input_object :money_transfer_creation_input do
     field(:book_id, non_null(:id))
+
+    field(:label, non_null(:string))
     field(:amount, non_null(:money))
     field(:type, non_null(:money_transfer_type))
     field(:date, :datetime)
@@ -111,6 +114,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
   Input used to update a money transfer.
   """
   input_object :money_transfer_update_input do
+    field(:label, :string)
     field(:amount, :money)
     field(:type, :money_transfer_type)
     field(:date, :datetime)

@@ -103,25 +103,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   ## External field resolution
 
-  def find_book_members(book, _args, _resolution) do
-    members =
-      Anacounts.Accounts.find_book_members(book)
-      |> Enum.map(&book_member_schema_to_book_member_type/1)
-
-    {:ok, members}
-  end
-
-  defp book_member_schema_to_book_member_type(%{
-         user: %{id: id, email: email, display_name: display_name},
-         role: role
-       }) do
-    %{
-      id: id,
-      display_name: display_name,
-      role: role,
-
-      # email is required to resolve fields of the `book_member` type (e.g. `avatar_url`)
-      email: email
-    }
+  def find_user(%{user_id: user_id}, _args, _resoltion) do
+    {:ok, Auth.get_user!(user_id)}
   end
 end

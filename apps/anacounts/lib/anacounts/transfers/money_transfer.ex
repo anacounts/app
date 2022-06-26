@@ -26,6 +26,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
         }
 
   schema "transfers_money_transfers" do
+    field :label, :string
     field :amount, Money.Ecto.Composite.Type
     field :type, Ecto.Enum, values: @transfer_types
     field :date, :utc_datetime
@@ -42,22 +43,30 @@ defmodule Anacounts.Transfers.MoneyTransfer do
 
   def create_changeset(book_id, holder_id, attrs) do
     %__MODULE__{}
-    |> cast(attrs, [:amount, :type, :date])
+    |> cast(attrs, [:label, :amount, :type, :date])
     |> put_change(:book_id, book_id)
     |> put_change(:holder_id, holder_id)
-    |> validate_required([:book_id, :holder_id, :amount])
+    |> validate_label()
+    |> validate_required(:amount)
+    |> validate_type()
     |> validate_book_id()
     |> validate_holder_id()
-    |> validate_type()
     |> cast_assoc(:peers, with: &Transfers.Peer.create_money_transfer_changeset/2)
   end
 
   def update_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:amount, :type, :date])
-    |> validate_required([:amount])
+    |> cast(attrs, [:label, :amount, :type, :date])
+    |> validate_label()
+    |> validate_required(:amount)
     |> validate_type()
     |> cast_assoc(:peers, with: &Transfers.Peer.update_money_transfer_changeset/2)
+  end
+
+  defp validate_label(changeset) do
+    changeset
+    |> validate_required(:label)
+    |> validate_length(:label, min: 1, max: 255)
   end
 
   defp validate_book_id(changeset) do

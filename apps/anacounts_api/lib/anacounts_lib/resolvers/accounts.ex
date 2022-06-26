@@ -74,15 +74,19 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   ## External field resolution
 
+  def find_book_members(book, _args, _resolution) do
+    {:ok, Anacounts.Accounts.find_book_members(book)}
+  end
+
   def find_money_transfer_book(%{book_id: book_id}, _args, _resolution) do
-    Accounts.get_book!(book_id)
+    {:ok, Accounts.get_book!(book_id)}
   end
 
   def find_money_transfer_holder(%{holder_id: holder_id}, _args, _resolution) do
-    Accounts.get_member!(holder_id)
+    {:ok, Accounts.get_member!(holder_id)}
   end
 
   def find_transfer_peer_user(%{member_id: member_id}, _args, _resolution) do
-    Accounts.get_member!(member_id)
+    {:ok, Accounts.get_member!(member_id)}
   end
 end
