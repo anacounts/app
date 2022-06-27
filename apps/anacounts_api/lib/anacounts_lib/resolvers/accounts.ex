@@ -72,11 +72,15 @@ defmodule AnacountsAPI.Resolvers.Accounts do
     end
   end
 
+  ## Field resolution
+
+  def get_book_members(book, _args, _resolution) do
+    {:ok, Accounts.find_book_members(book)}
+  end
+
   ## External field resolution
 
-  def find_book_members(book, _args, _resolution) do
-    {:ok, Anacounts.Accounts.find_book_members(book)}
-  end
+  # TODO rename field resolution functions to `get_xxx`
 
   def find_money_transfer_book(%{book_id: book_id}, _args, _resolution) do
     {:ok, Accounts.get_book!(book_id)}

@@ -26,20 +26,23 @@ defmodule Anacounts.Transfers.MoneyTransfer do
         }
 
   schema "transfers_money_transfers" do
-    field :label, :string
-    field :amount, Money.Ecto.Composite.Type
-    field :type, Ecto.Enum, values: @transfer_types
-    field :date, :utc_datetime
+    field(:label, :string)
+    field(:amount, Money.Ecto.Composite.Type)
+    field(:type, Ecto.Enum, values: @transfer_types)
+    field(:date, :utc_datetime)
 
-    belongs_to :book, Accounts.Book
-    belongs_to :tenant, Accounts.BookMember
+    belongs_to(:book, Accounts.Book)
+    belongs_to(:tenant, Accounts.BookMember)
 
-    has_many :peers, Transfers.Peer,
+    has_many(:peers, Transfers.Peer,
       foreign_key: :transfer_id,
       on_replace: :delete_if_exists
+    )
 
     timestamps()
   end
+
+  ## Changesets
 
   def create_changeset(attrs) do
     %__MODULE__{}
@@ -85,12 +88,22 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     |> validate_inclusion(:type, @transfer_types)
   end
 
+  ## Queries
+
   def base_query do
-    from __MODULE__, as: :money_transfer
+    from(__MODULE__, as: :money_transfer)
   end
 
   def where_book_id(query, book_id) do
-    from [money_transfer: money_transfer] in query,
+    from([money_transfer: money_transfer] in query,
       where: money_transfer.book_id == ^book_id
+    )
   end
+
+  ## Struct functions
+
+  @spec amount(t()) :: Money.t()
+  def amount(transfer)
+  def amount(%{type: :payment, amount: amount}), do: amount
+  def amount(%{type: _income_or_reimbursement, amount: amount}), do: Money.neg(amount)
 end

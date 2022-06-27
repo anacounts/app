@@ -16,11 +16,15 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:inserted_at, :naive_datetime)
 
     field(:members, list_of(:book_member)) do
-      resolve(&Resolvers.Accounts.find_book_members/3)
+      resolve(&Resolvers.Accounts.get_book_members/3)
     end
 
     field(:money_transfers, list_of(:money_transfer)) do
       resolve(&Resolvers.Transfers.find_book_transfers/3)
+    end
+
+    field(:balance, :book_balance) do
+      resolve(&Resolvers.Accounts.Balance.get_book_balance/3)
     end
   end
 
