@@ -86,7 +86,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     |> validate_inclusion(:type, @transfer_types)
   end
 
-  def base_query() do
+  def base_query do
     from __MODULE__, as: :money_transfer
   end
 
