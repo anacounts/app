@@ -16,7 +16,11 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:inserted_at, :naive_datetime)
 
     field(:members, list_of(:book_member)) do
-      resolve(&Resolvers.Auth.find_book_members/3)
+      resolve(&Resolvers.Accounts.find_book_members/3)
+    end
+
+    field(:money_transfers, list_of(:money_transfer)) do
+      resolve(&Resolvers.Transfers.find_book_transfers/3)
     end
   end
 
@@ -25,15 +29,12 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     # identification
     field(:id, :id)
 
-    # display information
-    field(:display_name, :string)
-
-    field(:avatar_url, :string) do
-      resolve(&Resolvers.Auth.get_profile_avatar_url/3)
-    end
-
     # relation to book
     field(:role, :string)
+
+    field(:user, :user) do
+      resolve(&Resolvers.Auth.find_user/3)
+    end
   end
 
   ## Queries

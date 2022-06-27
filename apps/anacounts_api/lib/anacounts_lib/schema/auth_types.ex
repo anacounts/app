@@ -26,6 +26,22 @@ defmodule AnacountsAPI.Schema.AuthTypes do
     end
   end
 
+  @desc """
+  User is the publicly available information about a user.
+
+  It may appear anywhere: in a book members, in money transfers, etc.
+  """
+  object :user do
+    field(:id, :id)
+
+    # display information
+    field(:display_name, :string)
+
+    field(:avatar_url, :string) do
+      resolve(&Resolvers.Auth.get_profile_avatar_url/3)
+    end
+  end
+
   ## Queries
 
   object :auth_queries do
@@ -75,6 +91,7 @@ defmodule AnacountsAPI.Schema.AuthTypes do
   end
 
   ## Input objects
+
   @desc "Used to update profile"
   input_object :profile_input do
     field(:display_name, non_null(:string))

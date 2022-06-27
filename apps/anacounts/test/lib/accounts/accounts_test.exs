@@ -6,27 +6,29 @@ defmodule Anacounts.AccountsTest do
 
   alias Anacounts.Accounts
 
-  describe "get_book/2" do
+  describe "get_book_of_user/2" do
     setup :setup_user_fixture
     setup :setup_book_fixture
 
     test "returns the book", %{book: book, user: user} do
-      user_book = Accounts.get_book(book.id, user)
+      user_book = Accounts.get_book_of_user(book.id, user)
       assert user_book.id == book.id
     end
 
     test "returns `nil` if the book doesn't belong to the user", %{book: book} do
       other_user = user_fixture()
 
-      assert Accounts.get_book(book.id, other_user) == nil
+      assert Accounts.get_book_of_user(book.id, other_user) == nil
     end
 
     test "returns `nil` if the book doesn't exist", %{book: book, user: user} do
-      assert Accounts.get_book(book.id + 10, user) == nil
+      assert Accounts.get_book_of_user(book.id + 10, user) == nil
     end
 
-    # XXX Add a test when books can be deleted
-    # test "returns `nil` if the book was deleted" do
+    test "returns `nil` if the book was deleted", %{book: book, user: user} do
+      assert {:ok, _book} = Accounts.delete_book(book)
+      refute Accounts.get_book_of_user(book.id, user)
+    end
   end
 
   describe "find_user_books/1" do
@@ -34,14 +36,14 @@ defmodule Anacounts.AccountsTest do
     setup :setup_book_fixture
 
     test "returns all user books", %{book: book, user: user} do
-      # XXX Add a test when a user can become a "member" of another user's book
-      # another_user = user_fixture()
-      # another_book = book_fixture(another_user, %{ name: "Some other book from someone else })
-      # {:ok, book_member} = Accounts.add_book_member(another_book, user)
+      another_user = user_fixture()
+      another_book = book_fixture(another_user, %{name: "Some other book from someone else"})
+      _book_member = book_member_fixture(another_book, user)
 
       user_books = Accounts.find_user_books(user)
-      assert length(user_books) == 1
-      assert hd(user_books).id == book.id
+      assert [book1, book2] = Enum.sort_by(user_books, & &1.id)
+      assert book1.id == book.id
+      assert book2.id == another_book.id
     end
   end
 
@@ -50,13 +52,13 @@ defmodule Anacounts.AccountsTest do
     setup :setup_book_fixture
 
     test "returns all members of a book", %{book: book, user: user} do
-      # XXX Add a test when a user can become a "member" of another user's book
-      # another_user = user_fixture()
-      # {:ok, _book_member} = Accounts.add_book_member(book, another_user)
+      other_user = user_fixture()
+      _other_member = book_member_fixture(book, other_user)
 
       book_members = Accounts.find_book_members(book)
-      assert length(book_members) == 1
-      assert hd(book_members).user_id == user.id
+      assert [member1, member2] = Enum.sort_by(book_members, & &1.id)
+      assert member1.user_id == user.id
+      assert member2.user_id == other_user.id
     end
   end
 
@@ -83,7 +85,7 @@ defmodule Anacounts.AccountsTest do
     setup :setup_user_fixture
     setup :setup_book_fixture
 
-    test "deletes the book", %{user: user, book: book} do
+    test "deletes the book", %{book: book} do
       assert {:ok, deleted} = Accounts.delete_book(book)
       assert deleted.id == book.id
 

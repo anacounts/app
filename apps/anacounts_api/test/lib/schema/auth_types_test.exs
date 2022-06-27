@@ -25,7 +25,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
       user = user_fixture(%{email: "email@example.com"})
       conn = log_user_in(conn, user)
 
-      conn = post(conn, "/api/v1", %{"query" => @profile_query})
+      conn = post(conn, "/", %{"query" => @profile_query})
 
       assert json_response(conn, 200) == %{
                "data" => %{
@@ -55,7 +55,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "returns a authentication token", %{conn: conn, user: user} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @log_in_mutation,
           "variables" => %{
             email: user.email,
@@ -72,7 +72,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "returns error on incorrect email", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @log_in_mutation,
           "variables" => %{
             email: "anacounts@example.com",
@@ -94,7 +94,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "returns error on incorrect password", %{conn: conn, user: user} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @log_in_mutation,
           "variables" => %{
             email: user.email,
@@ -129,7 +129,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
       token = Anacounts.Auth.generate_user_session_token(user)
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @invalidate_token_mutation,
           "variables" => %{"token" => token}
         })
@@ -146,7 +146,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
       token = Anacounts.Auth.generate_user_session_token(remote_user)
 
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @invalidate_token_mutation,
           "variables" => %{"token" => token}
         })
@@ -172,7 +172,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
     test "deletes all tokens of the current user", %{conn: conn, user: user} do
       _user_token = Anacounts.Auth.generate_user_session_token(user)
 
-      conn = post(conn, "/api/v1", %{"query" => @invalidate_all_tokens_mutation})
+      conn = post(conn, "/", %{"query" => @invalidate_all_tokens_mutation})
 
       assert json_response(conn, 200) == %{
                "data" => %{"invalidateAllTokens" => "ok"}
@@ -193,7 +193,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "register a new user", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @register_mutation,
           "variables" => valid_register_attributes()
         })
@@ -205,7 +205,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "fails with invalid attributes", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @register_mutation,
           "variables" => %{
             email: unique_user_email(),
@@ -240,7 +240,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "changes user profile attributes", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @update_profile_mutation,
           "variables" => %{
             "attrs" => %{
@@ -256,7 +256,7 @@ defmodule AnacountsAPI.Schema.AuthTypesTest do
 
     test "fails if given invalid attributes", %{conn: conn} do
       conn =
-        post(conn, "/api/v1", %{
+        post(conn, "/", %{
           "query" => @update_profile_mutation,
           "variables" => %{
             "attrs" => %{

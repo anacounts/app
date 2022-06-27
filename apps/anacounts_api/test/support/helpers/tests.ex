@@ -28,7 +28,7 @@ defmodule AnacountsAPI.Helpers.Tests do
         conn = Plug.Conn.delete_req_header(conn, "authorization")
 
         conn =
-          post(conn, "/api/v1", %{
+          post(conn, "/", %{
             "query" => unquote(query),
             "variables" => unquote(variables)
           })

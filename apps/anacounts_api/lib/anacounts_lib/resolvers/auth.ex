@@ -7,7 +7,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   alias Anacounts.Auth
 
-  ## Auth queries
+  ## Queries
 
   def find_profile(_parent, _args, %{context: %{current_user: user}}) do
     {:ok, user}
@@ -15,7 +15,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   def find_profile(_parent, _args, _resolution), do: not_logged_in()
 
-  ## Auth mutations
+  ## Mutations
 
   def do_log_in(_parent, %{email: email, password: password}, _resolution) do
     if user = Auth.get_user_by_email_and_password(email, password) do
@@ -103,27 +103,7 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   ## External field resolution
 
-  def find_book_members(book, _args, %{context: %{current_user: _user}}) do
-    members =
-      Anacounts.Accounts.find_book_members(book)
-      |> Enum.map(&book_member_schema_to_book_member_type/1)
-
-    {:ok, members}
-  end
-
-  def find_book_members(_parent, _args, _resolution), do: not_logged_in()
-
-  defp book_member_schema_to_book_member_type(%{
-         user: %{id: id, email: email, display_name: display_name},
-         role: role
-       }) do
-    %{
-      id: id,
-      display_name: display_name,
-      role: role,
-
-      # email is required to resolve fields of the `book_member` type (e.g. `avatar_url`)
-      email: email
-    }
+  def find_user(%{user_id: user_id}, _args, _resoltion) do
+    {:ok, Auth.get_user!(user_id)}
   end
 end
