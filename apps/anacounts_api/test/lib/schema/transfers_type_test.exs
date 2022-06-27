@@ -253,7 +253,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
              }
     end
 
-    test "cannot update a trasnfer belonging to book the user isn't member of", %{
+    test "cannot update a transfer belonging to book the user isn't member of", %{
       conn: conn,
       money_transfer: money_transfer
     } do
@@ -286,5 +286,67 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
     end
 
     test_logged_in(@update_money_transfer_mutation, %{"transferId" => 0, "attrs" => %{}})
+  end
+
+  describe "mutation: delete_money_transfer" do
+    @delete_money_transfer_mutation """
+    mutation DeleteMoneyTransfer($transferId: ID!) {
+      deleteMoneyTransfer(transferId: $transferId) {
+        id
+      }
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    setup :setup_book_fixture
+    setup :setup_book_member_fixture
+    setup :setup_money_transfer_fixture
+
+    test "deletes the money transfer", %{conn: conn, money_transfer: money_transfer} do
+      conn =
+        post(conn, "/", %{
+          "query" => @delete_money_transfer_mutation,
+          "variables" => %{
+            "transferId" => money_transfer.id
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "deleteMoneyTransfer" => %{
+                   "id" => to_string(money_transfer.id)
+                 }
+               }
+             }
+    end
+
+    test "cannot delete if the user isn't a member", %{conn: conn, money_transfer: money_transfer} do
+      other_user = user_fixture()
+
+      conn = log_user_in(conn, other_user)
+
+      conn =
+        post(conn, "/", %{
+          "query" => @delete_money_transfer_mutation,
+          "variables" => %{
+            "transferId" => money_transfer.id
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"deleteMoneyTransfer" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Not found",
+                   "path" => ["deleteMoneyTransfer"]
+                 }
+               ]
+             }
+    end
+
+    test_logged_in(@delete_money_transfer_mutation, %{"transferId" => 0})
   end
 end

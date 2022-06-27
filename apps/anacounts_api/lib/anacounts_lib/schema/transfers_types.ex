@@ -85,6 +85,13 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
 
       resolve(&Resolvers.Transfers.do_update_money_transfer/3)
     end
+
+    @desc "Delete a money transfer"
+    field :delete_money_transfer, :money_transfer do
+      arg(:transfer_id, non_null(:id))
+
+      resolve(&Resolvers.Transfers.do_delete_money_transfer/3)
+    end
   end
 
   ## Input objects

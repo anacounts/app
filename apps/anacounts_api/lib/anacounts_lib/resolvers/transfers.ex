@@ -48,6 +48,21 @@ defmodule AnacountsAPI.Resolvers.Transfers do
 
   def do_update_money_transfer(_parent, _args, _resolution), do: not_logged_in()
 
+  def do_delete_money_transfer(
+        _parent,
+        %{transfer_id: transfer_id},
+        %{context: %{current_user: user}}
+      ) do
+    with {:ok, transfer} <- fetch_transfer(transfer_id),
+         {:ok, _book} <- fetch_book(transfer.book_id, user),
+         {:ok, member} <- fetch_membership(transfer.book_id, user),
+         :ok <- has_rights?(member, :handle_money_transfers) do
+      Transfers.delete_transfer(transfer)
+    end
+  end
+
+  def do_delete_money_transfer(_parent, _args, _resolution), do: not_logged_in()
+
   defp fetch_book(book_id, user) do
     if book = Accounts.get_book_of_user(book_id, user) do
       {:ok, book}
