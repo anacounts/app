@@ -61,6 +61,11 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
   ## Queries
 
   object :transfers_queries do
+    field :money_transfer, :money_transfer do
+      arg(:id, non_null(:id))
+
+      resolve(&Resolvers.Transfers.find_money_transfer/3)
+    end
   end
 
   ## Mutations

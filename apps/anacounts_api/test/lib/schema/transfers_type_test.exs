@@ -6,6 +6,88 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
   import Anacounts.TransfersFixtures
   import AnacountsAPI.Helpers.Tests, only: [test_logged_in: 2]
 
+  alias AnacountsAPI.Schema.CustomTypes
+
+  describe "query: money_transfer" do
+    @money_transfer_query """
+    query GetMoneyTransfer($id: ID!) {
+      moneyTransfer(id: $id) {
+        id
+
+        label
+        amount
+        type
+        date
+
+        peers {
+          id
+          weight
+
+          member {
+            id
+          }
+        }
+      }
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    setup :setup_book_fixture
+    setup :setup_book_member_fixture
+    setup :setup_money_transfer_fixture
+
+    test "returns the money transfer", %{conn: conn, money_transfer: money_transfer} do
+      # TODO add peers
+
+      conn =
+        post(conn, "/", %{
+          "query" => @money_transfer_query,
+          "variables" => %{"id" => money_transfer.id}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "moneyTransfer" => %{
+                   "amount" => valid_money_transfer_amount() |> CustomTypes.serialize_money(),
+                   "id" => to_string(money_transfer.id),
+                   "date" => valid_money_transfer_date() |> DateTime.to_iso8601(),
+                   "label" => valid_money_transfer_label(),
+                   "type" => valid_money_transfer_type() |> to_string() |> String.upcase(),
+                   "peers" => []
+                 }
+               }
+             }
+    end
+
+    test "return not found is user isn't member of the book", %{
+      conn: conn,
+      money_transfer: money_transfer
+    } do
+      other_user = user_fixture()
+
+      conn = log_user_in(conn, other_user)
+
+      conn =
+        post(conn, "/", %{
+          "query" => @money_transfer_query,
+          "variables" => %{"id" => money_transfer.id}
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{"moneyTransfer" => nil},
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Not found",
+                   "path" => ["moneyTransfer"]
+                 }
+               ]
+             }
+    end
+  end
+
   describe "mutation: create_money_transfer" do
     @create_money_transfer_mutation """
     mutation CreateMoneyTransfer($attrs: MoneyTransferCreationInput!) {
@@ -35,7 +117,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
             "attrs" => %{
               "bookId" => book.id,
               "label" => "Ha, whatever",
-              "amount" => "1999/EUR",
+              "amount" => "199.9/EUR",
               "date" => "2022-02-10T23:04:12Z",
               "type" => "INCOME",
               "peers" => [
@@ -48,7 +130,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
       assert json_response(conn, 200) == %{
                "data" => %{
                  "createMoneyTransfer" => %{
-                   "amount" => "1999/EUR",
+                   "amount" => "19990/EUR",
                    "date" => "2022-02-10T23:04:12Z",
                    "type" => "INCOME",
                    "peers" => [
@@ -148,7 +230,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
             "attrs" => %{
               "label" => "hey, here's a label",
               "date" => "2024-04-04T04:04:04Z",
-              "amount" => "280/ALL",
+              "amount" => "280.00/ALL",
               "peers" => [
                 %{"memberId" => other_member.id, "weight" => "3"}
               ]
@@ -160,7 +242,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                "data" => %{
                  "updateMoneyTransfer" => %{
                    "label" => "hey, here's a label",
-                   "amount" => "280/ALL",
+                   "amount" => "28000/ALL",
                    "type" => "PAYMENT",
                    "date" => "2024-04-04T04:04:04Z",
                    "peers" => [

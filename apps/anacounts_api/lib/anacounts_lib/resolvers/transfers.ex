@@ -8,6 +8,15 @@ defmodule AnacountsAPI.Resolvers.Transfers do
   alias Anacounts.Accounts
   alias Anacounts.Transfers
 
+  ## Queries
+
+  def find_money_transfer(_parent, %{id: id}, %{context: %{current_user: user}}) do
+    with {:ok, transfer} <- fetch_transfer(id),
+         {:ok, _book} <- fetch_book(transfer.book_id, user) do
+      {:ok, transfer}
+    end
+  end
+
   ## Mutations
 
   def do_create_money_transfer(
