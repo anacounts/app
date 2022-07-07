@@ -5,7 +5,6 @@ defmodule Anacounts.Transfers do
 
   alias Anacounts.Repo
 
-  alias Anacounts.Accounts
   alias Anacounts.Transfers.MoneyTransfer
   alias Anacounts.Transfers.Peer
 
