@@ -54,10 +54,11 @@ defmodule Anacounts.Transfers.MoneyTransfer do
 
   def update_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:label, :amount, :type, :date])
+    |> cast(attrs, [:label, :amount, :type, :date, :holder_id])
     |> validate_label()
     |> validate_required(:amount)
     |> validate_type()
+    |> validate_holder_id()
     |> cast_assoc(:peers, with: &Transfers.Peer.update_money_transfer_changeset/2)
   end
 

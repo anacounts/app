@@ -96,6 +96,10 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
         type
         date
 
+        holder {
+          id
+        }
+
         peers {
           weight
         }
@@ -116,6 +120,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
+              "holderId" => book_member.id,
               "label" => "Ha, whatever",
               "amount" => "199.9/EUR",
               "date" => "2022-02-10T23:04:12Z",
@@ -133,6 +138,9 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "amount" => "19990/EUR",
                    "date" => "2022-02-10T23:04:12Z",
                    "type" => "INCOME",
+                   "holder" => %{
+                     "id" => to_string(book_member.id)
+                   },
                    "peers" => [
                      %{"weight" => "1"}
                    ]
@@ -141,13 +149,57 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
              }
     end
 
-    test "today as default date", %{conn: conn, book: book} do
+    test "creates a money transfer for another user", %{
+      conn: conn,
+      book: book,
+      book_member: book_member
+    } do
+      other_user = user_fixture()
+      other_member = book_member_fixture(book, other_user)
+
       conn =
         post(conn, "/", %{
           "query" => @create_money_transfer_mutation,
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
+              "holderId" => other_member.id,
+              "label" => "Ha, whatever",
+              "amount" => "199.9/EUR",
+              "date" => "2022-02-10T23:04:12Z",
+              "type" => "INCOME",
+              "peers" => [
+                %{"memberId" => book_member.id}
+              ]
+            }
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "createMoneyTransfer" => %{
+                   "amount" => "19990/EUR",
+                   "date" => "2022-02-10T23:04:12Z",
+                   "type" => "INCOME",
+                   "holder" => %{
+                     "id" => to_string(other_member.id)
+                   },
+                   "peers" => [
+                     %{"weight" => "1"}
+                   ]
+                 }
+               }
+             }
+    end
+
+    test "uses today as default date", %{conn: conn, book: book, book_member: book_member} do
+      conn =
+        post(conn, "/", %{
+          "query" => @create_money_transfer_mutation,
+          "variables" => %{
+            "attrs" => %{
+              "bookId" => book.id,
+              "holderId" => book_member.id,
               "label" => "Here's a transfer label",
               "amount" => "399/USD",
               "type" => "REIMBURSEMENT"
@@ -159,7 +211,10 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
       assert response["data"]["createMoneyTransfer"]["date"]
     end
 
-    test "cannot create for a book the user isn't member of", %{conn: conn} do
+    test "cannot create for a book the user isn't member of", %{
+      conn: conn,
+      book_member: book_member
+    } do
       other_user = user_fixture()
       other_book = book_fixture(other_user)
 
@@ -169,6 +224,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => other_book.id,
+              "holderId" => book_member.id,
               "label" => "Look at me !",
               "amount" => "199/AED",
               "type" => "PAYMENT",
@@ -191,7 +247,13 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
     end
 
     test_logged_in(@create_money_transfer_mutation, %{
-      "attrs" => %{"bookId" => 0, "label" => "label", "amount" => "0/EUR", "type" => "INCOME"}
+      "attrs" => %{
+        "bookId" => 0,
+        "holderId" => 0,
+        "label" => "label",
+        "amount" => "0/EUR",
+        "type" => "INCOME"
+      }
     })
   end
 
@@ -203,6 +265,10 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
         amount
         type
         date
+
+        holder {
+          id
+        }
 
         peers {
           weight
@@ -231,6 +297,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
               "label" => "hey, here's a label",
               "date" => "2024-04-04T04:04:04Z",
               "amount" => "280.00/ALL",
+              "holderId" => other_member.id,
               "peers" => [
                 %{"memberId" => other_member.id, "weight" => "3"}
               ]
@@ -245,6 +312,9 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "amount" => "28000/ALL",
                    "type" => "PAYMENT",
                    "date" => "2024-04-04T04:04:04Z",
+                   "holder" => %{
+                     "id" => to_string(other_member.id)
+                   },
                    "peers" => [
                      %{"weight" => "3"}
                    ]
