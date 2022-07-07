@@ -15,14 +15,14 @@ defmodule Anacounts.TransfersTest do
     setup :setup_book_member_fixture
 
     test "find all transfers in book", %{book: book, book_member: book_member} do
-      transfer = money_transfer_fixture(book, book_member)
+      transfer = money_transfer_fixture(book_id: book.id, tenant_id: book_member.id)
 
       assert [found_transfer] = Transfers.find_transfers_in_book(book.id)
       assert found_transfer.id == transfer.id
     end
   end
 
-  describe "create_transfer/3" do
+  describe "create_transfer/1" do
     setup :setup_user_fixture
     setup :setup_book_fixture
     setup :setup_book_member_fixture
@@ -30,9 +30,7 @@ defmodule Anacounts.TransfersTest do
     test "creates a money transfer", %{book: book, book_member: book_member} do
       assert {:ok, transfer} =
                Transfers.create_transfer(
-                 book.id,
-                 book_member.id,
-                 valid_money_transfer_attributes()
+                 valid_money_transfer_attributes(book_id: book.id, tenant_id: book_member.id)
                )
 
       assert transfer.label == valid_money_transfer_label()
@@ -48,14 +46,14 @@ defmodule Anacounts.TransfersTest do
 
       assert {:ok, transfer} =
                Transfers.create_transfer(
-                 book.id,
-                 book_member.id,
-                 valid_money_transfer_attributes(%{
+                 valid_money_transfer_attributes(
+                   book_id: book.id,
+                   tenant_id: book_member.id,
                    peers: [
                      %{member_id: book_member.id},
                      %{member_id: other_member.id, weight: Decimal.new(3)}
                    ]
-                 })
+                 )
                )
 
       [peer1, peer2] = Enum.sort_by(transfer.peers, & &1.weight)
@@ -68,11 +66,11 @@ defmodule Anacounts.TransfersTest do
     test "cannot create two peers for the same user", %{book: book, book_member: book_member} do
       assert {:error, changeset} =
                Transfers.create_transfer(
-                 book.id,
-                 book_member.id,
-                 valid_money_transfer_attributes(%{
+                 valid_money_transfer_attributes(
+                   book_id: book.id,
+                   tenant_id: book_member.id,
                    peers: [%{member_id: book_member.id}, %{member_id: book_member.id}]
-                 })
+                 )
                )
 
       assert errors_on(changeset) == %{
@@ -82,16 +80,27 @@ defmodule Anacounts.TransfersTest do
 
     test "fails with invalid book_id", %{book_member: book_member} do
       assert {:error, changeset} =
-               Transfers.create_transfer(0, book_member.id, valid_money_transfer_attributes())
+               Transfers.create_transfer(
+                 valid_money_transfer_attributes(book_id: 0, tenant_id: book_member.id)
+               )
 
       assert errors_on(changeset) == %{book_id: ["does not exist"]}
     end
 
-    test "fails with invalid user_id", %{book: book} do
+    test "fails with missing tenant_id", %{book: book} do
       assert {:error, changeset} =
-               Transfers.create_transfer(book.id, 0, valid_money_transfer_attributes())
+               Transfers.create_transfer(valid_money_transfer_attributes(book_id: book.id))
 
-      assert errors_on(changeset) == %{holder_id: ["does not exist"]}
+      assert errors_on(changeset) == %{tenant_id: ["can't be blank"]}
+    end
+
+    test "fails with invalid tenant_id", %{book: book} do
+      assert {:error, changeset} =
+               Transfers.create_transfer(
+                 valid_money_transfer_attributes(book_id: book.id, tenant_id: 0)
+               )
+
+      assert errors_on(changeset) == %{tenant_id: ["does not exist"]}
     end
   end
 
@@ -122,31 +131,24 @@ defmodule Anacounts.TransfersTest do
       assert peer.member_id == other_member.id
     end
 
-    test "does not update book or holder", %{
-      book: book,
-      book_member: book_member,
-      user: user,
-      money_transfer: money_transfer
-    } do
-      other_user = user_fixture()
-      other_member = book_member_fixture(book, other_user)
+    test "does not update book", %{book: book, user: user, money_transfer: money_transfer} do
       other_book = book_fixture(user)
 
       assert {:ok, updated} =
                Transfers.update_transfer(money_transfer, %{
-                 holder_id: other_member.id,
                  book_id: other_book.id
                })
 
-      assert updated.holder_id == book_member.id
       assert updated.book_id == book.id
     end
 
     test "updates existing peers", %{book: book, book_member: book_member} do
       money_transfer =
-        money_transfer_fixture(book, book_member, %{
+        money_transfer_fixture(
+          book_id: book.id,
+          tenant_id: book_member.id,
           peers: [%{member_id: book_member.id, weight: Decimal.new(2)}]
-        })
+        )
 
       [peer] = money_transfer.peers
 
@@ -163,9 +165,11 @@ defmodule Anacounts.TransfersTest do
 
     test "cannot update member_id of existing peer", %{book: book, book_member: book_member} do
       money_transfer =
-        money_transfer_fixture(book, book_member, %{
+        money_transfer_fixture(
+          book_id: book.id,
+          tenant_id: book_member.id,
           peers: [%{member_id: book_member.id}]
-        })
+        )
 
       [peer] = money_transfer.peers
 
@@ -184,9 +188,11 @@ defmodule Anacounts.TransfersTest do
 
     test "deletes peers", %{book: book, book_member: book_member} do
       money_transfer =
-        money_transfer_fixture(book, book_member, %{
+        money_transfer_fixture(
+          book_id: book.id,
+          tenant_id: book_member.id,
           peers: [%{member_id: book_member.id}]
-        })
+        )
 
       assert {:ok, updated_transfer} =
                Transfers.update_transfer(money_transfer, %{
@@ -224,7 +230,11 @@ defmodule Anacounts.TransfersTest do
 
     test "deleted related peers", %{book: book, book_member: book_member} do
       money_transfer =
-        money_transfer_fixture(book, book_member, %{peers: [%{member_id: book_member.id}]})
+        money_transfer_fixture(
+          book_id: book.id,
+          tenant_id: book_member.id,
+          peers: [%{member_id: book_member.id}]
+        )
 
       assert {:ok, _deleted_transfer} = Transfers.delete_transfer(money_transfer)
 

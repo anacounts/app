@@ -8,7 +8,7 @@ defmodule Anacounts.AccountsFixtures do
   def valid_book_name, do: "A valid book name !"
 
   def valid_book_attributes(attrs \\ %{}) do
-    Map.merge(attrs, %{
+    Enum.into(attrs, %{
       name: valid_book_name()
     })
   end
