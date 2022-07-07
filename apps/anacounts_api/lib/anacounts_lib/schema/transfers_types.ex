@@ -12,7 +12,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
   @desc """
   A money transfer is any payment, income, reimbursement in a book.
 
-  It is owned by a user called the holder. They may earn or pay
+  It is owned by a user called the tenant. They may earn or pay
   depending on the type of the transfer.
   """
   object :money_transfer do
@@ -27,8 +27,8 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
       resolve(&Resolvers.Accounts.find_money_transfer_book/3)
     end
 
-    field(:holder, :book_member) do
-      resolve(&Resolvers.Accounts.find_money_transfer_holder/3)
+    field(:tenant, :book_member) do
+      resolve(&Resolvers.Accounts.find_money_transfer_tenant/3)
     end
 
     field(:peers, list_of(:transfer_peer)) do
@@ -107,7 +107,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
     field(:type, non_null(:money_transfer_type))
     field(:date, :datetime)
     field(:book_id, non_null(:id))
-    field(:holder_id, non_null(:id))
+    field(:tenant_id, non_null(:id))
 
     field(:peers, list_of(:transfer_peer_creation_input))
   end
@@ -130,7 +130,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
     field(:amount, :money)
     field(:type, :money_transfer_type)
     field(:date, :datetime)
-    field(:holder_id, :id)
+    field(:tenant_id, :id)
 
     field(:peers, list_of(:transfer_peer_update_input))
   end

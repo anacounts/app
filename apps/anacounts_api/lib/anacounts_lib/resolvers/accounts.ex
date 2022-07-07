@@ -82,8 +82,8 @@ defmodule AnacountsAPI.Resolvers.Accounts do
     {:ok, Accounts.get_book!(book_id)}
   end
 
-  def find_money_transfer_holder(%{holder_id: holder_id}, _args, _resolution) do
-    {:ok, Accounts.get_member!(holder_id)}
+  def find_money_transfer_tenant(%{tenant_id: tenant_id}, _args, _resolution) do
+    {:ok, Accounts.get_member!(tenant_id)}
   end
 
   def find_transfer_peer_user(%{member_id: member_id}, _args, _resolution) do

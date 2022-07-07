@@ -96,7 +96,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
         type
         date
 
-        holder {
+        tenant {
           id
         }
 
@@ -120,7 +120,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
-              "holderId" => book_member.id,
+              "tenantId" => book_member.id,
               "label" => "Ha, whatever",
               "amount" => "199.9/EUR",
               "date" => "2022-02-10T23:04:12Z",
@@ -138,7 +138,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "amount" => "19990/EUR",
                    "date" => "2022-02-10T23:04:12Z",
                    "type" => "INCOME",
-                   "holder" => %{
+                   "tenant" => %{
                      "id" => to_string(book_member.id)
                    },
                    "peers" => [
@@ -163,7 +163,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
-              "holderId" => other_member.id,
+              "tenantId" => other_member.id,
               "label" => "Ha, whatever",
               "amount" => "199.9/EUR",
               "date" => "2022-02-10T23:04:12Z",
@@ -181,7 +181,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "amount" => "19990/EUR",
                    "date" => "2022-02-10T23:04:12Z",
                    "type" => "INCOME",
-                   "holder" => %{
+                   "tenant" => %{
                      "id" => to_string(other_member.id)
                    },
                    "peers" => [
@@ -199,7 +199,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => book.id,
-              "holderId" => book_member.id,
+              "tenantId" => book_member.id,
               "label" => "Here's a transfer label",
               "amount" => "399/USD",
               "type" => "REIMBURSEMENT"
@@ -224,7 +224,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
           "variables" => %{
             "attrs" => %{
               "bookId" => other_book.id,
-              "holderId" => book_member.id,
+              "tenantId" => book_member.id,
               "label" => "Look at me !",
               "amount" => "199/AED",
               "type" => "PAYMENT",
@@ -249,7 +249,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
     test_logged_in(@create_money_transfer_mutation, %{
       "attrs" => %{
         "bookId" => 0,
-        "holderId" => 0,
+        "tenantId" => 0,
         "label" => "label",
         "amount" => "0/EUR",
         "type" => "INCOME"
@@ -266,7 +266,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
         type
         date
 
-        holder {
+        tenant {
           id
         }
 
@@ -297,7 +297,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
               "label" => "hey, here's a label",
               "date" => "2024-04-04T04:04:04Z",
               "amount" => "280.00/ALL",
-              "holderId" => other_member.id,
+              "tenantId" => other_member.id,
               "peers" => [
                 %{"memberId" => other_member.id, "weight" => "3"}
               ]
@@ -312,7 +312,7 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "amount" => "28000/ALL",
                    "type" => "PAYMENT",
                    "date" => "2024-04-04T04:04:04Z",
-                   "holder" => %{
+                   "tenant" => %{
                      "id" => to_string(other_member.id)
                    },
                    "peers" => [

@@ -21,7 +21,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
           amount: Money.t(),
           type: :payment | :income | :reimbursement,
           book: Accounts.Book.t(),
-          holder: Accounts.BookMember.t(),
+          tenant: Accounts.BookMember.t(),
           peers: Transfers.Peer.t()
         }
 
@@ -32,7 +32,7 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     field :date, :utc_datetime
 
     belongs_to :book, Accounts.Book
-    belongs_to :holder, Accounts.BookMember
+    belongs_to :tenant, Accounts.BookMember
 
     has_many :peers, Transfers.Peer,
       foreign_key: :transfer_id,
@@ -43,22 +43,22 @@ defmodule Anacounts.Transfers.MoneyTransfer do
 
   def create_changeset(attrs) do
     %__MODULE__{}
-    |> cast(attrs, [:label, :amount, :type, :date, :book_id, :holder_id])
+    |> cast(attrs, [:label, :amount, :type, :date, :book_id, :tenant_id])
     |> validate_label()
     |> validate_required(:amount)
     |> validate_type()
     |> validate_book_id()
-    |> validate_holder_id()
+    |> validate_tenant_id()
     |> cast_assoc(:peers, with: &Transfers.Peer.create_money_transfer_changeset/2)
   end
 
   def update_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:label, :amount, :type, :date, :holder_id])
+    |> cast(attrs, [:label, :amount, :type, :date, :tenant_id])
     |> validate_label()
     |> validate_required(:amount)
     |> validate_type()
-    |> validate_holder_id()
+    |> validate_tenant_id()
     |> cast_assoc(:peers, with: &Transfers.Peer.update_money_transfer_changeset/2)
   end
 
@@ -74,10 +74,10 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     |> foreign_key_constraint(:book_id)
   end
 
-  defp validate_holder_id(changeset) do
+  defp validate_tenant_id(changeset) do
     changeset
-    |> validate_required(:holder_id)
-    |> foreign_key_constraint(:holder_id)
+    |> validate_required(:tenant_id)
+    |> foreign_key_constraint(:tenant_id)
   end
 
   defp validate_type(changeset) do

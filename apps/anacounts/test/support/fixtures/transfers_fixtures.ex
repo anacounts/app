@@ -30,7 +30,7 @@ defmodule Anacounts.TransfersFixtures do
     Map.put(
       context,
       :money_transfer,
-      money_transfer_fixture(book_id: book.id, holder_id: book_member.id)
+      money_transfer_fixture(book_id: book.id, tenant_id: book_member.id)
     )
   end
 end
