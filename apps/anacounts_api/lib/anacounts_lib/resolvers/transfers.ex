@@ -24,10 +24,9 @@ defmodule AnacountsAPI.Resolvers.Transfers do
         %{attrs: %{book_id: book_id} = attrs},
         %{context: %{current_user: user}}
       ) do
-    with {:ok, book} <- fetch_book(book_id, user),
-         {:ok, member} <- fetch_membership(book_id, user),
+    with {:ok, member} <- fetch_membership(book_id, user),
          :ok <- has_rights?(member, :handle_money_transfers) do
-      Transfers.create_transfer(book.id, member.id, attrs)
+      Transfers.create_transfer(attrs)
     end
   end
 
@@ -39,7 +38,6 @@ defmodule AnacountsAPI.Resolvers.Transfers do
         %{context: %{current_user: user}}
       ) do
     with {:ok, transfer} <- fetch_transfer(transfer_id),
-         {:ok, _book} <- fetch_book(transfer.book_id, user),
          {:ok, member} <- fetch_membership(transfer.book_id, user),
          :ok <- has_rights?(member, :handle_money_transfers) do
       Transfers.update_transfer(transfer, attrs)
@@ -54,7 +52,6 @@ defmodule AnacountsAPI.Resolvers.Transfers do
         %{context: %{current_user: user}}
       ) do
     with {:ok, transfer} <- fetch_transfer(transfer_id),
-         {:ok, _book} <- fetch_book(transfer.book_id, user),
          {:ok, member} <- fetch_membership(transfer.book_id, user),
          :ok <- has_rights?(member, :handle_money_transfers) do
       Transfers.delete_transfer(transfer)

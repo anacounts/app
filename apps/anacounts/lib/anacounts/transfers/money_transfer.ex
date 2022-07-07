@@ -41,11 +41,9 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     timestamps()
   end
 
-  def create_changeset(book_id, holder_id, attrs) do
+  def create_changeset(attrs) do
     %__MODULE__{}
-    |> cast(attrs, [:label, :amount, :type, :date])
-    |> put_change(:book_id, book_id)
-    |> put_change(:holder_id, holder_id)
+    |> cast(attrs, [:label, :amount, :type, :date, :book_id, :holder_id])
     |> validate_label()
     |> validate_required(:amount)
     |> validate_type()

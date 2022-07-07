@@ -28,10 +28,9 @@ defmodule Anacounts.Transfers do
     |> Repo.all()
   end
 
-  @spec create_transfer(Accounts.Book.t(), Accounts.BookMember.id(), map()) ::
-          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
-  def create_transfer(book_id, member_id, attrs) do
-    MoneyTransfer.create_changeset(book_id, member_id, attrs)
+  @spec create_transfer(map()) :: {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def create_transfer(attrs) do
+    MoneyTransfer.create_changeset(attrs)
     # The `date` field default behaviour cannot be handled by Ecto
     # and is therefore handled by the database.
     # Make the database return its value.
