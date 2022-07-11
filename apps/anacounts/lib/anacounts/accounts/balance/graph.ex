@@ -122,23 +122,10 @@ defmodule Anacounts.Accounts.Balance.Graph do
   # - remove min(v1.weight, v2.weight) from v1 and v2 weight
   # - create v3 = %{v1.from, v2.to, v2.weight - v1.weight}
   # - repeat
-  defp reduce_vertices(vertices)
-
   defp reduce_vertices(vertices) do
-    case find_matching_vertices(vertices) do
+    case find_reducible_vertices(vertices) do
       {v1, v2, other_vertices} ->
-        created_vertices = [
-          # new vertex
-          %{from: v1.from, to: v2.to, weight: min(v1.weight, v2.weight)},
-          # updated vertex
-          if(Money.cmp(v1.weight, v2.weight) == :gt,
-            do: %{v1 | weight: Money.subtract(v1.weight, v2.weight)},
-            else: %{v2 | weight: Money.subtract(v2.weight, v1.weight)}
-          )
-        ]
-
-        added_vertices =
-          Enum.reject(created_vertices, &(&1.from == &1.to or Money.zero?(&1.weight)))
+        added_vertices = balance_vertices(v1, v2)
 
         reduce_vertices(added_vertices ++ other_vertices)
 
@@ -148,7 +135,7 @@ defmodule Anacounts.Accounts.Balance.Graph do
   end
 
   # TODO refactor in a more... Elixir way
-  defp find_matching_vertices(vertices) do
+  defp find_reducible_vertices(vertices) do
     matching_entry =
       Enum.find_value(vertices, fn v1 ->
         v2 = Enum.find(vertices, fn v2 -> v1.to == v2.from end)
@@ -165,6 +152,20 @@ defmodule Anacounts.Accounts.Balance.Graph do
 
       {v1, v2, updated_vertices}
     end
+  end
+
+  defp balance_vertices(v1, v2) do
+    created_vertices = [
+      # new vertex
+      %{from: v1.from, to: v2.to, weight: min(v1.weight, v2.weight)},
+      # updated vertex
+      if(Money.cmp(v1.weight, v2.weight) == :gt,
+        do: %{v1 | weight: Money.subtract(v1.weight, v2.weight)},
+        else: %{v2 | weight: Money.subtract(v2.weight, v1.weight)}
+      )
+    ]
+
+    Enum.reject(created_vertices, &(&1.from == &1.to or Money.zero?(&1.weight)))
   end
 
   defp combine_redundant_vertices({nodes, vertices}) do

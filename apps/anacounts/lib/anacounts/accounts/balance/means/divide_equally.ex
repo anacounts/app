@@ -1,4 +1,10 @@
 defmodule Anacounts.Accounts.Balance.Means.DivideEqually do
+  @moduledoc """
+  Implements `Anacounts.Accounts.Balance.Means` behaviour.
+
+  Divides money transfer amount equally among the peers.
+  """
+
   @behaviour Anacounts.Accounts.Balance.Means
 
   alias Anacounts.Transfers

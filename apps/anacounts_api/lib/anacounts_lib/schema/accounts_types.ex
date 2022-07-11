@@ -6,6 +6,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
   use Absinthe.Schema.Notation
 
   alias AnacountsAPI.Resolvers
+  alias AnacountsAPI.Resolvers.Accounts
 
   ## Entities
 
@@ -16,7 +17,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:inserted_at, :naive_datetime)
 
     field(:members, list_of(:book_member)) do
-      resolve(&Resolvers.Accounts.get_book_members/3)
+      resolve(&Accounts.get_book_members/3)
     end
 
     field(:money_transfers, list_of(:money_transfer)) do
@@ -24,7 +25,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     end
 
     field(:balance, :book_balance) do
-      resolve(&Resolvers.Accounts.Balance.get_book_balance/3)
+      resolve(&Accounts.Balance.get_book_balance/3)
     end
   end
 
@@ -48,12 +49,12 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field :book, :book do
       arg(:id, non_null(:id))
 
-      resolve(&Resolvers.Accounts.find_book/3)
+      resolve(&Accounts.find_book/3)
     end
 
     @desc "Get all books belonging to authentified user"
     field :books, list_of(:book) do
-      resolve(&Resolvers.Accounts.find_books/3)
+      resolve(&Accounts.find_books/3)
     end
   end
 
@@ -64,21 +65,21 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field :create_book, :book do
       arg(:attrs, non_null(:book_input))
 
-      resolve(&Resolvers.Accounts.do_create_book/3)
+      resolve(&Accounts.do_create_book/3)
     end
 
     @desc "Delete an existing book"
     field :delete_book, :book do
       arg(:id, non_null(:id))
 
-      resolve(&Resolvers.Accounts.do_delete_book/3)
+      resolve(&Accounts.do_delete_book/3)
     end
 
     field :invite_user, :book_member do
       arg(:book_id, non_null(:id))
       arg(:email, non_null(:string))
 
-      resolve(&Resolvers.Accounts.do_invite_user/3)
+      resolve(&Accounts.do_invite_user/3)
     end
   end
 
