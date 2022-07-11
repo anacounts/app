@@ -55,7 +55,7 @@ defmodule Anacounts.Accounts.Balance.Graph do
   """
   @spec nodes_weight(t()) :: %{point() => weight()}
   def nodes_weight({nodes, vertices}) do
-    zeroed_weights = Map.new(nodes, &{&1, Money.new(0, :EUR)})
+    zeroed_weights = Map.new(nodes, &{&1, zero_money()})
 
     Enum.reduce(vertices, zeroed_weights, fn %{from: from, to: to, weight: weight}, weights ->
       weights
@@ -178,11 +178,13 @@ defmodule Anacounts.Accounts.Balance.Graph do
     {nodes, combined_vertices}
   end
 
-  defp sum_weights([]), do: Money.new(0, :EUR)
-  defp sum_weights([money | rest]), do: Money.add(money, sum_weights(rest))
-
   defp reject_weigthless_vertices({nodes, vertices}) do
     new_vertices = Enum.reject(vertices, &Money.zero?(&1.weight))
     {nodes, new_vertices}
   end
+
+  defp sum_weights([]), do: zero_money()
+  defp sum_weights([money | rest]), do: Money.add(money, sum_weights(rest))
+
+  defp zero_money, do: Money.new(0, :EUR)
 end

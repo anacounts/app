@@ -18,17 +18,6 @@ defmodule Anacounts.Accounts do
 
   @doc """
   Gets a single book.
-  Returns `nil` if the Book does not exist.
-  ## Examples
-      iex> get_book(123)
-      %Book{}
-      iex> get_book(456)
-      nil
-  """
-  def get_book(id), do: Repo.get(Book, id)
-
-  @doc """
-  Gets a single book.
   Raises `Ecto.NoResultsError` if the Book does not exist.
   ## Examples
       iex> get_book!(123)
