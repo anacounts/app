@@ -94,6 +94,8 @@ defmodule AnacountsAPI.Resolvers.Transfers do
 
   ## Field resolution
 
+  # TODO rename field resolution functions to `get_xxx`
+
   def find_money_transfer_peers(transfer, _args, _resolution) do
     {:ok, Transfers.find_transfer_peers(transfer.id)}
   end

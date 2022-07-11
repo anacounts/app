@@ -9,6 +9,7 @@ defmodule AnacountsAPI.Schema do
   import_types(AnacountsAPI.Schema.CustomTypes)
 
   import_types(AnacountsAPI.Schema.AccountsTypes)
+  import_types(AnacountsAPI.Schema.Accounts.BalanceTypes)
   import_types(AnacountsAPI.Schema.AuthTypes)
   import_types(AnacountsAPI.Schema.TransfersTypes)
 

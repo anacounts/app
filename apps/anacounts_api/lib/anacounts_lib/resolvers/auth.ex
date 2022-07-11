@@ -103,6 +103,8 @@ defmodule AnacountsAPI.Resolvers.Auth do
 
   ## External field resolution
 
+  # TODO rename field resolution functions to `get_xxx`
+
   def find_user(%{user_id: user_id}, _args, _resoltion) do
     {:ok, Auth.get_user!(user_id)}
   end

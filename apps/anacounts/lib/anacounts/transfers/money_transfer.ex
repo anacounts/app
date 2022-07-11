@@ -41,6 +41,8 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     timestamps()
   end
 
+  ## Changesets
+
   def create_changeset(attrs) do
     %__MODULE__{}
     |> cast(attrs, [:label, :amount, :type, :date, :book_id, :tenant_id])
@@ -85,6 +87,8 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     |> validate_inclusion(:type, @transfer_types)
   end
 
+  ## Queries
+
   def base_query do
     from __MODULE__, as: :money_transfer
   end
@@ -93,4 +97,11 @@ defmodule Anacounts.Transfers.MoneyTransfer do
     from [money_transfer: money_transfer] in query,
       where: money_transfer.book_id == ^book_id
   end
+
+  ## Struct functions
+
+  @spec amount(t()) :: Money.t()
+  def amount(transfer)
+  def amount(%{type: :payment, amount: amount}), do: amount
+  def amount(%{type: _income_or_reimbursement, amount: amount}), do: Money.neg(amount)
 end
