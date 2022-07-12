@@ -36,8 +36,8 @@ defmodule Anacounts.Accounts.Book do
   A book changeset for creation.
   The user given will be considered the first member and creator of the book.
   """
-  def create_changeset(book, user, attrs) do
-    book
+  def create_changeset(user, attrs) do
+    %__MODULE__{}
     |> cast(attrs, [:name])
     |> validate_name()
     |> put_creator(user)
