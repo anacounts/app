@@ -19,6 +19,11 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
         type
         date
 
+        balanceParams {
+          meansCode
+          params
+        }
+
         peers {
           id
           weight
@@ -55,13 +60,17 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "date" => valid_money_transfer_date() |> DateTime.to_iso8601(),
                    "label" => valid_money_transfer_label(),
                    "type" => valid_money_transfer_type() |> to_string() |> String.upcase(),
+                   "balanceParams" => %{
+                     "meansCode" => "DIVIDE_EQUALLY",
+                     "params" => %{}
+                   },
                    "peers" => []
                  }
                }
              }
     end
 
-    test "return not found is user isn't member of the book", %{
+    test "return not found if user isn't member of the book", %{
       conn: conn,
       money_transfer: money_transfer
     } do
@@ -98,6 +107,11 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
 
         tenant {
           id
+        }
+
+        balanceParams {
+          meansCode
+          params
         }
 
         peers {
@@ -141,6 +155,10 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "tenant" => %{
                      "id" => to_string(book_member.id)
                    },
+                   "balanceParams" => %{
+                     "meansCode" => "DIVIDE_EQUALLY",
+                     "params" => %{}
+                   },
                    "peers" => [
                      %{"weight" => "1"}
                    ]
@@ -168,6 +186,11 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
               "amount" => "199.9/EUR",
               "date" => "2022-02-10T23:04:12Z",
               "type" => "INCOME",
+              "balanceParams" => %{
+                # TODO Change it to another mode
+                "meansCode" => "DIVIDE_EQUALLY",
+                "params" => "{}"
+              },
               "peers" => [
                 %{"memberId" => book_member.id}
               ]
@@ -183,6 +206,10 @@ defmodule AnacountsAPI.Schema.TransfersTypesTest do
                    "type" => "INCOME",
                    "tenant" => %{
                      "id" => to_string(other_member.id)
+                   },
+                   "balanceParams" => %{
+                     "meansCode" => "DIVIDE_EQUALLY",
+                     "params" => %{}
                    },
                    "peers" => [
                      %{"weight" => "1"}

@@ -100,11 +100,16 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
 
   describe "mutation: create_book" do
     @create_book_mutation """
-    mutation CreateBook($attrs: BookInput!) {
+    mutation CreateBook($attrs: BookCreationInput!) {
       createBook(attrs: $attrs) {
         id
         name
         insertedAt
+
+        defaultBalanceParams {
+          meansCode
+          params
+        }
 
         members {
           role
@@ -124,33 +129,46 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
       conn =
         post(conn, "/", %{
           "query" => @create_book_mutation,
-          "variables" => %{"attrs" => valid_book_attributes()}
+          "variables" => %{
+            "attrs" => %{
+              "name" => "This is the new book I just created !",
+              "defaultBalanceParams" => %{
+                "meansCode" => "DIVIDE_EQUALLY",
+                "params" => "{}"
+              }
+            }
+          }
         })
 
-      user_id = to_string(user.id)
+      assert response = json_response(conn, 200)
+      assert book_id = response["data"]["createBook"]["id"]
 
-      assert %{
-               "data" => %{
-                 "createBook" => %{
-                   "id" => book_id,
-                   "name" => _book_name,
-                   "insertedAt" => _inserted_at,
-                   "members" => [
-                     %{
-                       "role" => "creator",
-                       "user" => %{
-                         "id" => ^user_id
-                       }
-                     }
-                   ]
+      assert response["data"]["createBook"]["name"] == "This is the new book I just created !"
+      assert response["data"]["createBook"]["insertedAt"]
+
+      assert response["data"]["createBook"]["defaultBalanceParams"] == %{
+               "meansCode" => "DIVIDE_EQUALLY",
+               "params" => %{}
+             }
+
+      assert response["data"]["createBook"]["members"] == [
+               %{
+                 "role" => "creator",
+                 "user" => %{
+                   "id" => to_string(user.id)
                  }
                }
-             } = json_response(conn, 200)
+             ]
 
       assert Accounts.get_book_of_user(book_id, user)
     end
 
-    test_logged_in(@create_book_mutation, %{"attrs" => valid_book_attributes()})
+    test_logged_in(@create_book_mutation, %{
+      "attrs" => %{
+        "name" => "",
+        "defaultBalanceParams" => %{"meansCode" => "DIVIDE_EQUALLY", "params" => "{}"}
+      }
+    })
   end
 
   describe "mutation: delete_book" do

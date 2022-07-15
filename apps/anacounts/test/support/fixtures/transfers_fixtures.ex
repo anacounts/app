@@ -16,6 +16,7 @@ defmodule Anacounts.TransfersFixtures do
       amount: valid_money_transfer_amount(),
       date: valid_money_transfer_date(),
       type: valid_money_transfer_type(),
+      balance_params: nil,
       peers: []
     })
   end

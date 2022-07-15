@@ -34,12 +34,18 @@ defmodule Anacounts.Accounts.BookMember do
     %__MODULE__{}
     |> cast(attrs, [:role, :book_id, :user_id])
     |> validate_required([:role, :book_id, :user_id])
+    |> validate_role()
     |> foreign_key_constraint(:book_id)
     |> foreign_key_constraint(:user_id)
     |> unique_constraint([:book_id, :user_id],
       message: "user is already a member of this book",
       error_key: :user_id
     )
+  end
+
+  defp validate_role(changeset) do
+    changeset
+    |> validate_inclusion(:role, Accounts.Role.all())
   end
 
   @spec base_query :: Ecto.Query.t()

@@ -94,6 +94,18 @@ defmodule AnacountsAPI.Resolvers.Transfers do
 
   ## Field resolution
 
+  def get_money_transfer_balance_params(
+        %{balance_params: nil, book_id: book_id},
+        _args,
+        _resolution
+      ) do
+    book = Accounts.get_book!(book_id)
+    {:ok, book.default_balance_params}
+  end
+
+  def get_money_transfer_balance_params(%{balance_params: balance_params}, _args, _resolution),
+    do: {:ok, balance_params}
+
   # TODO rename field resolution functions to `get_xxx`
 
   def find_money_transfer_peers(transfer, _args, _resolution) do

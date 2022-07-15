@@ -15,6 +15,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
     field(:id, :id)
     field(:name, :string)
     field(:inserted_at, :naive_datetime)
+    field(:default_balance_params, :balance_transfer_params)
 
     field(:members, list_of(:book_member)) do
       resolve(&Accounts.get_book_members/3)
@@ -63,7 +64,7 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
   object :accounts_mutations do
     @desc "Creates a new book"
     field :create_book, :book do
-      arg(:attrs, non_null(:book_input))
+      arg(:attrs, non_null(:book_creation_input))
 
       resolve(&Accounts.do_create_book/3)
     end
@@ -85,8 +86,9 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
   ## Input objects
 
-  @desc "Used to make operations (insert, update) on books"
-  input_object :book_input do
+  @desc "Used to create a book"
+  input_object :book_creation_input do
     field(:name, non_null(:string))
+    field(:default_balance_params, non_null(:balance_transfer_params_input))
   end
 end

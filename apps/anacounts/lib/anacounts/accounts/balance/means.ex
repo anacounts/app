@@ -7,6 +7,11 @@ defmodule Anacounts.Accounts.Balance.Means do
   alias Anacounts.Accounts.Balance.Means
   alias Anacounts.Transfers.MoneyTransfer
 
+  @type code :: :divide_equally
+
+  @codes [:divide_equally]
+  def codes, do: @codes
+
   @doc """
   Divide the given money transfer between its associated peers.
   """
