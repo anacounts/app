@@ -3,13 +3,16 @@ defmodule Anacounts.AccountsFixtures do
   Fixtures for the `Accounts` context
   """
 
+  import Anacounts.Accounts.BalanceFixtures
+
   alias Anacounts.Accounts
 
   def valid_book_name, do: "A valid book name !"
 
   def valid_book_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
-      name: valid_book_name()
+      name: valid_book_name(),
+      default_balance_params: valid_transfer_params()
     })
   end
 

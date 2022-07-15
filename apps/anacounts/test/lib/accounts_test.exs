@@ -2,6 +2,7 @@ defmodule Anacounts.AccountsTest do
   use Anacounts.DataCase, async: true
 
   import Anacounts.AccountsFixtures
+  import Anacounts.Accounts.BalanceFixtures
   import Anacounts.AuthFixtures
 
   alias Anacounts.Accounts
@@ -68,16 +69,50 @@ defmodule Anacounts.AccountsTest do
     test "creates a new book belonging to the user", %{user: user} do
       {:ok, book} = Accounts.create_book(user, valid_book_attributes())
 
-      assert hd(book.members).user_id == user.id
+      assert book.name == valid_book_name()
+      assert book.default_balance_params == valid_transfer_params()
+
+      assert %{members: [member]} = book
+      assert member.user_id == user.id
     end
 
-    test "fails when giving invalid parameters", %{user: user} do
+    test "fails when not given a name", %{user: user} do
       {:error, changeset} =
         Accounts.create_book(user, %{
-          name: nil
+          name: nil,
+          default_balance_params: valid_transfer_params()
         })
 
-      assert "can't be blank" in errors_on(changeset).name
+      assert errors_on(changeset) == %{name: ["can't be blank"]}
+    end
+
+    test "fails when not given balance params", %{user: user} do
+      {:error, changeset} =
+        Accounts.create_book(user, %{
+          name: valid_book_name()
+        })
+
+      assert errors_on(changeset) == %{default_balance_params: ["can't be blank"]}
+    end
+
+    test "fails when given invalid balance params means code", %{user: user} do
+      {:error, changeset} =
+        Accounts.create_book(user, %{
+          name: valid_book_name(),
+          default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
+        })
+
+      assert errors_on(changeset) == %{default_balance_params: ["is invalid"]}
+    end
+
+    test "fails when given invalid balance params parameters", %{user: user} do
+      {:error, changeset} =
+        Accounts.create_book(user, %{
+          name: valid_book_name(),
+          default_balance_params: %{means_code: :divide_equally, params: %{foo: :bar}}
+        })
+
+      assert errors_on(changeset) == %{default_balance_params: ["did not expect any parameter"]}
     end
   end
 

@@ -7,7 +7,8 @@ defmodule Anacounts.Accounts.Balance.Means do
   alias Anacounts.Accounts.Balance.Means
   alias Anacounts.Transfers.MoneyTransfer
 
-  # XXX Currently unused, but necessary so the atoms exist
+  @type code :: :divide_equally
+
   @codes [:divide_equally]
   def codes, do: @codes
 

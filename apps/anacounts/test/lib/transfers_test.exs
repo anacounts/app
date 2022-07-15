@@ -2,6 +2,7 @@ defmodule Anacounts.TransfersTest do
   use Anacounts.DataCase, async: true
 
   import Anacounts.AccountsFixtures
+  import Anacounts.Accounts.BalanceFixtures
   import Anacounts.AuthFixtures
   import Anacounts.TransfersFixtures
 
@@ -37,7 +38,21 @@ defmodule Anacounts.TransfersTest do
       assert transfer.amount == valid_money_transfer_amount()
       assert transfer.type == valid_money_transfer_type()
       assert transfer.date == valid_money_transfer_date()
+      assert transfer.balance_params == nil
       assert Enum.empty?(transfer.peers)
+    end
+
+    test "sets balance params", %{book: book, book_member: book_member} do
+      assert {:ok, transfer} =
+               Transfers.create_transfer(
+                 valid_money_transfer_attributes(
+                   book_id: book.id,
+                   tenant_id: book_member.id,
+                   balance_params: valid_transfer_params()
+                 )
+               )
+
+      assert transfer.balance_params == valid_transfer_params()
     end
 
     test "creates peers along the way", %{book: book, book_member: book_member} do
@@ -120,6 +135,7 @@ defmodule Anacounts.TransfersTest do
                  amount: Money.new(299, :EUR),
                  type: :income,
                  date: ~U[2020-06-29T17:31:28Z],
+                 balance_params: valid_transfer_params(),
                  peers: [%{member_id: other_member.id}]
                })
 
@@ -127,6 +143,7 @@ defmodule Anacounts.TransfersTest do
       assert updated.amount == Money.new(299, :EUR)
       assert updated.type == :income
       assert updated.date == ~U[2020-06-29T17:31:28Z]
+      assert updated.balance_params == valid_transfer_params()
       assert [peer] = updated.peers
       assert peer.member_id == other_member.id
     end

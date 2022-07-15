@@ -1,5 +1,21 @@
 defmodule Anacounts.Accounts.Balance.TransferParams do
+  @moduledoc """
+  A type representing a means - and their associated parameters - of balance transfers.
+  """
+
+  ## Type definition
+
   use Ecto.Type
+
+  import Ecto.Changeset
+
+  alias Anacounts.Accounts.Balance.Means
+
+  @type t :: %{
+          means_code: Means.code(),
+          params: map()
+        }
+
   def type, do: :balance_transfer_params
 
   # TODO refactor
@@ -34,4 +50,48 @@ defmodule Anacounts.Accounts.Balance.TransferParams do
   end
 
   def dump(_), do: :error
+
+  ## Changeset
+
+  @spec validate_changeset(Ecto.Changeset.t(), atom()) :: Ecto.Changeset.t()
+  def validate_changeset(changeset, field) do
+    transfer_params = get_field(changeset, field)
+
+    if transfer_params do
+      changeset
+      |> validate_means_code(field, transfer_params)
+      |> validate_params(field, transfer_params)
+    else
+      changeset
+    end
+  end
+
+  defp validate_means_code(changeset, field, %{means_code: means_code}) do
+    if means_code in Means.codes() do
+      changeset
+    else
+      add_error(changeset, field, "is invalid")
+    end
+  end
+
+  defp validate_params(
+         %{valid?: true} = changeset,
+         field,
+         %{means_code: means_code, params: params}
+       ) do
+    if error = params_mismatch(means_code, params) do
+      add_error(changeset, field, error)
+    else
+      changeset
+    end
+  end
+
+  defp validate_params(changeset, _field, _transfer_params), do: changeset
+
+  # Validate that the params match the one required by the code
+  defp params_mismatch(:divide_equally, params) do
+    unless Enum.empty?(params), do: "did not expect any parameter"
+  end
+
+  defp params_mismatch(_code, _params), do: "is invalid"
 end
