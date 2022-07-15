@@ -61,6 +61,7 @@ defmodule Anacounts.Accounts.Balance.TransferParams do
       changeset
       |> validate_means_code(field, transfer_params)
       |> validate_params(field, transfer_params)
+      |> validate_matching_code_and_params(field, transfer_params)
     else
       changeset
     end
@@ -74,19 +75,27 @@ defmodule Anacounts.Accounts.Balance.TransferParams do
     end
   end
 
-  defp validate_params(
-         %{valid?: true} = changeset,
-         field,
-         %{means_code: means_code, params: params}
-       ) do
+  defp validate_params(changeset, field, transfer_params) do
+    if Map.get(transfer_params, :params) do
+      changeset
+    else
+      add_error(changeset, field, "can't be blank")
+    end
+  end
+
+  defp validate_matching_code_and_params(%{valid?: false} = changeset, _field, _transfer_params),
+    do: changeset
+
+  defp validate_matching_code_and_params(changeset, field, %{
+         means_code: means_code,
+         params: params
+       }) do
     if error = params_mismatch(means_code, params) do
       add_error(changeset, field, error)
     else
       changeset
     end
   end
-
-  defp validate_params(changeset, _field, _transfer_params), do: changeset
 
   # Validate that the params match the one required by the code
   defp params_mismatch(:divide_equally, params) do
