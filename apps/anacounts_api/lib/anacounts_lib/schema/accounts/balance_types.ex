@@ -41,4 +41,27 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypes do
 
     field(:amount, :money)
   end
+
+  @desc """
+  The differents means to balance a money transfer.
+  Each has their own particularities and may require parameters either
+  on the transfer (e.g. a coefficient), or on the user (e.g. their revenue).
+  """
+  enum :balance_means_code do
+    value(:divide_equally)
+  end
+
+  @desc """
+  Indicates how a transfer must be balanced.
+  """
+  object :balance_transfer_params do
+    field(:means_code, :balance_means_code)
+    field(:params, :json)
+  end
+
+  ## Input object
+  input_object :balance_transfer_params_input do
+    field(:means_code, non_null(:balance_means_code))
+    field(:params, non_null(:json))
+  end
 end

@@ -23,6 +23,10 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
     field(:type, :money_transfer_type)
     field(:date, :datetime)
 
+    field(:balance_params, :balance_transfer_params) do
+      resolve(&Resolvers.Transfers.get_money_transfer_balance_params/3)
+    end
+
     field(:book, :book) do
       resolve(&Resolvers.Accounts.find_money_transfer_book/3)
     end
@@ -108,6 +112,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
     field(:date, :datetime)
     field(:book_id, non_null(:id))
     field(:tenant_id, non_null(:id))
+    field(:balance_params, :balance_transfer_params_input)
 
     field(:peers, list_of(:transfer_peer_creation_input))
   end
@@ -131,6 +136,7 @@ defmodule AnacountsAPI.Schema.TransfersTypes do
     field(:type, :money_transfer_type)
     field(:date, :datetime)
     field(:tenant_id, :id)
+    field(:balance_params, :balance_transfer_params_input)
 
     field(:peers, list_of(:transfer_peer_update_input))
   end
