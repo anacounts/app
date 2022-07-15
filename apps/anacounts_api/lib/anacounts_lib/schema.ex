@@ -16,12 +16,14 @@ defmodule AnacountsAPI.Schema do
   query do
     import_fields(:accounts_queries)
     import_fields(:auth_queries)
+    import_fields(:balance_queries)
     import_fields(:transfers_queries)
   end
 
   mutation do
     import_fields(:accounts_mutations)
     import_fields(:auth_mutations)
+    import_fields(:balance_mutations)
     import_fields(:transfers_mutations)
   end
 

@@ -5,6 +5,8 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypes do
 
   use Absinthe.Schema.Notation
 
+  alias AnacountsAPI.Resolvers.Accounts.Balance
+
   ## Entities
 
   # TODO needs @desc
@@ -59,8 +61,48 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypes do
     field(:params, :json)
   end
 
+  @desc """
+  Gives information about the user required for a certain means to balance money transfers.
+  """
+  object :balance_user_params do
+    field(:means_code, :balance_means_code)
+    field(:params, :json)
+  end
+
+  ## Queries
+
+  object :balance_queries do
+    @desc "Get all balance params for current user"
+    field :balance_user_params, list_of(:balance_user_params) do
+      resolve(&Balance.find_balance_user_params/3)
+    end
+  end
+
+  ## Mutations
+
+  object :balance_mutations do
+    field :set_balance_user_params, :balance_user_params do
+      arg(:means_code, non_null(:balance_means_code))
+      arg(:params, non_null(:json))
+
+      resolve(&Balance.do_set_balance_user_params/3)
+    end
+
+    field :delete_balance_user_params, :balance_user_params do
+      arg(:means_code, non_null(:balance_means_code))
+
+      resolve(&Balance.do_delete_balance_user_params/3)
+    end
+  end
+
   ## Input object
+
   input_object :balance_transfer_params_input do
+    field(:means_code, non_null(:balance_means_code))
+    field(:params, non_null(:json))
+  end
+
+  input_object :balance_user_params_input do
     field(:means_code, non_null(:balance_means_code))
     field(:params, non_null(:json))
   end
