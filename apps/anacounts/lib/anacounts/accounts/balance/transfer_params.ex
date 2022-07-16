@@ -102,5 +102,9 @@ defmodule Anacounts.Accounts.Balance.TransferParams do
     unless Enum.empty?(params), do: "did not expect any parameter"
   end
 
+  defp params_mismatch(:weight_by_income, params) do
+    unless Enum.empty?(params), do: "did not expect any parameter"
+  end
+
   defp params_mismatch(_code, _params), do: "is invalid"
 end

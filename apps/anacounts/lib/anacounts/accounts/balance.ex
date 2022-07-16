@@ -59,9 +59,14 @@ defmodule Anacounts.Accounts.Balance do
   end
 
   defp balance_transfer_by_peer(transfer) do
-    # means = Means.from_code(transfer.balance_means)
-    means = Means.from_code(nil)
-    means.balance_transfer_by_peer(transfer)
+    case Means.balance_transfer_by_peer(transfer) do
+      {:ok, peer_balances} ->
+        peer_balances
+
+      # TODO handle this propertly
+      {:error, reason} ->
+        raise "Could not balance transfer##{transfer.id}, reason: #{inspect(reason)}"
+    end
   end
 
   defp members_balance(balance_graph) do

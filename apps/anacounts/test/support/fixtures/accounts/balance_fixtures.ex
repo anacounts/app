@@ -37,6 +37,15 @@ defmodule Anacounts.Accounts.BalanceFixtures do
     end
   end
 
+  def balance_user_params_fixtures(user, attrs) do
+    {:ok, user_params} =
+      valid_balance_user_params_attrs(attrs)
+      |> Map.put(:user_id, user.id)
+      |> Balance.upsert_user_params()
+
+    user_params
+  end
+
   def setup_balance_user_params_fixtures(%{user: user} = context) do
     Map.put(context, :balance_user_params, balance_user_params_fixtures(user))
   end
