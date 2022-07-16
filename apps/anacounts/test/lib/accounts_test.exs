@@ -116,6 +116,29 @@ defmodule Anacounts.AccountsTest do
     end
   end
 
+  describe "update_book/2" do
+    setup :setup_user_fixture
+    setup :setup_book_fixture
+
+    test "updates the book", %{book: book} do
+      assert {:ok, updated} =
+               Accounts.update_book(book, %{
+                 name: "My awesome new never seen name !",
+                 default_balance_params: %{
+                   means_code: :weight_by_income,
+                   params: %{}
+                 }
+               })
+
+      assert updated.name == "My awesome new never seen name !"
+
+      assert updated.default_balance_params == %{
+               means_code: :weight_by_income,
+               params: %{}
+             }
+    end
+  end
+
   describe "delete_book/2" do
     setup :setup_user_fixture
     setup :setup_book_fixture
