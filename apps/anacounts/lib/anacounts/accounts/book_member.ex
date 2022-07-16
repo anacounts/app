@@ -30,6 +30,8 @@ defmodule Anacounts.Accounts.BookMember do
     timestamps()
   end
 
+  ## Changeset
+
   def create_changeset(attrs) do
     %__MODULE__{}
     |> cast(attrs, [:role, :book_id, :user_id])
@@ -48,9 +50,23 @@ defmodule Anacounts.Accounts.BookMember do
     |> validate_inclusion(:role, Accounts.Role.all())
   end
 
+  ## Query
+
   @spec base_query :: Ecto.Query.t()
   def base_query do
-    from bm in __MODULE__, where: is_nil(bm.deleted_at)
+    from book_member in __MODULE__,
+      as: :book_member,
+      where: is_nil(book_member.deleted_at)
+  end
+
+  def join_user(query) do
+    if has_named_binding?(query, :user) do
+      query
+    else
+      from [book_member: book_member] in query,
+        join: assoc(book_member, :user),
+        as: :user
+    end
   end
 
   @spec book_query(Accounts.Book.t()) :: Ecto.Query.t()

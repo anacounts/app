@@ -33,6 +33,9 @@ defmodule Anacounts.AccountsFixtures do
     book_member
   end
 
+  # Beware, even if calling `setup_book_member_fixture`, only the creator
+  # will be available in book members, since the book members aren't reloaded
+  # after creating the other member
   def setup_book_fixture(%{user: user} = context) do
     Map.put(context, :book, book_fixture(user))
   end

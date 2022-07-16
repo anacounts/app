@@ -21,16 +21,19 @@ defmodule Anacounts.Accounts.Balance.Means.DivideEqually do
     # idea: use index, if index == (1 / relative_weight), do +/- 1
     # idea2: use `Money.divide/2`
 
-    Enum.map(peers, fn peer ->
-      relative_weight = Decimal.div(peer.weight, total_weight)
-      peer_amount = Money.multiply(transfer_amount, relative_weight)
+    peers_balance =
+      Enum.map(peers, fn peer ->
+        relative_weight = Decimal.div(peer.weight, total_weight)
+        peer_amount = Money.multiply(transfer_amount, relative_weight)
 
-      %{
-        from: peer.member_id,
-        to: money_transfer.tenant_id,
-        amount: peer_amount,
-        transfer_id: money_transfer.id
-      }
-    end)
+        %{
+          from: peer.member_id,
+          to: money_transfer.tenant_id,
+          amount: peer_amount,
+          transfer_id: money_transfer.id
+        }
+      end)
+
+    {:ok, peers_balance}
   end
 end

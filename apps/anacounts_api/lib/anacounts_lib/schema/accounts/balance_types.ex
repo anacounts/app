@@ -51,6 +51,7 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypes do
   """
   enum :balance_means_code do
     value(:divide_equally)
+    value(:weight_by_income)
   end
 
   @desc """

@@ -57,7 +57,7 @@ defmodule Anacounts.Accounts.BalanceTest do
         |> Enum.map(& &1.means_code)
         |> Enum.sort()
 
-      assert sorted_codes == [:divide_equally]
+      assert sorted_codes == [:weight_by_income]
     end
   end
 
@@ -66,17 +66,17 @@ defmodule Anacounts.Accounts.BalanceTest do
     setup :setup_balance_user_params_fixtures
 
     test "gets the user param with specified code", %{user: user} do
-      assert user_params = Balance.get_user_params_with_code(user.id, :divide_equally)
+      assert user_params = Balance.get_user_params_with_code(user.id, :weight_by_income)
 
-      assert user_params.means_code == :divide_equally
-      assert user_params.params == %{}
+      assert user_params.means_code == :weight_by_income
+      assert user_params.params == %{"income" => 1234}
       assert user_params.user_id == user.id
     end
 
     test "returns `nil` if no user param exist for this code" do
       other_user = user_fixture()
 
-      refute Balance.get_user_params_with_code(other_user.id, :divide_equally)
+      refute Balance.get_user_params_with_code(other_user.id, :weight_by_income)
     end
   end
 
@@ -88,8 +88,8 @@ defmodule Anacounts.Accounts.BalanceTest do
                Balance.upsert_user_params(valid_balance_user_params_attrs(user_id: user.id))
 
       assert user_params.user_id == user.id
-      assert user_params.means_code == valid_balance_means_code()
-      assert user_params.params == valid_balance_params()
+      assert user_params.means_code == valid_balance_user_means_code()
+      assert user_params.params == valid_balance_user_params()
     end
 
     test "updates the user params", %{user: user} do
@@ -99,13 +99,13 @@ defmodule Anacounts.Accounts.BalanceTest do
                Balance.upsert_user_params(%{
                  user_id: user_params.user_id,
                  #  TODO Change code and params once possible
-                 means_code: valid_balance_means_code(),
-                 params: valid_balance_params()
+                 means_code: valid_balance_user_means_code(),
+                 params: valid_balance_user_params()
                })
 
       assert updated.user_id == user.id
-      assert updated.means_code == valid_balance_means_code()
-      assert updated.params == valid_balance_params()
+      assert updated.means_code == valid_balance_user_means_code()
+      assert updated.params == valid_balance_user_params()
     end
 
     test "fails if the means code does not exist", %{user: user} do
@@ -123,19 +123,19 @@ defmodule Anacounts.Accounts.BalanceTest do
       assert {:error, changeset} =
                Balance.upsert_user_params(%{
                  user_id: user.id,
-                 means_code: :divide_equally,
+                 means_code: :weight_by_income,
                  params: %{foo: :bar}
                })
 
-      assert errors_on(changeset) == %{params: ["did not expect any parameter"]}
+      assert errors_on(changeset) == %{params: ["expected \"income\" key, containing an integer"]}
     end
 
     test "fails if the user does not exist" do
       assert {:error, changeset} =
                Balance.upsert_user_params(%{
                  user_id: 0,
-                 means_code: :divide_equally,
-                 params: %{}
+                 means_code: :weight_by_income,
+                 params: %{income: 1234}
                })
 
       assert errors_on(changeset) == %{user_id: ["does not exist"]}

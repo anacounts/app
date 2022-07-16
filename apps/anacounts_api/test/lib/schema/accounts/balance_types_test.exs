@@ -30,8 +30,8 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypesTest do
                "data" => %{
                  "balanceUserParams" => [
                    %{
-                     "meansCode" => "DIVIDE_EQUALLY",
-                     "params" => %{}
+                     "meansCode" => "WEIGHT_BY_INCOME",
+                     "params" => %{"income" => 1234}
                    }
                  ]
                }
@@ -59,16 +59,16 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypesTest do
         post(conn, "/", %{
           "query" => @set_balance_user_params_mutation,
           "variables" => %{
-            "meansCode" => "DIVIDE_EQUALLY",
-            "params" => "{}"
+            "meansCode" => "WEIGHT_BY_INCOME",
+            "params" => ~S[{"income": 1234}]
           }
         })
 
       assert json_response(conn, 200) == %{
                "data" => %{
                  "setBalanceUserParams" => %{
-                   "meansCode" => "DIVIDE_EQUALLY",
-                   "params" => %{}
+                   "meansCode" => "WEIGHT_BY_INCOME",
+                   "params" => %{"income" => 1234}
                  }
                }
              }
@@ -82,16 +82,16 @@ defmodule AnacountsAPI.Schema.Accounts.BalanceTypesTest do
           "query" => @set_balance_user_params_mutation,
           "variables" => %{
             # TODO Change once possible
-            "meansCode" => "DIVIDE_EQUALLY",
-            "params" => "{}"
+            "meansCode" => "WEIGHT_BY_INCOME",
+            "params" => ~S[{"income": 4567}]
           }
         })
 
       assert json_response(conn, 200) == %{
                "data" => %{
                  "setBalanceUserParams" => %{
-                   "meansCode" => "DIVIDE_EQUALLY",
-                   "params" => %{}
+                   "meansCode" => "WEIGHT_BY_INCOME",
+                   "params" => %{"income" => 4567}
                  }
                }
              }

@@ -19,7 +19,8 @@ defmodule Anacounts.Accounts.Balance.UserParams do
         }
 
   schema "balance_user_params" do
-    field :means_code, Ecto.Enum, values: Means.codes()
+    field :means_code, Ecto.Enum, values: Means.codes_with_user_params()
+    # TODO crypt this data, must require to change to :binary data type
     field :params, :map
 
     belongs_to :user, Auth.User
@@ -39,8 +40,7 @@ defmodule Anacounts.Accounts.Balance.UserParams do
   defp validate_means_code(changeset) do
     changeset
     |> validate_required(:means_code)
-    # TODO Some codes don't require any parameters, remove them from the list
-    |> validate_inclusion(:means_code, Means.codes())
+    |> validate_inclusion(:means_code, Means.codes_with_user_params())
   end
 
   defp validate_params(changeset) do
@@ -66,6 +66,14 @@ defmodule Anacounts.Accounts.Balance.UserParams do
 
   defp params_mismatch(:divide_equally, params) do
     unless Enum.empty?(params), do: "did not expect any parameter"
+  end
+
+  defp params_mismatch(:weight_by_income, params) do
+    cond do
+      is_integer(params["income"]) -> nil
+      is_integer(params[:income]) -> nil
+      true -> "expected \"income\" key, containing an integer"
+    end
   end
 
   defp params_mismatch(_code, _params), do: "is invalid"
