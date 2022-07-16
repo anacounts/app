@@ -171,6 +171,108 @@ defmodule AnacountsAPI.Schema.AccountsTypesTest do
     })
   end
 
+  describe "mutation: update_book" do
+    @update_book_mutation """
+    mutation UpdateBook($id: ID!, $attrs: BookUpdateInput!) {
+      updateBook(id: $id, attrs: $attrs) {
+        name
+        defaultBalanceParams {
+          meansCode
+          params
+        }
+      }
+    }
+    """
+
+    setup :setup_user_fixture
+    setup :setup_log_user_in
+
+    setup :setup_book_fixture
+
+    test "updates the book", %{conn: conn, book: book} do
+      conn =
+        post(conn, "/", %{
+          "query" => @update_book_mutation,
+          "variables" => %{
+            "id" => book.id,
+            "attrs" => %{
+              "name" => "A brand new shiny name for our book",
+              "defaultBalanceParams" => %{
+                "meansCode" => "WEIGHT_BY_INCOME",
+                "params" => "{}"
+              }
+            }
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "updateBook" => %{
+                   "name" => "A brand new shiny name for our book",
+                   "defaultBalanceParams" => %{
+                     "meansCode" => "WEIGHT_BY_INCOME",
+                     "params" => %{}
+                   }
+                 }
+               }
+             }
+    end
+
+    test "fails with not found if book does not belong to user", %{conn: conn, book: book} do
+      other_user = user_fixture()
+      conn = log_user_in(conn, other_user)
+
+      conn =
+        post(conn, "/", %{
+          "query" => @update_book_mutation,
+          "variables" => %{
+            "id" => book.id,
+            "attrs" => %{}
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Not found",
+                   "path" => ["updateBook"]
+                 }
+               ],
+               "data" => %{"updateBook" => nil}
+             }
+    end
+
+    test "fails with unauthorized if member cannot update book", %{conn: conn, book: book} do
+      other_user = user_fixture()
+      _other_member = book_member_fixture(book, other_user)
+
+      conn = log_user_in(conn, other_user)
+
+      conn =
+        post(conn, "/", %{
+          "query" => @update_book_mutation,
+          "variables" => %{
+            "id" => book.id,
+            "attrs" => %{}
+          }
+        })
+
+      assert json_response(conn, 200) == %{
+               "errors" => [
+                 %{
+                   "locations" => [%{"column" => 3, "line" => 2}],
+                   "message" => "Unauthorized",
+                   "path" => ["updateBook"]
+                 }
+               ],
+               "data" => %{"updateBook" => nil}
+             }
+    end
+
+    test_logged_in(@update_book_mutation, %{"id" => 0, "attrs" => %{}})
+  end
+
   describe "mutation: delete_book" do
     @delete_book_mutation """
     mutation DeleteBook($id: ID!) {

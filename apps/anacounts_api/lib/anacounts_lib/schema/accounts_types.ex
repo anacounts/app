@@ -69,6 +69,14 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
       resolve(&Accounts.do_create_book/3)
     end
 
+    @desc "Update an existing book"
+    field :update_book, :book do
+      arg(:id, non_null(:id))
+      arg(:attrs, non_null(:book_update_input))
+
+      resolve(&Accounts.do_update_book/3)
+    end
+
     @desc "Delete an existing book"
     field :delete_book, :book do
       arg(:id, non_null(:id))
@@ -86,9 +94,15 @@ defmodule AnacountsAPI.Schema.AccountsTypes do
 
   ## Input objects
 
-  @desc "Used to create a book"
+  @desc "Used to create books"
   input_object :book_creation_input do
     field(:name, non_null(:string))
     field(:default_balance_params, non_null(:balance_transfer_params_input))
+  end
+
+  @desc "Used to update books"
+  input_object :book_update_input do
+    field(:name, :string)
+    field(:default_balance_params, :balance_transfer_params_input)
   end
 end

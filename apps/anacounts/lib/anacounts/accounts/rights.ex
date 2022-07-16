@@ -8,6 +8,7 @@ defmodule Anacounts.Accounts.Rights do
 
   ## List of rights
 
+  - update_book: Allow to modify the book (e.g. name)
   - delete_book: Allow to delete a book
   - handle_money_transfers: Allow to create, update, and delete money transfers
   - invite_new_member: Allow to invite a new member in the book
@@ -18,7 +19,7 @@ defmodule Anacounts.Accounts.Rights do
 
   @type t :: atom()
 
-  @creator_rights [:delete_book, :handle_money_transfers, :invite_new_member]
+  @creator_rights [:update_book, :delete_book, :handle_money_transfers, :invite_new_member]
   def creator_rights, do: @creator_rights
 
   @member_rights [:handle_money_transfers]

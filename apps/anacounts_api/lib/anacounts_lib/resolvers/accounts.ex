@@ -23,11 +23,21 @@ defmodule AnacountsAPI.Resolvers.Accounts do
 
   ## Mutations
 
-  def do_create_book(_parent, %{attrs: book_attrs}, %{context: %{current_user: user}}) do
-    Accounts.create_book(user, book_attrs)
+  def do_create_book(_parent, %{attrs: attrs}, %{context: %{current_user: user}}) do
+    Accounts.create_book(user, attrs)
   end
 
   def do_create_book(_parent, _args, _resolution), do: not_logged_in()
+
+  def do_update_book(_parent, %{id: id, attrs: attrs}, %{context: %{current_user: user}}) do
+    with {:ok, book} <- fetch_book(id, user),
+         {:ok, member} <- fetch_membership(id, user),
+         :ok <- has_rights?(member, :update_book) do
+      Accounts.update_book(book, attrs)
+    end
+  end
+
+  def do_update_book(_parent, _args, _resolution), do: not_logged_in()
 
   def do_delete_book(_parent, %{id: id}, %{context: %{current_user: user}}) do
     with {:ok, book} <- fetch_book(id, user),
