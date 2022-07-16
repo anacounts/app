@@ -1,3 +1,6 @@
+# Disable checking that there are too many dependencies
+# See comments below, this module needs to be refactored
+# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule Anacounts.Accounts.Balance do
   @moduledoc """
   Context to compute balance between book members.
