@@ -12,7 +12,7 @@ defmodule Anacounts.AccountsFixtures do
   def valid_book_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       name: valid_book_name(),
-      default_balance_params: valid_transfer_params()
+      default_balance_params: valid_balance_transfer_params_attrs()
     })
   end
 

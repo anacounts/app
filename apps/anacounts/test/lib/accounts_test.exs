@@ -70,7 +70,7 @@ defmodule Anacounts.AccountsTest do
       {:ok, book} = Accounts.create_book(user, valid_book_attributes())
 
       assert book.name == valid_book_name()
-      assert book.default_balance_params == valid_transfer_params()
+      assert book.default_balance_params == valid_balance_transfer_params_attrs()
 
       assert %{members: [member]} = book
       assert member.user_id == user.id
@@ -80,7 +80,7 @@ defmodule Anacounts.AccountsTest do
       {:error, changeset} =
         Accounts.create_book(user, %{
           name: nil,
-          default_balance_params: valid_transfer_params()
+          default_balance_params: valid_balance_transfer_params_attrs()
         })
 
       assert errors_on(changeset) == %{name: ["can't be blank"]}

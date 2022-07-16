@@ -48,11 +48,11 @@ defmodule Anacounts.TransfersTest do
                  valid_money_transfer_attributes(
                    book_id: book.id,
                    tenant_id: book_member.id,
-                   balance_params: valid_transfer_params()
+                   balance_params: valid_balance_transfer_params_attrs()
                  )
                )
 
-      assert transfer.balance_params == valid_transfer_params()
+      assert transfer.balance_params == valid_balance_transfer_params_attrs()
     end
 
     test "creates peers along the way", %{book: book, book_member: book_member} do
@@ -135,7 +135,7 @@ defmodule Anacounts.TransfersTest do
                  amount: Money.new(299, :EUR),
                  type: :income,
                  date: ~U[2020-06-29T17:31:28Z],
-                 balance_params: valid_transfer_params(),
+                 balance_params: valid_balance_transfer_params_attrs(),
                  peers: [%{member_id: other_member.id}]
                })
 
@@ -143,7 +143,7 @@ defmodule Anacounts.TransfersTest do
       assert updated.amount == Money.new(299, :EUR)
       assert updated.type == :income
       assert updated.date == ~U[2020-06-29T17:31:28Z]
-      assert updated.balance_params == valid_transfer_params()
+      assert updated.balance_params == valid_balance_transfer_params_attrs()
       assert [peer] = updated.peers
       assert peer.member_id == other_member.id
     end
