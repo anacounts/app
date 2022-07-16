@@ -63,6 +63,12 @@ defmodule Anacounts.Accounts do
     |> Repo.insert()
   end
 
+  @spec update_book(Book.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  def update_book(book, attrs) do
+    Book.update_changeset(book, attrs)
+    |> Repo.update()
+  end
+
   @spec delete_book(Book.t()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
   def delete_book(book) do
     book
