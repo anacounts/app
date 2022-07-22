@@ -42,7 +42,7 @@ defmodule Anacounts.Accounts.Balance do
   def for_book(book_id) do
     balance_graph = balance_graph(book_id)
     members_balance = members_balance(balance_graph)
-    transactions = transactions(balance_graph)
+    transactions = transactions(members_balance)
 
     %{
       members_balance: members_balance,
@@ -63,7 +63,7 @@ defmodule Anacounts.Accounts.Balance do
       {:ok, peer_balances} ->
         peer_balances
 
-      # TODO handle this propertly
+      # TODO handle this properly
       {:error, reason} ->
         raise "Could not balance transfer##{transfer.id}, reason: #{inspect(reason)}"
     end
@@ -73,11 +73,9 @@ defmodule Anacounts.Accounts.Balance do
     Graph.nodes_weight(balance_graph)
   end
 
-  defp transactions(balance_graph) do
-    balance_graph
-    |> Graph.contract_vertices()
-    |> Graph.vertices()
-    |> Enum.map(&%{from: &1.from, to: &1.to, amount: &1.weight})
+  defp transactions(_members_balance) do
+    # TODO
+    []
   end
 
   # --- Actual module content ---

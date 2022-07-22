@@ -11,6 +11,9 @@ defmodule Anacounts.Accounts.BalanceTest do
 
   alias Anacounts.Repo
 
+  # TODO reenable for_book/1 test
+
+  @tag :skip
   describe "for_book/1" do
     setup :setup_user_fixture
     setup :setup_book_fixture
