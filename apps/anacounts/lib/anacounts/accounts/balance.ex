@@ -73,9 +73,54 @@ defmodule Anacounts.Accounts.Balance do
     Graph.nodes_weight(balance_graph)
   end
 
-  defp transactions(_members_balance) do
-    # TODO
-    []
+  defp transactions(members_balance) do
+    {debtors, creditors} =
+      Enum.split_with(members_balance, fn {_member_id, amount} -> Money.negative?(amount) end)
+
+    make_transactions(debtors, creditors, [])
+  end
+
+  # Creates necessary transactions between creditors and debitors
+  # to balance things. The total sum of creditors and debitors should be
+  # equal to 0, or the function will crash.
+  defp make_transactions(creditors, debitors, transactions)
+  defp make_transactions([], [], transactions), do: transactions
+
+  defp make_transactions(
+         [{debtor, neg_debt} | other_debtors],
+         [{creditor, credit} | other_creditors],
+         transactions
+       ) do
+    debt = Money.neg(neg_debt)
+
+    case Money.cmp(credit, debt) do
+      :eq ->
+        new_transaction = %{from: debtor, to: creditor, amount: debt}
+
+        make_transactions(
+          other_debtors,
+          other_creditors,
+          [new_transaction | transactions]
+        )
+
+      :gt ->
+        new_transaction = %{from: debtor, to: creditor, amount: debt}
+
+        make_transactions(
+          other_debtors,
+          [{creditor, Money.subtract(credit, debt)} | other_creditors],
+          [new_transaction | transactions]
+        )
+
+      :lt ->
+        new_transaction = %{from: debtor, to: creditor, amount: credit}
+
+        make_transactions(
+          [{debtor, Money.add(neg_debt, credit)} | other_debtors],
+          other_creditors,
+          [new_transaction | transactions]
+        )
+    end
   end
 
   # --- Actual module content ---
