@@ -1,0 +1,48 @@
+<.app_header back_to={Routes.book_index_path(@socket, :index)}>
+  <%= @page_title %>
+  <:menu>
+    <li class="list-item" id="edit-book">
+      <%= live_redirect to: Routes.book_form_path(@socket, :edit, @book), replace: true, class: "list-item__link" do %>
+        <.icon name="pencil" />
+        <div class="list-item__label"><%= gettext("Edit") %></div>
+      <% end %>
+    </li>
+    <li class="list-item" id="delete-book">
+      <%= link to: "#", phx_click: "delete", class: "list-item__link text-error" do %>
+        <.icon name="delete" />
+        <div class="list-item__label"><%= gettext("Delete") %></div>
+      <% end %>
+    </li>
+  </:menu>
+</.app_header>
+
+<main>
+  <%= for {type, message} <- @flash do %>
+    <p class={"alert alert-#{type}"} role="alert" phx-click="lv:clear-flash" phx-value-key={type}>
+      <%= message %>
+    </p>
+  <% end %>
+
+  <%= @inner_content %>
+</main>
+
+<.bottom_nav>
+  <.bottom_nav_item
+    icon="format-list-bulleted"
+    label={gettext("Details")}
+    to={Routes.book_show_path(@socket, :show, @book)}
+    active={@socket.view == AppWeb.BookLive.Show}
+  />
+  <.bottom_nav_item
+    icon="swap-horizontal"
+    label={gettext("Transfers")}
+    to={Routes.money_transfer_index_path(@socket, :index, @book)}
+    active={@socket.view == AppWeb.MoneyTransferLive.Index}
+  />
+  <.bottom_nav_item
+    icon="wallet"
+    label={gettext("Balance")}
+    to={Routes.balance_show_path(@socket, :show, @book)}
+    active={@socket.view == AppWeb.BalanceLive.Show}
+  />
+</.bottom_nav>

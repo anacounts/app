@@ -1,0 +1,27 @@
+<div class="auth-page">
+  <h1 class="auth-page__title"><%= gettext("Forgot your password?") %></h1>
+
+  <.form
+    let={f}
+    for={:user}
+    action={Routes.user_reset_password_path(@conn, :create)}
+    class="auth-page__form"
+  >
+    <%= label(f, :email) do %>
+      <%= email_input(f, :email,
+        required: true,
+        autocomplete: "email",
+        placeholder: "john.doe@example.com"
+      ) %>
+    <% end %>
+
+    <div>
+      <%= submit(gettext("Send instructions to reset password"), class: "button button--color-cta") %>
+    </div>
+  </.form>
+
+  <p>
+    <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
+    <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %>
+  </p>
+</div>

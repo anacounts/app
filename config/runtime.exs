@@ -16,7 +16,7 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
-  config :anacounts, Anacounts.Repo,
+  config :app, App.Repo,
     # ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
@@ -42,7 +42,7 @@ if config_env() == :prod do
     System.get_env("HOST") ||
       raise "environment variable HOST is missing."
 
-  config :anacounts_api, AnacountsAPI.Endpoint,
+  config :app_web, AppWeb.Endpoint,
     url: [host: host, port: 80],
     http: [
       # Enable IPv6 and bind on all interfaces.
@@ -52,21 +52,11 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
-  # The domain on which is hosted the front-end.
-  # This is used for CORS, to allow the front-end to query
-  # from the API.
-  front_host =
-    System.get_env("FRONT_HOST") ||
-      raise "environment variable FRONT_HOST is missing."
-
-  # Set allowed origins for CORS Plug
-  config :cors_plug, origin: [front_host]
-
   # ## Using releases
   #
   # Configure for OTP releases, instruct Phoenix to start the endpoint
 
-  config :anacounts_api, AnacountsAPI.Endpoint, server: true
+  config :app_web, AppWeb.Endpoint, server: true
 
   # ## Configuring the mailer
   #
@@ -74,7 +64,7 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  #     config :anacounts, Anacounts.Mailer,
+  #     config :app, App.Mailer,
   #       adapter: Swoosh.Adapters.Mailgun,
   #       api_key: System.get_env("MAILGUN_API_KEY"),
   #       domain: System.get_env("MAILGUN_DOMAIN")

@@ -1,0 +1,65 @@
+<.app_header>
+  Books
+  <:menu_toggle>
+    <.icon name="account" alt={gettext("Profile")} size="md" />
+  </:menu_toggle>
+  <:menu>
+    <li class="list-item" id="edit-book">
+      <%= link to: Routes.user_settings_path(@socket, :edit), class: "list-item__link" do %>
+        <.icon name="cog" />
+        <div class="list-item__label"><%= gettext("Settings") %></div>
+      <% end %>
+    </li>
+    <li class="list-item" id="delete-book">
+      <%= link to: Routes.user_session_path(@socket, :delete), method: :delete, class: "list-item__link text-error" do %>
+        <.icon name="account-arrow-right" />
+        <div class="list-item__label"><%= gettext("Disconnect") %></div>
+      <% end %>
+    </li>
+  </:menu>
+</.app_header>
+
+<main>
+  <%= for {type, message} <- @flash do %>
+    <p class={"alert alert-#{type}"} role="alert" phx-click="lv:clear-flash" phx-value-key={type}>
+      <%= message %>
+    </p>
+  <% end %>
+
+  <div class="list">
+    <strong class="list__title">
+      <%= ngettext(
+        "%{count} book in your list",
+        "%{count} books in your list",
+        Enum.count(@books)
+      ) %>
+    </strong>
+    <ul class="list__scroller" role="list">
+      <%= for book <- @books do %>
+        <li class="list-item" data-book-id={book.id}>
+          <%= live_redirect to: Routes.book_show_path(@socket, :show, book), class: "list-item__link" do %>
+            <img
+              class="list-item__avatar"
+              src={Routes.static_path(@socket, "/images/book-default-avatar.png")}
+              alt=""
+            />
+            <div class="list-item__label">
+              <span class="list-item__primary-line"><%= book.name %></span>
+              <br />
+              <span class="list-item__secondary-line">
+                <%= gettext("You and %{count} other members", count: Enum.count(book.members) - 1) %>
+              </span>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <menu class="fab">
+    <li>
+      <%= live_redirect to: Routes.book_form_path(@socket, :new), class: "fab__item" do %>
+        <.icon name="plus" alt={gettext("Create a new book")} />
+      <% end %>
+    </li>
+  </menu>
+</main>

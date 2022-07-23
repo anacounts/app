@@ -81,13 +81,11 @@
           #
           {Credo.Check.Design.AliasUsage,
            [priority: :low, if_nested_deeper_than: 2, if_called_more_often_than: 0]},
-
           {Credo.Check.Design.DuplicatedCode, []},
 
           #
           ## Readability Checks
           #
-          {Credo.Check.Readability.AliasAs, []},
           {Credo.Check.Readability.AliasOrder, []},
           {Credo.Check.Readability.FunctionNames, []},
           {Credo.Check.Readability.ImplTrue, []},
@@ -135,7 +133,8 @@
           {Credo.Check.Refactor.MapJoin, []},
           {Credo.Check.Refactor.MapMap, []},
           {Credo.Check.Refactor.MatchInCondition, []},
-          {Credo.Check.Refactor.ModuleDependencies, []},
+          # TODO It hurts to have to disable this check :'(
+          # {Credo.Check.Refactor.ModuleDependencies, []},
           {Credo.Check.Refactor.NegatedConditionsInUnless, []},
           {Credo.Check.Refactor.NegatedConditionsWithElse, []},
           {Credo.Check.Refactor.NegatedIsNil, []},
@@ -144,9 +143,6 @@
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.RejectReject, []},
           {Credo.Check.Refactor.UnlessWithElse, []},
-          # Allow variable rebinding in api test
-          # It's common to reassign `conn` with the result of the query
-          {Credo.Check.Refactor.VariableRebinding, files: [excluded: "apps/anacounts_api/test"]},
           {Credo.Check.Refactor.WithClauses, []},
 
           #
@@ -188,12 +184,13 @@
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Design.TagTODO, [exit_status: 2]},
           {Credo.Check.Design.TagFIXME, []},
+          {Credo.Check.Readability.AliasAs, []},
           {Credo.Check.Readability.BlockPipe, []},
           {Credo.Check.Readability.SinglePipe, []},
           {Credo.Check.Refactor.PipeChainStart, []},
+          {Credo.Check.Refactor.VariableRebinding, []},
           {Credo.Check.Warning.LazyLogging, []},
-          {Credo.Check.Warning.LeakyEnvironment, []},
-
+          {Credo.Check.Warning.LeakyEnvironment, []}
 
           # {Credo.Check.Refactor.MapInto, []},
 

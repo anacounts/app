@@ -1,0 +1,37 @@
+<.app_header back_to={Routes.book_show_path(@socket, :show, @book)}>
+  <%= @page_title %>
+</.app_header>
+
+<form class="mx-4" phx-submit="invite">
+  <label>
+    <%= gettext("Email") %>
+    <input type="email" name="email" required />
+  </label>
+
+  <div class="book-invite-page__submit-button">
+    <%= submit(gettext("Add member"),
+      phx_disable_with: gettext("Sending..."),
+      class: "button button--color-cta mr-4"
+    ) %>
+  </div>
+</form>
+
+<div class="list">
+  <ul class="list__scroller">
+    <%= for member <- @book.members do %>
+      <li class="list-item">
+        <img class="list-item__avatar" src={Avatars.for_user(member.user)} />
+        <div class="list-item__label">
+          <span class="list-item__primary-line">
+            <%= member.user.display_name %>
+          </span>
+          <br />
+          <span class="list-item__secondary-line">
+            <%= member.role %>
+          </span>
+        </div>
+        <.icon name="check" />
+      </li>
+    <% end %>
+  </ul>
+</div>

@@ -1,11 +1,14 @@
 import Config
 
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :anacounts, Anacounts.Repo,
+config :app, App.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -15,7 +18,7 @@ config :anacounts, Anacounts.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :anacounts_api, AnacountsAPI.Endpoint,
+config :app_web, AppWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "GHLDzAtB0iRfyK+gf+IQv69IFSZXgXQoYGyektl5fk90x/dxOW2WZ2OhH3XYvpK3",
   server: false
@@ -24,7 +27,7 @@ config :anacounts_api, AnacountsAPI.Endpoint,
 config :logger, level: :warn
 
 # In test we don't send emails.
-config :anacounts, Anacounts.Mailer, adapter: Swoosh.Adapters.Test
+config :app, App.Mailer, adapter: Swoosh.Adapters.Test
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

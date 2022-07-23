@@ -1,0 +1,36 @@
+<div class="list">
+  <ul class="list__scroller">
+    <%= for transfer <- @money_transfers do %>
+      <% {icon_name, class_name} = icon_and_class_for_transfer_type(transfer.type) %>
+      <li class="list-item">
+        <%= live_redirect to: Routes.money_transfer_form_path(@socket, :edit, @book, transfer), class: "list-item__link" do %>
+          <.icon name={icon_name} class={class_name} />
+          <div class="list-item__label">
+            <span class={["list-item__primary-line", class_name]}>
+              <%= transfer.label %>
+            </span>
+            <br />
+            <span class="list-item__secondary-line">
+              <%= transfer.tenant.user.display_name %>
+            </span>
+          </div>
+          <div class="text-right">
+            <span class={["font-bold", class_name]}>
+              <%= Money.to_string(transfer.amount) %>
+            </span>
+            <br />
+            <%= to_string(transfer.date) %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<menu class="fab mb-16">
+  <li>
+    <%= live_redirect to: Routes.money_transfer_form_path(@socket, :new, @book), class: "fab__item" do %>
+      <.icon name="plus" alt="Add a money transfer" />
+    <% end %>
+  </li>
+</menu>

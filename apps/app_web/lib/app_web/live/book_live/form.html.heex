@@ -1,0 +1,30 @@
+<.app_header back_to={@back_to}>
+  <%= @page_title %>
+</.app_header>
+
+<main class="mx-4">
+  <.form let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
+    <%= label f, :name do %>
+      <%= gettext("Name") %>
+      <%= text_input(f, :name, placeholder: "My book name") %>
+      <%= error_tag(f, :name) %>
+    <% end %>
+
+    <%= label f, :default_balance_params do %>
+      <%= gettext("How to balance by default ?") %>
+      <% # TODO Set value from changeset %>
+      <select name="book[default_balance_params][means_code]">
+        <option value="divide_equally"><%= gettext("Divide equally") %></option>
+        <option value="weight_by_income"><%= gettext("Weight by income") %></option>
+      </select>
+      <%= error_tag(f, :default_balance_params) %>
+    <% end %>
+
+    <div>
+      <%= submit(gettext("Save"),
+        phx_disable_with: gettext("Saving..."),
+        class: "button button--color-cta"
+      ) %>
+    </div>
+  </.form>
+</main>

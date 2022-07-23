@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :anacounts, Anacounts.Repo,
+config :app, App.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -16,15 +16,18 @@ config :anacounts, Anacounts.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :anacounts_api, AnacountsAPI.Endpoint,
+config :app_web, AppWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  send_error_details: true,
+  debug_errors: true,
   secret_key_base: "Y8PSvX0+ZmmWKSfOyF3MRuaFKjHRwPA8IZKDm3A8RjiRF4jIoNq6cE07D1XWEdvV",
-  watchers: []
+  watchers: [
+    # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+  ]
 
 # ## SSL Support
 #
@@ -50,8 +53,16 @@ config :anacounts_api, AnacountsAPI.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
-# Set allowed origins for CORS Plug
-config :cors_plug, origin: ["http://localhost:3000"]
+# Watch static and templates for browser reloading.
+config :app_web, AppWeb.Endpoint,
+  live_reload: [
+    patterns: [
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/gettext/.*(po)$",
+      ~r"lib/app_web/(live|views)/.*(ex)$",
+      ~r"lib/app_web/templates/.*(eex)$"
+    ]
+  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

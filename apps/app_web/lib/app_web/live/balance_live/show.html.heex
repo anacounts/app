@@ -1,0 +1,55 @@
+<section>
+  <div class="list">
+    <strong class="list__title">
+      <%= gettext("Members balance") %>
+    </strong>
+    <ul class="list__scroller">
+      <%= for {member_id, amount} <- @members_balance do %>
+        <% member = Accounts.get_member!(member_id) |> App.Repo.preload(:user) %>
+        <% {icon_name, class_name} = transfer_icon_and_class_for_amount(amount) %>
+        <li class="list-item">
+          <.icon name={icon_name} class={class_name} />
+          <div class="list-item__label">
+            <span class="list-item__primary-line">
+              <%= member.user.display_name %>
+            </span>
+          </div>
+          <span class={"font-bold #{class_name}"}>
+            <%= amount %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>
+<section>
+  <div class="list">
+    <strong class="list__title">
+      <%= gettext("How to balance ?") %>
+    </strong>
+    <ul class="list__scroller">
+      <%= if Enum.empty?(@transactions) do %>
+        <li class="list-item">
+          <%= gettext("The transactions are balanced already !") %>
+        </li>
+      <% else %>
+        <%= for transaction <- @transactions do %>
+          <li class="list-item">
+            <div class="list-item__label">
+              <span class="list-item__primary-line">
+                <% from = Accounts.get_member!(transaction.from) |> App.Repo.preload(:user) %>
+                <%= from.user.display_name %>
+              </span>
+              <span><%= gettext("gives") %></span>
+              <span class="list-item__primary-line">
+                <% to = Accounts.get_member!(transaction.to) |> App.Repo.preload(:user) %>
+                <%= to.user.display_name %>
+              </span>
+            </div>
+            <%= transaction.amount %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</section>

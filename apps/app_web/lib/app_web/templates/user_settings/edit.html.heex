@@ -1,0 +1,157 @@
+<.app_header back_to={Routes.book_index_path(@conn, :index)}>Settings</.app_header>
+<main>
+  <div class="profile-page__display-info mx-4 mb-4">
+    <img class="avatar" src={Avatars.for_user(@current_user)} alt={gettext("Your avatar")} />
+    <div>
+      <span class="profile-page__display-name"><%= @current_user.display_name %></span>
+      <div><%= @current_user.email %></div>
+    </div>
+  </div>
+
+  <%= link(gettext("Disconnect"),
+    to: Routes.user_session_path(@conn, :delete),
+    method: :delete,
+    class: "button button--color-feature mx-4"
+  ) %>
+
+  <.accordion>
+    <div class="list-item">
+      <%= link(to: Routes.user_settings_balance_path(@conn, :edit), class: "list-item__link") do %>
+        <div class="list-item__label font-bold uppercase">
+          <%= gettext("Balance Settings") %>
+        </div>
+        <.icon name="chevron-right" />
+      <% end %>
+    </div>
+    <.accordion_item title={gettext("Change name")}>
+      <.form
+        let={f}
+        for={@email_changeset}
+        action={Routes.user_settings_path(@conn, :update)}
+        id="update_display_name"
+        class="mx-4"
+      >
+        <%= if @display_name_changeset.action do %>
+          <div class="alert alert-danger">
+            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
+          </div>
+        <% end %>
+
+        <%= hidden_input(f, :action, name: "action", value: "update_display_name") %>
+
+        <%= label(f, :display_name) do %>
+          <%= gettext("Name") %>
+          <%= text_input(f, :display_name, required: true, autocomplete: "username") %>
+          <%= error_tag(f, :display_name) %>
+        <% end %>
+        <div>
+          <%= submit(gettext("Change name"), class: "button button--color-cta") %>
+        </div>
+      </.form>
+    </.accordion_item>
+    <.accordion_item title={gettext("Change avatar")}>
+      <p class="mx-4">
+        <%= gettext(
+          ~s[Anacounts uses <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">Gravatar</a> to display user avatars.]
+        )
+        |> raw() %>
+      </p>
+      <p class="mx-4">
+        <%= gettext("Gravatar is a service providing globally unique avatars")
+        |> raw() %>
+      </p>
+      <p class="mx-4">
+        <%= gettext(
+          ~s[To edit your avatar, create <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">an account</a> and <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">personalize your Gravatar</a>.]
+        )
+        |> raw() %>
+      </p>
+    </.accordion_item>
+    <.accordion_item title={gettext("Change email")} open={@email_changeset.action}>
+      <.form
+        let={f}
+        for={@email_changeset}
+        action={Routes.user_settings_path(@conn, :update)}
+        id="update_email"
+        class="mx-4"
+      >
+        <%= if @email_changeset.action do %>
+          <div class="alert alert-danger">
+            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
+          </div>
+        <% end %>
+
+        <%= hidden_input(f, :action, name: "action", value: "update_email") %>
+
+        <%= label(f, :email) do %>
+          <%= gettext("New email") %>
+          <%= email_input(f, :email, required: true, autocomplete: "username") %>
+          <%= error_tag(f, :email) %>
+        <% end %>
+
+        <%= label(f, :current_password) do %>
+          <%= gettext("Password") %>
+          <%= password_input(f, :current_password,
+            required: true,
+            name: "current_password",
+            id: "current_password_for_email",
+            autocomplete: "current-password"
+          ) %>
+          <%= error_tag(f, :current_password) %>
+        <% end %>
+
+        <div>
+          <%= submit(gettext("Change email"), class: "button button--color-cta") %>
+        </div>
+      </.form>
+    </.accordion_item>
+    <.accordion_item title={gettext("Change password")} open={@password_changeset.action}>
+      <.form
+        let={f}
+        for={@password_changeset}
+        action={Routes.user_settings_path(@conn, :update)}
+        id="update_password"
+        class="mx-4"
+      >
+        <%= if @password_changeset.action do %>
+          <div class="alert alert-danger">
+            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
+          </div>
+        <% end %>
+
+        <%= hidden_input(f, :action, name: "action", value: "update_password") %>
+        <%= hidden_input(f, :email, autocomplete: "username") %>
+
+        <%= label(f, :password) do %>
+          <%= gettext("New password") %>
+          <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
+          <%= error_tag(f, :password) %>
+        <% end %>
+
+        <%= label(f, :password_confirmation) do %>
+          <%= gettext("Confirm password") %>
+          <%= password_input(f, :password_confirmation,
+            required: true,
+            autocomplete: "new-password"
+          ) %>
+          <%= error_tag(f, :password_confirmation) %>
+        <% end %>
+
+        <%= label(f, :current_password, for: "current_password_for_password") do %>
+          <%= gettext("Current password") %>
+          <%= password_input(f, :current_password,
+            required: true,
+            name: "current_password",
+            id: "current_password_for_password",
+            autocomplete: "current-password"
+          ) %>
+          <%= error_tag(f, :current_password) %>
+        <% end %>
+
+        <div>
+          <%= submit(gettext("Change password"), class: "button button--color-cta") %>
+        </div>
+      </.form>
+    </.accordion_item>
+  </.accordion>
+</main>
