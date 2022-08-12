@@ -1,0 +1,50 @@
+defmodule App.AccountsFixtures do
+  @moduledoc """
+  Fixtures for the `Accounts` context
+  """
+
+  import App.Accounts.BalanceFixtures
+
+  alias App.Accounts
+
+  def valid_book_name, do: "A valid book name !"
+
+  def valid_book_attributes(attrs \\ %{}) do
+    Enum.into(attrs, %{
+      name: valid_book_name(),
+      default_balance_params: valid_balance_transfer_params_attrs()
+    })
+  end
+
+  def book_fixture(user, attrs \\ %{}) do
+    {:ok, book} =
+      attrs
+      |> valid_book_attributes()
+      |> then(&Accounts.create_book(user, &1))
+
+    book
+  end
+
+  def book_member_fixture(book, user) do
+    # XXX In the end, `invite_user` will only send an invite
+    # Use a function that will actually create the membership of the user
+    {:ok, book_member} = Accounts.Members.invite_user(book.id, user.email)
+
+    book_member
+  end
+
+  # Beware, even if calling `setup_book_member_fixture`, only the creator
+  # will be available in book members, since the book members aren't reloaded
+  # after creating the other member
+  def setup_book_fixture(%{user: user} = context) do
+    Map.put(context, :book, book_fixture(user))
+  end
+
+  def setup_book_member_fixture(%{book: book} = context) do
+    book_member_user = App.AuthFixtures.user_fixture()
+
+    context
+    |> Map.put(:book_member_user, book_member_user)
+    |> Map.put(:book_member, book_member_fixture(book, book_member_user))
+  end
+end

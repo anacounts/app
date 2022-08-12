@@ -1,0 +1,23 @@
+<div class="auth-page">
+  <h1 class="auth-page__title"><%= gettext("Resend confirmation instructions") %></h1>
+
+  <.form
+    let={f}
+    for={:user}
+    action={Routes.user_confirmation_path(@conn, :create)}
+    class="auth-page__form"
+  >
+    <%= label(f, :email) do %>
+      <%= email_input(f, :email, required: true) %>
+    <% end %>
+
+    <div>
+      <%= submit(gettext("Resend confirmation instructions"), class: "button button--color-cta") %>
+    </div>
+  </.form>
+
+  <p>
+    <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
+    <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %>
+  </p>
+</div>

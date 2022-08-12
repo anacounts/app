@@ -1,0 +1,391 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "%{count} book in your list"
+msgid_plural "%{count} books in your list"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "%{count} member"
+msgid_plural "%{count} members"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Add member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Amount"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Balance"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Balance Settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Balance settings updated"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Balancing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Book deleted successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Books"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Change avatar"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Change email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Change name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Change password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Confirm account"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Confirm my account"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Confirm password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Contextual menu"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Create a new book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Currency"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Details"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Disconnect"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Divide equally"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Email change link is invalid or it has expired."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Email changed successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Forgot your password?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Go back"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Gravatar is a service providing globally unique avatars"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "How to balance ?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "How to balance by default ?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Income"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Indicate your income from last year. To do so, we adivise you to go onyour bank website, and sum all incomes from 1 year ago to today."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invalid email or password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invitation sent successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invitations"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invite member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in for 60 days"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Last year incomes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Logged out successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Members balance"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Money transfer created successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Money transfer updated successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Name updated successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New transfer"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "No configuration necessary. You're all set up !"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Payment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Profile"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reimbursement"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Resend confirmation instructions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reset password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Send instructions to reset password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Sending..."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Tenant"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "The transactions are balanced already !"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Transfer"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Transfer deleted successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Transfers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Type"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Update"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "User created successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Weight by income"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You and %{count} other members"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your avatar"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gives"
+msgstr ""

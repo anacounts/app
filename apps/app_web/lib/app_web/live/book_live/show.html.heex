@@ -1,0 +1,53 @@
+<.accordion>
+  <.accordion_item title="Book details" open>
+    <div class="list">
+      <ul class="list__scroller">
+        <li class="list-item">
+          <.icon name="label" />
+          <div class="list-item__label">
+            <span class="list-item__primary-line"><%= gettext("Name") %></span>
+            <br />
+            <span class="list-item__secondary-line"><%= @book.name %></span>
+          </div>
+        </li>
+        <li class="list-item">
+          <.icon name="wallet" />
+          <div class="list-item__label">
+            <span class="list-item__primary-line"><%= gettext("Balancing") %></span>
+            <br />
+            <span class="list-item__secondary-line">
+              <% # TODO Format text %>
+              <%= @book.default_balance_params.means_code %>
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </.accordion_item>
+  <.accordion_item title={
+    ngettext("%{count} member", "%{count} members", Enum.count(@book.members))
+  }>
+    <div class="list">
+      <ul class="list__scroller">
+        <%= for member <- @book.members do %>
+          <li class="list-item">
+            <img class="list-item__avatar" src={Avatars.for_user(member.user)} />
+            <div class="list-item__label">
+              <span class="list-item__primary-line">
+                <%= member.user.display_name %>
+              </span>
+              <br />
+              <span class="list-item__secondary-line"><%= member.role %></span>
+            </div>
+          </li>
+        <% end %>
+        <li class="list-item">
+          <%= live_redirect to: Routes.invitation_index_path(@socket, :index, @book), class: "list-item__link" do %>
+            <.icon name="account-plus" />
+            <div class="list-item__label"><%= gettext("Invite member") %></div>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </.accordion_item>
+</.accordion>

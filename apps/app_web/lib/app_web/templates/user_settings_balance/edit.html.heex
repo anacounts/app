@@ -1,0 +1,49 @@
+<.app_header back_to={Routes.user_settings_path(@conn, :edit)}>Balance</.app_header>
+
+<p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+<p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+<.accordion>
+  <.accordion_item title={gettext("Divide equally")}>
+    <div class="mx-4"><%= gettext("No configuration necessary. You're all set up !") %></div>
+  </.accordion_item>
+  <.accordion_item title={gettext("Weight by income")} open={@weight_by_income_changeset.action}>
+    <.form
+      let={f}
+      for={@weight_by_income_changeset}
+      action={Routes.user_settings_balance_path(@conn, :update)}
+      id="weight-by-income-form"
+      class="mx-4"
+    >
+      <%= if @weight_by_income_changeset.action do %>
+        <div class="alert alert-danger">
+          <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
+        </div>
+      <% end %>
+
+      <%= hidden_input(f, :means_code, value: "weight_by_income") %>
+
+      <label>
+        <%= gettext("Last year incomes") %>
+        <input
+          type="number"
+          step="0.01"
+          min="0.00"
+          placeholder="XXX.XX"
+          name="user_params[params][income]"
+          value={Ecto.Changeset.get_field(@weight_by_income_changeset, :params)["income"]}
+        />
+        <%= error_tag(f, :params) %>
+      </label>
+
+      <p>
+        <%= gettext(
+          "Indicate your income from last year. To do so, we adivise you to go on" <>
+            "your bank website, and sum all incomes from 1 year ago to today."
+        ) %>
+      </p>
+
+      <%= submit(gettext("Update"), class: "button button--color-cta") %>
+    </.form>
+  </.accordion_item>
+</.accordion>

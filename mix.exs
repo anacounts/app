@@ -9,8 +9,11 @@ defmodule Anacounts.Umbrella.MixProject do
       deps: deps(),
       aliases: aliases(),
       releases: [
-        anacounts_api: [
-          applications: [anacounts: :permanent, anacounts_api: :permanent]
+        app_web: [
+          applications: [
+            app: :permanent,
+            app_web: :permanent
+          ]
         ]
       ]
     ]
@@ -30,7 +33,10 @@ defmodule Anacounts.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
     [
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+
+      # Needed for the formatter to work in apps
+      {:phoenix_live_view, "~> 0.17.5"}
     ]
   end
 

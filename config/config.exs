@@ -10,8 +10,8 @@
 import Config
 
 # Configure Mix tasks and generators
-config :anacounts,
-  ecto_repos: [Anacounts.Repo]
+config :app,
+  ecto_repos: [App.Repo]
 
 # Configures the mailer
 #
@@ -20,21 +20,31 @@ config :anacounts,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :anacounts, Anacounts.Mailer, adapter: Swoosh.Adapters.Local
+config :app, App.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :anacounts_api,
-  ecto_repos: [Anacounts.Repo],
-  generators: [context_app: :anacounts]
+config :app_web,
+  ecto_repos: [App.Repo],
+  generators: [context_app: :app]
 
 # Configures the endpoint
-config :anacounts_api, AnacountsAPI.Endpoint,
+config :app_web, AppWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: AnacountsAPI.ErrorView, format: "json", accepts: ~w(json)],
-  pubsub_server: Anacounts.PubSub,
+  render_errors: [view: AppWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: App.PubSub,
   live_view: [signing_salt: "F5OA2rrK"]
+
+# Configure esbuild (the version is required)
+config :esbuild,
+  version: "0.14.29",
+  default: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../apps/app_web/assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

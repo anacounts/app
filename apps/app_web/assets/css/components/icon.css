@@ -1,0 +1,8 @@
+.icon {
+  width: var(--size, 1.5rem);
+  height: var(--size, 1.5rem);
+}
+
+.icon--size-md {
+  --size: 2rem;
+}
