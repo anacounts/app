@@ -52,7 +52,8 @@ defmodule Anacounts.Umbrella.MixProject do
   defp aliases do
     [
       # run `mix setup` in all child apps
-      setup: ["cmd mix setup"]
+      setup: ["cmd mix setup"],
+      "assets.deploy": ["cmd --app app_web mix assets.deploy"]
     ]
   end
 end

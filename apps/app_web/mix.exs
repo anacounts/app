@@ -65,8 +65,7 @@ defmodule AppWeb.MixProject do
     [
       setup: ["deps.get"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"],
-      # TODO replace with build step
+      "assets.deploy": ["esbuild default --minify", "sprite.generate", "phx.digest"],
       "sprite.generate":
         "cmd npx svg-sprite --dest=priv/static/assets --symbol --symbol-dest=. --symbol-sprite=sprite.svg 'assets/icons/*.svg'"
     ]
