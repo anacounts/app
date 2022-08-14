@@ -11,8 +11,7 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 # Install dependencies required to compile deps
-RUN apk update && \
-    apk add build-base
+RUN apk add --update build-base npm
 
 # Create the application build directory
 RUN mkdir /app
