@@ -1,13 +1,13 @@
-<.app_header back_to={Routes.user_settings_path(@conn, :edit)}>Balance</.app_header>
+<.page_header back_to={Routes.user_settings_path(@conn, :edit)}>Balance</.page_header>
 
 <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
 <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
 <.accordion>
-  <.accordion_item title={gettext("Divide equally")}>
-    <div class="mx-4"><%= gettext("No configuration necessary. You're all set up !") %></div>
-  </.accordion_item>
-  <.accordion_item title={gettext("Weight by income")} open={@weight_by_income_changeset.action}>
+  <:item title={gettext("Divide equally")}>
+    <div class="mx-4"><%= gettext("No configuration necessary. You're all set up!") %></div>
+  </:item>
+  <:item title={gettext("Weight by income")} open={@weight_by_income_changeset.action}>
     <.form
       let={f}
       for={@weight_by_income_changeset}
@@ -27,10 +27,9 @@
         <%= gettext("Last year incomes") %>
         <input
           type="number"
+          name="user_params[params][income]"
           step="0.01"
           min="0.00"
-          placeholder="XXX.XX"
-          name="user_params[params][income]"
           value={Ecto.Changeset.get_field(@weight_by_income_changeset, :params)["income"]}
         />
         <%= error_tag(f, :params) %>
@@ -43,7 +42,9 @@
         ) %>
       </p>
 
-      <%= submit(gettext("Update"), class: "button button--color-cta") %>
+      <.button color="cta">
+        <%= gettext("Update") %>
+      </.button>
     </.form>
-  </.accordion_item>
+  </:item>
 </.accordion>

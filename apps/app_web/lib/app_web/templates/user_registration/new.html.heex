@@ -1,45 +1,35 @@
-<div class="auth-page">
-  <h1 class="auth-page__title"><%= gettext("Register") %></h1>
-
-  <.form
-    let={f}
-    for={@changeset}
-    action={Routes.user_registration_path(@conn, :create)}
-    class="auth-page__form"
-  >
-    <%= if @changeset.action do %>
-      <div class="alert alert-danger">
-        <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
-      </div>
-    <% end %>
-
-    <%= label(f, :email) do %>
-      <%= gettext("Email") %>
-      <%= email_input(f, :email,
-        required: true,
-        autocomplete: "email",
-        placeholder: "john.doe@example.com"
-      ) %>
-      <%= error_tag(f, :email) %>
-    <% end %>
-
-    <%= label(f, :password) do %>
-      <%= gettext("Password") %>
-      <%= password_input(f, :password,
-        required: true,
-        autocapitalize: "new-password",
-        placeholder: "*****************"
-      ) %>
-      <%= error_tag(f, :password) %>
-    <% end %>
-
-    <div>
-      <%= submit(gettext("Register"), class: "button button--color-cta") %>
+<.form
+  let={f}
+  for={@changeset}
+  action={Routes.user_registration_path(@conn, :create)}
+  class="px-4"
+>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
     </div>
-  </.form>
+  <% end %>
 
-  <p>
-    <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %> |
-    <%= link(gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new)) %>
-  </p>
-</div>
+  <%= label f, :email do %>
+    <%= gettext("Email") %>
+    <%= email_input(f, :email, required: true, autocomplete: "email") %>
+    <%= error_tag(f, :email) %>
+  <% end %>
+
+  <%= label f, :password do %>
+    <%= gettext("Password") %>
+    <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
+    <%= error_tag(f, :password) %>
+  <% end %>
+
+  <div>
+    <.button color="cta">
+      <%= gettext("Register") %>
+    </.button>
+  </div>
+</.form>
+
+<p>
+  <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %> |
+  <%= link(gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new)) %>
+</p>

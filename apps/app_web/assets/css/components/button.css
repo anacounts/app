@@ -1,28 +1,45 @@
-.button {
-  display: inline-block;
-  padding: 0.5rem;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--radius-lg);
-  text-transform: uppercase;
-  color: var(--color-body);
-}
+@layer components {
+  .button {
+    @apply inline-block
+           p-2
+           border border-solid
+           rounded-lg
+           uppercase
+           transition-colors;
+  }
 
-.button:disabled {
-  background-color: var(--color-controls-background-disabled);
-  border-color: var(--color-controls-border-disabled);
-}
+  .button:disabled {
+    @apply bg-disabled
+           border-disabled-border;
+  }
 
-.button--color-cta {
-  color: var(--color-theme-contrast);
-  background-color: var(--color-theme);
-}
+  .button--cta {
+    @apply text-theme-contrast
+           bg-theme;
+  }
 
-.button--color-feature {
-  background-color: var(--color-controls-background);
-  border-color: var(--color-controls-border);
-}
+  .button--cta:hover {
+    @apply bg-theme-lighter;
+  }
 
-.button--color-invisible {
-  display: contents;
+  .button--cta:focus {
+    @apply bg-theme-darker;
+  }
+
+  .button--feature {
+    @apply bg-gray-100
+           border-gray-500;
+  }
+
+  .button--feature:hover {
+    @apply bg-gray-200;
+  }
+
+  .button--feature:focus {
+    @apply bg-gray-300;
+  }
+
+  .button--invisible {
+    @apply contents;
+  }
 }

@@ -1,0 +1,31 @@
+@layer base {
+  label {
+    @apply block
+               mb-4;
+  }
+
+  input,
+  select {
+    @apply block
+           my-1 p-2
+           border border-solid border-gray-600
+           bg-gray-100
+           rounded-lg
+           text-base placeholder:text-gray-600;
+  }
+
+  input:disabled,
+  select:disabled {
+    @apply text-disabled
+           border-disabled-border;
+  }
+
+  input:focus,
+  select:focus {
+    @apply outline-theme;
+  }
+
+  [type="checkbox"] {
+    @apply inline-block;
+  }
+}

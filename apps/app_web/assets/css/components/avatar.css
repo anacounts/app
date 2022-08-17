@@ -1,5 +1,14 @@
-.avatar {
-  width: 4rem;
-  height: 4rem;
-  border-radius: var(--radius-full);
+@layer components {
+  .avatar {
+    @apply w-8 h-8
+         rounded-full;
+  }
+
+  .avatar--lg {
+    @apply w-10 h-10;
+  }
+
+  .avatar--3xl {
+    @apply w-16 h-16;
+  }
 }

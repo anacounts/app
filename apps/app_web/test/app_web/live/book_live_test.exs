@@ -76,7 +76,7 @@ defmodule AppWeb.BookLiveTest do
 
       assert {:ok, _, html} =
                show_live
-               |> element("#delete-book a", "Delete")
+               |> element("#delete-book", "Delete")
                |> render_click()
                |> follow_redirect(conn, Routes.book_index_path(conn, :index))
 

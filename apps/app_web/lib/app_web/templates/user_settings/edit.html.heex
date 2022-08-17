@@ -1,9 +1,9 @@
-<.app_header back_to={Routes.book_index_path(@conn, :index)}>Settings</.app_header>
+<.page_header back_to={Routes.book_index_path(@conn, :index)}>Settings</.page_header>
 <main>
-  <div class="profile-page__display-info mx-4 mb-4">
-    <img class="avatar" src={Avatars.for_user(@current_user)} alt={gettext("Your avatar")} />
+  <div class="flex items-center gap-4 mx-4 mb-4">
+    <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Your avatar")} size="xl" />
     <div>
-      <span class="profile-page__display-name"><%= @current_user.display_name %></span>
+      <span class="font-bold"><%= @current_user.display_name %></span>
       <div><%= @current_user.email %></div>
     </div>
   </div>
@@ -11,19 +11,19 @@
   <%= link(gettext("Disconnect"),
     to: Routes.user_session_path(@conn, :delete),
     method: :delete,
-    class: "button button--color-feature mx-4"
+    class: "button button--feature mx-4"
   ) %>
 
+  <div class="list__item">
+    <%= link(to: Routes.user_settings_balance_path(@conn, :edit), class: "contents") do %>
+      <div class="grow font-bold uppercase">
+        <%= gettext("Balance Settings") %>
+      </div>
+      <.icon name="chevron-right" />
+    <% end %>
+  </div>
   <.accordion>
-    <div class="list-item">
-      <%= link(to: Routes.user_settings_balance_path(@conn, :edit), class: "list-item__link") do %>
-        <div class="list-item__label font-bold uppercase">
-          <%= gettext("Balance Settings") %>
-        </div>
-        <.icon name="chevron-right" />
-      <% end %>
-    </div>
-    <.accordion_item title={gettext("Change name")}>
+    <:item title={gettext("Change name")}>
       <.form
         let={f}
         for={@email_changeset}
@@ -39,17 +39,22 @@
 
         <%= hidden_input(f, :action, name: "action", value: "update_display_name") %>
 
-        <%= label(f, :display_name) do %>
+        <%= label f, :display_name do %>
           <%= gettext("Name") %>
-          <%= text_input(f, :display_name, required: true, autocomplete: "username") %>
+          <%= text_input(f, :display_name,
+            required: true,
+            autocomplete: "username"
+          ) %>
           <%= error_tag(f, :display_name) %>
         <% end %>
         <div>
-          <%= submit(gettext("Change name"), class: "button button--color-cta") %>
+          <.button color="cta">
+            <%= gettext("Change name") %>
+          </.button>
         </div>
       </.form>
-    </.accordion_item>
-    <.accordion_item title={gettext("Change avatar")}>
+    </:item>
+    <:item title={gettext("Change avatar")}>
       <p class="mx-4">
         <%= gettext(
           ~s[Anacounts uses <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">Gravatar</a> to display user avatars.]
@@ -66,8 +71,8 @@
         )
         |> raw() %>
       </p>
-    </.accordion_item>
-    <.accordion_item title={gettext("Change email")} open={@email_changeset.action}>
+    </:item>
+    <:item title={gettext("Change email")} open={@email_changeset.action}>
       <.form
         let={f}
         for={@email_changeset}
@@ -83,13 +88,16 @@
 
         <%= hidden_input(f, :action, name: "action", value: "update_email") %>
 
-        <%= label(f, :email) do %>
+        <%= label f, :email do %>
           <%= gettext("New email") %>
-          <%= email_input(f, :email, required: true, autocomplete: "username") %>
+          <%= email_input(f, :email,
+            required: true,
+            autocomplete: "username"
+          ) %>
           <%= error_tag(f, :email) %>
         <% end %>
 
-        <%= label(f, :current_password) do %>
+        <%= label f, :current_password do %>
           <%= gettext("Password") %>
           <%= password_input(f, :current_password,
             required: true,
@@ -101,11 +109,13 @@
         <% end %>
 
         <div>
-          <%= submit(gettext("Change email"), class: "button button--color-cta") %>
+          <.button color="cta">
+            <%= gettext("Change email") %>
+          </.button>
         </div>
       </.form>
-    </.accordion_item>
-    <.accordion_item title={gettext("Change password")} open={@password_changeset.action}>
+    </:item>
+    <:item title={gettext("Change password")} open={@password_changeset.action}>
       <.form
         let={f}
         for={@password_changeset}
@@ -122,13 +132,16 @@
         <%= hidden_input(f, :action, name: "action", value: "update_password") %>
         <%= hidden_input(f, :email, autocomplete: "username") %>
 
-        <%= label(f, :password) do %>
+        <%= label f, :password do %>
           <%= gettext("New password") %>
-          <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
+          <%= password_input(f, :password,
+            required: true,
+            autocomplete: "new-password"
+          ) %>
           <%= error_tag(f, :password) %>
         <% end %>
 
-        <%= label(f, :password_confirmation) do %>
+        <%= label f, :password_confirmation do %>
           <%= gettext("Confirm password") %>
           <%= password_input(f, :password_confirmation,
             required: true,
@@ -137,7 +150,7 @@
           <%= error_tag(f, :password_confirmation) %>
         <% end %>
 
-        <%= label(f, :current_password, for: "current_password_for_password") do %>
+        <%= label f, :current_password, for: "current_password_for_password" do %>
           <%= gettext("Current password") %>
           <%= password_input(f, :current_password,
             required: true,
@@ -149,9 +162,11 @@
         <% end %>
 
         <div>
-          <%= submit(gettext("Change password"), class: "button button--color-cta") %>
+          <.button color="cta">
+            <%= gettext("Change password") %>
+          </.button>
         </div>
       </.form>
-    </.accordion_item>
+    </:item>
   </.accordion>
 </main>

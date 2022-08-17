@@ -1,49 +1,39 @@
-<div class="auth-page">
-  <h1 class="auth-page__title"><%= gettext("Log in") %></h1>
-
-  <.form
-    let={f}
-    for={@conn}
-    action={Routes.user_session_path(@conn, :create)}
-    as={:user}
-    class="auth-page__form"
-  >
-    <%= if @error_message do %>
-      <div class="alert alert-danger">
-        <p><%= @error_message %></p>
-      </div>
-    <% end %>
-
-    <%= label(f, :email) do %>
-      <%= gettext("Email") %>
-      <%= email_input(f, :email,
-        required: true,
-        autocomplete: "email",
-        placeholder: "john.doe@example.com"
-      ) %>
-    <% end %>
-
-    <%= label(f, :password) do %>
-      <%= gettext("Password") %>
-      <%= password_input(f, :password,
-        required: true,
-        autocomplete: "current-password",
-        placeholder: "*****************"
-      ) %>
-    <% end %>
-
-    <%= label(f, :remember_me, default_value: true) do %>
-      <%= checkbox(f, :remember_me) %>
-      <%= gettext("Keep me logged in for 60 days") %>
-    <% end %>
-
-    <div>
-      <%= submit(gettext("Log in"), class: "button button--color-cta") %>
+<.form
+  let={f}
+  for={@conn}
+  action={Routes.user_session_path(@conn, :create)}
+  as={:user}
+  class="px-4"
+>
+  <%= if @error_message do %>
+    <div class="alert alert-danger">
+      <p><%= @error_message %></p>
     </div>
-  </.form>
+  <% end %>
 
-  <p>
-    <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
-    <%= link(gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new)) %>
-  </p>
-</div>
+  <%= label f, :email do %>
+    <%= gettext("Email") %>
+    <%= email_input(f, :email, required: true, autocomplete: "email") %>
+  <% end %>
+
+  <%= label f, :password do %>
+    <%= gettext("Password") %>
+    <%= password_input(f, :password, required: true, autocomplete: "current-password") %>
+  <% end %>
+
+  <%= label f, :remember_me, default_value: true do %>
+    <%= checkbox(f, :remember_me) %>
+    <%= gettext("Keep me logged in for 60 days") %>
+  <% end %>
+
+  <div>
+    <.button color="cta">
+      <%= gettext("Log in") %>
+    </.button>
+  </div>
+</.form>
+
+<p>
+  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
+  <%= link(gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new)) %>
+</p>

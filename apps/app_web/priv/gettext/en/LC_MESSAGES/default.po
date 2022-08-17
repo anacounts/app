@@ -11,13 +11,13 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "%{count} book in your list"
 msgid_plural "%{count} books in your list"
 msgstr[0] "%{count} book in your list"
 msgstr[1] "%{count} books in your list"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "%{count} member"
 msgid_plural "%{count} members"
 msgstr[0] "%{count} member"
@@ -28,18 +28,14 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "A link to confirm your email change has been sent to the new address."
 
 #, elixir-autogen, elixir-format
-msgid "Add member"
-msgstr "Add member"
-
-#, elixir-autogen, elixir-format
 msgid "Amount"
 msgstr "Amount"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 msgstr "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Balance"
 
@@ -55,7 +51,7 @@ msgstr "Balance settings updated"
 msgid "Balancing"
 msgstr "Balancing"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Book"
 msgstr "Book"
 
@@ -95,7 +91,7 @@ msgstr "Confirm my account"
 msgid "Confirm new password"
 msgstr "Confirm new password"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Confirm password"
 msgstr "Confirm password"
 
@@ -167,13 +163,13 @@ msgstr "Go back"
 msgid "Gravatar is a service providing globally unique avatars"
 msgstr "Gravatar is a service providing globally unique avatars"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "How to balance ?"
-msgstr "How to balance ?"
+#, elixir-autogen, elixir-format
+msgid "How to balance by default?"
+msgstr "How to balance by default?"
 
 #, elixir-autogen, elixir-format
-msgid "How to balance by default ?"
-msgstr "How to balance by default ?"
+msgid "How to balance?"
+msgstr "How to balance?"
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
@@ -264,8 +260,8 @@ msgid "New transfer"
 msgstr "New transfer"
 
 #, elixir-autogen, elixir-format
-msgid "No configuration necessary. You're all set up !"
-msgstr "No configuration necessary. You're all set up !"
+msgid "No configuration necessary. You're all set up!"
+msgstr "No configuration necessary. You're all set up!"
 
 #, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
@@ -299,7 +295,7 @@ msgstr "Reimbursement"
 msgid "Resend confirmation instructions"
 msgstr "Resend confirmation instructions"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Reset password"
 msgstr "Reset password"
 
@@ -332,10 +328,10 @@ msgid "Tenant"
 msgstr "Tenant"
 
 #, elixir-autogen, elixir-format
-msgid "The transactions are balanced already !"
-msgstr "The transactions are balanced already !"
+msgid "The transactions are balanced already!"
+msgstr "The transactions are balanced already!"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 

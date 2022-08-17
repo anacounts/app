@@ -1,8 +1,9 @@
-.icon {
-  width: var(--size, 1.5rem);
-  height: var(--size, 1.5rem);
-}
+@layer components {
+  .icon {
+    @apply w-6 h-6;
+  }
 
-.icon--size-md {
-  --size: 2rem;
+  .icon--md {
+    @apply w-8 h-8;
+  }
 }

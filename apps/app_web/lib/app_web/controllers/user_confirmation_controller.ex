@@ -3,6 +3,8 @@ defmodule AppWeb.UserConfirmationController do
 
   alias App.Auth
 
+  plug :put_layout, "auth.html"
+
   def new(conn, _params) do
     render(conn, "new.html", page_title: gettext("Resend confirmation instructions"))
   end

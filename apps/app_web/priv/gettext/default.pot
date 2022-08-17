@@ -27,10 +27,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Add member"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Amount"
 msgstr ""
 
@@ -167,11 +163,11 @@ msgid "Gravatar is a service providing globally unique avatars"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "How to balance ?"
+msgid "How to balance by default?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "How to balance by default ?"
+msgid "How to balance?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -263,7 +259,7 @@ msgid "New transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "No configuration necessary. You're all set up !"
+msgid "No configuration necessary. You're all set up!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -331,7 +327,7 @@ msgid "Tenant"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The transactions are balanced already !"
+msgid "The transactions are balanced already!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
