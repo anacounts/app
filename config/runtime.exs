@@ -57,16 +57,32 @@ if config_env() == :prod do
   # In production you need to configure the mailer to use a different adapter.
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
-  #
-  #     config :app, App.Mailer,
-  #       adapter: Swoosh.Adapters.Mailgun,
-  #       api_key: System.get_env("MAILGUN_API_KEY"),
-  #       domain: System.get_env("MAILGUN_DOMAIN")
-  #
-  # For this example you need include a HTTP client required by Swoosh API client.
+
+  ses_region =
+    System.get_env("SES_REGION") ||
+      raise "environment variable SES_REGION is missing."
+
+  ses_access_key =
+    System.get_env("SES_ACCESS_KEY") ||
+      raise "environment variable SES_ACCESS_KEY is missing."
+
+  ses_secret_key =
+    System.get_env("SES_SECRET_KEY") ||
+      raise "environment variable SES_SECRET_KEY is missing."
+
+  ses_identity =
+    System.get_env("SES_IDENTITY") ||
+      raise "environment variable SES_IDENTITY is missing."
+
+  config :app, App.Mailer,
+    adapter: Swoosh.Adapters.AmazonSES,
+    region: ses_region,
+    access_key: ses_access_key,
+    secret: ses_secret_key,
+    identity: ses_identity
+
+  # A HTTP client is required by Swoosh API client for most providers (including SES).
   # Swoosh supports Hackney and Finch out of the box:
-  #
-  #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
-  #
-  # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :swoosh, :api_client, Swoosh.ApiClient.Hackney
 end

@@ -41,7 +41,9 @@ defmodule App.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
-      {:swoosh, "~> 1.3"},
+      {:swoosh, "~> 1.7.4"},
+      {:gen_smtp, "~> 1.0"},
+      {:hackney, "~> 1.18"},
       {:decimal, "~> 2.0"},
       # TODO Move to ex_money (migration is gonna be hard)
       {:money, "~> 1.10"}

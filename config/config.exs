@@ -18,9 +18,11 @@ config :app,
 # By default it uses the "Local" adapter which stores the emails
 # locally. You can see the emails in your browser, at "/dev/mailbox".
 #
-# For production it's recommended to configure a different adapter
+# For production, a different adapter and identity are configured
 # at the `config/runtime.exs`.
-config :app, App.Mailer, adapter: Swoosh.Adapters.Local
+config :app, App.Mailer,
+  adapter: Swoosh.Adapters.Local,
+  identity: "example.com"
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false

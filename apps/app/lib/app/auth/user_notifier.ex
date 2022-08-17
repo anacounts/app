@@ -15,7 +15,7 @@ defmodule App.Auth.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"App", "contact@example.com"})
+      |> from({"Anacounts", Mailer.no_reply_email()})
       |> subject(subject)
       |> text_body(body)
 
