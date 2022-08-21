@@ -1,18 +1,26 @@
-/* .accordion { } */
+@layer components {
+  /* .accordion { } */
 
-/* .accordion__item {} */
+  /* .accordion__item {} */
 
-.accordion__header {
-  display: flex;
-  align-items: center;
-  height: 3rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  line-height: 3rem;
-  list-style-type: none;
-}
+  .accordion__header {
+    @apply flex items-center
+           h-10
+           mx-4
+           leading-10;
+  }
 
-.accordion__title {
-  flex-grow: 1;
-  text-transform: uppercase;
+  .accordion__title {
+    @apply grow
+           uppercase
+           cursor-pointer;
+  }
+
+  .accordion__icon {
+    @apply transition-transform duration-300;
+  }
+
+  [open] .accordion__icon {
+    @apply scale-[-1];
+  }
 }

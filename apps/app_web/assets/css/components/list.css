@@ -1,20 +1,24 @@
-/* # Wrapper */
-
-/* .list {} */
-
-/* # Title */
-
-.list__title {
-  display: block;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+@layer components {
+  /* TODO Should be another self-contained component */
+  .list__title {
+    display: block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
 }
 
-/* # Scroller */
-.list__scroller {
-  padding-left: 0;
-  margin: 0;
-  list-style-type: none;
+@layer components {
+  /* .list {} */
+
+  .list__item {
+    @apply flex items-center gap-4
+           p-4
+           transition-colors;
+  }
+
+  .list__item:hover {
+    @apply bg-gray-100;
+  }
 }

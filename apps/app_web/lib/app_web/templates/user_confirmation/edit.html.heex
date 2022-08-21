@@ -1,19 +1,17 @@
-<div class="auth-page">
-  <h1 class="auth-page__title"><%= gettext("Confirm account") %></h1>
+<.form
+  let={_f}
+  for={:user}
+  action={Routes.user_confirmation_path(@conn, :update, @token)}
+  class="px-4"
+>
+  <div>
+    <.button color="cta">
+      <%= gettext("Confirm my account") %>
+    </.button>
+  </div>
+</.form>
 
-  <.form
-    let={_f}
-    for={:user}
-    action={Routes.user_confirmation_path(@conn, :update, @token)}
-    class="auth-page__form"
-  >
-    <div>
-      <%= submit(gettext("Confirm my account"), class: "button button--color-cta") %>
-    </div>
-  </.form>
-
-  <p>
-    <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
-    <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %>
-  </p>
-</div>
+<p>
+  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
+  <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %>
+</p>

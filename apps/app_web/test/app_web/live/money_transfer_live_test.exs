@@ -110,7 +110,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
 
       {:ok, _, html} =
         form_live
-        |> element("#delete-book a", "Delete")
+        |> element("#delete-money-transfer", "Delete")
         |> render_click()
         |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
 

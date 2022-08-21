@@ -49,6 +49,7 @@ defmodule AppWeb.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
@@ -65,7 +66,12 @@ defmodule AppWeb.MixProject do
     [
       setup: ["deps.get"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "sprite.generate", "phx.digest"],
+      "assets.deploy": [
+        "esbuild default --minify",
+        "tailwind default --minify",
+        "sprite.generate",
+        "phx.digest"
+      ],
       "sprite.generate":
         "cmd npx svg-sprite --dest=priv/static/assets --symbol --symbol-dest=. --symbol-sprite=sprite.svg 'assets/icons/*.svg'"
     ]

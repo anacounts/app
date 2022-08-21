@@ -5,6 +5,8 @@ defmodule AppWeb.UserRegistrationController do
   alias App.Auth.User
   alias AppWeb.UserAuth
 
+  plug :put_layout, "auth.html"
+
   def new(conn, _params) do
     changeset = Auth.change_user_registration(%User{})
     render(conn, "new.html", page_title: gettext("Register"), changeset: changeset)

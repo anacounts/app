@@ -25,8 +25,9 @@ config :app_web, AppWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "Y8PSvX0+ZmmWKSfOyF3MRuaFKjHRwPA8IZKDm3A8RjiRF4jIoNq6cE07D1XWEdvV",
   watchers: [
-    # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    # Start the esbuild and tailwind watchers
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support

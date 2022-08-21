@@ -20,7 +20,7 @@ defmodule App.Accounts.Balance.UserParams do
 
   schema "balance_user_params" do
     field(:means_code, Ecto.Enum, values: Means.codes_with_user_params())
-    # TODO crypt this data, must require to change to :binary data type
+    # TODO crypt this data, must require to change to :binary data type. Consider Cloak
     field(:params, :map)
 
     belongs_to(:user, Auth.User)

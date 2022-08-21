@@ -4,6 +4,8 @@ defmodule AppWeb.UserSessionController do
   alias App.Auth
   alias AppWeb.UserAuth
 
+  plug :put_layout, "auth.html"
+
   def new(conn, _params) do
     render(conn, "new.html", page_title: gettext("Log in"), error_message: nil)
   end
