@@ -1,8 +1,0 @@
-@layer components {
-  .page-header {
-    @apply flex items-center gap-2
-           h-16
-           mx-4
-           text-3xl;
-  }
-}
