@@ -1,7 +1,7 @@
 <section>
-  <strong class="list__title">
+  <.heading level="section">
     <%= gettext("Members balance") %>
-  </strong>
+  </.heading>
   <.list>
     <%= for {member_id, amount} <- @members_balance do %>
       <% member = Accounts.get_member!(member_id) |> App.Repo.preload(:user) %>
@@ -21,9 +21,9 @@
   </.list>
 </section>
 <section>
-  <strong class="list__title">
+  <.heading level="section" class="mt-4">
     <%= gettext("How to balance?") %>
-  </strong>
+  </.heading>
   <.list>
     <%= if Enum.empty?(@transactions) do %>
       <.list_item>

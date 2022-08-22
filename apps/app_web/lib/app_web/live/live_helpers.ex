@@ -4,6 +4,7 @@ defmodule AppWeb.LiveHelpers do
   Includes many common components commonly used throughout the app.
   """
 
+  import Phoenix.HTML.Tag, only: [content_tag: 3]
   import Phoenix.LiveView
   import Phoenix.LiveView.Helpers
 
@@ -260,6 +261,18 @@ defmodule AppWeb.LiveHelpers do
     """
   end
 
+  def heading(assigns) do
+    ~H"""
+    <% {level_class, level_tag} = heading_level_class_and_tag(@level) %>
+    <%= content_tag(level_tag, render_slot(@inner_block),
+      class: ["heading", level_class, assigns[:class]]
+    ) %>
+    """
+  end
+
+  defp heading_level_class_and_tag("title"), do: {"heading--title", "h1"}
+  defp heading_level_class_and_tag("section"), do: {"heading--section", "h3"}
+
   ## Icon
 
   @doc """
@@ -391,7 +404,7 @@ defmodule AppWeb.LiveHelpers do
           <.icon name="arrow-left" alt={gettext("Go back")} />
         <% end %>
       <% end %>
-      <h1 class="page-header__title"><%= render_slot(@inner_block) %></h1>
+      <.heading level="title" class="grow"><%= render_slot(@inner_block) %></.heading>
       <%= if assigns[:menu] do %>
         <%= for menu <- assigns[:menu], menu[:if] != false do %>
           <.dropdown id="contextual-menu">

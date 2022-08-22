@@ -22,13 +22,13 @@
     </.alert>
   <% end %>
 
-  <strong class="list__title">
+  <.heading level="section">
     <%= ngettext(
       "%{count} book in your list",
       "%{count} books in your list",
       Enum.count(@books)
     ) %>
-  </strong>
+  </.heading>
   <.list>
     <%= for book <- @books do %>
       <.list_item to={Routes.book_show_path(@socket, :show, book)}>
