@@ -58,6 +58,44 @@ defmodule AppWeb.LiveHelpers do
     """
   end
 
+  ## Alert
+
+  @doc """
+  Generates an alert. Alerts are used to display temporary messages to the user.
+
+  ## Attributes
+
+  - type: The type of the alert
+
+  ## Slots
+
+  - default: The content of the alert
+             Note that an icon is automatically added to the alert.
+
+  ## Examples
+
+      <.alert type="info">
+        This is an info
+      </.alert>
+
+  """
+  def alert(assigns) do
+    assigns =
+      assigns
+      |> assign(:extra, assigns_to_attributes(assigns, [:class, :type]))
+
+    ~H"""
+    <% {type_class, type_icon} = alert_type_class_and_icon(@type) %>
+    <div class={["alert", type_class, assigns[:class]]} role="alert" {@extra}>
+      <.icon name={type_icon} />
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  defp alert_type_class_and_icon("info"), do: {"alert--info", "information"}
+  defp alert_type_class_and_icon("error"), do: {"alert--error", "alert-circle"}
+
   ## Avatar
 
   @doc """
@@ -67,6 +105,11 @@ defmodule AppWeb.LiveHelpers do
 
   - src (required): The image URL.
   - alt: The alt text for the image.
+
+  ## Examples
+
+      <.avatar src="https://avatars0.githubusercontent.com/u/1234?s=460&v=4" alt="GitHub avatar" />
+
   """
   def avatar(assigns) do
     ~H"""

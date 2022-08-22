@@ -18,8 +18,8 @@ module.exports = {
         DEFAULT: "#b20600",
         contrast: "#ffffff",
       },
-      error: "#d32f2f",
-      success: "#4caf50",
+      info: "#0b61ec",
+      error: "#f1353a",
       disabled: {
         DEFAULT: "#cbd5e0",
         border: "#a0aec0",

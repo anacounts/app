@@ -6,9 +6,7 @@
   class="px-4"
 >
   <%= if @error_message do %>
-    <div class="alert alert-danger">
-      <p><%= @error_message %></p>
-    </div>
+    <.alert type="error"><%= @error_message %></.alert>
   <% end %>
 
   <%= label f, :email do %>

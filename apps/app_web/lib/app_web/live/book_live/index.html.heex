@@ -17,9 +17,9 @@
 
 <main>
   <%= for {type, message} <- @flash do %>
-    <p class={"alert alert-#{type}"} role="alert" phx-click="lv:clear-flash" phx-value-key={type}>
+    <.alert type={type} phx-click="lv:clear-flash" phx-value-key={type}>
       <%= message %>
-    </p>
+    </.alert>
   <% end %>
 
   <strong class="list__title">
