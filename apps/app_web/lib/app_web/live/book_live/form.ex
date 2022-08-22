@@ -20,7 +20,7 @@ defmodule AppWeb.BookLive.Form do
     socket
     |> assign(:book, book)
     |> assign(:changeset, Accounts.change_book(book))
-    |> assign(:page_title, gettext("New book"))
+    |> assign(:page_title, gettext("New Book"))
     |> assign(:back_to, Routes.book_index_path(socket, :index))
   end
 
@@ -30,7 +30,7 @@ defmodule AppWeb.BookLive.Form do
     socket
     |> assign(:book, book)
     |> assign(:changeset, Accounts.change_book(book))
-    |> assign(:page_title, gettext("Edit book"))
+    |> assign(:page_title, gettext("Edit Book · %{name}", name: book.name))
     |> assign(:back_to, Routes.book_show_path(socket, :show, book_id))
   end
 

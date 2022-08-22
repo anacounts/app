@@ -16,14 +16,13 @@ defmodule AppWeb.BookLive.Show do
       # TODO No preload here !
       |> App.Repo.preload(members: [:user])
 
-    socket = assign(socket, :book, book)
+    socket =
+      assign(socket,
+        page_title: book.name,
+        book: book
+      )
 
     {:ok, socket, layout: {AppWeb.LayoutView, "book.html"}}
-  end
-
-  @impl Phoenix.LiveView
-  def handle_params(_params, _url, socket) do
-    {:noreply, assign(socket, :page_title, gettext("Book"))}
   end
 
   @impl Phoenix.LiveView
