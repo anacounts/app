@@ -1,0 +1,21 @@
+@layer components {
+  .alert {
+    @apply flex gap-2
+           p-2 my-4
+           border
+           rounded-md
+           text-theme-contrast;
+  }
+
+  .alert:empty {
+    @apply hidden;
+  }
+
+  .alert--info {
+    @apply bg-info;
+  }
+
+  .alert--error {
+    @apply bg-error;
+  }
+}

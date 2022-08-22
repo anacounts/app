@@ -14,6 +14,10 @@
     class: "button button--feature mx-4"
   ) %>
 
+  <%= for {type, message} <- get_flash(@conn) do %>
+    <.alert type={type} class="mx-4"><%= message %></.alert>
+  <% end %>
+
   <div class="list__item">
     <%= link(to: Routes.user_settings_balance_path(@conn, :edit), class: "contents") do %>
       <div class="grow font-bold uppercase">
@@ -32,9 +36,9 @@
         class="mx-4"
       >
         <%= if @display_name_changeset.action do %>
-          <div class="alert alert-danger">
-            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
-          </div>
+          <.alert type="error">
+            <%= gettext("Oops, something went wrong! Please check the errors below.") %>
+          </.alert>
         <% end %>
 
         <%= hidden_input(f, :action, name: "action", value: "update_display_name") %>
@@ -81,9 +85,9 @@
         class="mx-4"
       >
         <%= if @email_changeset.action do %>
-          <div class="alert alert-danger">
-            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
-          </div>
+          <.alert type="error">
+            <%= gettext("Oops, something went wrong! Please check the errors below.") %>
+          </.alert>
         <% end %>
 
         <%= hidden_input(f, :action, name: "action", value: "update_email") %>
@@ -124,20 +128,17 @@
         class="mx-4"
       >
         <%= if @password_changeset.action do %>
-          <div class="alert alert-danger">
-            <p><%= gettext("Oops, something went wrong! Please check the errors below.") %></p>
-          </div>
+          <.alert type="error">
+            <%= gettext("Oops, something went wrong! Please check the errors below.") %>
+          </.alert>
         <% end %>
 
         <%= hidden_input(f, :action, name: "action", value: "update_password") %>
-        <%= hidden_input(f, :email, autocomplete: "username") %>
+        <%= hidden_input(f, :email, name: "username", autocomplete: "username") %>
 
         <%= label f, :password do %>
           <%= gettext("New password") %>
-          <%= password_input(f, :password,
-            required: true,
-            autocomplete: "new-password"
-          ) %>
+          <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
           <%= error_tag(f, :password) %>
         <% end %>
 
