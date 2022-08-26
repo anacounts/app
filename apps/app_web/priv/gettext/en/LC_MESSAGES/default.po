@@ -208,10 +208,6 @@ msgid "Invitations · %{book_name}"
 msgstr "Invitations · %{book_name}"
 
 #, elixir-autogen, elixir-format
-msgid "Invitations · %{book_name}"
-msgstr "Invitations · %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "Invite member"
 msgstr "Invite member"
 
