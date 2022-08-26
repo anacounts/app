@@ -18,6 +18,7 @@ defmodule AppWeb.BalanceLive.Show do
     socket =
       assign(socket,
         page_title: "Balance · #{book.name}",
+        layout_heading: gettext("Balance"),
         book: book,
         members_balance: members_balance,
         transactions: transactions

@@ -1,4 +1,6 @@
-<.page_header back_to={Routes.user_settings_path(@conn, :edit)}>Balance</.page_header>
+<.page_header back_to={Routes.user_settings_path(@conn, :edit)}>
+  <:title><%= gettext("Balance Settings") %></:title>
+</.page_header>
 
 <%= for {type, message} <- get_flash(@conn) do %>
   <.alert type={type}><%= message %></.alert>
@@ -38,7 +40,7 @@
 
       <p>
         <%= gettext(
-          "Indicate your income from last year. To do so, we adivise you to go on" <>
+          "Indicate your income from last year. To do so, we adivise you to go on " <>
             "your bank website, and sum all incomes from 1 year ago to today."
         ) %>
       </p>

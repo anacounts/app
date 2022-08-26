@@ -18,10 +18,10 @@ defmodule AppWeb.BookLive.Form do
     book = %Book{}
 
     assign(socket,
-      book: book,
-      changeset: Accounts.change_book(book),
       page_title: gettext("New Book"),
-      back_to: Routes.book_index_path(socket, :index)
+      back_to: Routes.book_index_path(socket, :index),
+      book: book,
+      changeset: Accounts.change_book(book)
     )
   end
 
@@ -29,10 +29,10 @@ defmodule AppWeb.BookLive.Form do
     book = Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
 
     assign(socket,
-      book: book,
-      changeset: Accounts.change_book(book),
       page_title: gettext("Edit Book · %{name}", name: book.name),
-      back_to: Routes.book_show_path(socket, :show, book_id)
+      back_to: Routes.book_show_path(socket, :show, book_id),
+      book: book,
+      changeset: Accounts.change_book(book)
     )
   end
 

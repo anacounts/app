@@ -1,5 +1,9 @@
 <.page_header back_to={Routes.money_transfer_index_path(@socket, :index, @book)}>
-  <%= @page_title %>
+  <:title>
+    <%= if @live_action == :new,
+      do: gettext("New Transfer"),
+      else: gettext("Edit Transfer") %>
+  </:title>
   <:menu if={@live_action == :edit}>
     <%= if @live_action == :edit do %>
       <.list_item id="delete-money-transfer" class="text-error" to="#" phx-click="delete">

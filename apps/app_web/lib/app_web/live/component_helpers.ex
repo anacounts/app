@@ -48,8 +48,10 @@ defmodule AppWeb.ComponentHelpers do
     ~H"""
     <div class={["accordion", assigns[:class]]} {@extra}>
       <%= for item <- @item do %>
-        <% item_extra = assigns_to_attributes(item, [:class, :title]) %>
-        <details class={["accordion__item", item[:class]]} {item_extra}>
+        <details
+          class={["accordion__item", item[:class]]}
+          {assigns_to_attributes(item, [:class, :title])}
+        >
           <summary class="accordion__header">
             <strong class="accordion__title"><%= item.title %></strong>
             <.icon class="accordion__icon" name="chevron-down" />
@@ -176,7 +178,12 @@ defmodule AppWeb.ComponentHelpers do
   """
   def dropdown(assigns) do
     ~H"""
-    <div class="dropdown" aria-expanded="false" id={@id} phx-click-away={close_dropdown(@id)}>
+    <div
+      class={["dropdown", assigns[:class]]}
+      aria-expanded="false"
+      id={@id}
+      phx-click-away={close_dropdown(@id)}
+    >
       <button class="dropdown__toggle" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
         <%= render_slot(@toggle) %>
       </button>
@@ -188,11 +195,13 @@ defmodule AppWeb.ComponentHelpers do
   end
 
   defp close_dropdown(id) do
-    JS.hide(to: "##{id}-popover")
+    JS.set_attribute({"aria-expanded", "false"}, to: id)
+    |> JS.hide(to: "##{id}-popover")
   end
 
   defp toggle_dropdown(id) do
-    JS.toggle(to: "##{id}-popover")
+    JS.set_attribute({"aria-expanded", "true"}, to: id)
+    |> JS.toggle(to: "##{id}-popover")
   end
 
   ## FAB

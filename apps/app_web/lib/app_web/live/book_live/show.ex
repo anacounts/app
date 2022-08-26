@@ -19,6 +19,7 @@ defmodule AppWeb.BookLive.Show do
     socket =
       assign(socket,
         page_title: book.name,
+        layout_heading: gettext("Details"),
         book: book
       )
 

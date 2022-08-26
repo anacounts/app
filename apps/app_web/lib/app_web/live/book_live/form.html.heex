@@ -1,5 +1,9 @@
 <.page_header back_to={@back_to}>
-  <%= @page_title %>
+  <:title>
+    <%= if @live_action == :new,
+      do: gettext("New Book"),
+      else: gettext("Edit Book") %>
+  </:title>
 </.page_header>
 
 <main class="mx-4">

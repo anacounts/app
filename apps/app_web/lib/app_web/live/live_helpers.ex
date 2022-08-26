@@ -26,11 +26,12 @@ defmodule AppWeb.LiveHelpers do
 
   - :menu - The menu to use
   - :menu_toggle - The menu toggle to use
+  - default - The content in place of the title
 
   ## Examples
 
       <.page_header back_to="#">
-        Anacounts
+        <:title>Anacounts</:title>
 
         <:menu>
           <.list_item to="/users/settings">
@@ -55,10 +56,10 @@ defmodule AppWeb.LiveHelpers do
           <.icon name="arrow-left" alt={gettext("Go back")} />
         <% end %>
       <% end %>
-      <.heading level="title" class="grow"><%= render_slot(@inner_block) %></.heading>
+      <.heading level="title"><%= render_slot(@title) %></.heading>
       <%= if assigns[:menu] do %>
         <%= for menu <- assigns[:menu], menu[:if] != false do %>
-          <.dropdown id="contextual-menu">
+          <.dropdown id="contextual-menu" class="ml-auto">
             <:toggle>
               <%= render_menu_toggle(assigns) %>
             </:toggle>

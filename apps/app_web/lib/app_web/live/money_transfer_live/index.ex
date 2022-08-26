@@ -22,6 +22,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
     socket =
       assign(socket,
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
+        layout_heading: gettext("Transfers"),
         book: book,
         money_transfers: money_transfers
       )

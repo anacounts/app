@@ -135,7 +135,15 @@ msgid "Edit"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Edit Book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit Transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -183,7 +191,7 @@ msgid "Income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Indicate your income from last year. To do so, we adivise you to go onyour bank website, and sum all incomes from 1 year ago to today."
+msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -192,6 +200,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Invitation sent successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invitations"
 msgstr ""
 
 #, elixir-autogen, elixir-format

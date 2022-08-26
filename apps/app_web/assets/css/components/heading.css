@@ -1,5 +1,7 @@
 @layer components {
-  /* .heading {} */
+  .heading {
+    @apply truncate;
+  }
 
   .heading--title {
     @apply text-2xl uppercase;
