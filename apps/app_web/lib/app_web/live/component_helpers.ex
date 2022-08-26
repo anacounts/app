@@ -338,39 +338,36 @@ defmodule AppWeb.ComponentHelpers do
     """
   end
 
-  def list_item(assigns) do
+  def list_item(%{to: _to} = assigns) do
+    link_opts =
+      assigns
+      |> Map.take([:to, :replace])
+      |> Keyword.new()
+      |> Keyword.put(:class, "list__item")
+
     assigns =
       assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :to, :method, :replace]))
+      |> assign(:extra, assigns_to_attributes(assigns, [:class, :to, :replace]))
+      |> assign(:link_opts, link_opts)
 
     ~H"""
-    <li class={["list__item", assigns[:class]]} {@extra}>
-      <%= wrap_in_link(assigns) %>
+    <li class={["contents", assigns[:class]]} {@extra}>
+      <%= live_redirect @link_opts do %>
+        <%= render_slot(@inner_block) %>
+      <% end %>
     </li>
     """
   end
 
-  defp wrap_in_link(%{to: _to} = assigns) do
-    opts =
-      assigns
-      |> Map.take([:to, :method, :replace])
-      |> Keyword.new()
-      |> Keyword.put(:class, "contents")
-
+  def list_item(assigns) do
     assigns =
       assigns
-      |> assign(:opts, opts)
+      |> assign(:extra, assigns_to_attributes(assigns, [:class]))
 
     ~H"""
-    <%= live_redirect @opts do %>
+    <li class={["list__item", assigns[:class]]} {@extra}>
       <%= render_slot(@inner_block) %>
-    <% end %>
-    """
-  end
-
-  defp wrap_in_link(assigns) do
-    ~H"""
-    <%= render_slot(@inner_block) %>
+    </li>
     """
   end
 

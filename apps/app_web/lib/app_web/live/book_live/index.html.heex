@@ -8,10 +8,14 @@
       <.icon name="cog" />
       <%= gettext("Settings") %>
     </.list_item>
-    <.list_item class="text-error" to={Routes.user_session_path(@socket, :delete)} method="delete">
-      <.icon name="account-arrow-right" />
-      <%= gettext("Disconnect") %>
-    </.list_item>
+
+    <% # TODO Replace with <.list_item> when updating components for liveview 0.18 %>
+    <li class="text-error">
+      <%= link to: Routes.user_session_path(@socket, :delete), method: :delete, class: "list__item" do %>
+        <.icon name="account-arrow-right" />
+        <%= gettext("Disconnect") %>
+      <% end %>
+    </li>
   </:menu>
 </.page_header>
 
