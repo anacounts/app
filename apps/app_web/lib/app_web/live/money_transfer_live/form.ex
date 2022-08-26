@@ -29,9 +29,11 @@ defmodule AppWeb.MoneyTransferLive.Form do
     peers = Enum.map(socket.assigns.book.members, &%Peer{member_id: &1.id, member: &1})
     money_transfer = %MoneyTransfer{date: Date.utc_today(), peers: peers}
 
-    socket
-    |> assign(:money_transfer, money_transfer)
-    |> assign(:changeset, Transfers.change_money_transfer(money_transfer))
+    assign(socket,
+      page_title: gettext("New Transfer"),
+      money_transfer: money_transfer,
+      changeset: Transfers.change_money_transfer(money_transfer)
+    )
   end
 
   defp mount_action(socket, :edit, %{"money_transfer_id" => money_transfer_id}) do
@@ -41,22 +43,15 @@ defmodule AppWeb.MoneyTransferLive.Form do
       Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
       |> App.Repo.preload(:peers)
 
-    socket
-    |> assign(:money_transfer, money_transfer)
-    |> assign(:changeset, Transfers.change_money_transfer(money_transfer))
-  end
-
-  @impl Phoenix.LiveView
-  def handle_params(_params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action)}
-  end
-
-  defp apply_action(socket, :new) do
-    assign(socket, :page_title, gettext("New transfer"))
-  end
-
-  defp apply_action(socket, :edit) do
-    assign(socket, :page_title, gettext("Transfer"))
+    assign(socket,
+      page_title:
+        gettext("%{transfer_name} · %{book_name}",
+          transfer_name: money_transfer.label,
+          book_name: book.name
+        ),
+      money_transfer: money_transfer,
+      changeset: Transfers.change_money_transfer(money_transfer)
+    )
   end
 
   @impl Phoenix.LiveView

@@ -23,6 +23,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
+msgid "%{transfer_name} · %{book_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
@@ -48,10 +52,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Balancing"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -135,7 +135,15 @@ msgid "Edit"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Edit book"
+msgid "Edit Book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit Book · %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit Transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -183,7 +191,7 @@ msgid "Income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Indicate your income from last year. To do so, we adivise you to go onyour bank website, and sum all incomes from 1 year ago to today."
+msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -196,6 +204,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Invitations"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Invitations · %{book_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -243,7 +255,11 @@ msgid "Name updated successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New book"
+msgid "New Book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New Transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -252,10 +268,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New password"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -335,15 +347,15 @@ msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Transfer"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Transfer deleted successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Transfers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Transfers · %{book_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format

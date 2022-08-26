@@ -16,14 +16,13 @@ defmodule AppWeb.InvitationLive.Index do
       Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
       |> App.Repo.preload(members: :user)
 
-    socket = assign(socket, :book, book)
+    socket =
+      assign(socket,
+        page_title: gettext("Invitations · %{book_name}", book_name: book.name),
+        book: book
+      )
 
     {:ok, socket}
-  end
-
-  @impl Phoenix.LiveView
-  def handle_params(_params, _url, socket) do
-    {:noreply, assign(socket, :page_title, gettext("Invitations"))}
   end
 
   @impl Phoenix.LiveView

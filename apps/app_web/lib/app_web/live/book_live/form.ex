@@ -17,21 +17,23 @@ defmodule AppWeb.BookLive.Form do
   defp mount_action(socket, :new, _params) do
     book = %Book{}
 
-    socket
-    |> assign(:book, book)
-    |> assign(:changeset, Accounts.change_book(book))
-    |> assign(:page_title, gettext("New book"))
-    |> assign(:back_to, Routes.book_index_path(socket, :index))
+    assign(socket,
+      page_title: gettext("New Book"),
+      back_to: Routes.book_index_path(socket, :index),
+      book: book,
+      changeset: Accounts.change_book(book)
+    )
   end
 
   defp mount_action(socket, :edit, %{"book_id" => book_id}) do
     book = Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
 
-    socket
-    |> assign(:book, book)
-    |> assign(:changeset, Accounts.change_book(book))
-    |> assign(:page_title, gettext("Edit book"))
-    |> assign(:back_to, Routes.book_show_path(socket, :show, book_id))
+    assign(socket,
+      page_title: gettext("Edit Book · %{name}", name: book.name),
+      back_to: Routes.book_show_path(socket, :show, book_id),
+      book: book,
+      changeset: Accounts.change_book(book)
+    )
   end
 
   @impl Phoenix.LiveView

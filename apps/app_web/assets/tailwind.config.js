@@ -19,6 +19,7 @@ module.exports = {
         contrast: "#ffffff",
       },
       info: "#0b61ec",
+      success: "#4caf50",
       error: "#f1353a",
       disabled: {
         DEFAULT: "#cbd5e0",

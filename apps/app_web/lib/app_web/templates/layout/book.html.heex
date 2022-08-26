@@ -1,5 +1,5 @@
 <.page_header back_to={Routes.book_index_path(@socket, :index)}>
-  <%= @page_title %>
+  <:title><%= @layout_heading %></:title>
   <:menu>
     <.list_item to={Routes.book_form_path(@socket, :edit, @book)} replace>
       <.icon name="pencil" />

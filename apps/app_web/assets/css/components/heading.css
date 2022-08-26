@@ -1,0 +1,14 @@
+@layer components {
+  .heading {
+    @apply truncate;
+  }
+
+  .heading--title {
+    @apply text-2xl uppercase;
+  }
+
+  .heading--section {
+    @apply mx-4
+           font-bold uppercase;
+  }
+}

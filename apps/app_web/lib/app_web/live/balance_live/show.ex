@@ -17,17 +17,14 @@ defmodule AppWeb.BalanceLive.Show do
 
     socket =
       assign(socket,
+        page_title: "Balance · #{book.name}",
+        layout_heading: gettext("Balance"),
         book: book,
         members_balance: members_balance,
         transactions: transactions
       )
 
     {:ok, socket, layout: {AppWeb.LayoutView, "book.html"}}
-  end
-
-  @impl Phoenix.LiveView
-  def handle_params(_params, _url, socket) do
-    {:noreply, assign(socket, :page_title, gettext("Balance"))}
   end
 
   defp transfer_icon_and_class_for_amount(amount) do

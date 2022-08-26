@@ -1,15 +1,4 @@
 @layer components {
-  /* TODO Should be another self-contained component */
-  .list__title {
-    display: block;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-}
-
-@layer components {
   /* .list {} */
 
   .list__item {

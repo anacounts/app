@@ -24,6 +24,10 @@ msgstr[0] "%{count} member"
 msgstr[1] "%{count} members"
 
 #, elixir-autogen, elixir-format
+msgid "%{transfer_name} · %{book_name}"
+msgstr "%{transfer_name} · %{book_name}"
+
+#, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
 msgstr "A link to confirm your email change has been sent to the new address."
 
@@ -50,10 +54,6 @@ msgstr "Balance settings updated"
 #, elixir-autogen, elixir-format
 msgid "Balancing"
 msgstr "Balancing"
-
-#, elixir-autogen, elixir-format
-msgid "Book"
-msgstr "Book"
 
 #, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
@@ -136,8 +136,16 @@ msgid "Edit"
 msgstr "Edit"
 
 #, elixir-autogen, elixir-format
-msgid "Edit book"
-msgstr "Edit book"
+msgid "Edit Book"
+msgstr "Edit Book"
+
+#, elixir-autogen, elixir-format
+msgid "Edit Book · %{name}"
+msgstr "Edit Book · %{name}"
+
+#, elixir-autogen, elixir-format
+msgid "Edit Transfer"
+msgstr "Edit Transfer"
 
 #, elixir-autogen, elixir-format
 msgid "Email"
@@ -184,8 +192,8 @@ msgid "Income"
 msgstr "Income"
 
 #, elixir-autogen, elixir-format
-msgid "Indicate your income from last year. To do so, we adivise you to go onyour bank website, and sum all incomes from 1 year ago to today."
-msgstr "Indicate your income from last year. To do so, we adivise you to go onyour bank website, and sum all incomes from 1 year ago to today."
+msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
+msgstr "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
@@ -196,8 +204,8 @@ msgid "Invitation sent successfully"
 msgstr "Invitation sent successfully"
 
 #, elixir-autogen, elixir-format
-msgid "Invitations"
-msgstr "Invitations"
+msgid "Invitations · %{book_name}"
+msgstr "Invitations · %{book_name}"
 
 #, elixir-autogen, elixir-format
 msgid "Invite member"
@@ -244,8 +252,12 @@ msgid "Name updated successfully."
 msgstr "Name updated successfully."
 
 #, elixir-autogen, elixir-format
-msgid "New book"
-msgstr "New book"
+msgid "New Book"
+msgstr "New Book"
+
+#, elixir-autogen, elixir-format
+msgid "New Transfer"
+msgstr "New Transfer"
 
 #, elixir-autogen, elixir-format
 msgid "New email"
@@ -254,10 +266,6 @@ msgstr "New email"
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "New password"
-
-#, elixir-autogen, elixir-format
-msgid "New transfer"
-msgstr "New transfer"
 
 #, elixir-autogen, elixir-format
 msgid "No configuration necessary. You're all set up!"
@@ -336,16 +344,16 @@ msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\
 msgstr "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 
 #, elixir-autogen, elixir-format
-msgid "Transfer"
-msgstr "Transfer"
-
-#, elixir-autogen, elixir-format
 msgid "Transfer deleted successfully"
 msgstr "Transfer deleted successfully"
 
 #, elixir-autogen, elixir-format
 msgid "Transfers"
 msgstr "Transfers"
+
+#, elixir-autogen, elixir-format
+msgid "Transfers · %{book_name}"
+msgstr "Transfers · %{book_name}"
 
 #, elixir-autogen, elixir-format
 msgid "Type"

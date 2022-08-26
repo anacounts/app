@@ -1,4 +1,6 @@
-<.page_header back_to={Routes.book_index_path(@conn, :index)}>Settings</.page_header>
+<.page_header back_to={Routes.book_index_path(@conn, :index)}>
+  <:title><%= gettext("Settings") %></:title>
+</.page_header>
 <main>
   <div class="flex items-center gap-4 mx-4 mb-4">
     <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Your avatar")} size="xl" />

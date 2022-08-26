@@ -1,6 +1,7 @@
 @layer components {
   .icon {
-    @apply w-6 h-6;
+    @apply shrink-0
+           w-6 h-6;
   }
 
   .icon--md {
