@@ -2,8 +2,8 @@ defmodule AppWeb.MoneyTransferLiveTest do
   use AppWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import App.AccountsFixtures
   import App.BooksFixtures
+  import App.Books.MembersFixtures
   import App.TransfersFixtures
 
   @create_attrs %{

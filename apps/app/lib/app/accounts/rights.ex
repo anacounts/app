@@ -15,7 +15,8 @@ defmodule App.Accounts.Rights do
 
   """
 
-  alias App.Accounts
+  alias App.Accounts.Role
+  alias App.Books.Members.BookMember
 
   @type t :: atom()
 
@@ -25,8 +26,8 @@ defmodule App.Accounts.Rights do
   @member_rights [:handle_money_transfers]
   def member_rights, do: @member_rights
 
-  @spec member_has_right?(Accounts.BookMember.t(), t()) :: boolean()
+  @spec member_has_right?(BookMember.t(), t()) :: boolean()
   def member_has_right?(member, right) do
-    Accounts.Role.has_right?(member.role, right)
+    Role.has_right?(member.role, right)
   end
 end

@@ -6,13 +6,13 @@ defmodule App.Accounts.Balance.Graph do
   the graph to a minimal graph.
   """
 
-  alias App.Accounts
   alias App.Accounts.Balance
+  alias App.Books.Members.BookMember
 
   @type t :: {MapSet.t(point()), [vertex()]}
 
   # a node in the graph
-  @typep point :: Accounts.BookMember.id()
+  @typep point :: BookMember.id()
 
   # a link between two points in the graph
   @typep vertex :: %{from: point(), to: point(), weight: weight()}

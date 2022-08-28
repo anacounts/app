@@ -1,10 +1,10 @@
 defmodule App.TransfersTest do
   use App.DataCase, async: true
 
-  import App.AccountsFixtures
   import App.Accounts.BalanceFixtures
   import App.AuthFixtures
   import App.BooksFixtures
+  import App.Books.MembersFixtures
   import App.TransfersFixtures
 
   alias App.Repo

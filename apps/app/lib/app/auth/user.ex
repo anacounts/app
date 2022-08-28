@@ -6,8 +6,8 @@ defmodule App.Auth.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Accounts
   alias App.Books.Book
+  alias App.Books.Members.BookMember
 
   @type id :: integer()
   @type t :: %__MODULE__{
@@ -31,7 +31,7 @@ defmodule App.Auth.User do
     # display information
     field(:display_name, :string)
 
-    many_to_many(:books, Book, join_through: Accounts.BookMember)
+    many_to_many(:books, Book, join_through: BookMember)
 
     timestamps()
   end

@@ -9,9 +9,9 @@ defmodule App.Transfers.MoneyTransfer do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts
   alias App.Accounts.Balance
   alias App.Books.Book
+  alias App.Books.Members.BookMember
   alias App.Transfers
 
   # the types
@@ -23,7 +23,7 @@ defmodule App.Transfers.MoneyTransfer do
           amount: Money.t(),
           type: :payment | :income | :reimbursement,
           book: Book.t(),
-          tenant: Accounts.BookMember.t(),
+          tenant: BookMember.t(),
           balance_params: Balance.TransferParams.t(),
           peers: Transfers.Peer.t()
         }
@@ -35,7 +35,7 @@ defmodule App.Transfers.MoneyTransfer do
     field(:date, :date)
 
     belongs_to(:book, Book)
-    belongs_to(:tenant, Accounts.BookMember)
+    belongs_to(:tenant, BookMember)
 
     # balance
     field(:balance_params, Balance.TransferParams)

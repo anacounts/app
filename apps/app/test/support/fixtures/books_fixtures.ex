@@ -26,6 +26,8 @@ defmodule App.BooksFixtures do
     book
   end
 
+  # TODO "setup_*" functions should be removed in favor of setup blocks
+
   # Beware, even if calling `setup_book_member_fixture`, only the creator
   # will be available in book members, since the book members aren't reloaded
   # after creating the other member

@@ -1,7 +1,6 @@
 defmodule App.Books do
   @moduledoc """
-  Manage books and related information.
-  Allows to create a book, add or remove money transfers, add users, ...
+  The Book context. Create, update, delete, and find books.
   """
 
   alias App.Repo

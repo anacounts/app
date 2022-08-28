@@ -1,9 +1,9 @@
 defmodule App.Accounts.Balance.Means.DivideEquallyTest do
   use App.DataCase, async: true
 
-  import App.AccountsFixtures
   import App.AuthFixtures
   import App.BooksFixtures
+  import App.Books.MembersFixtures
   import App.TransfersFixtures
 
   alias App.Accounts.Balance.Means.DivideEqually
