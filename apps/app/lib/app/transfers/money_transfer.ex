@@ -11,8 +11,8 @@ defmodule App.Transfers.MoneyTransfer do
 
   alias App.Accounts
   alias App.Accounts.Balance
-  alias App.Transfers
   alias App.Books.Book
+  alias App.Transfers
 
   # the types
   @transfer_types [:payment, :income, :reimbursement]

@@ -8,8 +8,8 @@ defmodule App.Accounts.BookMember do
   import Ecto.Query
 
   alias App.Accounts
-  alias App.Books.Book
   alias App.Auth
+  alias App.Books.Book
 
   @type id :: integer()
 

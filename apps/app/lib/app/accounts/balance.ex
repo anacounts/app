@@ -6,10 +6,10 @@ defmodule App.Accounts.Balance do
   Context to compute balance between book members.
   """
 
-  alias App.Accounts.BookMember
   alias App.Accounts.Balance.Graph
   alias App.Accounts.Balance.Means
   alias App.Accounts.Balance.UserParams
+  alias App.Accounts.BookMember
   alias App.Auth.User
   alias App.Books.Book
   alias App.Transfers

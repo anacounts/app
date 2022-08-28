@@ -1,4 +1,7 @@
 defmodule App.Accounts do
+  @moduledoc """
+  Deprecated module. To be replaced with `App.Books` and others.
+  """
   alias App.Accounts.BookMember
   alias App.Books.Book
 

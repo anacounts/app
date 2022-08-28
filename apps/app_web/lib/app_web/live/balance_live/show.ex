@@ -7,8 +7,8 @@ defmodule AppWeb.BalanceLive.Show do
   use AppWeb, :live_view
 
   alias App.Accounts
-  alias App.Books
   alias App.Accounts.Balance
+  alias App.Books
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do

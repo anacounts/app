@@ -6,8 +6,8 @@ defmodule AppWeb.BookLive.Show do
 
   use AppWeb, :live_view
 
-  alias App.Books
   alias App.Auth.Avatars
+  alias App.Books
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
