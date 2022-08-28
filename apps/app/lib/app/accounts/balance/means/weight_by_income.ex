@@ -8,13 +8,12 @@ defmodule App.Accounts.Balance.Means.WeightByIncome do
   @behaviour App.Accounts.Balance.Means
 
   import Ecto.Query
+  alias App.Repo
 
   alias App.Accounts.Balance.UserParams
-  alias App.Accounts.BookMember
+  alias App.Books.Members.BookMember
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
-
-  alias App.Repo
 
   @impl App.Accounts.Balance.Means
   def balance_transfer_by_peer(money_transfer) do

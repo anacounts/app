@@ -1,4 +1,4 @@
-defmodule App.Accounts.BookMember do
+defmodule App.Books.Members.BookMember do
   @moduledoc """
   The link between a book and a user.
   It contains the role of the user for this particular book.
@@ -21,7 +21,7 @@ defmodule App.Accounts.BookMember do
           deleted_at: NaiveDateTime.t()
         }
 
-  schema "accounts_book_members" do
+  schema "book_members" do
     belongs_to(:book, Book)
     belongs_to(:user, Auth.User)
 

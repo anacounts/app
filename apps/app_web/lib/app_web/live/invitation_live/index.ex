@@ -6,9 +6,9 @@ defmodule AppWeb.InvitationLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Accounts.Members
   alias App.Auth.Avatars
   alias App.Books
+  alias App.Books.Members
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
@@ -29,7 +29,7 @@ defmodule AppWeb.InvitationLive.Index do
   def handle_event("invite", %{"email" => email}, socket) do
     book = socket.assigns.book
 
-    Members.invite_user(book.id, email)
+    Members.invite_new_member(book.id, email)
 
     {:noreply, put_flash(socket, :info, gettext("Invitation sent successfully"))}
   end

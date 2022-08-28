@@ -7,20 +7,20 @@ defmodule App.Transfers.Peer do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts
+  alias App.Books.Members.BookMember
   alias App.Transfers
 
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
           transfer: Transfers.MoneyTransfer.t(),
-          member: Accounts.BookMember.t(),
+          member: BookMember.t(),
           weight: Decimal.t()
         }
 
   schema "transfers_peers" do
     belongs_to(:transfer, Transfers.MoneyTransfer)
-    belongs_to(:member, Accounts.BookMember)
+    belongs_to(:member, BookMember)
 
     field(:weight, :decimal, default: Decimal.new(1))
   end

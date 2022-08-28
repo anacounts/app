@@ -9,9 +9,9 @@ defmodule App.Accounts.Balance do
   alias App.Accounts.Balance.Graph
   alias App.Accounts.Balance.Means
   alias App.Accounts.Balance.UserParams
-  alias App.Accounts.BookMember
   alias App.Auth.User
   alias App.Books.Book
+  alias App.Books.Members.BookMember
   alias App.Transfers
 
   alias App.Repo
