@@ -6,12 +6,12 @@ defmodule AppWeb.MoneyTransferLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
+  alias App.Books
   alias App.Transfers
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
 
     money_transfers =
       book_id

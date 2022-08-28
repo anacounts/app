@@ -4,6 +4,7 @@ defmodule App.Accounts.BalanceTest do
   import App.AccountsFixtures
   import App.Accounts.BalanceFixtures
   import App.AuthFixtures
+  import App.BooksFixtures
   import App.TransfersFixtures
 
   alias App.Accounts.Balance

@@ -8,10 +8,11 @@ defmodule AppWeb.BalanceLive.Show do
 
   alias App.Accounts
   alias App.Accounts.Balance
+  alias App.Books
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
 
     %{members_balance: members_balance, transactions: transactions} = Balance.for_book(book_id)
 

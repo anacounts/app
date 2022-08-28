@@ -6,13 +6,13 @@ defmodule AppWeb.BookLive.Show do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
   alias App.Auth.Avatars
+  alias App.Books
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
     book =
-      Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+      Books.get_book_of_user!(book_id, socket.assigns.current_user)
       # TODO No preload here !
       |> App.Repo.preload(members: [:user])
 
@@ -28,7 +28,7 @@ defmodule AppWeb.BookLive.Show do
 
   @impl Phoenix.LiveView
   def handle_event("delete", _params, socket) do
-    {:ok, _} = Accounts.delete_book(socket.assigns.book)
+    {:ok, _} = Books.delete_book(socket.assigns.book)
 
     {:noreply,
      socket

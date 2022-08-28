@@ -9,19 +9,20 @@ defmodule App.Accounts.BookMember do
 
   alias App.Accounts
   alias App.Auth
+  alias App.Books.Book
 
   @type id :: integer()
 
   @type t :: %__MODULE__{
           id: id(),
-          book: Accounts.Book.t(),
+          book: Book.t(),
           user: Auth.User.t(),
           role: Accounts.Role.t(),
           deleted_at: NaiveDateTime.t()
         }
 
   schema "accounts_book_members" do
-    belongs_to(:book, Accounts.Book)
+    belongs_to(:book, Book)
     belongs_to(:user, Auth.User)
 
     field(:role, Ecto.Enum, values: Accounts.Role.all())
@@ -71,7 +72,7 @@ defmodule App.Accounts.BookMember do
     end
   end
 
-  @spec book_query(Accounts.Book.t()) :: Ecto.Query.t()
+  @spec book_query(Book.t()) :: Ecto.Query.t()
   def book_query(book) do
     from(base_query(), where: [book_id: ^book.id])
   end

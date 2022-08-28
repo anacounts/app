@@ -1,8 +1,8 @@
 defmodule App.Accounts.MembersTest do
   use App.DataCase, async: true
 
-  import App.AccountsFixtures
   import App.AuthFixtures
+  import App.BooksFixtures
 
   alias App.Accounts.Members
 

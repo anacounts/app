@@ -6,14 +6,14 @@ defmodule App.Accounts.Members do
 
   alias App.Repo
 
-  alias App.Accounts
   alias App.Accounts.BookMember
   alias App.Auth
+  alias App.Books.Book
 
   @doc """
   Invite a user to an existing book.
   """
-  @spec invite_user(Accounts.Book.id(), String.t()) :: BookMember.t()
+  @spec invite_user(Book.id(), String.t()) :: BookMember.t()
   def invite_user(book_id, user_email) do
     user =
       Auth.get_user_by_email(user_email) ||

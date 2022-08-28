@@ -6,11 +6,12 @@ defmodule App.Accounts.Balance do
   Context to compute balance between book members.
   """
 
-  alias App.Accounts
   alias App.Accounts.Balance.Graph
   alias App.Accounts.Balance.Means
   alias App.Accounts.Balance.UserParams
+  alias App.Accounts.BookMember
   alias App.Auth.User
+  alias App.Books.Book
   alias App.Transfers
 
   alias App.Repo
@@ -21,24 +22,24 @@ defmodule App.Accounts.Balance do
   # (or maybe just the `for_book/1` function, I don't know yet)
 
   @type t :: %{
-          members_balance: %{Accounts.BookMember.id() => Money.t()},
+          members_balance: %{BookMember.id() => Money.t()},
           transactions:
             list(%{
-              from: Accounts.BookMember.id(),
-              to: Accounts.BookMember.id(),
+              from: BookMember.id(),
+              to: BookMember.id(),
               amount: Money.t()
             })
         }
 
   @typedoc "The balance of a member for a transfer."
   @type peer_balance :: %{
-          from: Accounts.BookMember.id(),
-          to: Accounts.BookMember.id(),
+          from: BookMember.id(),
+          to: BookMember.id(),
           amount: Money.t(),
           transfer_id: Transfers.MoneyTransfer.id()
         }
 
-  @spec for_book(Accounts.Book.id()) :: t()
+  @spec for_book(Book.id()) :: t()
   def for_book(book_id) do
     balance_graph = balance_graph(book_id)
     members_balance = members_balance(balance_graph)

@@ -6,12 +6,12 @@ defmodule AppWeb.BookLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
   alias App.Auth.Avatars
+  alias App.Books
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    books = Accounts.find_user_books(socket.assigns.current_user)
+    books = Books.find_user_books(socket.assigns.current_user)
     {:ok, assign(socket, :books, books)}
   end
 

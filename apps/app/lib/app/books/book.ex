@@ -1,4 +1,4 @@
-defmodule App.Accounts.Book do
+defmodule App.Books.Book do
   @moduledoc """
   The entity grouping users and transfers.
   """
@@ -23,7 +23,7 @@ defmodule App.Accounts.Book do
           updated_at: NaiveDateTime.t()
         }
 
-  schema "accounts_books" do
+  schema "books" do
     field(:name, :string)
     field(:deleted_at, :naive_datetime)
 
