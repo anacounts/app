@@ -7,6 +7,7 @@ defmodule App.Auth.User do
   import Ecto.Changeset
 
   alias App.Accounts
+  alias App.Books.Book
 
   @type id :: integer()
   @type t :: %__MODULE__{
@@ -15,7 +16,7 @@ defmodule App.Auth.User do
           password: String.t(),
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
-          books: [Accounts.Book.t()],
+          books: [Book.t()],
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -30,7 +31,7 @@ defmodule App.Auth.User do
     # display information
     field(:display_name, :string)
 
-    many_to_many(:books, Accounts.Book, join_through: Accounts.BookMember)
+    many_to_many(:books, Book, join_through: Accounts.BookMember)
 
     timestamps()
   end

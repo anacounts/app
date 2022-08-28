@@ -12,6 +12,7 @@ defmodule App.Transfers.MoneyTransfer do
   alias App.Accounts
   alias App.Accounts.Balance
   alias App.Transfers
+  alias App.Books.Book
 
   # the types
   @transfer_types [:payment, :income, :reimbursement]
@@ -21,7 +22,7 @@ defmodule App.Transfers.MoneyTransfer do
           id: id(),
           amount: Money.t(),
           type: :payment | :income | :reimbursement,
-          book: Accounts.Book.t(),
+          book: Book.t(),
           tenant: Accounts.BookMember.t(),
           balance_params: Balance.TransferParams.t(),
           peers: Transfers.Peer.t()
@@ -33,7 +34,7 @@ defmodule App.Transfers.MoneyTransfer do
     field(:type, Ecto.Enum, values: @transfer_types)
     field(:date, :date)
 
-    belongs_to(:book, Accounts.Book)
+    belongs_to(:book, Book)
     belongs_to(:tenant, Accounts.BookMember)
 
     # balance

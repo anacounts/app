@@ -6,8 +6,8 @@ defmodule AppWeb.MoneyTransferLive.Form do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
   alias App.Auth.Avatars
+  alias App.Books
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -15,7 +15,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id} = params, _session, socket) do
     book =
-      Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+      Books.get_book_of_user!(book_id, socket.assigns.current_user)
       # TODO No preload here
       # look for all App.Repo.preload in app_web
       |> App.Repo.preload(members: :user)

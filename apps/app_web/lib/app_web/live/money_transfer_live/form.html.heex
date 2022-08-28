@@ -6,9 +6,9 @@
   </:title>
   <:menu if={@live_action == :edit}>
     <%= if @live_action == :edit do %>
-      <.list_item id="delete-money-transfer" class="text-error" to="#" phx-click="delete">
+      <.list_item id="delete-money-transfer" class="text-error" phx-click="delete">
         <.icon name="delete" />
-        Delete
+        <%= gettext("Delete") %>
       </.list_item>
     <% end %>
   </:menu>

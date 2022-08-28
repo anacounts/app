@@ -3,6 +3,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
 
   import Phoenix.LiveViewTest
   import App.AccountsFixtures
+  import App.BooksFixtures
   import App.TransfersFixtures
 
   @create_attrs %{

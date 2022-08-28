@@ -3,6 +3,7 @@ defmodule App.Accounts.Balance.Means.DivideEquallyTest do
 
   import App.AccountsFixtures
   import App.AuthFixtures
+  import App.BooksFixtures
   import App.TransfersFixtures
 
   alias App.Accounts.Balance.Means.DivideEqually

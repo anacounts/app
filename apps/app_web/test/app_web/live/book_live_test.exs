@@ -2,7 +2,7 @@ defmodule AppWeb.BookLiveTest do
   use AppWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import App.AccountsFixtures
+  import App.BooksFixtures
 
   @create_attrs %{
     name: "some name",

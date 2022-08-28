@@ -6,8 +6,8 @@ defmodule AppWeb.BookLive.Form do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
-  alias App.Accounts.Book
+  alias App.Books
+  alias App.Books.Book
 
   @impl Phoenix.LiveView
   def mount(params, _session, socket) do
@@ -21,18 +21,18 @@ defmodule AppWeb.BookLive.Form do
       page_title: gettext("New Book"),
       back_to: Routes.book_index_path(socket, :index),
       book: book,
-      changeset: Accounts.change_book(book)
+      changeset: Books.change_book(book)
     )
   end
 
   defp mount_action(socket, :edit, %{"book_id" => book_id}) do
-    book = Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
 
     assign(socket,
       page_title: gettext("Edit Book · %{name}", name: book.name),
       back_to: Routes.book_show_path(socket, :show, book_id),
       book: book,
-      changeset: Accounts.change_book(book)
+      changeset: Books.change_book(book)
     )
   end
 
@@ -40,7 +40,7 @@ defmodule AppWeb.BookLive.Form do
   def handle_event("validate", %{"book" => book_params}, socket) do
     changeset =
       socket.assigns.book
-      |> Accounts.change_book(book_params)
+      |> Books.change_book(book_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -51,7 +51,7 @@ defmodule AppWeb.BookLive.Form do
   end
 
   defp save_book(socket, :edit, book_params) do
-    case Accounts.update_book(socket.assigns.book, book_params) do
+    case Books.update_book(socket.assigns.book, book_params) do
       {:ok, _book} ->
         {:noreply, push_redirect(socket, to: socket.assigns.back_to)}
 
@@ -61,7 +61,7 @@ defmodule AppWeb.BookLive.Form do
   end
 
   defp save_book(socket, :new, book_params) do
-    case Accounts.create_book(socket.assigns.current_user, book_params) do
+    case Books.create_book(socket.assigns.current_user, book_params) do
       {:ok, book} ->
         {:noreply, push_redirect(socket, to: Routes.book_show_path(socket, :show, book.id))}
 

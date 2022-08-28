@@ -6,14 +6,14 @@ defmodule AppWeb.InvitationLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
   alias App.Accounts.Members
+  alias App.Books
   alias App.Auth.Avatars
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
     book =
-      Accounts.get_book_of_user!(book_id, socket.assigns.current_user)
+      Books.get_book_of_user!(book_id, socket.assigns.current_user)
       |> App.Repo.preload(members: :user)
 
     socket =
