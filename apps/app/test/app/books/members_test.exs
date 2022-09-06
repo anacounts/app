@@ -1,5 +1,5 @@
 defmodule App.Books.MembersTest do
-  use App.DataCase
+  use App.DataCase, async: true
 
   import App.AuthFixtures
   import App.BooksFixtures
