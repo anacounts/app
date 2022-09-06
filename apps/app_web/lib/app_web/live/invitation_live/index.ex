@@ -29,7 +29,9 @@ defmodule AppWeb.InvitationLive.Index do
   def handle_event("invite", %{"email" => email}, socket) do
     book = socket.assigns.book
 
-    Members.invite_new_member(book.id, email)
+    # TODO Handle errors (e.g. invited user is already a member)
+    # TODO Do not allow access to the page if not allowed to invite people
+    {:ok, _} = Members.invite_new_member(book.id, socket.assigns.current_user, email)
 
     {:noreply, put_flash(socket, :info, gettext("Invitation sent successfully"))}
   end

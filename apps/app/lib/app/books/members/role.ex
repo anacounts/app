@@ -14,7 +14,8 @@ defmodule App.Books.Members.Role do
 
   @roles %{
     creator: Rights.creator_rights(),
-    member: Rights.member_rights()
+    member: Rights.member_rights(),
+    viewer: Rights.viewer_rights()
   }
 
   @role_ids Map.keys(@roles)

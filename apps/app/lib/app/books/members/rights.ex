@@ -17,7 +17,6 @@ defmodule App.Books.Members.Rights do
   """
 
   alias App.Books.Members.Role
-  alias App.Books.Members.BookMember
 
   @type t ::
           :delete_book
@@ -25,7 +24,14 @@ defmodule App.Books.Members.Rights do
           | :invite_new_member
           | :update_book
 
-  @creator_rights [:delete_book, :handle_money_transfers, :invite_new_member, :update_book]
+  @all_rights [
+    :delete_book,
+    :handle_money_transfers,
+    :invite_new_member,
+    :update_book
+  ]
+
+  @creator_rights @all_rights
   @spec creator_rights() :: [t()]
   def creator_rights, do: @creator_rights
 
@@ -33,15 +39,25 @@ defmodule App.Books.Members.Rights do
   @spec member_rights() :: [t()]
   def member_rights, do: @member_rights
 
-  @doc """
-  Checks if a book member can delete the book.
-  """
-  @spec member_can_delete_book?(BookMember.t()) :: boolean()
-  def member_can_delete_book?(member) do
-    member_has_right?(member, :delete_book)
-  end
+  @viewer_rights []
+  @spec viewer_rights() :: [t()]
+  def viewer_rights, do: @viewer_rights
 
-  defp member_has_right?(member, right) do
-    Role.has_right?(member.role, right)
+  for right <- @all_rights do
+    @doc """
+    Check if a member can do the action `#{right}`.
+
+    ## Examples
+
+        iex> member_can_#{right}?(%BookMember{role: :creator})
+        true
+
+        iex> member_can_#{right}?(%BookMember{role: :viewer})
+        false
+
+    """
+    def unquote(:"member_can_#{right}?")(member) do
+      Role.has_right?(member.role, unquote(right))
+    end
   end
 end
