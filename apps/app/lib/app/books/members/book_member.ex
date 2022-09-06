@@ -36,10 +36,9 @@ defmodule App.Books.Members.BookMember do
   def create_changeset(attrs) do
     %__MODULE__{}
     |> cast(attrs, [:role, :book_id, :user_id])
-    |> validate_required([:role, :book_id, :user_id])
     |> validate_role()
-    |> foreign_key_constraint(:book_id)
-    |> foreign_key_constraint(:user_id)
+    |> validate_book_id()
+    |> validate_user_id()
     |> unique_constraint([:book_id, :user_id],
       message: "user is already a member of this book",
       error_key: :user_id
@@ -48,7 +47,20 @@ defmodule App.Books.Members.BookMember do
 
   defp validate_role(changeset) do
     changeset
-    |> validate_inclusion(:role, Accounts.Role.all())
+    |> validate_required(:role)
+    |> validate_inclusion(:role, Role.all())
+  end
+
+  defp validate_book_id(changeset) do
+    changeset
+    |> validate_required(:book_id)
+    |> foreign_key_constraint(:book_id)
+  end
+
+  defp validate_user_id(changeset) do
+    changeset
+    |> validate_required(:user_id)
+    |> foreign_key_constraint(:user_id)
   end
 
   ## Query
