@@ -74,28 +74,37 @@ defmodule App.Books do
   end
 
   @doc """
-  Updates a book.
+  Updates a book if the user is allowed to do so.
 
   ## Examples
 
-      iex> update_book(book, %{field: new_value})
+      iex> update_book(book, user, %{field: new_value})
       {:ok, %Book{}}
 
-      iex> update_book(book, %{field: bad_value})
+      iex> update_book(book, user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
+      iex> update_book(book, not_allowed_user, %{field: bad_value})
+      {:error, :unauthorized}
+
   """
-  @spec update_book(Book.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
-  def update_book(book, attrs) do
-    book
-    |> Book.changeset(attrs)
-    |> Repo.update()
+  @spec update_book(Book.t(), User.t(), map()) ::
+          {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def update_book(book, user, attrs) do
+    with %{} = member <- Members.get_membership(book.id, user.id),
+         true <- Rights.member_can_update_book?(member) do
+      book
+      |> Book.changeset(attrs)
+      |> Repo.update()
+    else
+      _ -> {:error, :unauthorized}
+    end
   end
 
   # TODO delete_book should actually delete the book, another function could soft delete it
 
   @doc """
-  Deletes a book.
+  Deletes a book if the user is allowed to do so.
 
   ## Examples
 
