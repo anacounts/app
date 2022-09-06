@@ -7,9 +7,9 @@ defmodule App.Books.Members.BookMember do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts
   alias App.Auth
   alias App.Books.Book
+  alias App.Books.Members.Role
 
   @type id :: integer()
 
@@ -17,7 +17,7 @@ defmodule App.Books.Members.BookMember do
           id: id(),
           book: Book.t(),
           user: Auth.User.t(),
-          role: Accounts.Role.t(),
+          role: Role.t(),
           deleted_at: NaiveDateTime.t()
         }
 
@@ -25,7 +25,7 @@ defmodule App.Books.Members.BookMember do
     belongs_to(:book, Book)
     belongs_to(:user, Auth.User)
 
-    field(:role, Ecto.Enum, values: Accounts.Role.all())
+    field(:role, Ecto.Enum, values: Role.all())
     field(:deleted_at, :naive_datetime)
 
     timestamps()

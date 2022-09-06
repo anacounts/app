@@ -1,4 +1,4 @@
-defmodule App.Accounts.Role do
+defmodule App.Books.Members.Role do
   @moduledoc """
   Position a user has in a book. A user may have different roles in
   different books, but can only have one role in a particular book.
@@ -8,7 +8,7 @@ defmodule App.Accounts.Role do
   The creator of a book always has a "creator" role, which gives him
   all the rights there can be on the book they created.
   """
-  alias App.Accounts.Rights
+  alias App.Books.Members.Rights
 
   @type t :: atom()
 
@@ -23,9 +23,20 @@ defmodule App.Accounts.Role do
   @doc """
   Checks whether a role has a particular right or not.
   If the right does not exist, returns `false`.
+
+  ## Examples
+
+      iex> has_right?(:creator, :invite_new_member)
+      true
+      iex> has_right?(:member, :invite_new_member)
+      false
+      iex> has_right?(:member, :handle_money_transfers)
+      true
+
   """
-  @spec has_right?(t(), Right.t()) :: boolean()
+  @spec has_right?(t(), Rights.t()) :: boolean()
   def has_right?(role, right) do
-    right in Map.fetch!(@roles, role)
+    role_rights = Map.fetch!(@roles, role)
+    right in role_rights
   end
 end
