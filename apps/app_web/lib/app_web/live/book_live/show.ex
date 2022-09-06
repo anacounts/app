@@ -28,7 +28,8 @@ defmodule AppWeb.BookLive.Show do
 
   @impl Phoenix.LiveView
   def handle_event("delete", _params, socket) do
-    {:ok, _} = Books.delete_book(socket.assigns.book)
+    # TODO Handle errors (e.g. if the user is not allowed to delete the book)
+    {:ok, _} = Books.delete_book(socket.assigns.book, socket.assigns.current_user)
 
     {:noreply,
      socket

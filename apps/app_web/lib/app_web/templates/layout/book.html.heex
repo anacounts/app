@@ -5,6 +5,7 @@
       <.icon name="pencil" />
       <%= gettext("Edit") %>
     </.list_item>
+    <% # TODO Do not display the list item if the user is not allowed to delete the book %>
     <.list_item id="delete-book" class="text-error" phx-click="delete">
       <.icon name="delete" />
       <%= gettext("Delete") %>

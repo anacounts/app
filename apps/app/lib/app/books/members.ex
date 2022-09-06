@@ -49,4 +49,21 @@ defmodule App.Books.Members do
 
   """
   def get_book_member!(id), do: Repo.get!(BookMember, id)
+
+  @doc """
+  Get the book member entity linking a user to a book.
+
+  Returns `nil` if the user is not a member of the book.
+
+  ## Examples
+
+      iex> get_book_member_of_user(book.id, user.id)
+      %BookMember{}
+      iex> get_book_member_of_user(book.id, non_member_user.id)
+      nil
+
+  """
+  def get_membership(book_id, user_id) do
+    Repo.get_by(BookMember, book_id: book_id, user_id: user_id)
+  end
 end
