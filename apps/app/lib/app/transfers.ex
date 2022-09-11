@@ -5,6 +5,9 @@ defmodule App.Transfers do
 
   alias App.Repo
 
+  alias App.Auth.User
+  alias App.Books.Members
+  alias App.Books.Members.Rights
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
@@ -68,19 +71,28 @@ defmodule App.Transfers do
 
   ## Examples
 
-      iex> update_money_transfer(money_transfer, %{field: new_value})
+      iex> update_money_transfer(money_transfer, user, %{field: new_value})
       {:ok, %MoneyTransfer{}}
 
-      iex> update_money_transfer(money_transfer, %{field: bad_value})
+      iex> update_money_transfer(money_transfer, user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
+      iex> update_money_transfer(money_transfer, not_allowed_user, %{field: new_value})
+      {:error, :unauthorized}
+
   """
-  def update_money_transfer(%MoneyTransfer{} = money_transfer, attrs) do
-    money_transfer
-    # peers can be updated by the changeset
-    |> Repo.preload(:peers)
-    |> MoneyTransfer.update_changeset(attrs)
-    |> Repo.update()
+  @spec update_money_transfer(MoneyTransfer.t(), User.t(), map()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def update_money_transfer(%MoneyTransfer{} = money_transfer, %User{} = user, attrs) do
+    if can_handle_transfers?(money_transfer.book_id, user.id) do
+      money_transfer
+      # peers can be updated by the changeset
+      |> Repo.preload(:peers)
+      |> MoneyTransfer.update_changeset(attrs)
+      |> Repo.update()
+    else
+      {:error, :unauthorized}
+    end
   end
 
   @doc """
@@ -95,8 +107,18 @@ defmodule App.Transfers do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_money_transfer(%MoneyTransfer{} = money_transfer) do
-    Repo.delete(money_transfer)
+  def delete_money_transfer(%MoneyTransfer{} = money_transfer, %User{} = user) do
+    if can_handle_transfers?(money_transfer.book_id, user.id) do
+      Repo.delete(money_transfer)
+    else
+      {:error, :unauthorized}
+    end
+  end
+
+  defp can_handle_transfers?(book_id, user_id) do
+    if member = Members.get_membership(book_id, user_id),
+      do: Rights.member_can_handle_money_transfers?(member),
+      else: false
   end
 
   @doc """

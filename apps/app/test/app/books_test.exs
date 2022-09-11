@@ -31,7 +31,7 @@ defmodule App.BooksTest do
     end
 
     test "returns `nil` if the book was deleted", %{book: book, user: user} do
-      assert {:ok, _book} = Books.delete_book(book)
+      assert {:ok, _book} = Books.delete_book(book, user)
       refute Books.get_book_of_user(book.id, user)
     end
   end
@@ -123,9 +123,9 @@ defmodule App.BooksTest do
     setup :setup_user_fixture
     setup :setup_book_fixture
 
-    test "updates the book", %{book: book} do
+    test "updates the book", %{book: book, user: user} do
       assert {:ok, updated} =
-               Books.update_book(book, %{
+               Books.update_book(book, user, %{
                  name: "My awesome new never seen name !",
                  default_balance_params: %{means_code: :weight_by_income}
                })
@@ -138,8 +138,20 @@ defmodule App.BooksTest do
              }
     end
 
-    test "update_book/2 with invalid data returns error changeset", %{book: book} do
-      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, @invalid_book_attrs)
+    test "returns error unauthorized if user is not a member of the book", %{book: book} do
+      other_user = user_fixture()
+      assert {:error, :unauthorized} = Books.update_book(book, other_user, %{name: "foo"})
+    end
+
+    test "returns error unauthorized if the user if not allowed to update the book", %{book: book} do
+      other_user = user_fixture()
+      _other_member = book_member_fixture(book, other_user)
+
+      assert {:error, :unauthorized} = Books.update_book(book, other_user, %{name: "foo"})
+    end
+
+    test "returns error changeset with invalid data", %{book: book, user: user} do
+      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, user, @invalid_book_attrs)
 
       # TODO don't automatically insert members when creating book fixture
       # assert book == Books.get_book!(book.id)
@@ -150,12 +162,23 @@ defmodule App.BooksTest do
     setup :setup_user_fixture
     setup :setup_book_fixture
 
-    test "deletes the book", %{book: book} do
-      assert {:ok, deleted} = Books.delete_book(book)
+    test "deletes the book", %{book: book, user: user} do
+      assert {:ok, deleted} = Books.delete_book(book, user)
       assert deleted.id == book.id
 
       assert deleted_book = Repo.get(Book, book.id)
       assert deleted_book.deleted_at
+    end
+
+    test "does not delete the book if the user is not a member of the book", %{book: book} do
+      assert {:error, :unauthorized} = Books.delete_book(book, user_fixture())
+    end
+
+    test "does not delete the book if the user is not allowed to", %{book: book} do
+      other_user = user_fixture()
+      _other_member = book_member_fixture(book, other_user)
+
+      assert {:error, :unauthorized} = Books.delete_book(book, other_user)
     end
   end
 

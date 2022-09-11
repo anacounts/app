@@ -51,13 +51,16 @@ defmodule AppWeb.BookLive.Form do
   end
 
   defp save_book(socket, :edit, book_params) do
-    case Books.update_book(socket.assigns.book, book_params) do
+    case Books.update_book(socket.assigns.book, socket.assigns.current_user, book_params) do
       {:ok, _book} ->
         {:noreply, push_redirect(socket, to: socket.assigns.back_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+
+    # TODO Handle :unauthorized
+    # TODO Don't allow getting on the page in the first place is not allowed
   end
 
   defp save_book(socket, :new, book_params) do

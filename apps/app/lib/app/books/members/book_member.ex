@@ -7,9 +7,9 @@ defmodule App.Books.Members.BookMember do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts
   alias App.Auth
   alias App.Books.Book
+  alias App.Books.Members.Role
 
   @type id :: integer()
 
@@ -17,7 +17,7 @@ defmodule App.Books.Members.BookMember do
           id: id(),
           book: Book.t(),
           user: Auth.User.t(),
-          role: Accounts.Role.t(),
+          role: Role.t(),
           deleted_at: NaiveDateTime.t()
         }
 
@@ -25,7 +25,7 @@ defmodule App.Books.Members.BookMember do
     belongs_to(:book, Book)
     belongs_to(:user, Auth.User)
 
-    field(:role, Ecto.Enum, values: Accounts.Role.all())
+    field(:role, Ecto.Enum, values: Role.all())
     field(:deleted_at, :naive_datetime)
 
     timestamps()
@@ -36,10 +36,9 @@ defmodule App.Books.Members.BookMember do
   def create_changeset(attrs) do
     %__MODULE__{}
     |> cast(attrs, [:role, :book_id, :user_id])
-    |> validate_required([:role, :book_id, :user_id])
     |> validate_role()
-    |> foreign_key_constraint(:book_id)
-    |> foreign_key_constraint(:user_id)
+    |> validate_book_id()
+    |> validate_user_id()
     |> unique_constraint([:book_id, :user_id],
       message: "user is already a member of this book",
       error_key: :user_id
@@ -48,7 +47,20 @@ defmodule App.Books.Members.BookMember do
 
   defp validate_role(changeset) do
     changeset
-    |> validate_inclusion(:role, Accounts.Role.all())
+    |> validate_required(:role)
+    |> validate_inclusion(:role, Role.all())
+  end
+
+  defp validate_book_id(changeset) do
+    changeset
+    |> validate_required(:book_id)
+    |> foreign_key_constraint(:book_id)
+  end
+
+  defp validate_user_id(changeset) do
+    changeset
+    |> validate_required(:user_id)
+    |> foreign_key_constraint(:user_id)
   end
 
   ## Query

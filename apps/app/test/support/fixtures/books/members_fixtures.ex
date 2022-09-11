@@ -12,7 +12,7 @@ defmodule App.Books.MembersFixtures do
   def book_member_fixture(book, user) do
     # XXX In the end, `invite_new_member` will only send an invite
     # Use a function that will actually create the membership of the user
-    {:ok, book_member} = Members.invite_new_member(book.id, user.email)
+    {:ok, book_member} = Members.invite_new_member(book.id, hd(book.members).user, user.email)
 
     book_member
   end

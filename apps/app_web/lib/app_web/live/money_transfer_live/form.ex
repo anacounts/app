@@ -74,7 +74,8 @@ defmodule AppWeb.MoneyTransferLive.Form do
 
   def handle_event("delete", _params, socket) do
     money_transfer = socket.assigns.money_transfer
-    {:ok, _} = Transfers.delete_money_transfer(money_transfer)
+    user = socket.assigns.current_user
+    {:ok, _} = Transfers.delete_money_transfer(money_transfer, user)
 
     {:noreply,
      socket
@@ -109,9 +110,10 @@ defmodule AppWeb.MoneyTransferLive.Form do
   end
 
   defp save_money_transfer(socket, :edit, money_transfer_params) do
-    %{book: book, money_transfer: money_transfer} = socket.assigns
+    %{book: book, current_user: user, money_transfer: money_transfer} = socket.assigns
 
-    case Transfers.update_money_transfer(money_transfer, money_transfer_params) do
+    # TODO Don't even allow to change the transfer if the user is not allowed
+    case Transfers.update_money_transfer(money_transfer, user, money_transfer_params) do
       {:ok, _money_transfer} ->
         {:noreply,
          socket
