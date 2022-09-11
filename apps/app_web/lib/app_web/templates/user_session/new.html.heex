@@ -32,6 +32,8 @@
 </.form>
 
 <p>
-  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
-  <%= link(gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new)) %>
+  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
+    gettext("Forgot your password?"),
+    to: Routes.user_reset_password_path(@conn, :new)
+  ) %>
 </p>
