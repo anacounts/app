@@ -12,6 +12,8 @@
 </.form>
 
 <p>
-  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> |
-  <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %>
+  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
+    gettext("Log in"),
+    to: Routes.user_session_path(@conn, :new)
+  ) %>
 </p>
