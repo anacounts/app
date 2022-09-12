@@ -7,7 +7,6 @@ defmodule App.Balance do
   """
 
   alias App.Auth.User
-  alias App.Balance.Graph
   alias App.Balance.Means
   alias App.Balance.UserParams
   alias App.Books.Book
@@ -41,8 +40,7 @@ defmodule App.Balance do
 
   @spec for_book(Book.id()) :: t()
   def for_book(book_id) do
-    balance_graph = balance_graph(book_id)
-    members_balance = members_balance(balance_graph)
+    members_balance = members_balance(book_id)
     transactions = transactions(members_balance)
 
     %{
@@ -51,12 +49,12 @@ defmodule App.Balance do
     }
   end
 
-  defp balance_graph(book_id) do
+  defp members_balance(book_id) do
     transfers = Transfers.find_transfers_in_book(book_id)
 
     transfers
     |> Enum.flat_map(&balance_transfer_by_peer/1)
-    |> Graph.from_peer_balances()
+    |> group_peer_balances()
   end
 
   defp balance_transfer_by_peer(transfer) do
@@ -70,8 +68,15 @@ defmodule App.Balance do
     end
   end
 
-  defp members_balance(balance_graph) do
-    Graph.nodes_weight(balance_graph)
+  defp group_peer_balances(peer_balances)
+  defp group_peer_balances([]), do: %{}
+
+  defp group_peer_balances([peer_balance | rest]) do
+    amount = peer_balance.amount
+
+    group_peer_balances(rest)
+    |> Map.update(peer_balance.from, Money.neg(amount), &Money.subtract(&1, amount))
+    |> Map.update(peer_balance.to, amount, &Money.add(&1, amount))
   end
 
   defp transactions(members_balance) do

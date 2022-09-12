@@ -54,6 +54,7 @@ defmodule App.Balance.TransferParams do
 
   def dump(_), do: :error
 
+  # TODO investigate, validation should probably be done during cast
   ## Changeset
 
   @spec validate_changeset(Ecto.Changeset.t(), atom()) :: Ecto.Changeset.t()
