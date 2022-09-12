@@ -7,8 +7,8 @@ defmodule App.Books.Book do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts.Balance
   alias App.Auth
+  alias App.Balance
   alias App.Books.Members.BookMember
 
   @type id :: integer()

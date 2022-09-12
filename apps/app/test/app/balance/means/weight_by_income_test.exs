@@ -1,13 +1,13 @@
-defmodule App.Accounts.Balance.Means.WeightByIncomeTest do
+defmodule App.Balance.Means.WeightByIncomeTest do
   use App.DataCase, async: true
 
-  import App.Accounts.BalanceFixtures
+  import App.BalanceFixtures
   import App.AuthFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
-  alias App.Accounts.Balance.Means.WeightByIncome
+  alias App.Balance.Means.WeightByIncome
 
   describe "balance_transfer_by_peer/1" do
     setup :setup_user_fixture

@@ -1,9 +1,9 @@
-defmodule App.Accounts.Balance.GraphTest do
+defmodule App.Balance.GraphTest do
   use App.DataCase, async: true
 
-  import App.Accounts.Balance.Graph
+  import App.Balance.Graph
 
-  doctest App.Accounts.Balance.Graph
+  doctest App.Balance.Graph
 
   describe "from_peer_balances/1" do
     defp peer_balance(from, to, amount) do

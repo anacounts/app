@@ -1,4 +1,4 @@
-defmodule App.Accounts.Balance.Graph do
+defmodule App.Balance.Graph do
   @moduledoc """
   A weighted graph representation of the peer balances.
 
@@ -6,7 +6,7 @@ defmodule App.Accounts.Balance.Graph do
   the graph to a minimal graph.
   """
 
-  alias App.Accounts.Balance
+  alias App.Balance
   alias App.Books.Members.BookMember
 
   @type t :: {MapSet.t(point()), [vertex()]}

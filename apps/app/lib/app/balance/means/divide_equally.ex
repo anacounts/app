@@ -1,16 +1,16 @@
-defmodule App.Accounts.Balance.Means.DivideEqually do
+defmodule App.Balance.Means.DivideEqually do
   @moduledoc """
-  Implements `App.Accounts.Balance.Means` behaviour.
+  Implements `App.Balance.Means` behaviour.
 
   Divides money transfer amount equally among the peers.
   """
 
-  @behaviour App.Accounts.Balance.Means
+  @behaviour App.Balance.Means
 
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
 
-  @impl App.Accounts.Balance.Means
+  @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
     peers = Transfers.find_transfer_peers(money_transfer.id)
 

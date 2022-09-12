@@ -1,6 +1,6 @@
 defmodule App.TransfersFixtures do
   @moduledoc """
-  Fixtures for the `Transfer` context
+  Fixtures for the `App.Transfers` context
   """
 
   alias App.Transfers

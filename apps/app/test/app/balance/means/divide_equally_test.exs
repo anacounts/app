@@ -1,4 +1,4 @@
-defmodule App.Accounts.Balance.Means.DivideEquallyTest do
+defmodule App.Balance.Means.DivideEquallyTest do
   use App.DataCase, async: true
 
   import App.AuthFixtures
@@ -6,7 +6,7 @@ defmodule App.Accounts.Balance.Means.DivideEquallyTest do
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
-  alias App.Accounts.Balance.Means.DivideEqually
+  alias App.Balance.Means.DivideEqually
 
   describe "balance_transfer_by_peer/1" do
     setup :setup_user_fixture

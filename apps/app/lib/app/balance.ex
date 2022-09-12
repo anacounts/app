@@ -1,15 +1,15 @@
 # Disable checking that there are too many dependencies
 # See comments below, this module needs to be refactored
 # credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
-defmodule App.Accounts.Balance do
+defmodule App.Balance do
   @moduledoc """
   Context to compute balance between book members.
   """
 
-  alias App.Accounts.Balance.Graph
-  alias App.Accounts.Balance.Means
-  alias App.Accounts.Balance.UserParams
   alias App.Auth.User
+  alias App.Balance.Graph
+  alias App.Balance.Means
+  alias App.Balance.UserParams
   alias App.Books.Book
   alias App.Books.Members.BookMember
   alias App.Transfers

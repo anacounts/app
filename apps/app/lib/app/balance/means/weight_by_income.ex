@@ -1,21 +1,21 @@
-defmodule App.Accounts.Balance.Means.WeightByIncome do
+defmodule App.Balance.Means.WeightByIncome do
   @moduledoc """
-  Implements `App.Accounts.Balance.Means` behaviour.
+  Implements `App.Balance.Means` behaviour.
 
   Divides money transfer among peers according their income.
   """
 
-  @behaviour App.Accounts.Balance.Means
+  @behaviour App.Balance.Means
 
   import Ecto.Query
   alias App.Repo
 
-  alias App.Accounts.Balance.UserParams
+  alias App.Balance.UserParams
   alias App.Books.Members.BookMember
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
-  @impl App.Accounts.Balance.Means
+  @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
     case peers_income(money_transfer) do
       {:ok, peers_income} ->

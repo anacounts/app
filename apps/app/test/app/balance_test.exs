@@ -1,14 +1,14 @@
-defmodule App.Accounts.BalanceTest do
+defmodule App.BalanceTest do
   use App.DataCase, async: true
 
-  import App.Accounts.BalanceFixtures
+  import App.BalanceFixtures
   import App.AuthFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
-  alias App.Accounts.Balance
-  alias App.Accounts.Balance.UserParams
+  alias App.Balance
+  alias App.Balance.UserParams
 
   alias App.Repo
 

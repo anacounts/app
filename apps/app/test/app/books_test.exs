@@ -1,7 +1,7 @@
 defmodule App.BooksTest do
   use App.DataCase, async: true
 
-  import App.Accounts.BalanceFixtures
+  import App.BalanceFixtures
   import App.AuthFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures

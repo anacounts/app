@@ -1,9 +1,9 @@
 defmodule AppWeb.UserSettingsBalanceController do
   use AppWeb, :controller
 
-  alias App.Accounts.Balance
+  alias App.Balance
 
-  plug :assign_changesets
+  plug(:assign_changesets)
 
   def edit(conn, _params) do
     render(conn, "edit.html", page_title: gettext("Balance Settings"))
