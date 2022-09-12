@@ -86,9 +86,11 @@ defmodule App.Balance.Means.WeightByIncome do
     unless Enum.empty?(errors_rows), do: errors_rows
   end
 
-  defp total_weight(peers_income) do
-    Enum.reduce(peers_income, Decimal.new(0), fn %{peer: peer, income: income}, total ->
-      Decimal.add(total, Decimal.mult(peer.weight, income))
-    end)
+  defp total_weight(peers_income)
+  defp total_weight([]), do: Decimal.new(0)
+
+  defp total_weight([peer_income | rest]) do
+    Decimal.mult(peer_income.peer.weight, peer_income.income)
+    |> Decimal.add(total_weight(rest))
   end
 end
