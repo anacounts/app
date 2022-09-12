@@ -128,6 +128,50 @@ defmodule App.BalanceTest do
                ]
              }
     end
+
+    test "does not crash if the book is correctly balanced", %{book: %{members: [member1]} = book} do
+      member2 = book_member_fixture(book, user_fixture())
+      member3 = book_member_fixture(book, user_fixture())
+
+      _transfer1 =
+        money_transfer_fixture(
+          amount: Money.new(300, :EUR),
+          book_id: book.id,
+          tenant_id: member1.id,
+          peers: [
+            %{member_id: member1.id},
+            %{member_id: member2.id},
+            %{member_id: member3.id}
+          ]
+        )
+
+      _reimbursement1 =
+        money_transfer_fixture(
+          amount: Money.new(100, :EUR),
+          type: :reimbursement,
+          book_id: book.id,
+          tenant_id: member1.id,
+          peers: [%{member_id: member2.id}]
+        )
+
+      _reimbursement1 =
+        money_transfer_fixture(
+          amount: Money.new(100, :EUR),
+          type: :reimbursement,
+          book_id: book.id,
+          tenant_id: member1.id,
+          peers: [%{member_id: member3.id}]
+        )
+
+      assert Balance.for_book(book.id) == %{
+               members_balance: %{
+                 member1.id => Money.new(0, :EUR),
+                 member2.id => Money.new(0, :EUR),
+                 member3.id => Money.new(0, :EUR)
+               },
+               transactions: []
+             }
+    end
   end
 
   describe "find_user_params/1" do
