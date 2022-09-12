@@ -1,4 +1,4 @@
-defmodule App.Accounts.Balance.UserParams do
+defmodule App.Balance.UserParams do
   @moduledoc """
   A type representing a means - and their associated parameters - of balance transfers.
   """
@@ -6,8 +6,8 @@ defmodule App.Accounts.Balance.UserParams do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts.Balance.Means
   alias App.Auth
+  alias App.Balance.Means
 
   @type id :: integer()
 

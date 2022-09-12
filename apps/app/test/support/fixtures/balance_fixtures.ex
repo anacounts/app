@@ -1,9 +1,9 @@
-defmodule App.Accounts.BalanceFixtures do
+defmodule App.BalanceFixtures do
   @moduledoc """
-  Fixtures for the `Accounts.Balance` context
+  Fixtures for the `App.Balance` context
   """
 
-  alias App.Accounts.Balance
+  alias App.Balance
 
   def valid_balance_transfer_means_code, do: :divide_equally
   def valid_balance_transfer_params, do: nil

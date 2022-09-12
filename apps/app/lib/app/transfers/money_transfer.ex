@@ -9,7 +9,7 @@ defmodule App.Transfers.MoneyTransfer do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Accounts.Balance
+  alias App.Balance
   alias App.Books.Book
   alias App.Books.Members.BookMember
   alias App.Transfers

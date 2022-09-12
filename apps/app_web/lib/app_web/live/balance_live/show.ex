@@ -6,7 +6,7 @@ defmodule AppWeb.BalanceLive.Show do
 
   use AppWeb, :live_view
 
-  alias App.Accounts.Balance
+  alias App.Balance
   alias App.Books
   alias App.Books.Members
 

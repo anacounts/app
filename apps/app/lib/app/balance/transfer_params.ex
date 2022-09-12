@@ -1,4 +1,4 @@
-defmodule App.Accounts.Balance.TransferParams do
+defmodule App.Balance.TransferParams do
   @moduledoc """
   A type representing a means - and their associated parameters - of balance transfers.
   """
@@ -9,7 +9,7 @@ defmodule App.Accounts.Balance.TransferParams do
 
   import Ecto.Changeset
 
-  alias App.Accounts.Balance.Means
+  alias App.Balance.Means
 
   @type t :: %{
           means_code: Means.code(),

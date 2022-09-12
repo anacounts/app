@@ -1,10 +1,10 @@
-defmodule App.Accounts.Balance.Means do
+defmodule App.Balance.Means do
   @moduledoc """
   A behavior to represents means to divide transfer amount between peers.
   """
 
-  alias App.Accounts.Balance
-  alias App.Accounts.Balance.Means
+  alias App.Balance
+  alias App.Balance.Means
   alias App.Transfers.MoneyTransfer
 
   # When adding a new balance means

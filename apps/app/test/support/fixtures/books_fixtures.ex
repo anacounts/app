@@ -4,7 +4,7 @@ defmodule App.BooksFixtures do
   entities via the `App.Books` context.
   """
 
-  import App.Accounts.BalanceFixtures
+  import App.BalanceFixtures
 
   alias App.Books
 

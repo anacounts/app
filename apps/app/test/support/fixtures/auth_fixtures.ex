@@ -1,6 +1,6 @@
 defmodule App.AuthFixtures do
   @moduledoc """
-  Fixtures for the `Auth` context
+  Fixtures for the `App.Auth` context
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
