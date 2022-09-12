@@ -81,7 +81,9 @@ defmodule App.Balance do
 
   defp transactions(members_balance) do
     {debtors, creditors} =
-      Enum.split_with(members_balance, fn {_member_id, amount} -> Money.negative?(amount) end)
+      members_balance
+      |> Enum.reject(fn {_member_id, balance} -> Money.zero?(balance) end)
+      |> Enum.split_with(fn {_member_id, amount} -> Money.negative?(amount) end)
 
     make_transactions(debtors, creditors, [])
   end
