@@ -52,6 +52,18 @@ defmodule App.NotificationsTest do
     test "with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Notifications.create_notification(@invalid_attrs, [])
     end
+
+    test "does not send twice to the same user" do
+      user = user_fixture()
+
+      assert {:ok, notification} =
+               Notifications.create_notification(%{content: "some content", importance: :high}, [
+                 user,
+                 user
+               ])
+
+      assert %Recipient{} = Notifications.get_recipient!(notification.id, user.id)
+    end
   end
 
   describe "read_notification/2" do
