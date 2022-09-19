@@ -31,8 +31,8 @@ defmodule App.Notifications do
   # Returns a query fetching notifications for a given user.
   defp user_notifications_query(user_id) do
     from notification in Notification,
-      join: user_notification in assoc(notification, :user_notifications),
-      where: user_notification.user_id == ^user_id
+      join: recipient in assoc(notification, :recipients),
+      where: recipient.user_id == ^user_id
   end
 
   @doc """
@@ -53,6 +53,24 @@ defmodule App.Notifications do
   def get_notification!(id), do: Repo.get!(Notification, id)
 
   @doc """
+  Get a notification recipient from its user.
+
+  Raises `Ecto.NoResultsError` if the Recipient does not exist.
+
+  ## Examples
+
+      iex> get_recipient!(123, 123)
+      %Recipient{}
+
+      iex> get_recipient!(456, 456)
+      ** (Ecto.NoResultsError)
+
+  """
+  @spec get_recipient!(Notification.id(), User.id()) :: Recipient.t()
+  def get_recipient!(notification_id, user_id),
+    do: Repo.get_by!(Recipient, notification_id: notification_id, user_id: user_id)
+
+  @doc """
   Creates a notification, and send it to the given users.
 
   ## Examples
@@ -64,6 +82,7 @@ defmodule App.Notifications do
       {:error, %Ecto.Changeset{}}
 
   """
+
   @spec create_notification(map(), [User.t()]) ::
           {:ok, Notification.t()} | {:error, Ecto.Changeset.t()}
   def create_notification(attrs, recipients) when is_map(attrs) and is_list(recipients) do
@@ -84,10 +103,12 @@ defmodule App.Notifications do
     Ecto.Multi.new()
     |> Ecto.Multi.insert(:notification, Notification.changeset(%Notification{}, attrs))
     |> Ecto.Multi.insert_all(
-      :user_notifications,
+      :recipients,
       Recipient,
       fn %{notification: notification} ->
-        Enum.map(recipients, fn %User{} = recipient ->
+        recipients
+        |> Enum.uniq_by(& &1.id)
+        |> Enum.map(fn %User{} = recipient ->
           %{
             user_id: recipient.id,
             notification_id: notification.id,
@@ -144,10 +165,9 @@ defmodule App.Notifications do
   """
   @spec read?(User.t(), Notification.t()) :: boolean()
   def read?(%User{} = user, %Notification{} = notification) do
-    user_notification =
-      Repo.get_by!(Recipient, user_id: user.id, notification_id: notification.id)
+    recipient = Repo.get_by!(Recipient, user_id: user.id, notification_id: notification.id)
 
-    user_notification.read_at != nil
+    recipient.read_at != nil
   end
 
   @doc """

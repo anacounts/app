@@ -13,10 +13,10 @@ defmodule App.Notifications.Recipient do
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
-          user_id: User.id(),
-          user: User.t() | Ecto.Association.NotLoaded.t(),
           notification_id: Notification.id(),
           notification: Notification.t() | Ecto.Association.NotLoaded.t(),
+          user_id: User.id(),
+          user: User.t() | Ecto.Association.NotLoaded.t(),
           read_at: NaiveDateTime.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -25,29 +25,29 @@ defmodule App.Notifications.Recipient do
   schema "notification_recipients" do
     field :read_at, :naive_datetime
 
-    belongs_to :user, User
     belongs_to :notification, Notification
+    belongs_to :user, User
 
     timestamps()
   end
 
   @doc false
-  def changeset(user_notification, attrs) do
-    user_notification
+  def changeset(recipient, attrs) do
+    recipient
     |> cast(attrs, [:read_at, :user_id, :notification_id])
-    |> validate_user_id()
     |> validate_notification_id()
-  end
-
-  defp validate_user_id(changeset) do
-    changeset
-    |> validate_required(:user_id)
-    |> foreign_key_constraint(:user_id)
+    |> validate_user_id()
   end
 
   defp validate_notification_id(changeset) do
     changeset
     |> validate_required(:notification_id)
     |> foreign_key_constraint(:notification_id)
+  end
+
+  defp validate_user_id(changeset) do
+    changeset
+    |> validate_required(:user_id)
+    |> foreign_key_constraint(:user_id)
   end
 end

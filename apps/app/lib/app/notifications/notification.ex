@@ -25,7 +25,7 @@ defmodule App.Notifications.Notification do
           id: id(),
           content: String.t(),
           importance: importance(),
-          user_notifications: [Recipient.t()] | Ecto.Association.NotLoaded.t(),
+          recipients: [Recipient.t()] | Ecto.Association.NotLoaded.t(),
           users: [User.t()] | Ecto.Association.NotLoaded.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -35,7 +35,7 @@ defmodule App.Notifications.Notification do
     field :content, :string
     field :importance, Ecto.Enum, values: @notification_importances
 
-    has_many :user_notifications, Recipient
+    has_many :recipients, Recipient
     many_to_many :users, User, join_through: Recipient
 
     timestamps()
