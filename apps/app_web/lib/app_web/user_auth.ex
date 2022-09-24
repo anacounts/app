@@ -157,12 +157,12 @@ defmodule AppWeb.UserAuth do
   defp mount_current_user(session, socket) do
     case session do
       %{"user_token" => user_token} ->
-        LiveView.assign_new(socket, :current_user, fn ->
+        Phoenix.Component.assign_new(socket, :current_user, fn ->
           Auth.get_user_by_session_token(user_token)
         end)
 
       %{} ->
-        LiveView.assign_new(socket, :current_user, fn -> nil end)
+        Phoenix.Component.assign_new(socket, :current_user, fn -> nil end)
     end
   end
 

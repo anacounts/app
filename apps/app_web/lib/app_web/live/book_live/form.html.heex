@@ -7,7 +7,7 @@
 </.page_header>
 
 <main class="mx-4">
-  <.form let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
+  <.form :let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
     <%= label f, :name do %>
       <%= gettext("Name") %>
       <%= text_input(f, :name) %>

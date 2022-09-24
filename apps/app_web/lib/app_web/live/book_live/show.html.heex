@@ -23,22 +23,20 @@
   </:item>
   <:item title={ngettext("%{count} member", "%{count} members", Enum.count(@book.members))}>
     <.list>
-      <%= for member <- @book.members do %>
-        <.list_item>
-          <.avatar src={Avatars.for_user(member.user)} />
-          <div>
-            <span class="font-bold">
-              <%= member.user.display_name %>
-            </span>
-            <br />
-            <span><%= member.role %></span>
-          </div>
-        </.list_item>
-      <% end %>
+      <.list_item :for={member <- @book.members}>
+        <.avatar src={Avatars.for_user(member.user)} />
+        <div>
+          <span class="font-bold">
+            <%= member.user.display_name %>
+          </span>
+          <br />
+          <span><%= member.role %></span>
+        </div>
+      </.list_item>
     </.list>
-    <.list_item to={Routes.invitation_index_path(@socket, :index, @book)}>
+    <.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
       <.icon name="account-plus" />
       <%= gettext("Invite member") %>
-    </.list_item>
+    </.list_item_link>
   </:item>
 </.accordion>

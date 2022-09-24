@@ -16,19 +16,17 @@
 </form>
 
 <.list>
-  <%= for member <- @book.members do %>
-    <.list_item>
-      <.avatar src={Avatars.for_user(member.user)} />
-      <div class="grow">
-        <span class="font-bold">
-          <%= member.user.display_name %>
-        </span>
-        <br />
-        <span>
-          <%= member.role %>
-        </span>
-      </div>
-      <.icon name="check" />
-    </.list_item>
-  <% end %>
+  <.list_item :for={member <- @book.members}>
+    <.avatar src={Avatars.for_user(member.user)} />
+    <div class="grow">
+      <span class="font-bold">
+        <%= member.user.display_name %>
+      </span>
+      <br />
+      <span>
+        <%= member.role %>
+      </span>
+    </div>
+    <.icon name="check" />
+  </.list_item>
 </.list>

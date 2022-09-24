@@ -7,7 +7,7 @@ defmodule AppWeb.LiveHelpers do
   in more specific contexts.
   """
 
-  import Phoenix.LiveView.Helpers
+  import Phoenix.Component
 
   import AppWeb.Gettext
   import AppWeb.ComponentHelpers
@@ -34,14 +34,14 @@ defmodule AppWeb.LiveHelpers do
         <:title>Anacounts</:title>
 
         <:menu>
-          <.list_item to="/users/settings">
+          <.list_item_link navigate="/users/settings">
             <.icon name="cog" />
             Settings
-          </.list_item>
-          <.list_item to="/users/log_out" method="delete">
+          </.list_item_link>
+          <.list_item_link href="/users/log_out" method="delete">
             <.icon name="out" />
             Disconnect
-          </.list_item>
+          </.list_item_link>
         </:menu>
       </.page_header>
 
@@ -51,11 +51,9 @@ defmodule AppWeb.LiveHelpers do
     <header class="flex items-center gap-2
                    h-16
                    mx-4">
-      <%= if assigns[:back_to] do %>
-        <%= live_redirect to: @back_to, class: "button button--invisible" do %>
-          <.icon name="arrow-left" alt={gettext("Go back")} />
-        <% end %>
-      <% end %>
+      <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--invisible">
+        <.icon name="arrow-left" alt={gettext("Go back")} />
+      </.link>
       <.heading level="title"><%= render_slot(@title) %></.heading>
       <%= if assigns[:menu] do %>
         <%= for menu <- assigns[:menu], menu[:if] != false do %>

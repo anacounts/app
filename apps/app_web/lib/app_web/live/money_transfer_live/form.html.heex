@@ -6,16 +6,22 @@
   </:title>
   <:menu if={@live_action == :edit}>
     <%= if @live_action == :edit do %>
-      <.list_item id="delete-money-transfer" class="text-error" phx-click="delete">
+      <.list_item_link id="delete-money-transfer" class="text-error" phx-click="delete">
         <.icon name="delete" />
         <%= gettext("Delete") %>
-      </.list_item>
+      </.list_item_link>
     <% end %>
   </:menu>
 </.page_header>
 
 <main>
-  <.form let={f} for={@changeset} id="money-transfer-form" phx-change="validate" phx-submit="save">
+  <.form
+    :let={f}
+    for={@changeset}
+    id="money-transfer-form"
+    phx-change="validate"
+    phx-submit="save"
+  >
     <%= hidden_input(f, :book_id, value: @book.id) %>
 
     <% ## Details %>

@@ -53,7 +53,7 @@ defmodule AppWeb.BookLive.Form do
   defp save_book(socket, :edit, book_params) do
     case Books.update_book(socket.assigns.book, socket.assigns.current_user, book_params) do
       {:ok, _book} ->
-        {:noreply, push_redirect(socket, to: socket.assigns.back_to)}
+        {:noreply, push_navigate(socket, to: socket.assigns.back_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -66,7 +66,7 @@ defmodule AppWeb.BookLive.Form do
   defp save_book(socket, :new, book_params) do
     case Books.create_book(socket.assigns.current_user, book_params) do
       {:ok, book} ->
-        {:noreply, push_redirect(socket, to: Routes.book_show_path(socket, :show, book.id))}
+        {:noreply, push_navigate(socket, to: Routes.book_show_path(socket, :show, book.id))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

@@ -80,7 +80,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Transfer deleted successfully"))
-     |> push_redirect(to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book))}
+     |> push_navigate(to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book))}
   end
 
   defp normalize_params(params) do
@@ -118,7 +118,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Money transfer updated successfully"))
-         |> push_redirect(to: Routes.money_transfer_index_path(socket, :index, book))}
+         |> push_navigate(to: Routes.money_transfer_index_path(socket, :index, book))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -131,7 +131,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Money transfer created successfully"))
-         |> push_redirect(
+         |> push_navigate(
            to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book)
          )}
 

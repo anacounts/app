@@ -1,4 +1,4 @@
-<.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)} class="px-4">
+<.form :let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)} class="px-4">
   <%= label f, :email do %>
     <%= email_input(f, :email, required: true, autocomplete: "email") %>
   <% end %>

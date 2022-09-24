@@ -4,10 +4,10 @@
     <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
   </:menu_toggle>
   <:menu>
-    <.list_item to={Routes.user_settings_path(@socket, :edit)}>
+    <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
       <.icon name="cog" />
       <%= gettext("Settings") %>
-    </.list_item>
+    </.list_item_link>
 
     <% # TODO Replace with <.list_item> when updating components for liveview 0.18 %>
     <li class="text-error">
@@ -20,11 +20,14 @@
 </.page_header>
 
 <main>
-  <%= for {type, message} <- @flash do %>
-    <.alert type={type} phx-click="lv:clear-flash" phx-value-key={type}>
-      <%= message %>
-    </.alert>
-  <% end %>
+  <.alert
+    :for={{type, message} <- @flash}
+    type={type}
+    phx-click="lv:clear-flash"
+    phx-value-key={type}
+  >
+    <%= message %>
+  </.alert>
 
   <.heading level="section">
     <%= ngettext(
@@ -34,18 +37,16 @@
     ) %>
   </.heading>
   <.list>
-    <%= for book <- @books do %>
-      <.list_item to={Routes.book_show_path(@socket, :show, book)}>
-        <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
-        <div>
-          <span class="font-bold"><%= book.name %></span>
-          <br />
-          <span>
-            <%= gettext("You and %{count} other members", count: Enum.count(book.members) - 1) %>
-          </span>
-        </div>
-      </.list_item>
-    <% end %>
+    <.list_item_link :for={book <- @books} navigate={Routes.book_show_path(@socket, :show, book)}>
+      <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
+      <div>
+        <span class="font-bold"><%= book.name %></span>
+        <br />
+        <span>
+          <%= gettext("You and %{count} other members", count: Enum.count(book.members) - 1) %>
+        </span>
+      </div>
+    </.list_item_link>
   </.list>
 
   <.fab_container>

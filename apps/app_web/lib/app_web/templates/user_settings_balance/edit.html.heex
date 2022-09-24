@@ -2,9 +2,7 @@
   <:title><%= gettext("Balance Settings") %></:title>
 </.page_header>
 
-<%= for {type, message} <- get_flash(@conn) do %>
-  <.alert type={type}><%= message %></.alert>
-<% end %>
+<.alert :for={{type, message} <- get_flash(@conn)} type={type}><%= message %></.alert>
 
 <.accordion>
   <:item title={gettext("Divide equally")}>
@@ -12,7 +10,7 @@
   </:item>
   <:item title={gettext("Weight by income")} open={@weight_by_income_changeset.action}>
     <.form
-      let={f}
+      :let={f}
       for={@weight_by_income_changeset}
       action={Routes.user_settings_balance_path(@conn, :update)}
       id="weight-by-income-form"

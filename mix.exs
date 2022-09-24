@@ -36,7 +36,7 @@ defmodule Anacounts.Umbrella.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
 
       # Needed for the formatter to work in apps
-      {:phoenix_live_view, "~> 0.17.5"}
+      {:phoenix_live_view, "~> 0.18"}
     ]
   end
 
