@@ -1,7 +1,7 @@
 <.list>
   <%= for transfer <- @money_transfers do %>
     <% {icon_name, class_name} = icon_and_class_for_transfer_type(transfer.type) %>
-    <.list_item to={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
+    <.list_item_link navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
       <.icon name={icon_name} class={class_name} />
       <div class="grow">
         <span class={["font-bold", class_name]}>
@@ -19,7 +19,7 @@
         <br />
         <%= to_string(transfer.date) %>
       </div>
-    </.list_item>
+    </.list_item_link>
   <% end %>
 </.list>
 

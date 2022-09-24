@@ -35,7 +35,7 @@ msgid "Amount"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgid "Anacounts uses <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -343,7 +343,7 @@ msgid "The transactions are balanced already!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+msgid "To edit your avatar, <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr ""
 
 #, elixir-autogen, elixir-format

@@ -16,9 +16,9 @@
     class: "button button--feature mx-4"
   ) %>
 
-  <%= for {type, message} <- get_flash(@conn) do %>
-    <.alert type={type} class="mx-4"><%= message %></.alert>
-  <% end %>
+  <.alert :for={{type, message} <- get_flash(@conn)} type={type} class="mx-4">
+    <%= message %>
+  </.alert>
 
   <div class="list__item">
     <%= link(to: Routes.user_settings_balance_path(@conn, :edit), class: "contents") do %>
@@ -30,10 +30,12 @@
   </div>
   <.accordion>
     <:item title={gettext("Change name")}>
+      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
-        let={f}
+        :let={f}
         for={@email_changeset}
         action={Routes.user_settings_path(@conn, :update)}
+        method="put"
         id="update_display_name"
         class="mx-4"
       >
@@ -63,7 +65,7 @@
     <:item title={gettext("Change avatar")}>
       <p class="mx-4">
         <%= gettext(
-          ~s[Anacounts uses <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">Gravatar</a> to display user avatars.]
+          ~s[Anacounts uses <a class="text-link" href="https://en.gravatar.com/" target="_blank" rel="noreferrer">Gravatar</a> to display user avatars.]
         )
         |> raw() %>
       </p>
@@ -73,16 +75,18 @@
       </p>
       <p class="mx-4">
         <%= gettext(
-          ~s[To edit your avatar, create <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">an account</a> and <a href="https://en.gravatar.com/" target="_blank" rel="noreferrer">personalize your Gravatar</a>.]
+          ~s[To edit your avatar, <a class="text-link" href="https://en.gravatar.com/" target="_blank" rel="noreferrer">create an account</a> and <a class="text-link" href="https://en.gravatar.com/" target="_blank" rel="noreferrer">personalize your Gravatar</a>.]
         )
         |> raw() %>
       </p>
     </:item>
     <:item title={gettext("Change email")} open={@email_changeset.action}>
+      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
-        let={f}
+        :let={f}
         for={@email_changeset}
         action={Routes.user_settings_path(@conn, :update)}
+        method="put"
         id="update_email"
         class="mx-4"
       >
@@ -122,10 +126,12 @@
       </.form>
     </:item>
     <:item title={gettext("Change password")} open={@password_changeset.action}>
+      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
-        let={f}
+        :let={f}
         for={@password_changeset}
         action={Routes.user_settings_path(@conn, :update)}
+        method="put"
         id="update_password"
         class="mx-4"
       >

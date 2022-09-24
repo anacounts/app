@@ -8,9 +8,7 @@ defmodule AppWeb.ComponentHelpers do
   Related CSS can be found in `assets/css/components/*`.
   """
 
-  import Phoenix.HTML.Tag, only: [content_tag: 3]
-  import Phoenix.LiveView
-  import Phoenix.LiveView.Helpers
+  import Phoenix.Component
 
   alias AppWeb.Endpoint
   alias AppWeb.Router.Helpers, as: Routes
@@ -47,18 +45,17 @@ defmodule AppWeb.ComponentHelpers do
 
     ~H"""
     <div class={["accordion", assigns[:class]]} {@extra}>
-      <%= for item <- @item do %>
-        <details
-          class={["accordion__item", item[:class]]}
-          {assigns_to_attributes(item, [:class, :title])}
-        >
-          <summary class="accordion__header">
-            <strong class="accordion__title"><%= item.title %></strong>
-            <.icon class="accordion__icon" name="chevron-down" />
-          </summary>
-          <%= render_slot(item) %>
-        </details>
-      <% end %>
+      <details
+        :for={item <- @item}
+        class={["accordion__item", item[:class]]}
+        {assigns_to_attributes(item, [:class, :title])}
+      >
+        <summary class="accordion__header">
+          <strong class="accordion__title"><%= item.title %></strong>
+          <.icon class="accordion__icon" name="chevron-down" />
+        </summary>
+        <%= render_slot(item) %>
+      </details>
     </div>
     """
   end
@@ -236,11 +233,9 @@ defmodule AppWeb.ComponentHelpers do
 
     ~H"""
     <menu class={["fab-container", assigns[:class]]} {@extra}>
-      <%= for item <- @item do %>
-        <li>
-          <%= render_slot(item) %>
-        </li>
-      <% end %>
+      <li :for={item <- @item}>
+        <%= render_slot(item) %>
+      </li>
     </menu>
     """
   end
@@ -266,23 +261,25 @@ defmodule AppWeb.ComponentHelpers do
   """
   def fab(assigns) do
     ~H"""
-    <%= live_redirect to: @to, class: "fab" do %>
+    <.link navigate={@to} class="fab">
       <%= render_slot(@inner_block) %>
-    <% end %>
+    </.link>
     """
   end
 
   def heading(assigns) do
     ~H"""
-    <% {level_class, level_tag} = heading_level_class_and_tag(@level) %>
-    <%= content_tag(level_tag, render_slot(@inner_block),
-      class: ["heading", level_class, assigns[:class]]
-    ) %>
+    <.dynamic_tag name={heading_level_tag(@level)} class={["heading", heading_level_class(@level)]}>
+      <%= render_slot(@inner_block) %>
+    </.dynamic_tag>
     """
   end
 
-  defp heading_level_class_and_tag("title"), do: {"heading--title", "h1"}
-  defp heading_level_class_and_tag("section"), do: {"heading--section", "h3"}
+  defp heading_level_tag("title"), do: "h1"
+  defp heading_level_tag("section"), do: "h3"
+
+  defp heading_level_class("title"), do: "heading--title"
+  defp heading_level_class("section"), do: "heading--section"
 
   ## Icon
 
@@ -314,9 +311,7 @@ defmodule AppWeb.ComponentHelpers do
       aria-hidden={is_nil(@alt)}
       {@extra}
     >
-      <%= if @alt do %>
-        <title><%= @alt %></title>
-      <% end %>
+      <title :if={@alt}><%= @alt %></title>
       <use href={icon_sprite_url(@name)} />
     </svg>
     """
@@ -338,27 +333,6 @@ defmodule AppWeb.ComponentHelpers do
     """
   end
 
-  def list_item(%{to: _to} = assigns) do
-    link_opts =
-      assigns
-      |> Map.take([:to, :replace])
-      |> Keyword.new()
-      |> Keyword.put(:class, "list__item")
-
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :to, :replace]))
-      |> assign(:link_opts, link_opts)
-
-    ~H"""
-    <li class={["contents", assigns[:class]]} {@extra}>
-      <%= live_redirect @link_opts do %>
-        <%= render_slot(@inner_block) %>
-      <% end %>
-    </li>
-    """
-  end
-
   def list_item(assigns) do
     assigns =
       assigns
@@ -367,6 +341,20 @@ defmodule AppWeb.ComponentHelpers do
     ~H"""
     <li class={["list__item", assigns[:class]]} {@extra}>
       <%= render_slot(@inner_block) %>
+    </li>
+    """
+  end
+
+  def list_item_link(assigns) do
+    assigns =
+      assigns
+      |> assign(:extra, assigns_to_attributes(assigns, [:class]))
+
+    ~H"""
+    <li class="contents">
+      <.link class={["list__item", assigns[:class]]} {@extra}>
+        <%= render_slot(@inner_block) %>
+      </.link>
     </li>
     """
   end
@@ -405,14 +393,15 @@ defmodule AppWeb.ComponentHelpers do
     ~H"""
     <nav class="toggle-nav">
       <menu class="toggle-nav__menu">
-        <%= for item <- @item do %>
-          <li class={["toggle-nav__item", toggle_nav_item_active_class(item.active)]}>
-            <%= live_redirect to: item.to, replace: true, class: "toggle-nav__link" do %>
-              <.icon name={item.icon} size="md" class="toggle-nav__item-icon" />
-              <span><%= item.label %></span>
-            <% end %>
-          </li>
-        <% end %>
+        <li
+          :for={item <- @item}
+          class={["toggle-nav__item", toggle_nav_item_active_class(item.active)]}
+        >
+          <.link navigate={item.to} replace class="toggle-nav__link">
+            <.icon name={item.icon} size="md" class="toggle-nav__item-icon" />
+            <span><%= item.label %></span>
+          </.link>
+        </li>
       </menu>
     </nav>
     """
