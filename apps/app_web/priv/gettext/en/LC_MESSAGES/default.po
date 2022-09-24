@@ -36,8 +36,8 @@ msgid "Amount"
 msgstr "Amount"
 
 #, elixir-autogen, elixir-format
-msgid "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
-msgstr "Anacounts uses <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgid "Anacounts uses <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgstr "Anacounts uses <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 
 #, elixir-autogen, elixir-format
 msgid "Balance"
@@ -204,6 +204,10 @@ msgid "Invitation sent successfully"
 msgstr "Invitation sent successfully"
 
 #, elixir-autogen, elixir-format
+msgid "Invitations"
+msgstr "Invitations"
+
+#, elixir-autogen, elixir-format
 msgid "Invitations · %{book_name}"
 msgstr "Invitations · %{book_name}"
 
@@ -339,9 +343,9 @@ msgstr "Tenant"
 msgid "The transactions are balanced already!"
 msgstr "The transactions are balanced already!"
 
-#, elixir-autogen, elixir-format
-msgid "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
-msgstr "To edit your avatar, create <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">an account</a> and <a href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+#, elixir-autogen, elixir-format, fuzzy
+msgid "To edit your avatar, <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+msgstr "To edit your avatar, <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-link\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 
 #, elixir-autogen, elixir-format
 msgid "Transfer deleted successfully"
