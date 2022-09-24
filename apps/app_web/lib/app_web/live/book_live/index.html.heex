@@ -1,9 +1,11 @@
 <.page_header>
   <:title><%= gettext("Books") %></:title>
-  <:menu_toggle>
-    <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
-  </:menu_toggle>
   <:menu>
+    <.dropdown id="contextual-menu">
+      <:toggle>
+    <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
+      </:toggle>
+
     <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
       <.icon name="cog" />
       <%= gettext("Settings") %>

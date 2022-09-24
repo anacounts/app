@@ -25,7 +25,6 @@ defmodule AppWeb.LiveHelpers do
   ## Slots
 
   - :menu - The menu to use
-  - :menu_toggle - The menu toggle to use
   - default - The content in place of the title
 
   ## Examples
@@ -34,14 +33,20 @@ defmodule AppWeb.LiveHelpers do
         <:title>Anacounts</:title>
 
         <:menu>
-          <.list_item_link navigate="/users/settings">
-            <.icon name="cog" />
-            Settings
-          </.list_item_link>
-          <.list_item_link href="/users/log_out" method="delete">
-            <.icon name="out" />
-            Disconnect
-          </.list_item_link>
+          <.dropdown id="contextual-menu">
+            <:toggle>
+              <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+            </:toggle>
+
+            <.list_item_link navigate="/users/settings">
+              <.icon name="cog" />
+              Settings
+            </.list_item_link>
+            <.list_item_link href="/users/log_out" method="delete">
+              <.icon name="out" />
+              Disconnect
+            </.list_item_link>
+          </.dropdown>
         </:menu>
       </.page_header>
 
@@ -54,30 +59,11 @@ defmodule AppWeb.LiveHelpers do
       <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--invisible">
         <.icon name="arrow-left" alt={gettext("Go back")} />
       </.link>
-      <.heading level="title"><%= render_slot(@title) %></.heading>
+      <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>
       <%= if assigns[:menu] do %>
-        <%= for menu <- assigns[:menu], menu[:if] != false do %>
-          <.dropdown id="contextual-menu" class="ml-auto">
-            <:toggle>
-              <%= render_menu_toggle(assigns) %>
-            </:toggle>
-            <%= render_slot(menu) %>
-          </.dropdown>
-        <% end %>
+        <%= render_slot(@menu) %>
       <% end %>
     </header>
-    """
-  end
-
-  defp render_menu_toggle(%{menu_toggle: menu_toggle} = assigns) do
-    ~H"""
-    <%= render_slot(menu_toggle) %>
-    """
-  end
-
-  defp render_menu_toggle(assigns) do
-    ~H"""
-    <.icon name="dots-vertical" alt={gettext("Contextual menu")} size="md" />
     """
   end
 end
