@@ -269,7 +269,10 @@ defmodule AppWeb.ComponentHelpers do
 
   def heading(assigns) do
     ~H"""
-    <.dynamic_tag name={heading_level_tag(@level)} class={["heading", heading_level_class(@level)]}>
+    <.dynamic_tag
+      name={heading_level_tag(@level)}
+      class={["heading", heading_level_class(@level), assigns[:class]]}
+    >
       <%= render_slot(@inner_block) %>
     </.dynamic_tag>
     """
