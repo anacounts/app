@@ -5,6 +5,10 @@
   }
 
   .icon--md {
+    @apply w-7 h-7;
+  }
+
+  .icon--lg {
     @apply w-8 h-8;
   }
 }

@@ -159,7 +159,7 @@ defmodule AppWeb.ComponentHelpers do
 
       <.dropdown>
         <:toggle>
-          <.icon name="dots-vertical" alt={gettext("Contextual menu")} size="md" />
+          <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
         </:toggle>
 
         <.list_item>
@@ -321,7 +321,8 @@ defmodule AppWeb.ComponentHelpers do
   end
 
   defp icon_size_class(nil), do: nil
-  defp icon_size_class("md"), do: "icon--md"
+  defp icon_size_class(:md), do: "icon--md"
+  defp icon_size_class(:lg), do: "icon--lg"
 
   defp icon_sprite_url(icon_name),
     do: Routes.static_path(Endpoint, "/assets/sprite.svg##{icon_name}")
@@ -401,7 +402,7 @@ defmodule AppWeb.ComponentHelpers do
           class={["toggle-nav__item", toggle_nav_item_active_class(item.active)]}
         >
           <.link navigate={item.to} replace class="toggle-nav__link">
-            <.icon name={item.icon} size="md" class="toggle-nav__item-icon" />
+            <.icon name={item.icon} size={:lg} class="toggle-nav__item-icon" />
             <span><%= item.label %></span>
           </.link>
         </li>
