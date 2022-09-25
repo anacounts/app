@@ -370,6 +370,7 @@ defmodule AppWeb.ComponentHelpers do
 
   - id (required): The id of the modal
   - size: The size of the modal. Defaults to "md"
+  - open: Whether the modal is open by default or not. Defaults to false
 
   ## Slots
 
@@ -395,7 +396,10 @@ defmodule AppWeb.ComponentHelpers do
   """
   def modal(assigns) do
     ~H"""
-    <.focus_wrap id={@id} class={["modal", modal_size_class(assigns[:size])]}>
+    <.focus_wrap
+      id={@id}
+      class={["modal", modal_size_class(assigns[:size]), modal_open_class(assigns[:open])]}
+    >
       <section class="modal__dialog" role="dialog">
         <header class="modal__header">
           <%= render_slot(@header) %>
@@ -420,6 +424,9 @@ defmodule AppWeb.ComponentHelpers do
 
   defp modal_size_class(nil), do: "modal--md"
   defp modal_size_class(:xl), do: "modal--xl"
+
+  defp modal_open_class(nil), do: nil
+  defp modal_open_class(true), do: "modal--open"
 
   ## Toggle navigation
 
