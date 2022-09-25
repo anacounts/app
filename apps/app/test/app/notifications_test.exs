@@ -71,7 +71,7 @@ defmodule App.NotificationsTest do
       user = user_fixture()
       notification = notification_fixture([user])
 
-      assert {:ok, %Recipient{}} = Notifications.read_notification(user, notification)
+      assert {:ok, %Notification{}} = Notifications.read_notification(user, notification)
       assert Notifications.read?(user, notification)
     end
 
