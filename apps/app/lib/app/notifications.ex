@@ -32,7 +32,9 @@ defmodule App.Notifications do
   defp user_notifications_query(user_id) do
     from notification in Notification,
       join: recipient in assoc(notification, :recipients),
-      where: recipient.user_id == ^user_id
+      where: recipient.user_id == ^user_id,
+      select_merge: %{read_at: recipient.read_at},
+      order_by: [asc: notification.inserted_at]
   end
 
   @doc """
@@ -129,23 +131,26 @@ defmodule App.Notifications do
 
   ## Examples
 
-      iex> mark_as_read(user, notification)
+      iex> read_notification(user, notification)
       %Notification{}
 
-      iex> mark_as_read(user, notification_not_for_user)
+      iex> read_notification(user, notification_not_for_user)
       ** (Ecto.NoResultsError)
 
   """
-  @spec read_notification(User.t(), Notification.t()) :: {:ok, Recipient.t()}
+  @spec read_notification(User.t(), Notification.t()) :: {:ok, Notification.t()}
   def read_notification(%User{} = user, %Notification{} = notification) do
     recipient = Repo.get_by!(Recipient, user_id: user.id, notification_id: notification.id)
 
     if recipient.read_at do
-      {:ok, recipient}
+      {:ok, notification}
     else
-      recipient
-      |> Recipient.changeset(%{read_at: NaiveDateTime.utc_now()})
-      |> Repo.update()
+      updated_recipient =
+        recipient
+        |> Recipient.changeset(%{read_at: NaiveDateTime.utc_now()})
+        |> Repo.update!()
+
+      {:ok, %{notification | read_at: updated_recipient.read_at}}
     end
   end
 

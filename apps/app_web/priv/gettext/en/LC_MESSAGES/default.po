@@ -80,6 +80,10 @@ msgid "Change password"
 msgstr "Change password"
 
 #, elixir-autogen, elixir-format
+msgid "Close"
+msgstr "Close"
+
+#, elixir-autogen, elixir-format
 msgid "Confirm account"
 msgstr "Confirm account"
 

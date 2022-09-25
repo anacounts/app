@@ -48,7 +48,6 @@ defmodule App.Books.Members.BookMember do
   defp validate_role(changeset) do
     changeset
     |> validate_required(:role)
-    |> validate_inclusion(:role, Role.all())
   end
 
   defp validate_book_id(changeset) do
