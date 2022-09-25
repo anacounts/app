@@ -40,7 +40,6 @@ defmodule App.Balance.UserParams do
   defp validate_means_code(changeset) do
     changeset
     |> validate_required(:means_code)
-    |> validate_inclusion(:means_code, Means.codes_with_user_params())
   end
 
   defp validate_params(changeset) do

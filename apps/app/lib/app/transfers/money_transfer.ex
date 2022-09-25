@@ -83,7 +83,6 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_type(changeset) do
     changeset
     |> validate_required(:type)
-    |> validate_inclusion(:type, @transfer_types)
   end
 
   defp validate_book_id(changeset) do

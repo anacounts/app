@@ -55,7 +55,6 @@ defmodule App.Notifications.Notification do
   defp validate_importance(changeset) do
     changeset
     |> validate_required(:importance)
-    |> validate_inclusion(:importance, @notification_importances)
   end
 
   defp validate_content(changeset) do
