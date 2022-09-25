@@ -1,8 +1,23 @@
 defmodule AppWeb.NotificationMenu do
+  @moduledoc """
+  A component that renders the main notification menu.
+
+  The component is the main display point for notifications: give it a `:user`, it will
+  display their highly important notifications in a modal, but also mark them as read,
+  when they close it.
+
+  ## Attributes
+
+  - `:user` - the user to render the notifications for.
+
+  ## Examples
+
+      <.live_component module={AppWeb.NotificationMenu} id="notification-menu />
+
+  """
   use AppWeb, :live_component
 
   alias App.Notifications
-  alias App.Notifications.Notification
 
   @impl Phoenix.LiveComponent
   def update(assigns, socket) do
