@@ -7,7 +7,9 @@ defmodule AppWeb.LiveHelpers do
   in more specific contexts.
   """
 
-  import Phoenix.Component
+  use Phoenix.Component
+
+  import Phoenix.HTML, only: [raw: 1]
 
   import AppWeb.Gettext
   import AppWeb.ComponentHelpers
@@ -64,6 +66,35 @@ defmodule AppWeb.LiveHelpers do
         <%= render_slot(@menu) %>
       <% end %>
     </header>
+    """
+  end
+
+  ## Markdown
+
+  @doc """
+  Renders a Markdown string in HTML. The [`typography`](https://tailwindcss.com/docs/typography-plugin)
+  plugin of TailwindCSS is used to style the renderd HTML, along with its `.prose` class.
+
+  The markdown is expected to be valid, otherwise the component will crash.
+
+  ## Attributes
+
+  - :content - The markdown content to display.
+
+  ## Examples
+
+      <.markdown content={@content} />
+
+  """
+  def markdown(assigns) do
+    {:ok, rendered, []} = Earmark.as_html(assigns.content, compact_output: true)
+
+    assigns = assign(assigns, :rendered, rendered)
+
+    ~H"""
+    <div class="prose">
+      <%= raw(@rendered) %>
+    </div>
     """
   end
 end

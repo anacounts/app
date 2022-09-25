@@ -34,12 +34,12 @@ defmodule AppWeb.NotificationMenu do
   def render(assigns) do
     ~H"""
     <div>
-      <.modal :if={@displayed_notification} id="notification-modal" open size={:xl} dismiss={true}>
+      <.modal :if={@displayed_notification} id="notification-modal" open size={:xl} dismiss={false}>
         <:header>
           <%= @displayed_notification.title %>
         </:header>
 
-        <%= @displayed_notification.content %>
+        <.markdown content={@displayed_notification.content} />
 
         <:footer>
           <.button
