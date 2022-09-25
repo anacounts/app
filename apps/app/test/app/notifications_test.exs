@@ -8,7 +8,8 @@ defmodule App.NotificationsTest do
   alias App.Notifications.Notification
   alias App.Notifications.Recipient
 
-  @invalid_attrs %{content: nil, importance: :none}
+  @valid_attrs %{title: "the title", content: "some content", importance: :high}
+  @invalid_attrs %{title: "", content: nil, importance: :none}
 
   describe "list_user_notifications/1" do
     test "returns all user notifications" do
@@ -40,27 +41,28 @@ defmodule App.NotificationsTest do
       user1 = user_fixture()
       user2 = user_fixture()
 
-      valid_attrs = %{content: "some content", importance: :high}
-
       assert {:ok, %Notification{} = notification} =
-               Notifications.create_notification(valid_attrs, [user1, user2])
+               Notifications.create_notification(@valid_attrs, [user1, user2])
 
+      assert notification.title == "the title"
       assert notification.content == "some content"
       assert notification.importance == :high
     end
 
     test "with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Notifications.create_notification(@invalid_attrs, [])
+      assert {:error, changeset} = Notifications.create_notification(@invalid_attrs, [])
+
+      assert errors_on(changeset) == %{
+               title: ["can't be blank"],
+               content: ["can't be blank"],
+               importance: ["is invalid"]
+             }
     end
 
     test "does not send twice to the same user" do
       user = user_fixture()
 
-      assert {:ok, notification} =
-               Notifications.create_notification(%{content: "some content", importance: :high}, [
-                 user,
-                 user
-               ])
+      assert {:ok, notification} = Notifications.create_notification(@valid_attrs, [user, user])
 
       assert %Recipient{} = Notifications.get_recipient!(notification.id, user.id)
     end
