@@ -10,6 +10,8 @@ defmodule AppWeb.ComponentHelpers do
 
   use Phoenix.Component
 
+  import AppWeb.Gettext
+
   alias AppWeb.Endpoint
   alias AppWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
@@ -405,8 +407,9 @@ defmodule AppWeb.ComponentHelpers do
           <%= render_slot(@header) %>
           <.button
             color="ghost"
-            class="ml-auto"
+            class="modal__dismiss"
             phx-click={JS.remove_class("modal--open", to: "##{@id}")}
+            aria-label={gettext("Close")}
           >
             <.icon name="close" />
           </.button>
