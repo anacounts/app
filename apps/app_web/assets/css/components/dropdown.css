@@ -3,10 +3,6 @@
     position: relative;
   }
 
-  .dropdown__toggle {
-    @apply contents;
-  }
-
   .dropdown__menu {
     @apply hidden
            absolute right-0 top-full

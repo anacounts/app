@@ -181,9 +181,9 @@ defmodule AppWeb.ComponentHelpers do
       id={@id}
       phx-click-away={close_dropdown(@id)}
     >
-      <button class="dropdown__toggle" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
+      <.button color="ghost" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
         <%= render_slot(@toggle) %>
-      </button>
+      </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
         <%= render_slot(@inner_block) %>
       </menu>
