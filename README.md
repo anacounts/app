@@ -23,8 +23,8 @@ simple way of handling release for now.
 
 You should be able to roll **your own replica** fairly easily. The application
 was made in order to be as easy to replicate as possible, and as configurable
-as possible. It does't enforce you to use the same host as I do. You will most
-likely need some changes in the config files though so you should consider
+as possible. It does not enforce you to use the same host as I do. You will most
+likely need some changes in the config files though, so you should consider
 forking the repository.
 
 The whole infrastructure is handled via Terraform. I do not want to disclose
