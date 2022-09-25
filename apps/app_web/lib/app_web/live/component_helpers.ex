@@ -8,7 +8,7 @@ defmodule AppWeb.ComponentHelpers do
   Related CSS can be found in `assets/css/components/*`.
   """
 
-  import Phoenix.Component
+  use Phoenix.Component
 
   alias AppWeb.Endpoint
   alias AppWeb.Router.Helpers, as: Routes
@@ -362,6 +362,64 @@ defmodule AppWeb.ComponentHelpers do
     </li>
     """
   end
+
+  @doc """
+  Generates a modal element.
+
+  ## Attributes
+
+  - id (required): The id of the modal
+  - size: The size of the modal. Defaults to "md"
+
+  ## Slots
+
+  - header: The header of the modal
+  - inner_block: The body of the modal
+  - footer: The footer of the modal
+
+  ## Example
+
+      <.modal id="modal">
+        <:header>
+          <.heading level="title">Modal title</.heading>
+        </:header>
+
+        <p>Modal body</p>
+
+        <:footer>
+          <.button color="ghost">Cancel</.button>
+          <.button color="primary">Save</.button>
+        </:footer>
+      </.modal>
+
+  """
+  def modal(assigns) do
+    ~H"""
+    <.focus_wrap id={@id} class={["modal", modal_size_class(assigns[:size])]}>
+      <section class="modal__dialog" role="dialog">
+        <header class="modal__header">
+          <%= render_slot(@header) %>
+          <.button
+            color="ghost"
+            class="ml-auto"
+            phx-click={JS.remove_class("modal--open", to: "##{@id}")}
+          >
+            <.icon name="close" />
+          </.button>
+        </header>
+        <div class="modal__body">
+          <%= render_slot(@inner_block) %>
+        </div>
+        <footer class="modal__footer">
+          <%= render_slot(@footer) %>
+        </footer>
+      </section>
+    </.focus_wrap>
+    """
+  end
+
+  defp modal_size_class(nil), do: "modal--md"
+  defp modal_size_class(:xl), do: "modal--xl"
 
   ## Toggle navigation
 
