@@ -138,16 +138,19 @@ defmodule App.Notifications do
       ** (Ecto.NoResultsError)
 
   """
-  @spec read_notification(User.t(), Notification.t()) :: {:ok, Recipient.t()}
+  @spec read_notification(User.t(), Notification.t()) :: {:ok, Notification.t()}
   def read_notification(%User{} = user, %Notification{} = notification) do
     recipient = Repo.get_by!(Recipient, user_id: user.id, notification_id: notification.id)
 
     if recipient.read_at do
-      {:ok, recipient}
+      {:ok, notification}
     else
-      recipient
-      |> Recipient.changeset(%{read_at: NaiveDateTime.utc_now()})
-      |> Repo.update()
+      updated_recipient =
+        recipient
+        |> Recipient.changeset(%{read_at: NaiveDateTime.utc_now()})
+        |> Repo.update!()
+
+      {:ok, %{notification | read_at: updated_recipient.read_at}}
     end
   end
 

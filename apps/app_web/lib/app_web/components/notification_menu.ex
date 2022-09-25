@@ -15,13 +15,6 @@ defmodule AppWeb.NotificationMenu do
      |> assign(:displayed_notification, displayed_notification(notifications))}
   end
 
-  # Notifications with high importance are displayed in a in a prominent and intrusive way.
-  # We only display one notification at a time, and therefore we pick the first one which
-  # is not read yet.
-  defp displayed_notification(notifications) do
-    Enum.find(notifications, &(is_nil(&1.read_at) and &1.importance == :high))
-  end
-
   @impl Phoenix.LiveComponent
   def render(assigns) do
     ~H"""
@@ -49,7 +42,7 @@ defmodule AppWeb.NotificationMenu do
     %{user: user, notifications: notifications} = socket.assigns
 
     {:ok, read_notification} =
-      Notifications.read_notification(user, %Notification{id: notification_id})
+      Notifications.read_notification(user, Notifications.get_notification!(notification_id))
 
     updated_notifications =
       Enum.map(notifications, fn n ->
@@ -60,5 +53,12 @@ defmodule AppWeb.NotificationMenu do
      socket
      |> assign(:notifications, updated_notifications)
      |> assign(:displayed_notification, displayed_notification(updated_notifications))}
+  end
+
+  # Notifications with high importance are displayed in a in a prominent and intrusive way.
+  # We only display one notification at a time, and therefore we pick the first one which
+  # is not read yet.
+  defp displayed_notification(notifications) do
+    Enum.find(notifications, &(is_nil(&1.read_at) and &1.importance == :high))
   end
 end
