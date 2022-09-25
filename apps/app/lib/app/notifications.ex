@@ -131,10 +131,10 @@ defmodule App.Notifications do
 
   ## Examples
 
-      iex> mark_as_read(user, notification)
+      iex> read_notification(user, notification)
       %Notification{}
 
-      iex> mark_as_read(user, notification_not_for_user)
+      iex> read_notification(user, notification_not_for_user)
       ** (Ecto.NoResultsError)
 
   """
