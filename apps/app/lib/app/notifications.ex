@@ -92,8 +92,8 @@ defmodule App.Notifications do
       {:ok, result} ->
         {:ok, result.notification}
 
-      {:error, _failed_operation, _failed_value, _changes_so_far} ->
-        {:error, %Ecto.Changeset{}}
+      {:error, :notification, changeset, _changes} ->
+        {:error, changeset}
     end
   end
 

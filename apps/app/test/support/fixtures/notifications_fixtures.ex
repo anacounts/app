@@ -17,6 +17,7 @@ defmodule App.NotificationsFixtures do
     {:ok, notification} =
       attrs
       |> Enum.into(%{
+        title: "the title",
         content: "some content",
         importance: :medium
       })

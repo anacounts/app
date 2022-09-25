@@ -32,6 +32,7 @@ defmodule App.Notifications.Notification do
         }
 
   schema "notifications" do
+    field :title, :string
     field :content, :string
     field :importance, Ecto.Enum, values: @notification_importances
 
@@ -47,18 +48,25 @@ defmodule App.Notifications.Notification do
   @doc false
   def changeset(notification, attrs) do
     notification
-    |> cast(attrs, [:importance, :content])
-    |> validate_importance()
+    |> cast(attrs, [:title, :content, :importance])
+    |> validate_title()
     |> validate_content()
+    |> validate_importance()
   end
 
-  defp validate_importance(changeset) do
+  defp validate_title(changeset) do
     changeset
-    |> validate_required(:importance)
+    |> validate_required(:title)
+    |> validate_length(:title, min: 1, max: 255)
   end
 
   defp validate_content(changeset) do
     changeset
     |> validate_required(:content)
+  end
+
+  defp validate_importance(changeset) do
+    changeset
+    |> validate_required(:importance)
   end
 end
