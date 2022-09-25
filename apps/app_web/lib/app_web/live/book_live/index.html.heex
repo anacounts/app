@@ -1,5 +1,13 @@
 <.page_header>
   <:title><%= gettext("Books") %></:title>
+
+  <:menu>
+    <.live_component
+      module={AppWeb.NotificationMenu}
+      id="notification_viewer"
+      user={@current_user}
+    />
+  </:menu>
   <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>

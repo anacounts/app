@@ -35,6 +35,9 @@ defmodule App.Notifications.Notification do
     field :content, :string
     field :importance, Ecto.Enum, values: @notification_importances
 
+    # Filled with the value of `read_at` of the recipient, for the current user.
+    field :read_at, :naive_datetime, virtual: true
+
     has_many :recipients, Recipient
     many_to_many :users, User, join_through: Recipient
 

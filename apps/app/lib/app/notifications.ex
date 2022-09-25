@@ -32,7 +32,9 @@ defmodule App.Notifications do
   defp user_notifications_query(user_id) do
     from notification in Notification,
       join: recipient in assoc(notification, :recipients),
-      where: recipient.user_id == ^user_id
+      where: recipient.user_id == ^user_id,
+      select_merge: %{read_at: recipient.read_at},
+      order_by: [asc: notification.inserted_at]
   end
 
   @doc """
