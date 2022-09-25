@@ -403,9 +403,10 @@ defmodule AppWeb.ComponentHelpers do
       class={["modal", modal_size_class(assigns[:size]), modal_open_class(assigns[:open])]}
     >
       <section class="modal__dialog" role="dialog">
-        <header :if={assigns[:header]} class="modal__header">
+        <header :if={assigns[:header] || assigns[:dismiss]} class="modal__header">
           <%= render_slot(@header) %>
           <.button
+            :if={assigns[:dismiss] != false}
             color="ghost"
             class="modal__dismiss"
             phx-click={JS.remove_class("modal--open", to: "##{@id}")}
