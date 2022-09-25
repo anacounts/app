@@ -13,6 +13,8 @@
            border-disabled-border;
   }
 
+  /* ## Call to action */
+
   .button--cta {
     @apply text-theme-contrast
            bg-theme;
@@ -25,6 +27,8 @@
   .button--cta:focus {
     @apply bg-theme-darker;
   }
+
+  /* ## Feature */
 
   .button--feature {
     @apply bg-gray-100
@@ -39,7 +43,24 @@
     @apply bg-gray-300;
   }
 
-  .button--invisible {
-    @apply contents;
+  /* ## Ghost */
+
+  .button--ghost {
+    @apply bg-transparent
+           border-transparent;
+  }
+
+  .button--ghost:hover {
+    @apply bg-gray-200;
+  }
+
+  .button--ghost:focus {
+    @apply bg-gray-300;
+  }
+
+  .button--ghost:disabled {
+    @apply bg-transparent
+           border-transparent
+           text-disabled;
   }
 }

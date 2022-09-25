@@ -56,7 +56,7 @@ defmodule AppWeb.LiveHelpers do
     <header class="flex items-center gap-2
                    h-16
                    mx-4">
-      <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--invisible">
+      <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--ghost">
         <.icon name="arrow-left" alt={gettext("Go back")} />
       </.link>
       <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>

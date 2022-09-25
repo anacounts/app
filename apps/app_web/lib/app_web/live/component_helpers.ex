@@ -139,7 +139,7 @@ defmodule AppWeb.ComponentHelpers do
   defp button_color_class(nil), do: nil
   defp button_color_class("cta"), do: "button--cta"
   defp button_color_class("feature"), do: "button--feature"
-  defp button_color_class("invisible"), do: "button--invisible"
+  defp button_color_class("ghost"), do: "button--ghost"
 
   ## Dropdown
 
