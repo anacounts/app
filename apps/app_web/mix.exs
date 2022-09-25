@@ -55,6 +55,7 @@ defmodule AppWeb.MixProject do
       {:gettext, "~> 0.18"},
       {:app, in_umbrella: true},
       {:jason, "~> 1.4"},
+      {:earmark, "~> 1.4"},
       {:plug_cowboy, "~> 2.5"}
     ]
   end
