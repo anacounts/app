@@ -57,7 +57,7 @@ defmodule App.Notifications.Notification do
   defp validate_title(changeset) do
     changeset
     |> validate_required(:title)
-    |> validate_length(:title, min: 1, max: 255)
+    |> validate_length(:title, min: 1, max: 80)
   end
 
   defp validate_content(changeset) do
