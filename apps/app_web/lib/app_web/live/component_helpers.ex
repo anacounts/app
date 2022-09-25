@@ -8,7 +8,7 @@ defmodule AppWeb.ComponentHelpers do
   Related CSS can be found in `assets/css/components/*`.
   """
 
-  import Phoenix.Component
+  use Phoenix.Component
 
   alias AppWeb.Endpoint
   alias AppWeb.Router.Helpers, as: Routes
@@ -139,7 +139,7 @@ defmodule AppWeb.ComponentHelpers do
   defp button_color_class(nil), do: nil
   defp button_color_class("cta"), do: "button--cta"
   defp button_color_class("feature"), do: "button--feature"
-  defp button_color_class("invisible"), do: "button--invisible"
+  defp button_color_class("ghost"), do: "button--ghost"
 
   ## Dropdown
 
@@ -159,7 +159,7 @@ defmodule AppWeb.ComponentHelpers do
 
       <.dropdown>
         <:toggle>
-          <.icon name="dots-vertical" alt={gettext("Contextual menu")} size="md" />
+          <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
         </:toggle>
 
         <.list_item>
@@ -181,9 +181,9 @@ defmodule AppWeb.ComponentHelpers do
       id={@id}
       phx-click-away={close_dropdown(@id)}
     >
-      <button class="dropdown__toggle" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
+      <.button color="ghost" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
         <%= render_slot(@toggle) %>
-      </button>
+      </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
         <%= render_slot(@inner_block) %>
       </menu>
@@ -269,7 +269,10 @@ defmodule AppWeb.ComponentHelpers do
 
   def heading(assigns) do
     ~H"""
-    <.dynamic_tag name={heading_level_tag(@level)} class={["heading", heading_level_class(@level)]}>
+    <.dynamic_tag
+      name={heading_level_tag(@level)}
+      class={["heading", heading_level_class(@level), assigns[:class]]}
+    >
       <%= render_slot(@inner_block) %>
     </.dynamic_tag>
     """
@@ -318,7 +321,8 @@ defmodule AppWeb.ComponentHelpers do
   end
 
   defp icon_size_class(nil), do: nil
-  defp icon_size_class("md"), do: "icon--md"
+  defp icon_size_class(:md), do: "icon--md"
+  defp icon_size_class(:lg), do: "icon--lg"
 
   defp icon_sprite_url(icon_name),
     do: Routes.static_path(Endpoint, "/assets/sprite.svg##{icon_name}")
@@ -359,6 +363,64 @@ defmodule AppWeb.ComponentHelpers do
     """
   end
 
+  @doc """
+  Generates a modal element.
+
+  ## Attributes
+
+  - id (required): The id of the modal
+  - size: The size of the modal. Defaults to "md"
+
+  ## Slots
+
+  - header: The header of the modal
+  - inner_block: The body of the modal
+  - footer: The footer of the modal
+
+  ## Example
+
+      <.modal id="modal">
+        <:header>
+          <.heading level="title">Modal title</.heading>
+        </:header>
+
+        <p>Modal body</p>
+
+        <:footer>
+          <.button color="ghost">Cancel</.button>
+          <.button color="primary">Save</.button>
+        </:footer>
+      </.modal>
+
+  """
+  def modal(assigns) do
+    ~H"""
+    <.focus_wrap id={@id} class={["modal", modal_size_class(assigns[:size])]}>
+      <section class="modal__dialog" role="dialog">
+        <header class="modal__header">
+          <%= render_slot(@header) %>
+          <.button
+            color="ghost"
+            class="ml-auto"
+            phx-click={JS.remove_class("modal--open", to: "##{@id}")}
+          >
+            <.icon name="close" />
+          </.button>
+        </header>
+        <div class="modal__body">
+          <%= render_slot(@inner_block) %>
+        </div>
+        <footer class="modal__footer">
+          <%= render_slot(@footer) %>
+        </footer>
+      </section>
+    </.focus_wrap>
+    """
+  end
+
+  defp modal_size_class(nil), do: "modal--md"
+  defp modal_size_class(:xl), do: "modal--xl"
+
   ## Toggle navigation
 
   @doc """
@@ -398,7 +460,7 @@ defmodule AppWeb.ComponentHelpers do
           class={["toggle-nav__item", toggle_nav_item_active_class(item.active)]}
         >
           <.link navigate={item.to} replace class="toggle-nav__link">
-            <.icon name={item.icon} size="md" class="toggle-nav__item-icon" />
+            <.icon name={item.icon} size={:lg} class="toggle-nav__item-icon" />
             <span><%= item.label %></span>
           </.link>
         </li>

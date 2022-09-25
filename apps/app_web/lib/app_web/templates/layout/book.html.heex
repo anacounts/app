@@ -1,15 +1,21 @@
 <.page_header back_to={Routes.book_index_path(@socket, :index)}>
   <:title><%= @layout_heading %></:title>
   <:menu>
-    <.list_item_link navigate={Routes.book_form_path(@socket, :edit, @book)} replace>
-      <.icon name="pencil" />
-      <%= gettext("Edit") %>
-    </.list_item_link>
-    <% # TODO Do not display the list item if the user is not allowed to delete the book %>
-    <.list_item_link id="delete-book" class="text-error" phx-click="delete">
-      <.icon name="delete" />
-      <%= gettext("Delete") %>
-    </.list_item_link>
+    <.dropdown id="contextual-menu">
+      <:toggle>
+        <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+      </:toggle>
+
+      <.list_item_link navigate={Routes.book_form_path(@socket, :edit, @book)} replace>
+        <.icon name="pencil" />
+        <%= gettext("Edit") %>
+      </.list_item_link>
+      <% # TODO Do not display the list item if the user is not allowed to delete the book %>
+      <.list_item_link id="delete-book" class="text-error" phx-click="delete">
+        <.icon name="delete" />
+        <%= gettext("Delete") %>
+      </.list_item_link>
+    </.dropdown>
   </:menu>
 </.page_header>
 

@@ -4,13 +4,19 @@
       do: gettext("New Transfer"),
       else: gettext("Edit Transfer") %>
   </:title>
-  <:menu if={@live_action == :edit}>
-    <%= if @live_action == :edit do %>
-      <.list_item_link id="delete-money-transfer" class="text-error" phx-click="delete">
-        <.icon name="delete" />
-        <%= gettext("Delete") %>
-      </.list_item_link>
-    <% end %>
+  <:menu :if={@live_action == :edit}>
+    <.dropdown id="contextual-menu">
+      <:toggle>
+        <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+      </:toggle>
+
+      <%= if @live_action == :edit do %>
+        <.list_item_link id="delete-money-transfer" class="text-error" phx-click="delete">
+          <.icon name="delete" />
+          <%= gettext("Delete") %>
+        </.list_item_link>
+      <% end %>
+    </.dropdown>
   </:menu>
 </.page_header>
 

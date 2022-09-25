@@ -26,6 +26,7 @@ module.exports = {
         border: "#a0aec0",
       },
       link: "#0000ee",
+      white: "#ffffff",
       gray: {
         100: "#f7fafc",
         200: "#edf2f7",
@@ -37,6 +38,7 @@ module.exports = {
         800: "#2d3748",
         900: "#1a202c",
       },
+      black: "#000000",
       transparent: "transparent",
       current: "currentColor",
     },

@@ -1,21 +1,24 @@
 <.page_header>
   <:title><%= gettext("Books") %></:title>
-  <:menu_toggle>
-    <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
-  </:menu_toggle>
   <:menu>
-    <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
-      <.icon name="cog" />
-      <%= gettext("Settings") %>
-    </.list_item_link>
+    <.dropdown id="contextual-menu">
+      <:toggle>
+        <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
+      </:toggle>
 
-    <% # TODO Replace with <.list_item> when updating components for liveview 0.18 %>
-    <li class="text-error">
-      <%= link to: Routes.user_session_path(@socket, :delete), method: :delete, class: "list__item" do %>
+      <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
+        <.icon name="cog" />
+        <%= gettext("Settings") %>
+      </.list_item_link>
+      <.list_item_link
+        class="text-error"
+        href={Routes.user_session_path(@socket, :delete)}
+        method="delete"
+      >
         <.icon name="account-arrow-right" />
         <%= gettext("Disconnect") %>
-      <% end %>
-    </li>
+      </.list_item_link>
+    </.dropdown>
   </:menu>
 </.page_header>
 
