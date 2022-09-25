@@ -96,6 +96,9 @@ defmodule AppWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
+      # Alias LiveView javascript functions
+      alias Phoenix.LiveView.JS
+
       import AppWeb.ErrorHelpers
       import AppWeb.Gettext
       alias AppWeb.Router.Helpers, as: Routes
