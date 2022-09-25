@@ -64,7 +64,8 @@
     }
 
     .modal--xl .modal__dialog {
-      @apply h-auto max-w-2xl;
+      @apply h-auto max-w-3xl
+             rounded-lg;
     }
   }
 }
