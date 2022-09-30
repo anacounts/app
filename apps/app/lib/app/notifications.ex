@@ -223,6 +223,11 @@ defmodule App.Notifications do
       iex> icon(%Notification{type: :admin_announcement})
       "cog"
 
+  ## Required icons
+
+  Currently, only "cog" is used as a notification icon.
+  Some will be added in the future for different notification types.
+
   """
   @spec icon(Notification.t()) :: String.t()
   def icon(%Notification{type: :admin_announcement}), do: "cog"
