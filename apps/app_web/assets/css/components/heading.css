@@ -4,7 +4,8 @@
   }
 
   .heading--title {
-    @apply text-2xl uppercase;
+    @apply uppercase;
+    font-size: clamp(1.5rem, -1.5rem + 8.333vw, 2rem);
   }
 
   .heading--section {
