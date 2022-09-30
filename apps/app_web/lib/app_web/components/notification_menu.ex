@@ -78,6 +78,6 @@ defmodule AppWeb.NotificationMenu do
   # We only display one notification at a time, and therefore we pick the first one which
   # is not read yet.
   defp displayed_notification(notifications) do
-    Enum.find(notifications, &(is_nil(&1.read_at) and &1.importance == :high))
+    Enum.find(notifications, &(not Notifications.read?(&1) and &1.importance == :high))
   end
 end

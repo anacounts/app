@@ -155,7 +155,28 @@ defmodule App.Notifications do
   end
 
   @doc """
-  Checks if a notification was read by a given user.
+  Check if a notification was read.
+
+  This function result is based on the `:read_at` virtual field of the notification,
+  therefore, it expects the `:read_at` field to be filled.
+
+  To check if a notification was read by a certain user, use `read?/2` instead.
+
+  ## Examples
+
+      iex> read?(%Notification{read_at: ~N[2019-01-01 00:00:00]})
+      true
+
+      iex> read?(%Notification{read_at: nil})
+      false
+
+  """
+  def read?(%Notification{} = notification) do
+    notification.read_at != nil
+  end
+
+  @doc """
+  Check if a notification was read by a given user.
 
   Raises `Ecto.NoResultsError` if the notification was not sent to the user.
 
