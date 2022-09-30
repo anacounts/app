@@ -87,6 +87,19 @@ defmodule App.NotificationsTest do
     end
   end
 
+  describe "read?/1" do
+    test "returns true if the notification was read" do
+      user = user_fixture()
+      notification = notification_fixture([user])
+
+      refute Notifications.read?(notification)
+
+      {:ok, notification} = Notifications.read_notification(user, notification)
+
+      assert Notifications.read?(notification)
+    end
+  end
+
   describe "read?/2" do
     test "returns true if the notification was read by the user" do
       user = user_fixture()
@@ -106,6 +119,20 @@ defmodule App.NotificationsTest do
       assert_raise Ecto.NoResultsError, fn ->
         Notifications.read?(user, notification)
       end
+    end
+  end
+
+  describe "urgent?/1" do
+    test "returns true if the notification is urgent" do
+      notification = notification_fixture(%{importance: :high})
+
+      assert Notifications.urgent?(notification)
+    end
+
+    test "returns false if the notification is not urgent" do
+      notification = notification_fixture(%{importance: :low})
+
+      refute Notifications.urgent?(notification)
     end
   end
 
