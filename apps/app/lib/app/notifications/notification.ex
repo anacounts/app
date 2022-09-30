@@ -2,13 +2,11 @@ defmodule App.Notifications.Notification do
   @moduledoc """
   A notification. Notifications may be sent to a user or a group of users.
 
-  The `:importance` of a notification determines how it is displayed to the user.
-  A notification with importance `:high` will be displayed in a prominent and intrusive
-  way, a notification with importance `:medium` will be discretly signaled to the user,
-  and a notification with importance `:low` will will be displayed only when the user
-  explicitly requests to see all notifications.
+  The `:type` of a notification specifies the reason why it was created.
+  It is be used to determine its urgency (see `App.Notifications.urgent?/1`),
+  the icon that should be displayed alongside, and can be used for more.
 
-  The `:content` is plain text that is displayed to the user.
+  The `:content` is markdown text that is rendered and displayed to the user.
   """
 
   use Ecto.Schema
@@ -17,14 +15,14 @@ defmodule App.Notifications.Notification do
   alias App.Auth.User
   alias App.Notifications.Recipient
 
-  @type importance :: :low | :medium | :high
-  @notification_importances [:low, :medium, :high]
+  @type type :: :admin_announcement
+  @notification_types [:admin_announcement]
 
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
           content: String.t(),
-          importance: importance(),
+          type: type(),
           recipients: [Recipient.t()] | Ecto.Association.NotLoaded.t(),
           users: [User.t()] | Ecto.Association.NotLoaded.t(),
           inserted_at: NaiveDateTime.t(),
@@ -34,7 +32,7 @@ defmodule App.Notifications.Notification do
   schema "notifications" do
     field :title, :string
     field :content, :string
-    field :importance, Ecto.Enum, values: @notification_importances
+    field :type, Ecto.Enum, values: @notification_types
 
     # Filled with the value of `read_at` of the recipient, for the current user.
     field :read_at, :naive_datetime, virtual: true
@@ -48,10 +46,10 @@ defmodule App.Notifications.Notification do
   @doc false
   def changeset(notification, attrs) do
     notification
-    |> cast(attrs, [:title, :content, :importance])
+    |> cast(attrs, [:title, :content, :type])
     |> validate_title()
     |> validate_content()
-    |> validate_importance()
+    |> validate_type()
   end
 
   defp validate_title(changeset) do
@@ -65,8 +63,8 @@ defmodule App.Notifications.Notification do
     |> validate_required(:content)
   end
 
-  defp validate_importance(changeset) do
+  defp validate_type(changeset) do
     changeset
-    |> validate_required(:importance)
+    |> validate_required(:type)
   end
 end

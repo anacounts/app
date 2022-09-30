@@ -8,14 +8,14 @@ defmodule App.NotificationsTest do
   alias App.Notifications.Notification
   alias App.Notifications.Recipient
 
-  @valid_attrs %{title: "the title", content: "some content", importance: :high}
-  @invalid_attrs %{title: "", content: nil, importance: :none}
+  @valid_attrs %{title: "the title", content: "some content", type: :admin_announcement}
+  @invalid_attrs %{title: "", content: nil, type: :none}
 
   describe "list_user_notifications/1" do
     test "returns all user notifications" do
       user = user_fixture()
       notification1 = notification_fixture([user])
-      notification2 = notification_fixture(%{importance: :high}, [user])
+      notification2 = notification_fixture([user])
 
       _not_for_user = notification_fixture()
 
@@ -46,7 +46,7 @@ defmodule App.NotificationsTest do
 
       assert notification.title == "the title"
       assert notification.content == "some content"
-      assert notification.importance == :high
+      assert notification.type == :admin_announcement
     end
 
     test "with invalid data returns error changeset" do
@@ -55,7 +55,7 @@ defmodule App.NotificationsTest do
       assert errors_on(changeset) == %{
                title: ["can't be blank"],
                content: ["can't be blank"],
-               importance: ["is invalid"]
+               type: ["is invalid"]
              }
     end
 
@@ -124,15 +124,9 @@ defmodule App.NotificationsTest do
 
   describe "urgent?/1" do
     test "returns true if the notification is urgent" do
-      notification = notification_fixture(%{importance: :high})
+      notification = notification_fixture(%{type: :admin_announcement})
 
       assert Notifications.urgent?(notification)
-    end
-
-    test "returns false if the notification is not urgent" do
-      notification = notification_fixture(%{importance: :low})
-
-      refute Notifications.urgent?(notification)
     end
   end
 
