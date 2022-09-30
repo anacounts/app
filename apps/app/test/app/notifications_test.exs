@@ -122,6 +122,20 @@ defmodule App.NotificationsTest do
     end
   end
 
+  describe "urgent?/1" do
+    test "returns true if the notification is urgent" do
+      notification = notification_fixture(%{importance: :high})
+
+      assert Notifications.urgent?(notification)
+    end
+
+    test "returns false if the notification is not urgent" do
+      notification = notification_fixture(%{importance: :low})
+
+      refute Notifications.urgent?(notification)
+    end
+  end
+
   describe "delete_notification/1" do
     test "deletes the notification" do
       notification = notification_fixture()

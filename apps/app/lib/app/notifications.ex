@@ -197,6 +197,23 @@ defmodule App.Notifications do
   end
 
   @doc """
+  Checks whether a notification is urgent or not.
+
+  ## Examples
+
+      iex> urgent?(%Notification{importance: :high})
+      true
+
+      iex> urgent?(%Notification{importance: :low})
+      false
+
+  """
+  @spec urgent?(Notification.t()) :: boolean()
+  def urgent?(%Notification{} = notification) do
+    notification.importance == :high
+  end
+
+  @doc """
   Deletes a notification.
 
   ## Examples

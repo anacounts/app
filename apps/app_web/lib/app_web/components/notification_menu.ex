@@ -74,10 +74,10 @@ defmodule AppWeb.NotificationMenu do
      |> assign(:displayed_notification, displayed_notification(updated_notifications))}
   end
 
-  # Notifications with high importance are displayed in a in a prominent and intrusive way.
+  # Notifications which are urgent are displayed in a in a prominent and intrusive way.
   # We only display one notification at a time, and therefore we pick the first one which
   # is not read yet.
   defp displayed_notification(notifications) do
-    Enum.find(notifications, &(not Notifications.read?(&1) and &1.importance == :high))
+    Enum.find(notifications, &(not Notifications.read?(&1) and Notifications.urgent?(&1)))
   end
 end

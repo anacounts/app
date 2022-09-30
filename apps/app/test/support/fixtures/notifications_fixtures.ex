@@ -9,8 +9,14 @@ defmodule App.NotificationsFixtures do
   @doc """
   Generate a notification.
   """
-  def notification_fixture(recipients \\ []) when is_list(recipients) do
+  def notification_fixture(attrs_or_recipients \\ [])
+
+  def notification_fixture(recipients) when is_list(recipients) do
     notification_fixture(%{}, recipients)
+  end
+
+  def notification_fixture(attrs) do
+    notification_fixture(attrs, [])
   end
 
   def notification_fixture(attrs, recipients) do
