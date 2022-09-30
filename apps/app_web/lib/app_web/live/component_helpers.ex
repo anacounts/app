@@ -122,7 +122,7 @@ defmodule AppWeb.ComponentHelpers do
   end
 
   defp avatar_size_class(nil), do: nil
-  defp avatar_size_class("xl"), do: "avatar--xl"
+  defp avatar_size_class(:lg), do: "avatar--lg"
 
   ## Button
 

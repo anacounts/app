@@ -1,14 +1,10 @@
 @layer components {
   .avatar {
-    @apply w-8 h-8
+    @apply w-10 h-10
          rounded-full;
   }
 
   .avatar--lg {
-    @apply w-10 h-10;
-  }
-
-  .avatar--3xl {
-    @apply w-16 h-16;
+    @apply w-12 h-12;
   }
 }
