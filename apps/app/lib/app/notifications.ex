@@ -214,6 +214,20 @@ defmodule App.Notifications do
   end
 
   @doc """
+  Get the name of the icon linked to the notification.
+
+  The icon is based on the notification type.
+
+  ## Examples
+
+      iex> icon(%Notification{type: :admin_announcement})
+      "cog"
+
+  """
+  @spec icon(Notification.t()) :: String.t()
+  def icon(%Notification{type: :admin_announcement}), do: "cog"
+
+  @doc """
   Deletes a notification.
 
   ## Examples

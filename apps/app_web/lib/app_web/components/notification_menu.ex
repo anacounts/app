@@ -34,8 +34,15 @@ defmodule AppWeb.NotificationMenu do
   def render(assigns) do
     ~H"""
     <div>
-      <.modal :if={@displayed_notification} id="notification-modal" open size={:xl} dismiss={false}>
+      <.modal
+        :if={@displayed_notification}
+        id="notification-modal"
+        open
+        size={:xl}
+        dismiss={not Notifications.urgent?(@displayed_notification)}
+      >
         <:header>
+          <.icon name={Notifications.icon(@displayed_notification)} />
           <%= @displayed_notification.title %>
         </:header>
 
