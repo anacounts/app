@@ -201,16 +201,16 @@ defmodule App.Notifications do
 
   ## Examples
 
-      iex> urgent?(%Notification{importance: :high})
+      iex> urgent?(%Notification{type: :admin_announcement})
       true
 
-      iex> urgent?(%Notification{importance: :low})
+      iex> urgent?(%Notification{type: :other_type})
       false
 
   """
   @spec urgent?(Notification.t()) :: boolean()
   def urgent?(%Notification{} = notification) do
-    notification.importance == :high
+    notification.type == :admin_announcement
   end
 
   @doc """

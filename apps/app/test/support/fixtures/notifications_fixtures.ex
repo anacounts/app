@@ -25,7 +25,7 @@ defmodule App.NotificationsFixtures do
       |> Enum.into(%{
         title: "the title",
         content: "some content",
-        importance: :medium
+        type: :admin_announcement
       })
       |> Notifications.create_notification(recipients)
 
