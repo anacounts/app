@@ -8,6 +8,6 @@
   }
 
   .list__item:hover {
-    @apply bg-gray-100;
+    @apply bg-gray-10;
   }
 }

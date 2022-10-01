@@ -9,8 +9,8 @@
   }
 
   .button:disabled {
-    @apply bg-disabled
-           border-disabled-border;
+    @apply bg-gray-40
+           border-gray-50;
   }
 
   /* ## Call to action */
@@ -31,16 +31,16 @@
   /* ## Feature */
 
   .button--feature {
-    @apply bg-gray-100
-           border-gray-500;
+    @apply bg-gray-10
+           border-gray-50;
   }
 
   .button--feature:hover {
-    @apply bg-gray-200;
+    @apply bg-gray-20;
   }
 
   .button--feature:focus {
-    @apply bg-gray-300;
+    @apply bg-gray-30;
   }
 
   /* ## Ghost */
@@ -51,16 +51,16 @@
   }
 
   .button--ghost:hover {
-    @apply bg-gray-200;
+    @apply bg-gray-20;
   }
 
   .button--ghost:focus {
-    @apply bg-gray-300;
+    @apply bg-gray-30;
   }
 
   .button--ghost:disabled {
     @apply bg-transparent
            border-transparent
-           text-disabled;
+           text-gray-40;
   }
 }
