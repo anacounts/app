@@ -107,6 +107,10 @@ msgid "Create a new book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Create your first book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Currency"
 msgstr ""
 
