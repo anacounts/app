@@ -8,37 +8,36 @@ module.exports = {
   content: ["./js/**/*.js", "../lib/*_web.ex", "../lib/*_web/**/*.*ex"],
   theme: {
     colors: {
+      // Theme colors
       theme: {
         darker: "#e63700",
         DEFAULT: "#ff3d00",
         lighter: "#ff501a",
         contrast: "#ffffff",
       },
-      support: {
-        DEFAULT: "#b20600",
-        contrast: "#ffffff",
+      // Action colors
+      action: {
+        DEFAULT: "#0000ee",
       },
+      // Gray colors
+      white: "#ffffff",
+      gray: {
+        10: "#f7fafc",
+        20: "#edf2f7",
+        30: "#e2e8f0",
+        40: "#cbd5e0",
+        50: "#a0aec0",
+        60: "#718096",
+        70: "#4a5568",
+        80: "#2d3748",
+        90: "#1a202c",
+      },
+      black: "#000000",
+      // Status colors
       info: "#0b61ec",
       success: "#4caf50",
       error: "#f1353a",
-      disabled: {
-        DEFAULT: "#cbd5e0",
-        border: "#a0aec0",
-      },
-      link: "#0000ee",
-      white: "#ffffff",
-      gray: {
-        100: "#f7fafc",
-        200: "#edf2f7",
-        300: "#e2e8f0",
-        400: "#cbd5e0",
-        500: "#a0aec0",
-        600: "#718096",
-        700: "#4a5568",
-        800: "#2d3748",
-        900: "#1a202c",
-      },
-      black: "#000000",
+      // Helper colors
       transparent: "transparent",
       current: "currentColor",
     },
