@@ -48,6 +48,14 @@
     ) %>
   </.heading>
   <.list>
+    <.list_item_link
+      :if={Enum.empty?(@books)}
+      class="justify-center gap-2 my-4 text-2xl"
+      navigate={Routes.book_form_path(@socket, :new)}
+    >
+      <.icon name="plus" />
+      <%= gettext("Create your first book") %>
+    </.list_item_link>
     <.list_item_link :for={book <- @books} navigate={Routes.book_show_path(@socket, :show, book)}>
       <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
       <div>
