@@ -14,10 +14,6 @@ module.exports = {
         lighter: "#ff501a",
         contrast: "#ffffff",
       },
-      support: {
-        DEFAULT: "#b20600",
-        contrast: "#ffffff",
-      },
       info: "#0b61ec",
       success: "#4caf50",
       error: "#f1353a",
