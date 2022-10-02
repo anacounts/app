@@ -1,0 +1,26 @@
+@layer components {
+  .tile {
+    @apply flex items-center gap-4
+           rounded-lg
+           bg-background-2
+           shadow;
+  }
+
+  .tile--sm {
+    @apply mx-2 my-2
+           px-3 py-2;
+  }
+
+  .tile--md {
+    @apply mx-2 my-4
+           p-4;
+  }
+
+  .tile--clickable {
+    @apply transition-colors cursor-pointer;
+  }
+
+  .tile--clickable:hover {
+    @apply bg-gray-20;
+  }
+}

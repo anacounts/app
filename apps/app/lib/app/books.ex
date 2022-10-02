@@ -46,9 +46,6 @@ defmodule App.Books do
   @spec find_user_books(User.t()) :: [Book.t()]
   def find_user_books(user) do
     Book.user_query(user)
-    # TODO preload shouldn't be necessary since we only display the number of members
-    # See templates/books/index.html.heex:18
-    |> Book.preload_members()
     |> Repo.all()
   end
 

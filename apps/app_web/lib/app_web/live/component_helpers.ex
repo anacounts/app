@@ -432,6 +432,70 @@ defmodule AppWeb.ComponentHelpers do
   defp modal_open_class(nil), do: nil
   defp modal_open_class(true), do: "modal--open"
 
+  ## Tile
+
+  @doc """
+  Generates a tile element.
+
+  [INSERT LVATTRDOCS]
+
+  ## Example
+
+        <.tile size={:sm} clickable>
+          The title content
+        </.tile>
+
+  """
+
+  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
+
+  attr :size, :atom,
+    default: :md,
+    values: [:sm, :md],
+    doc: "The size of the tile. Defaults to `:md`"
+
+  attr :clickable, :boolean, default: false, doc: "Whether the tile is clickable or not"
+  attr :rest, :global
+
+  slot(:inner_block)
+
+  def tile(assigns) do
+    ~H"""
+    <div class={["tile", tile_size_class(@size), tile_clickable_class(@clickable), @class]} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  @doc """
+  Same as `tile/1` but generates a link as wrapper.
+  """
+
+  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
+
+  attr :size, :atom,
+    default: :md,
+    values: [:sm, :md],
+    doc: "The size of the tile. Defaults to `:md`"
+
+  attr :rest, :global
+
+  slot(:inner_block)
+
+  def tile_link(assigns) do
+    ~H"""
+    <.link class={["tile", tile_size_class(@size), tile_clickable_class(true), @class]} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </.link>
+    """
+  end
+
+  defp tile_size_class(:sm), do: "tile--sm"
+  defp tile_size_class(:md), do: "tile--md"
+
+  defp tile_clickable_class(true), do: "tile--clickable"
+  defp tile_clickable_class(false), do: nil
+
   ## Toggle navigation
 
   @doc """

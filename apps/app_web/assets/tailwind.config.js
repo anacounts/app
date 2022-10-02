@@ -33,6 +33,10 @@ module.exports = {
         90: "#1a202c",
       },
       black: "#000000",
+      background: {
+        DEFAULT: "#fff",
+        2: "#f7fafc",
+      },
       // Status colors
       info: "#0b61ec",
       success: "#4caf50",
@@ -49,6 +53,7 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
+    require("@tailwindcss/line-clamp"),
     plugin(({ addVariant }) =>
       addVariant("phx-no-feedback", ["&.phx-no-feedback", ".phx-no-feedback &"])
     ),

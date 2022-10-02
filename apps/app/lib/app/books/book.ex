@@ -125,10 +125,4 @@ defmodule App.Books.Book do
     |> join_users()
     |> where([user: user], user.id == ^user_id)
   end
-
-  def preload_members(query) do
-    query
-    |> join_members()
-    |> preload([member: members], members: members)
-  end
 end
