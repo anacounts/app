@@ -47,26 +47,29 @@
       Enum.count(@books)
     ) %>
   </.heading>
-  <.list>
-    <.list_item_link
-      :if={Enum.empty?(@books)}
-      class="justify-center gap-2 my-4 text-2xl"
-      navigate={Routes.book_form_path(@socket, :new)}
-    >
-      <.icon name="plus" />
-      <%= gettext("Create your first book") %>
-    </.list_item_link>
-    <.list_item_link :for={book <- @books} navigate={Routes.book_show_path(@socket, :show, book)}>
-      <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
-      <div>
-        <span class="font-bold"><%= book.name %></span>
-        <br />
-        <span>
-          <%= gettext("You and %{count} other members", count: Enum.count(book.members) - 1) %>
-        </span>
-      </div>
-    </.list_item_link>
-  </.list>
+
+  <.tile_link
+    :if={Enum.empty?(@books)}
+    class="text-xl"
+    navigate={Routes.book_form_path(@socket, :new)}
+  >
+    <.icon name="plus" />
+    <%= gettext("Create your first book") %>
+  </.tile_link>
+  <.tile_link
+    :for={book <- @books}
+    navigate={Routes.book_show_path(@socket, :show, book)}
+    size={:sm}
+  >
+    <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
+    <div>
+      <div class="text-lg line-clamp-2"><%= book.name %></div>
+      <span class="font-bold">
+        <%= gettext("Open details") %>
+        <.icon name="arrow-right" class="ml-1 align-bottom" />
+      </span>
+    </div>
+  </.tile_link>
 
   <.fab_container>
     <:item>
