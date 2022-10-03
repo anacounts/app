@@ -12,13 +12,35 @@ defmodule AppWeb.Locale do
 
   # Fetch the locale from the request headers, and set it in the conn session.
   def call(conn, _default) do
-    if locale_tuple = List.keyfind(conn.req_headers, "accept-language", 0) do
-      locale = elem(locale_tuple, 1)
-      Gettext.put_locale(AppWeb.Gettext, locale)
-      put_session(conn, :locale, locale)
-    else
-      conn
+    # The Accept-Language header is a comma-separated list of language tags.
+    # The first tag is the most preferred language.
+    # e.g. Accept-Language: en-US,en;q=0.9,el;q=0.8
+    # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+
+    case get_req_header(conn, "accept-language") do
+      [accept_language_header | _] ->
+        locale = parse_locale(accept_language_header)
+
+        Gettext.put_locale(AppWeb.Gettext, locale)
+        put_session(conn, :locale, locale)
+
+      [] ->
+        conn
     end
+  end
+
+  defp parse_locale(accept_languages) do
+    # "en;q=0.9,el;q=0.8"
+    # => "en;q=0.9"
+    favorite_language =
+      accept_languages
+      |> String.split(",")
+      |> List.first()
+
+    # => "en"
+    favorite_language
+    |> String.split(";")
+    |> List.first()
   end
 
   # Fetch the locale from the session, and set it for the current process.
