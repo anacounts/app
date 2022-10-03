@@ -71,7 +71,6 @@ defmodule App.Transfers.MoneyTransfer do
     |> validate_required(:amount)
     |> validate_type()
     |> validate_tenant_id()
-    |> validate_balance_params()
   end
 
   defp validate_label(changeset) do
@@ -95,11 +94,6 @@ defmodule App.Transfers.MoneyTransfer do
     changeset
     |> validate_required(:tenant_id)
     |> foreign_key_constraint(:tenant_id)
-  end
-
-  defp validate_balance_params(changeset) do
-    changeset
-    |> Balance.TransferParams.validate_changeset(:balance_params)
   end
 
   ## Queries

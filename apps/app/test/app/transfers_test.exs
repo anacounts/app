@@ -9,6 +9,7 @@ defmodule App.TransfersTest do
 
   alias App.Repo
 
+  alias App.Balance.TransferParams
   alias App.Transfers
 
   describe "find_transfers_in_book/1" do
@@ -65,7 +66,8 @@ defmodule App.TransfersTest do
                  )
                )
 
-      assert transfer.balance_params == valid_balance_transfer_params_attrs()
+      assert transfer.balance_params ==
+               struct!(TransferParams, valid_balance_transfer_params_attrs())
     end
 
     test "creates peers along the way", %{book: book, book_member: book_member} do
@@ -156,7 +158,10 @@ defmodule App.TransfersTest do
       assert updated.amount == Money.new(299, :EUR)
       assert updated.type == :income
       assert updated.date == ~D[2020-06-29]
-      assert updated.balance_params == valid_balance_transfer_params_attrs()
+
+      assert updated.balance_params ==
+               struct!(TransferParams, valid_balance_transfer_params_attrs())
+
       assert [peer] = updated.peers
       assert peer.member_id == other_member.id
     end

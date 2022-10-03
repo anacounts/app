@@ -67,7 +67,6 @@ defmodule App.Books.Book do
   defp validate_default_balance_params(changeset) do
     changeset
     |> validate_required(:default_balance_params)
-    |> Balance.TransferParams.validate_changeset(:default_balance_params)
   end
 
   defp put_creator(changeset, creator) do
