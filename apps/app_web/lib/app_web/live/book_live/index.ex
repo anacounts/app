@@ -17,6 +17,6 @@ defmodule AppWeb.BookLive.Index do
 
   @impl Phoenix.LiveView
   def handle_params(_params, _url, socket) do
-    {:noreply, assign(socket, :page_title, gettext("Books"))}
+    {:noreply, assign(socket, :page_title, gettext("My books"))}
   end
 end
