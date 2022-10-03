@@ -46,6 +46,7 @@ defmodule AppWeb do
     quote do
       use Phoenix.LiveView
 
+      on_mount AppWeb.Locale
       unquote(view_helpers())
     end
   end
