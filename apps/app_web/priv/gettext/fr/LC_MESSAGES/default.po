@@ -60,10 +60,6 @@ msgid "Book deleted successfully"
 msgstr "Livret supprimé"
 
 #, elixir-autogen, elixir-format
-msgid "Books"
-msgstr "Livrets"
-
-#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr "Modifier mon avatar"
 
@@ -254,6 +250,10 @@ msgstr "Transfert d'argent créé"
 #, elixir-autogen, elixir-format
 msgid "Money transfer updated successfully"
 msgstr "Transfert d'argent modifié"
+
+#, elixir-autogen, elixir-format
+msgid "My books"
+msgstr "Mes livrets"
 
 #, elixir-autogen, elixir-format
 msgid "Name"
