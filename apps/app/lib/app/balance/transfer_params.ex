@@ -7,9 +7,10 @@ defmodule App.Balance.TransferParams do
 
   use Ecto.Type
 
-  import Ecto.Changeset
-
   alias App.Balance.Means
+
+  @enforce_keys [:means_code, :params]
+  defstruct means_code: nil, params: nil
 
   @type t :: %{
           means_code: Means.code(),
@@ -18,81 +19,34 @@ defmodule App.Balance.TransferParams do
 
   def type, do: :balance_transfer_params
 
-  # TODO refactor
-  # An awesome way to do this would be to create a basic "Tuple" type,
-  # with a module/struct as parameter. It could then get its fields on load and fill them,
-  # dump them the same way, etc...
-  # See if it's feasible
-  # Another absolutely awesome thing, would be to add it to Ecto itself \o/
+  @codes Means.codes()
+  @string_codes Enum.map(@codes, &Atom.to_string/1)
 
   # Provide custom casting rules
-  def cast(%{means_code: means_code} = input) when is_atom(means_code) do
-    {:ok, %{means_code: means_code, params: input[:params]}}
+  def cast(%__MODULE__{} = input) do
+    {:ok, input}
   end
 
-  def cast(%{"means_code" => means_code} = input) when is_atom(means_code) do
-    {:ok, %{means_code: means_code, params: input["params"]}}
+  def cast(%{means_code: means_code} = input) when means_code in @codes do
+    cast_normalized(means_code, input[:params])
   end
 
-  def cast(%{"means_code" => means_code} = input)
-      when means_code in ["divide_equally", "weight_by_income"] do
-    {:ok, %{means_code: String.to_existing_atom(means_code), params: input["params"]}}
+  def cast(%{"means_code" => means_code} = input) when means_code in @string_codes do
+    cast_normalized(String.to_existing_atom(means_code), input["params"])
   end
 
   def cast(_), do: :error
 
-  # Load data from the database
-  @spec load({binary, any}) :: {:ok, %{means_code: atom, params: any}}
-  def load({means_code, params}) do
-    {:ok, %{means_code: String.to_existing_atom(means_code), params: params}}
-  end
-
-  # Dumps term to the database
-  def dump(%{means_code: means_code, params: params}) do
-    {:ok, {Atom.to_string(means_code), params}}
-  end
-
-  def dump(_), do: :error
-
-  # TODO investigate, validation should probably be done during cast
-  ## Changeset
-
-  @spec validate_changeset(Ecto.Changeset.t(), atom()) :: Ecto.Changeset.t()
-  def validate_changeset(changeset, field) do
-    transfer_params = get_field(changeset, field)
-
-    if transfer_params do
-      changeset
-      |> validate_means_code(field, transfer_params)
-      |> validate_matching_code_and_params(field, transfer_params)
+  defp cast_normalized(means_code, params) do
+    if message = params_mismatch(means_code, params) do
+      {:error, message: message}
     else
-      changeset
+      {:ok, %__MODULE__{means_code: means_code, params: params}}
     end
   end
 
-  defp validate_means_code(changeset, field, %{means_code: means_code}) do
-    if means_code in Means.codes() do
-      changeset
-    else
-      add_error(changeset, field, "means code is invalid")
-    end
-  end
-
-  defp validate_matching_code_and_params(%{valid?: false} = changeset, _field, _transfer_params),
-    do: changeset
-
-  defp validate_matching_code_and_params(changeset, field, %{
-         means_code: means_code,
-         params: params
-       }) do
-    if error = params_mismatch(means_code, params) do
-      add_error(changeset, field, error)
-    else
-      changeset
-    end
-  end
-
-  # Validate that the params match the one required by the code
+  # Validate that the params matches the pattern required by the code.
+  # Returns `nil` if no error is found, or a string describing the error otherwise.
   defp params_mismatch(:divide_equally, params) do
     unless is_nil(params), do: "did not expect any parameter"
   end
@@ -102,4 +56,18 @@ defmodule App.Balance.TransferParams do
   end
 
   defp params_mismatch(_code, _params), do: "is invalid"
+
+  # Load data from the database
+  def load({means_code, params}) do
+    {:ok, %__MODULE__{means_code: String.to_existing_atom(means_code), params: params}}
+  end
+
+  def load(_), do: :error
+
+  # Dumps term to the database
+  def dump(%{means_code: means_code, params: params}) do
+    {:ok, {Atom.to_string(means_code), params}}
+  end
+
+  def dump(_), do: :error
 end

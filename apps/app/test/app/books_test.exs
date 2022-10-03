@@ -6,6 +6,7 @@ defmodule App.BooksTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
+  alias App.Balance.TransferParams
   alias App.Books
   alias App.Books.Book
 
@@ -73,7 +74,9 @@ defmodule App.BooksTest do
       {:ok, book} = Books.create_book(user, valid_book_attributes())
 
       assert book.name == valid_book_name()
-      assert book.default_balance_params == valid_balance_transfer_params_attrs()
+
+      assert book.default_balance_params ==
+               struct!(TransferParams, valid_balance_transfer_params_attrs())
 
       assert %{members: [member]} = book
       assert member.user_id == user.id
@@ -105,7 +108,7 @@ defmodule App.BooksTest do
           default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
         })
 
-      assert errors_on(changeset) == %{default_balance_params: ["means code is invalid"]}
+      assert errors_on(changeset) == %{default_balance_params: ["is invalid"]}
     end
 
     test "fails when given invalid balance params parameters", %{user: user} do
@@ -132,7 +135,7 @@ defmodule App.BooksTest do
 
       assert updated.name == "My awesome new never seen name !"
 
-      assert updated.default_balance_params == %{
+      assert updated.default_balance_params == %TransferParams{
                means_code: :weight_by_income,
                params: nil
              }
