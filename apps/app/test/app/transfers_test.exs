@@ -22,6 +22,18 @@ defmodule App.TransfersTest do
       assert [found_transfer] = Transfers.find_transfers_in_book(book.id)
       assert found_transfer.id == transfer.id
     end
+
+    test "finds transfers ordered by descending date", %{book: book, book_member: book_member} do
+      transfer_after =
+        money_transfer_fixture(book_id: book.id, tenant_id: book_member.id, date: ~D[2020-01-02])
+
+      transfer_before =
+        money_transfer_fixture(book_id: book.id, tenant_id: book_member.id, date: ~D[2020-01-01])
+
+      assert [found_transfer1, found_transfer2] = Transfers.find_transfers_in_book(book.id)
+      assert found_transfer1.id == transfer_after.id
+      assert found_transfer2.id == transfer_before.id
+    end
   end
 
   describe "create_money_transfer/1" do
