@@ -3,6 +3,7 @@ defmodule App.Transfers do
   Context for money transfers.
   """
 
+  import Ecto.Query
   alias App.Repo
 
   alias App.Auth.User
@@ -149,6 +150,7 @@ defmodule App.Transfers do
   def find_transfers_in_book(book_id) do
     MoneyTransfer.base_query()
     |> MoneyTransfer.where_book_id(book_id)
+    |> order_by(desc: :date)
     |> Repo.all()
   end
 end
