@@ -33,7 +33,7 @@ defmodule AppWeb.UserSettingsBalanceController do
   defp assign_changesets(conn, _opts) do
     # TODO There MUST be a better way to do this
     user_params =
-      Balance.find_user_params(conn.assigns.current_user.id)
+      Balance.list_user_params(conn.assigns.current_user.id)
       |> Enum.map(&Map.from_struct/1)
       |> Kernel.++(@default_user_params)
       |> Enum.uniq_by(& &1.means_code)

@@ -50,7 +50,7 @@ defmodule App.Balance do
   end
 
   defp members_balance(book_id) do
-    transfers = Transfers.find_transfers_of_book(book_id)
+    transfers = Transfers.list_transfers_of_book(book_id)
 
     transfers
     |> Enum.flat_map(&balance_transfer_by_peer/1)
@@ -154,8 +154,8 @@ defmodule App.Balance do
 
   # --- Actual module content ---
 
-  @spec find_user_params(User.id()) :: [UserParams.t()]
-  def find_user_params(user_id) do
+  @spec list_user_params(User.id()) :: [UserParams.t()]
+  def list_user_params(user_id) do
     UserParams.base_query()
     |> UserParams.where_user_id(user_id)
     |> Repo.all()

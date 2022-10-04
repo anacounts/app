@@ -11,7 +11,7 @@ defmodule AppWeb.BookLive.Index do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    books = Books.find_user_books(socket.assigns.current_user)
+    books = Books.list_user_books(socket.assigns.current_user)
     {:ok, assign(socket, :books, books)}
   end
 
