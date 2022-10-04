@@ -43,8 +43,8 @@ defmodule App.Books do
   @doc """
   Get all books of a specific user, whatever role they may have.
   """
-  @spec list_user_books(User.t()) :: [Book.t()]
-  def list_user_books(user) do
+  @spec list_books_of_user(User.t()) :: [Book.t()]
+  def list_books_of_user(user) do
     Book.user_query(user)
     |> Repo.all()
   end

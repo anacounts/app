@@ -154,8 +154,8 @@ defmodule App.Transfers do
 
   ## Peers
 
-  @spec list_transfer_peers(MoneyTransfer.id()) :: [Peer.t()]
-  def list_transfer_peers(transfer_id) do
+  @spec list_peers_of_transfer(MoneyTransfer.id()) :: [Peer.t()]
+  def list_peers_of_transfer(transfer_id) do
     Peer.base_query()
     |> Peer.where_transfer_id(transfer_id)
     |> Repo.all()

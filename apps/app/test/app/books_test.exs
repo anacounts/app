@@ -60,7 +60,7 @@ defmodule App.BooksTest do
       another_book = book_fixture(another_user, %{name: "Some other book from someone else"})
       _book_member = book_member_fixture(another_book, user)
 
-      user_books = Books.list_user_books(user)
+      user_books = Books.list_books_of_user(user)
       assert [book1, book2] = Enum.sort_by(user_books, & &1.id)
       assert book1.id == book.id
       assert book2.id == another_book.id
