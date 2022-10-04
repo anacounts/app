@@ -21,7 +21,7 @@ defmodule AppWeb.NotificationMenu do
 
   @impl Phoenix.LiveComponent
   def update(assigns, socket) do
-    notifications = Notifications.list_user_notifications(assigns.user)
+    notifications = Notifications.list_notifications_of_user(assigns.user)
 
     {:ok,
      socket

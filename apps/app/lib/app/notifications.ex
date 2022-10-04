@@ -18,12 +18,12 @@ defmodule App.Notifications do
 
   ## Examples
 
-      iex> list_user_notifications()
+      iex> list_notifications_of_user()
       [%Notification{}, ...]
 
   """
-  @spec list_user_notifications(User.t()) :: [Notification.t()]
-  def list_user_notifications(%User{} = user) do
+  @spec list_notifications_of_user(User.t()) :: [Notification.t()]
+  def list_notifications_of_user(%User{} = user) do
     user_notifications_query(user.id)
     |> Repo.all()
   end

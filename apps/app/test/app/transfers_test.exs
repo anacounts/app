@@ -12,7 +12,7 @@ defmodule App.TransfersTest do
   alias App.Balance.TransferParams
   alias App.Transfers
 
-  describe "find_transfers_in_book/1" do
+  describe "find_transfers_of_book/1" do
     setup :setup_user_fixture
     setup :setup_book_fixture
     setup :setup_book_member_fixture
@@ -20,7 +20,7 @@ defmodule App.TransfersTest do
     test "find all transfers in book", %{book: book, book_member: book_member} do
       transfer = money_transfer_fixture(book_id: book.id, tenant_id: book_member.id)
 
-      assert [found_transfer] = Transfers.find_transfers_in_book(book.id)
+      assert [found_transfer] = Transfers.list_transfers_of_book(book.id)
       assert found_transfer.id == transfer.id
     end
 
@@ -31,7 +31,7 @@ defmodule App.TransfersTest do
       transfer_before =
         money_transfer_fixture(book_id: book.id, tenant_id: book_member.id, date: ~D[2020-01-01])
 
-      assert [found_transfer1, found_transfer2] = Transfers.find_transfers_in_book(book.id)
+      assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book.id)
       assert found_transfer1.id == transfer_after.id
       assert found_transfer2.id == transfer_before.id
     end

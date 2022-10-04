@@ -47,6 +47,23 @@ defmodule App.Transfers do
     do: Repo.get_by!(MoneyTransfer, id: id, book_id: book_id)
 
   @doc """
+  Find all money transfers of a book.
+
+  ## Examples
+
+      iex> list_transfers_of_book(123)
+      [%MoneyTransfer{}, ...]
+
+  """
+  @spec list_transfers_of_book(Book.id()) :: [MoneyTransfer.t()]
+  def list_transfers_of_book(book_id) do
+    MoneyTransfer.base_query()
+    |> MoneyTransfer.where_book_id(book_id)
+    |> order_by(desc: :date)
+    |> Repo.all()
+  end
+
+  @doc """
   Creates a money_transfer.
 
   ## Examples
@@ -137,20 +154,10 @@ defmodule App.Transfers do
 
   ## Peers
 
-  @spec find_transfer_peers(MoneyTransfer.id()) :: [Peer.t()]
-  def find_transfer_peers(transfer_id) do
+  @spec list_peers_of_transfer(MoneyTransfer.id()) :: [Peer.t()]
+  def list_peers_of_transfer(transfer_id) do
     Peer.base_query()
     |> Peer.where_transfer_id(transfer_id)
-    |> Repo.all()
-  end
-
-  # TODO I don't know where to put this now
-
-  @spec find_transfers_in_book(Book.id()) :: [MoneyTransfer.t()]
-  def find_transfers_in_book(book_id) do
-    MoneyTransfer.base_query()
-    |> MoneyTransfer.where_book_id(book_id)
-    |> order_by(desc: :date)
     |> Repo.all()
   end
 end

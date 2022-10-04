@@ -11,7 +11,7 @@ defmodule App.NotificationsTest do
   @valid_attrs %{title: "the title", content: "some content", type: :admin_announcement}
   @invalid_attrs %{title: "", content: nil, type: :none}
 
-  describe "list_user_notifications/1" do
+  describe "list_notifications_of_user/1" do
     test "returns all user notifications" do
       user = user_fixture()
       notification1 = notification_fixture([user])
@@ -19,7 +19,7 @@ defmodule App.NotificationsTest do
 
       _not_for_user = notification_fixture()
 
-      assert Notifications.list_user_notifications(user) == [notification1, notification2]
+      assert Notifications.list_notifications_of_user(user) == [notification1, notification2]
     end
   end
 

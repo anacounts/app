@@ -179,7 +179,7 @@ defmodule App.BalanceTest do
     setup :setup_balance_user_params_fixtures
 
     test "find user parameters for all codes", %{user: user} do
-      user_params = Balance.find_user_params(user.id)
+      user_params = Balance.list_user_params(user.id)
 
       assert length(user_params) == 1
 
