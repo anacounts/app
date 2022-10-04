@@ -15,7 +15,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
 
     money_transfers =
       book_id
-      |> Transfers.find_transfers_in_book()
+      |> Transfers.find_transfers_of_book()
       # TODO No preload here
       |> App.Repo.preload(tenant: :user)
 
