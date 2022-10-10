@@ -74,7 +74,7 @@ defmodule AppWeb.MixProject do
         "phx.digest"
       ],
       "sprite.generate":
-        "cmd npx svg-sprite --dest=priv/static/assets --symbol --symbol-dest=. --symbol-sprite=sprite.svg 'assets/icons/*.svg'"
+        "cmd npm install svg-sprite && ./node_modules/.bin/svg-sprite --dest=priv/static/assets --symbol --symbol-dest=. --symbol-sprite=sprite.svg 'assets/icons/*.svg'"
     ]
   end
 end
