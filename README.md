@@ -31,6 +31,8 @@ The whole infrastructure is handled via Terraform. I do not want to disclose
 the config files for the time being, as I plan to change the platform is is
 hosted on.
 
+<!-- TODO flyctl update: set secrets SECRET_KEY_BASE, SES_ACCESS_KEY, SES_IDENTITY, SES_REGION, SES_SECRET_KEY -->
+
 ## Contributing
 
 All contributions are welcome, whether code, reviews, testing or anything
