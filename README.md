@@ -9,11 +9,9 @@ more fair.
 ## Hosting
 
 The application is currently available at
-[anacounts.herokuapp.com](https://anacounts.herokuapp.com/).
+[app.anacounts.com](https://app.anacounts.com/).
 
-Be aware that the application is still unstable and data loss may occur.
-It is currently hosted on Heroku free tier, which is going down by the end
-of November. I will change the host by then.
+It is currently hosted using [Fly.io](https://fly.io/).
 
 ## Deployment
 
@@ -22,16 +20,14 @@ when merged to master. The app is on rolling release, which I find the most
 simple way of handling release for now.
 
 You should be able to roll **your own replica** fairly easily. The application
-was made in order to be as easy to replicate as possible, and as configurable
-as possible. It does not enforce you to use the same host as I do. You will most
-likely need some changes in the config files though, so you should consider
-forking the repository.
+was made in order to be as easy to replicate and as configurable as possible.
+It does not enforce you to use the same host as I do. You will most likely need
+some changes in the config files though, so you should consider forking the
+repository.
 
-The whole infrastructure is handled via Terraform. I do not want to disclose
-the config files for the time being, as I plan to change the platform is is
-hosted on.
-
-<!-- TODO flyctl update: set secrets SECRET_KEY_BASE, SES_ACCESS_KEY, SES_IDENTITY, SES_REGION, SES_SECRET_KEY -->
+The infrastructure is handled partly manually on Fly, and partly via Terraform.
+The configuration files can be found in the `terraform` directory, as well as
+[a guide](terraform/DEPLOYMENT.md) to roll your version of Anacounts.
 
 ## Contributing
 
