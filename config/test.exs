@@ -16,6 +16,16 @@ config :app, App.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
+# Configure Cloak's vault
+config :app, App.Vault,
+  ciphers: [
+    default:
+      {Cloak.Ciphers.AES.GCM,
+       tag: "AES.GCM.V1",
+       key: Base.decode64!("ZQDBZYVMOjxGEUYGYYMZnP7pYe8IK5QLR7kRz8wYJRk="),
+       iv_length: 12}
+  ]
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :app_web, AppWeb.Endpoint,

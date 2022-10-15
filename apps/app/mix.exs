@@ -40,6 +40,7 @@ defmodule App.MixProject do
       {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
+      {:cloak_ecto, "~> 1.2.0"},
       {:jason, "~> 1.2"},
       {:swoosh, "~> 1.8"},
       {:gen_smtp, "~> 1.0"},
