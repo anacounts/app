@@ -58,7 +58,8 @@
   </.tile_link>
   <.tile_link
     :for={book <- @books}
-    navigate={Routes.book_show_path(@socket, :show, book)}
+    data-book-id={book.id}
+    navigate={Routes.money_transfer_index_path(@socket, :index, book)}
     size={:sm}
   >
     <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />

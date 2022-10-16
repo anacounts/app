@@ -59,6 +59,18 @@ defmodule AppWeb.BookLiveTest do
       assert html =~ "1 book in your list"
       assert html =~ book.name
     end
+
+    test "links to books transfers", %{conn: conn, book: book} do
+      {:ok, index_live, _html} = live(conn, Routes.book_index_path(conn, :index))
+
+      assert {:ok, _, html} =
+               index_live
+               |> element("[data-book-id='#{book.id}']", book.name)
+               |> render_click()
+               |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+
+      assert html =~ "Transfers"
+    end
   end
 
   describe "Show" do
