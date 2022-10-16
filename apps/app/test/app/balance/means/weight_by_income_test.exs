@@ -1,7 +1,7 @@
 defmodule App.Balance.Means.WeightByIncomeTest do
   use App.DataCase, async: true
 
-  import App.BalanceFixtures
+  import App.Balance.ConfigFixtures
   import App.AuthFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
