@@ -69,13 +69,9 @@ defmodule App.Transfers.Peer do
   end
 
   def join_member(query) do
-    if has_named_binding?(query, :book_member) do
-      query
-    else
-      from [peer: peer] in query,
-        join: assoc(peer, :member),
-        as: :book_member
-    end
+    with_named_binding(query, :book_member, fn query ->
+      join(query, :inner, [peer: peer], member in assoc(peer, :member), as: :book_member)
+    end)
   end
 
   def where_transfer_id(query, transfer_id) do

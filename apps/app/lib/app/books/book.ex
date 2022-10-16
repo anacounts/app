@@ -94,23 +94,15 @@ defmodule App.Books.Book do
   end
 
   def join_members(query) do
-    if has_named_binding?(query, :member) do
-      query
-    else
-      from [book: book] in query,
-        join: assoc(book, :members),
-        as: :member
-    end
+    with_named_binding(query, :member, fn query ->
+      join(query, :inner, [book: book], member in assoc(book, :members), as: :member)
+    end)
   end
 
   def join_users(query) do
-    if has_named_binding?(query, :user) do
-      query
-    else
-      from [book: book] in query,
-        join: assoc(book, :users),
-        as: :user
-    end
+    with_named_binding(query, :user, fn query ->
+      join(query, :inner, [book: book], user in assoc(book, :users), as: :user)
+    end)
   end
 
   # TODO drop

@@ -72,13 +72,9 @@ defmodule App.Books.Members.BookMember do
   end
 
   def join_user(query) do
-    if has_named_binding?(query, :user) do
-      query
-    else
-      from [book_member: book_member] in query,
-        join: assoc(book_member, :user),
-        as: :user
-    end
+    with_named_binding(query, :user, fn query ->
+      join(query, :inner, [book_member: book_member], user in assoc(book_member, :user), as: :user)
+    end)
   end
 
   @spec book_query(Book.t()) :: Ecto.Query.t()
