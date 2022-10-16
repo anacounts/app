@@ -64,7 +64,7 @@ defmodule AppWeb.BookLive.Form do
   end
 
   defp save_book(socket, :new, book_params) do
-    case Books.create_book(socket.assigns.current_user, book_params) do
+    case Books.create_book(book_params, socket.assigns.current_user) do
       {:ok, book} ->
         {:noreply, push_navigate(socket, to: Routes.book_show_path(socket, :show, book.id))}
 

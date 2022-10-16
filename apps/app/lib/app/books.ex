@@ -8,6 +8,7 @@ defmodule App.Books do
   alias App.Auth.User
   alias App.Books.Book
   alias App.Books.Members
+  alias App.Books.Members.BookMember
   alias App.Books.Members.Rights
 
   # TODO Delete get_book_of_user/2 and get_book_of_user!/2
@@ -49,25 +50,32 @@ defmodule App.Books do
     |> Repo.all()
   end
 
-  # TODO Should be create_book/1
-
   @doc """
   Creates a book.
 
   ## Examples
 
-      iex> create_book(user, %{field: value})
+      iex> create_book(%{field: value}, user_creator)
       {:ok, %Book{}}
 
-      iex> create_book(user, %{field: bad_value})
+      iex> create_book(%{field: bad_value}, user_creator)
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_book(User.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
-  def create_book(user, attrs) do
-    %Book{}
-    |> Book.create_changeset(user, attrs)
-    |> Repo.insert()
+  @spec create_book(map(), User.t()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  def create_book(attrs, %User{} = creator) do
+    result =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:book, Book.changeset(%Book{}, attrs))
+      |> Ecto.Multi.insert(:creator, fn %{book: book} ->
+        %BookMember{role: :creator, book_id: book.id, user_id: creator.id}
+      end)
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{book: book}} -> {:ok, book}
+      {:error, :book, changeset, _changes} -> {:error, changeset}
+    end
   end
 
   @doc """

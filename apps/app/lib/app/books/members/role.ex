@@ -13,6 +13,7 @@ defmodule App.Books.Members.Role do
   @type t :: atom()
 
   @roles %{
+    # TODO Rename to :owner
     creator: Rights.creator_rights(),
     member: Rights.member_rights(),
     viewer: Rights.viewer_rights()

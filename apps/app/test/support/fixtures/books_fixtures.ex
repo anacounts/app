@@ -21,7 +21,10 @@ defmodule App.BooksFixtures do
     {:ok, book} =
       attrs
       |> valid_book_attributes()
-      |> then(&Books.create_book(user, &1))
+      |> Books.create_book(user)
+
+    # TODO There should be no preload here, rework tests
+    book = App.Repo.preload(book, members: [:user])
 
     book
   end
