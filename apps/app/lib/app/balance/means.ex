@@ -11,9 +11,7 @@ defmodule App.Balance.Means do
   # - add the code to type `code` and module attribute `@codes` below
   # - update `from_code/1` below
   # - add a value to the database enum (e.g. see migration App.Repo.Migrations.AddMeansWeightByIncome)
-  # - update `cast/1` and `params_mismatch/2` in TransferParams
-  # - update `params_mismatch/2` in UserParams
-  # - add the value to the GraphQL "balance_means_code" enum in BalanceTypes
+  # - update `cast/1` in TransferParams
 
   @type code :: :divide_equally | :weight_by_income
 
