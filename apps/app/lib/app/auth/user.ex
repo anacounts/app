@@ -23,15 +23,15 @@ defmodule App.Auth.User do
 
   schema "users" do
     # authentification
-    field(:email, :string)
-    field(:password, :string, virtual: true, redact: true)
-    field(:hashed_password, :string, redact: true)
-    field(:confirmed_at, :naive_datetime)
+    field :email, :string
+    field :password, :string, virtual: true, redact: true
+    field :hashed_password, :string, redact: true
+    field :confirmed_at, :naive_datetime
 
     # display information
-    field(:display_name, :string)
+    field :display_name, :string
 
-    many_to_many(:books, Book, join_through: BookMember)
+    many_to_many :books, Book, join_through: BookMember
 
     timestamps()
   end

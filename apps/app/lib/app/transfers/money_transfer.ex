@@ -29,21 +29,20 @@ defmodule App.Transfers.MoneyTransfer do
         }
 
   schema "transfers_money_transfers" do
-    field(:label, :string)
-    field(:amount, Money.Ecto.Composite.Type)
-    field(:type, Ecto.Enum, values: @transfer_types)
-    field(:date, :date)
+    field :label, :string
+    field :amount, Money.Ecto.Composite.Type
+    field :type, Ecto.Enum, values: @transfer_types
+    field :date, :date
 
-    belongs_to(:book, Book)
-    belongs_to(:tenant, BookMember)
+    belongs_to :book, Book
+    belongs_to :tenant, BookMember
 
     # balance
-    field(:balance_params, Balance.TransferParams)
+    field :balance_params, Balance.TransferParams
 
-    has_many(:peers, Transfers.Peer,
+    has_many :peers, Transfers.Peer,
       foreign_key: :transfer_id,
       on_replace: :delete_if_exists
-    )
 
     timestamps()
   end

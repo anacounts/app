@@ -19,10 +19,10 @@ defmodule App.Transfers.Peer do
         }
 
   schema "transfers_peers" do
-    belongs_to(:transfer, Transfers.MoneyTransfer)
-    belongs_to(:member, BookMember)
+    belongs_to :transfer, Transfers.MoneyTransfer
+    belongs_to :member, BookMember
 
-    field(:weight, :decimal, default: Decimal.new(1))
+    field :weight, :decimal, default: Decimal.new(1)
   end
 
   def create_money_transfer_changeset(struct, attrs) do
