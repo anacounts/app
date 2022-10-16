@@ -88,32 +88,21 @@ defmodule App.Books.Book do
 
   @spec base_query :: Ecto.Query.t()
   def base_query do
-    from(book in __MODULE__,
+    from book in __MODULE__,
       as: :book,
       where: is_nil(book.deleted_at)
-    )
   end
 
   def join_members(query) do
-    if has_named_binding?(query, :member) do
-      query
-    else
-      from([book: book] in query,
-        join: assoc(book, :members),
-        as: :member
-      )
-    end
+    with_named_binding(query, :member, fn query ->
+      join(query, :inner, [book: book], assoc(book, :members), as: :member)
+    end)
   end
 
   def join_users(query) do
-    if has_named_binding?(query, :user) do
-      query
-    else
-      from([book: book] in query,
-        join: assoc(book, :users),
-        as: :user
-      )
-    end
+    with_named_binding(query, :user, fn query ->
+      join(query, :inner, [book: book], assoc(book, :users), as: :user)
+    end)
   end
 
   # TODO drop
