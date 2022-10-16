@@ -33,13 +33,12 @@ defmodule App.Books.Members do
   end
 
   defp create_book_member(book_id, user) do
-    %{
-      # set the member role as default, it can be changed later
-      role: :member,
+    %BookMember{
       book_id: book_id,
       user_id: user.id
     }
-    |> BookMember.create_changeset()
+    # set the member role as default, it can be changed later
+    |> BookMember.changeset(%{role: :member})
     |> Repo.insert()
   end
 
