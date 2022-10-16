@@ -6,16 +6,10 @@ defmodule App.Balance do
   Context to compute balance between book members.
   """
 
-  import Ecto.Query
-
-  alias App.Auth.User
   alias App.Balance.Means
-  alias App.Balance.UserConfig
   alias App.Books.Book
   alias App.Books.Members.BookMember
   alias App.Transfers
-
-  alias App.Repo
 
   # TODO Needs refactoring
 
@@ -149,33 +143,5 @@ defmodule App.Balance do
       other_creditors,
       [new_transaction | transactions]
     )
-  end
-
-  # TODO Move to a new `App.Balance.Config` module
-
-  @spec get_user_config_or_default(User.t()) :: UserConfig.t() | nil
-  def get_user_config_or_default(%User{} = user) do
-    user_config =
-      user_config_query(user)
-      |> Repo.one()
-
-    user_config || %UserConfig{user: user, user_id: user.id}
-  end
-
-  defp user_config_query(user) do
-    from UserConfig,
-      where: [user_id: ^user.id]
-  end
-
-  @spec update_user_config(UserConfig.t(), map()) ::
-          {:ok, UserConfig.t()} | {:error, Ecto.Changeset.t()}
-  def update_user_config(user_config, attrs) do
-    user_config
-    |> UserConfig.changeset(attrs)
-    |> Repo.insert_or_update()
-  end
-
-  def user_config_change(%UserConfig{} = user_config) do
-    UserConfig.changeset(user_config)
   end
 end

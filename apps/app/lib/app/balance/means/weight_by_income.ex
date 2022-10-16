@@ -10,7 +10,7 @@ defmodule App.Balance.Means.WeightByIncome do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Balance.UserConfig
+  alias App.Balance.Config.UserConfig
   alias App.Books.Members.BookMember
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer

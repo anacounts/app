@@ -18,9 +18,6 @@ defmodule App.Balance.Means do
   @codes [:divide_equally, :weight_by_income]
   def codes, do: @codes
 
-  @codes_with_user_params @codes -- [:divide_equally]
-  def codes_with_user_params, do: @codes_with_user_params
-
   @doc """
   Divide the given money transfer between its associated peers.
   """

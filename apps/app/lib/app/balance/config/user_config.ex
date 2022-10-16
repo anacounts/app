@@ -1,4 +1,4 @@
-defmodule App.Balance.UserConfig do
+defmodule App.Balance.Config.UserConfig do
   @moduledoc """
   The users configuration related to balancing.
 
@@ -25,7 +25,7 @@ defmodule App.Balance.UserConfig do
     belongs_to :user, User
   end
 
-  def changeset(struct, attrs \\ %{}) do
+  def changeset(struct, attrs) do
     struct
     |> cast(attrs, [:annual_income])
     |> validate_annual_income()
