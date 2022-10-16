@@ -15,41 +15,15 @@ defmodule App.BalanceFixtures do
     })
   end
 
-  def valid_balance_user_means_code, do: :weight_by_income
-  def valid_balance_user_params, do: %{income: 1234}
+  def user_balance_config_fixture(user, attrs \\ %{}) do
+    {:ok, user_config} =
+      Balance.get_user_config_or_default(user)
+      |> Balance.update_user_config(Map.new(attrs))
 
-  def valid_balance_user_params_attrs(attrs \\ %{}) do
-    Enum.into(attrs, %{
-      means_code: valid_balance_user_means_code(),
-      params: valid_balance_user_params()
-    })
+    user_config
   end
 
-  @base_user_params_fixtures [
-    %{means_code: :weight_by_income, params: %{income: 1234}}
-  ]
-
-  def balance_user_params_fixtures(user) do
-    for base_params <- @base_user_params_fixtures do
-      {:ok, user_params} =
-        base_params
-        |> Map.put(:user_id, user.id)
-        |> Balance.upsert_user_params()
-
-      user_params
-    end
-  end
-
-  def balance_user_params_fixtures(user, attrs) do
-    {:ok, user_params} =
-      valid_balance_user_params_attrs(attrs)
-      |> Map.put(:user_id, user.id)
-      |> Balance.upsert_user_params()
-
-    user_params
-  end
-
-  def setup_balance_user_params_fixtures(%{user: user} = context) do
-    Map.put(context, :balance_user_params, balance_user_params_fixtures(user))
+  def setup_user_balance_config_fixture(%{user: user} = context) do
+    Map.put(context, :user_balance_config, user_balance_config_fixture(user))
   end
 end
