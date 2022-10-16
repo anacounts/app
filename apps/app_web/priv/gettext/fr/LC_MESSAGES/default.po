@@ -280,10 +280,6 @@ msgid "New password"
 msgstr "Nouveau mot de passe"
 
 #, elixir-autogen, elixir-format
-msgid "No configuration necessary. You're all set up!"
-msgstr "Aucune configuration nécessaire."
-
-#, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr "Une erreur est survenue. Veuillez vérifier les erreurs dans le formulaire."
 
