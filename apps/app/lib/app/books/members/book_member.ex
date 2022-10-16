@@ -73,7 +73,7 @@ defmodule App.Books.Members.BookMember do
 
   def join_user(query) do
     with_named_binding(query, :user, fn query ->
-      join(query, :inner, [book_member: book_member], user in assoc(book_member, :user), as: :user)
+      join(query, :inner, [book_member: book_member], assoc(book_member, :user), as: :user)
     end)
   end
 

@@ -70,7 +70,7 @@ defmodule App.Transfers.Peer do
 
   def join_member(query) do
     with_named_binding(query, :book_member, fn query ->
-      join(query, :inner, [peer: peer], member in assoc(peer, :member), as: :book_member)
+      join(query, :inner, [peer: peer], assoc(peer, :member), as: :book_member)
     end)
   end
 
