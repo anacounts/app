@@ -24,15 +24,15 @@ defmodule App.Books.Book do
         }
 
   schema "books" do
-    field(:name, :string)
-    field(:deleted_at, :naive_datetime)
+    field :name, :string
+    field :deleted_at, :naive_datetime
 
     # user relation
-    has_many(:members, BookMember)
-    many_to_many(:users, Auth.User, join_through: BookMember)
+    has_many :members, BookMember
+    many_to_many :users, Auth.User, join_through: BookMember
 
     # balance
-    field(:default_balance_params, Balance.TransferParams)
+    field :default_balance_params, Balance.TransferParams
 
     timestamps()
   end

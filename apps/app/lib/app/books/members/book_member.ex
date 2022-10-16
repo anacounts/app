@@ -22,11 +22,11 @@ defmodule App.Books.Members.BookMember do
         }
 
   schema "book_members" do
-    belongs_to(:book, Book)
-    belongs_to(:user, Auth.User)
+    belongs_to :book, Book
+    belongs_to :user, Auth.User
 
-    field(:role, Ecto.Enum, values: Role.all())
-    field(:deleted_at, :naive_datetime)
+    field :role, Ecto.Enum, values: Role.all()
+    field :deleted_at, :naive_datetime
 
     timestamps()
   end
