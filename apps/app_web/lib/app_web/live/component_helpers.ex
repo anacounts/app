@@ -331,13 +331,19 @@ defmodule AppWeb.ComponentHelpers do
 
   ## List
 
+  attr :hoverable, :boolean, default: false, doc: "Whether the items are hoverable"
+  attr :rest, :global
+
   def list(assigns) do
     ~H"""
-    <ul class="list">
+    <ul class={["list", list_hoverable_class(@hoverable)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </ul>
     """
   end
+
+  defp list_hoverable_class(true), do: "list--hoverable"
+  defp list_hoverable_class(false), do: nil
 
   def list_item(assigns) do
     assigns =
