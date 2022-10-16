@@ -67,11 +67,27 @@ defmodule App.Books.Members do
 
       iex> get_book_member_of_user(book.id, user.id)
       %BookMember{}
+
       iex> get_book_member_of_user(book.id, non_member_user.id)
       nil
 
   """
+  @spec get_membership(Book.id(), User.id()) :: BookMember.t() | nil
   def get_membership(book_id, user_id) do
     Repo.get_by(BookMember, book_id: book_id, user_id: user_id)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking book member changes.
+
+  ## Examples
+
+      iex> change_book_member(book_member)
+      %Ecto.Changeset{data: %BookMember{}}
+
+  """
+  @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
+  def change_book_member(book_member, attrs \\ %{}) do
+    BookMember.changeset(book_member, attrs)
   end
 end

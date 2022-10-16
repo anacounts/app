@@ -39,18 +39,6 @@ defmodule App.Books.Book do
 
   ## Changeset
 
-  # TODO drop create changesets
-
-  @doc """
-  A book changeset for creation.
-  The user given will be considered the first member and creator of the book.
-  """
-  def create_changeset(struct, user, attrs) do
-    struct
-    |> changeset(attrs)
-    |> put_creator(user)
-  end
-
   def changeset(struct, attrs) do
     struct
     |> cast(attrs, [:name, :default_balance_params])
@@ -67,16 +55,6 @@ defmodule App.Books.Book do
   defp validate_default_balance_params(changeset) do
     changeset
     |> validate_required(:default_balance_params)
-  end
-
-  defp put_creator(changeset, creator) do
-    changeset
-    |> put_change(:members, [
-      %{
-        user: creator,
-        role: :creator
-      }
-    ])
   end
 
   def delete_changeset(book) do

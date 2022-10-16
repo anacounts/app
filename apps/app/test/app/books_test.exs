@@ -9,6 +9,7 @@ defmodule App.BooksTest do
   alias App.Balance.TransferParams
   alias App.Books
   alias App.Books.Book
+  alias App.Books.Members
 
   @invalid_book_attrs %{name: nil, default_balance_params: %{}}
 
@@ -71,52 +72,57 @@ defmodule App.BooksTest do
     setup :setup_user_fixture
 
     test "creates a new book belonging to the user", %{user: user} do
-      {:ok, book} = Books.create_book(user, valid_book_attributes())
+      {:ok, book} = Books.create_book(valid_book_attributes(), user)
 
       assert book.name == valid_book_name()
 
       assert book.default_balance_params ==
                struct!(TransferParams, valid_balance_transfer_params_attrs())
 
-      assert %{members: [member]} = book
-      assert member.user_id == user.id
+      assert Members.get_membership(book.id, user.id)
     end
 
     test "fails when not given a name", %{user: user} do
       {:error, changeset} =
-        Books.create_book(user, %{
-          name: nil,
-          default_balance_params: valid_balance_transfer_params_attrs()
-        })
+        Books.create_book(
+          %{
+            name: nil,
+            default_balance_params: valid_balance_transfer_params_attrs()
+          },
+          user
+        )
 
       assert errors_on(changeset) == %{name: ["can't be blank"]}
     end
 
     test "fails when not given balance params", %{user: user} do
-      {:error, changeset} =
-        Books.create_book(user, %{
-          name: valid_book_name()
-        })
+      {:error, changeset} = Books.create_book(%{name: valid_book_name()}, user)
 
       assert errors_on(changeset) == %{default_balance_params: ["can't be blank"]}
     end
 
     test "fails when given invalid balance params means code", %{user: user} do
       {:error, changeset} =
-        Books.create_book(user, %{
-          name: valid_book_name(),
-          default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
-        })
+        Books.create_book(
+          %{
+            name: valid_book_name(),
+            default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
+          },
+          user
+        )
 
       assert errors_on(changeset) == %{default_balance_params: ["is invalid"]}
     end
 
     test "fails when given invalid balance params parameters", %{user: user} do
       {:error, changeset} =
-        Books.create_book(user, %{
-          name: valid_book_name(),
-          default_balance_params: %{means_code: :divide_equally, params: %{foo: :bar}}
-        })
+        Books.create_book(
+          %{
+            name: valid_book_name(),
+            default_balance_params: %{means_code: :divide_equally, params: %{foo: :bar}}
+          },
+          user
+        )
 
       assert errors_on(changeset) == %{default_balance_params: ["did not expect any parameter"]}
     end
