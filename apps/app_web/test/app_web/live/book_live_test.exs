@@ -79,7 +79,7 @@ defmodule AppWeb.BookLiveTest do
     test "displays book", %{conn: conn, book: book} do
       {:ok, _show_live, html} = live(conn, Routes.book_show_path(conn, :show, book))
 
-      assert html =~ "Book"
+      assert html =~ "Details"
       assert html =~ book.name
     end
 
