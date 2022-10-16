@@ -66,7 +66,7 @@ defmodule App.Balance.Means.WeightByIncome do
       |> Peer.join_member()
       |> BookMember.join_user()
 
-    from([peer: peer, user: user] in base_query,
+    from [peer: peer, user: user] in base_query,
       left_join: user_config in UserConfig,
       on: user_config.user_id == user.id,
       select: %{
@@ -74,7 +74,6 @@ defmodule App.Balance.Means.WeightByIncome do
         income: user_config.annual_income,
         display_name: user.display_name
       }
-    )
   end
 
   defp incomes_errors(incomes) do

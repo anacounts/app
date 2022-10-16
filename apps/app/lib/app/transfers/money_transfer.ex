@@ -98,13 +98,12 @@ defmodule App.Transfers.MoneyTransfer do
   ## Queries
 
   def base_query do
-    from(__MODULE__, as: :money_transfer)
+    from __MODULE__, as: :money_transfer
   end
 
   def where_book_id(query, book_id) do
-    from([money_transfer: money_transfer] in query,
+    from [money_transfer: money_transfer] in query,
       where: money_transfer.book_id == ^book_id
-    )
   end
 
   ## Struct functions
