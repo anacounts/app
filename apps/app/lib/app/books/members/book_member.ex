@@ -33,9 +33,9 @@ defmodule App.Books.Members.BookMember do
 
   ## Changeset
 
-  def create_changeset(attrs) do
-    %__MODULE__{}
-    |> cast(attrs, [:role, :book_id, :user_id])
+  def changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:role])
     |> validate_role()
     |> validate_book_id()
     |> validate_user_id()
