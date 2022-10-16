@@ -1,42 +1,37 @@
-<.accordion>
-  <:item title="Book details" open>
-    <.list>
-      <.list_item>
-        <.icon name="label" />
-        <div>
-          <span class="font-bold"><%= gettext("Name") %></span>
-          <br />
-          <span><%= @book.name %></span>
-        </div>
-      </.list_item>
-      <.list_item>
-        <.icon name="wallet" />
-        <div>
-          <span class="font-bold"><%= gettext("Balancing") %></span>
-          <br />
-          <span>
-            <%= format_code(@book.default_balance_params.means_code) %>
-          </span>
-        </div>
-      </.list_item>
-    </.list>
-  </:item>
-  <:item title={ngettext("%{count} member", "%{count} members", Enum.count(@book.members))}>
-    <.list>
-      <.list_item :for={member <- @book.members}>
-        <.avatar src={Avatars.for_user(member.user)} />
-        <div>
-          <span class="font-bold">
-            <%= member.user.display_name %>
-          </span>
-          <br />
-          <span><%= member.role %></span>
-        </div>
-      </.list_item>
-    </.list>
-    <.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
-      <.icon name="account-plus" />
-      <%= gettext("Invite member") %>
-    </.list_item_link>
-  </:item>
-</.accordion>
+<h2 class="mx-4 mt-4 text-2xl text-theme">
+  <%= @book.name %>
+</h2>
+
+<.list>
+  <.list_item>
+    <.icon name="wallet" />
+    <div>
+      <span class="font-bold"><%= gettext("Balancing") %></span>
+      <br />
+      <span>
+        <%= format_code(@book.default_balance_params.means_code) %>
+      </span>
+    </div>
+  </.list_item>
+</.list>
+
+<.heading level="section">
+  <%= ngettext("%{count} member", "%{count} members", Enum.count(@book.members)) %>
+</.heading>
+
+<.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
+  <.icon name="account-plus" />
+  <%= gettext("Invite member") %>
+</.list_item_link>
+<.list>
+  <.list_item :for={member <- @book.members}>
+    <.avatar src={Avatars.for_user(member.user)} />
+    <div>
+      <span class="font-bold">
+        <%= member.user.display_name %>
+      </span>
+      <br />
+      <span><%= member.role %></span>
+    </div>
+  </.list_item>
+</.list>

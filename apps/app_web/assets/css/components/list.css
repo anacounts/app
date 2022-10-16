@@ -7,7 +7,7 @@
            transition-colors;
   }
 
-  .list__item:hover {
+  .list--hoverable .list__item:hover {
     @apply bg-gray-10;
   }
 }

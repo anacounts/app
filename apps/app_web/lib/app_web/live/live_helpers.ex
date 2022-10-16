@@ -56,8 +56,8 @@ defmodule AppWeb.LiveHelpers do
   def page_header(assigns) do
     ~H"""
     <header class="flex items-center gap-2
-                   h-16
-                   mx-4">
+                   h-14 mb-2 px-4
+                   bg-gray-10 shadow">
       <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--ghost">
         <.icon name="arrow-left" alt={gettext("Go back")} />
       </.link>

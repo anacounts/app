@@ -1,4 +1,4 @@
-<.list>
+<.list hoverable>
   <%= for transfer <- @money_transfers do %>
     <% {icon_name, class_name} = icon_and_class_for_transfer_type(transfer.type) %>
     <.list_item_link navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
