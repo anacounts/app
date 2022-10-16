@@ -2,7 +2,7 @@ defmodule App.Repo.Migrations.DropBalanceUserParamsTable do
   use Ecto.Migration
 
   def change do
-    drop table :balance_user_params
+    drop table(:balance_user_params)
   end
 
   def down do
