@@ -10,6 +10,8 @@ defmodule App.Application do
     children = [
       # Start the Ecto repository
       App.Repo,
+      # Start Cloak vault
+      App.Vault,
       # Start the PubSub system
       {Phoenix.PubSub, name: App.PubSub}
       # Start a worker by calling: App.Worker.start_link(arg)

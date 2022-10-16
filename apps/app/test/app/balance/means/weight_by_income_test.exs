@@ -28,8 +28,8 @@ defmodule App.Balance.Means.WeightByIncomeTest do
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
         )
 
-      balance_user_params_fixtures(user1, means_code: :weight_by_income, params: %{income: 1})
-      balance_user_params_fixtures(user2, means_code: :weight_by_income, params: %{income: 2})
+      user_balance_config_fixture(user1, annual_income: 1)
+      user_balance_config_fixture(user2, annual_income: 2)
 
       assert WeightByIncome.balance_transfer_by_peer(transfer) ==
                {:ok,
@@ -72,10 +72,10 @@ defmodule App.Balance.Means.WeightByIncomeTest do
           ]
         )
 
-      balance_user_params_fixtures(user1, means_code: :weight_by_income, params: %{income: 1})
-      balance_user_params_fixtures(user2, means_code: :weight_by_income, params: %{income: 2})
-      balance_user_params_fixtures(user3, means_code: :weight_by_income, params: %{income: 2})
-      balance_user_params_fixtures(user4, means_code: :weight_by_income, params: %{income: 3})
+      user_balance_config_fixture(user1, annual_income: 1)
+      user_balance_config_fixture(user2, annual_income: 2)
+      user_balance_config_fixture(user3, annual_income: 2)
+      user_balance_config_fixture(user4, annual_income: 3)
 
       assert WeightByIncome.balance_transfer_by_peer(transfer) ==
                {:ok,
@@ -122,8 +122,8 @@ defmodule App.Balance.Means.WeightByIncomeTest do
           ]
         )
 
-      balance_user_params_fixtures(user1, means_code: :weight_by_income, params: %{income: 1})
-      balance_user_params_fixtures(user2, means_code: :weight_by_income, params: %{income: 1})
+      user_balance_config_fixture(user1, annual_income: 1)
+      user_balance_config_fixture(user2, annual_income: 1)
 
       assert WeightByIncome.balance_transfer_by_peer(transfer) ==
                {:ok,
@@ -165,9 +165,9 @@ defmodule App.Balance.Means.WeightByIncomeTest do
           ]
         )
 
-      balance_user_params_fixtures(user1, means_code: :weight_by_income, params: %{income: 1})
-      balance_user_params_fixtures(user2, means_code: :weight_by_income, params: %{income: 2})
-      balance_user_params_fixtures(user3, means_code: :weight_by_income, params: %{income: 3})
+      user_balance_config_fixture(user1, annual_income: 1)
+      user_balance_config_fixture(user2, annual_income: 2)
+      user_balance_config_fixture(user3, annual_income: 3)
 
       assert WeightByIncome.balance_transfer_by_peer(transfer) ==
                {:ok,

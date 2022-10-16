@@ -10,7 +10,7 @@ defmodule App.Balance.Means.WeightByIncome do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Balance.UserParams
+  alias App.Balance.UserConfig
   alias App.Books.Members.BookMember
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -67,11 +67,11 @@ defmodule App.Balance.Means.WeightByIncome do
       |> BookMember.join_user()
 
     from([peer: peer, user: user] in base_query,
-      left_join: user_params in UserParams,
-      on: user_params.user_id == user.id and user_params.means_code == :weight_by_income,
+      left_join: user_config in UserConfig,
+      on: user_config.user_id == user.id,
       select: %{
         peer: peer,
-        income: user_params.params["income"],
+        income: user_config.annual_income,
         display_name: user.display_name
       }
     )

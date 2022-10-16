@@ -10,6 +10,16 @@ config :app, App.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+# Configure Cloak's vault
+config :app, App.Vault,
+  ciphers: [
+    default:
+      {Cloak.Ciphers.AES.GCM,
+       tag: "AES.GCM.V1",
+       key: Base.decode64!("+5BuR1wRBk2UepbYR/SaLMHzc1gs9oDxypqtLl9vl5A="),
+       iv_length: 12}
+  ]
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

@@ -8,9 +8,6 @@ defmodule App.BalanceTest do
   import App.TransfersFixtures
 
   alias App.Balance
-  alias App.Balance.UserParams
-
-  alias App.Repo
 
   describe "for_book/1" do
     setup :setup_user_fixture
@@ -174,116 +171,47 @@ defmodule App.BalanceTest do
     end
   end
 
-  describe "find_user_params/1" do
+  describe "get_user_config_or_default/2" do
     setup :setup_user_fixture
-    setup :setup_balance_user_params_fixtures
 
-    test "find user parameters for all codes", %{user: user} do
-      user_params = Balance.list_user_params(user.id)
+    test "returns the balance config of the user", %{user: user} do
+      user_balance_config_fixture(user, annual_income: 1234)
 
-      assert length(user_params) == 1
+      assert %{annual_income: 1234} = Balance.get_user_config_or_default(user)
+    end
 
-      sorted_codes =
-        user_params
-        |> Enum.map(& &1.means_code)
-        |> Enum.sort()
+    test "retuns a default value if the user does not have a balance config yet", %{user: user} do
+      assert user_config = Balance.get_user_config_or_default(user)
 
-      assert sorted_codes == [:weight_by_income]
+      assert user_config.user == user
+      assert user_config.user_id == user.id
+      assert user_config.annual_income == nil
     end
   end
 
-  describe "get_user_params_with_code/2" do
-    setup :setup_user_fixture
-    setup :setup_balance_user_params_fixtures
-
-    test "gets the user param with specified code", %{user: user} do
-      assert user_params = Balance.get_user_params_with_code(user.id, :weight_by_income)
-
-      assert user_params.means_code == :weight_by_income
-      assert user_params.params == %{"income" => 1234}
-      assert user_params.user_id == user.id
-    end
-
-    test "returns `nil` if no user param exist for this code" do
-      other_user = user_fixture()
-
-      refute Balance.get_user_params_with_code(other_user.id, :weight_by_income)
-    end
-  end
-
-  describe "upsert_user_params/1" do
+  describe "update_user_config/1" do
     setup :setup_user_fixture
 
-    test "creates a new user params", %{user: user} do
-      assert {:ok, user_params} =
-               Balance.upsert_user_params(valid_balance_user_params_attrs(user_id: user.id))
+    test "creates the user config if it does not exist", %{user: user} do
+      user_config = Balance.get_user_config_or_default(user)
+      assert Ecto.get_meta(user_config, :state) == :built
 
-      assert user_params.user_id == user.id
-      assert user_params.means_code == valid_balance_user_means_code()
-      assert user_params.params == valid_balance_user_params()
+      assert {:ok, user_config} = Balance.update_user_config(user_config, %{})
+      assert Ecto.get_meta(user_config, :state) == :loaded
     end
 
-    test "updates the user params", %{user: user} do
-      [user_params | _] = balance_user_params_fixtures(user)
+    test "updates the user config", %{user: user} do
+      user_config = user_balance_config_fixture(user, annual_income: 1234)
 
-      assert {:ok, updated} =
-               Balance.upsert_user_params(%{
-                 user_id: user_params.user_id,
-                 #  TODO Change code and params once possible
-                 means_code: valid_balance_user_means_code(),
-                 params: valid_balance_user_params()
-               })
-
-      assert updated.user_id == user.id
-      assert updated.means_code == valid_balance_user_means_code()
-      assert updated.params == valid_balance_user_params()
+      assert {:ok, user_config} = Balance.update_user_config(user_config, %{annual_income: 2345})
+      assert user_config.annual_income == 2345
     end
 
-    test "fails if the means code does not exist", %{user: user} do
-      assert {:error, changeset} =
-               Balance.upsert_user_params(%{
-                 user_id: user.id,
-                 means_code: :unknown_means_code,
-                 params: %{}
-               })
+    test "fails if a value is incorrect", %{user: user} do
+      user_config = user_balance_config_fixture(user)
 
-      assert errors_on(changeset) == %{means_code: ["is invalid"]}
-    end
-
-    test "fails if the params do not match the code", %{user: user} do
-      assert {:error, changeset} =
-               Balance.upsert_user_params(%{
-                 user_id: user.id,
-                 means_code: :weight_by_income,
-                 params: %{foo: :bar}
-               })
-
-      assert errors_on(changeset) == %{params: ["income must be a non-negative integer"]}
-    end
-
-    test "fails if the user does not exist" do
-      assert {:error, changeset} =
-               Balance.upsert_user_params(%{
-                 user_id: 0,
-                 means_code: :weight_by_income,
-                 params: %{income: 1234}
-               })
-
-      assert errors_on(changeset) == %{user_id: ["does not exist"]}
-    end
-  end
-
-  describe "delete_user_params/1" do
-    setup :setup_user_fixture
-    setup :setup_balance_user_params_fixtures
-
-    test "deletes the user parameters", %{user: user, balance_user_params: [user_params | _]} do
-      assert {:ok, deleted} = Balance.delete_user_params(user_params)
-
-      assert deleted.id == user_params.id
-
-      refute Balance.get_user_params_with_code(user.id, user_params.means_code)
-      refute Repo.get(UserParams, user_params.id)
+      assert {:error, changeset} = Balance.update_user_config(user_config, %{annual_income: -1})
+      assert errors_on(changeset) == %{annual_income: ["must be greater than or equal to 0"]}
     end
   end
 end

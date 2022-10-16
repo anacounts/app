@@ -279,10 +279,6 @@ msgid "New password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "No configuration necessary. You're all set up!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 

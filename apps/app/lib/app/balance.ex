@@ -6,19 +6,18 @@ defmodule App.Balance do
   Context to compute balance between book members.
   """
 
+  import Ecto.Query
+
   alias App.Auth.User
   alias App.Balance.Means
-  alias App.Balance.UserParams
+  alias App.Balance.UserConfig
   alias App.Books.Book
   alias App.Books.Members.BookMember
   alias App.Transfers
 
   alias App.Repo
 
-  # TODO This should move to another specialized module.
-  # This is going to be the main context for the `balance` module,
-  # so specialized operation like these shouldn't appear here
-  # (or maybe just the `for_book/1` function, I don't know yet)
+  # TODO Needs refactoring
 
   @type t :: %{
           members_balance: %{BookMember.id() => Money.t()},
@@ -152,34 +151,31 @@ defmodule App.Balance do
     )
   end
 
-  # --- Actual module content ---
+  # TODO Move to a new `App.Balance.Config` module
 
-  @spec list_user_params(User.id()) :: [UserParams.t()]
-  def list_user_params(user_id) do
-    UserParams.base_query()
-    |> UserParams.where_user_id(user_id)
-    |> Repo.all()
+  @spec get_user_config_or_default(User.t()) :: UserConfig.t() | nil
+  def get_user_config_or_default(%User{} = user) do
+    user_config =
+      user_config_query(user)
+      |> Repo.one()
+
+    user_config || %UserConfig{user: user, user_id: user.id}
   end
 
-  @spec get_user_params_with_code(User.id(), Means.code()) :: UserParams.t() | nil
-  def get_user_params_with_code(user_id, means_code) do
-    UserParams.base_query()
-    |> UserParams.where_user_id(user_id)
-    |> UserParams.where_means_code(means_code)
-    |> Repo.one()
+  defp user_config_query(user) do
+    from UserConfig,
+      where: [user_id: ^user.id]
   end
 
-  @spec upsert_user_params(map()) :: {:ok, UserParams.t()} | {:error, Ecto.Changeset.t()}
-  def upsert_user_params(attrs) do
-    UserParams.changeset(attrs)
-    |> Repo.insert(
-      conflict_target: [:user_id, :means_code],
-      on_conflict: {:replace, [:params]}
-    )
+  @spec update_user_config(UserConfig.t(), map()) ::
+          {:ok, UserConfig.t()} | {:error, Ecto.Changeset.t()}
+  def update_user_config(user_config, attrs) do
+    user_config
+    |> UserConfig.changeset(attrs)
+    |> Repo.insert_or_update()
   end
 
-  @spec delete_user_params(UserParams.t()) :: {:ok, UserParams.t()} | {:error, Ecto.Changeset.t()}
-  def delete_user_params(user_params) do
-    Repo.delete(user_params)
+  def user_config_change(%UserConfig{} = user_config) do
+    UserConfig.changeset(user_config)
   end
 end
