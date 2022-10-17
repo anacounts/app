@@ -10,16 +10,12 @@ defmodule App.Balance.Means.WeightByIncomeTest do
   alias App.Balance.Means.WeightByIncome
 
   describe "balance_transfer_by_peer/1" do
-    setup :setup_user_fixture
-    setup :setup_book_fixture
-    setup :setup_book_member_fixture
+    setup :book_with_member_context
 
-    test "balances transfer amount among 2 peers", %{
-      book: %{members: [member1]} = book,
-      user: user1,
-      book_member: member2,
-      book_member_user: user2
-    } do
+    test "balances transfer amount among 2 peers", %{book: book, user: user1, member: member1} do
+      user2 = user_fixture()
+      member2 = book_member_fixture(book, user2)
+
       transfer =
         money_transfer_fixture(
           book_id: book.id,
@@ -49,7 +45,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
                 ]}
     end
 
-    test "balance among multiple peers", %{user: user1, book: %{members: [member1]} = book} do
+    test "balance among multiple peers", %{book: book, user: user1, member: member1} do
       user2 = user_fixture()
       member2 = book_member_fixture(book, user2)
 
@@ -107,7 +103,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
                 ]}
     end
 
-    test "takes weight into account", %{user: user1, book: %{members: [member1]} = book} do
+    test "takes weight into account", %{book: book, member: member1, user: user1} do
       user2 = user_fixture()
       member2 = book_member_fixture(book, user2)
 
@@ -143,10 +139,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
                 ]}
     end
 
-    test "takes weight into account for 3 peers", %{
-      user: user1,
-      book: %{members: [member1]} = book
-    } do
+    test "takes weight into account for 3 peers", %{book: book, user: user1, member: member1} do
       user2 = user_fixture()
       member2 = book_member_fixture(book, user2)
 
@@ -193,10 +186,10 @@ defmodule App.Balance.Means.WeightByIncomeTest do
                 ]}
     end
 
-    test "fails if a user params isn't available", %{
-      book: %{members: [member1]} = book,
-      book_member: member2
-    } do
+    test "fails if a user config appropriate fields aren't set", %{book: book, member: member1} do
+      user2 = user_fixture()
+      member2 = book_member_fixture(book, user2)
+
       money_transfer =
         money_transfer_fixture(
           book_id: book.id,
@@ -205,6 +198,8 @@ defmodule App.Balance.Means.WeightByIncomeTest do
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
         )
 
+      user_balance_config_fixture(user2)
+
       assert WeightByIncome.balance_transfer_by_peer(money_transfer) ==
                {:error,
                 [
@@ -212,5 +207,17 @@ defmodule App.Balance.Means.WeightByIncomeTest do
                   " did not parameter their income for \"Weight By Income\""
                 ]}
     end
+  end
+
+  defp book_with_member_context(_context) do
+    book = book_fixture()
+    user = user_fixture()
+    member = book_member_fixture(book, user)
+
+    %{
+      book: book,
+      user: user,
+      member: member
+    }
   end
 end

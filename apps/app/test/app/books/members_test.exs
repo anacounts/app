@@ -8,11 +8,7 @@ defmodule App.Books.MembersTest do
   alias App.Books.Members
 
   describe "invite_member/2" do
-    # XXX In the end, `invite_new_member` will only send an invite
-    # Tests will need to be updated
-
-    setup :setup_user_fixture
-    setup :setup_book_fixture
+    setup :book_with_creator_context
 
     test "adds a member to the book", %{book: book, user: user} do
       invited_user = user_fixture()
@@ -54,7 +50,7 @@ defmodule App.Books.MembersTest do
   end
 
   describe "get_book_member!/1" do
-    setup [:setup_user_fixture, :setup_book_fixture]
+    setup :book_with_creator_context
 
     test "returns the book_member with given id", %{book: book} do
       other_user = user_fixture()
@@ -67,5 +63,17 @@ defmodule App.Books.MembersTest do
         Members.get_book_member!(-1)
       end
     end
+  end
+
+  defp book_with_creator_context(_context) do
+    book = book_fixture()
+    user = user_fixture()
+    member = book_member_fixture(book, user, role: :creator)
+
+    %{
+      book: book,
+      user: user,
+      member: member
+    }
   end
 end

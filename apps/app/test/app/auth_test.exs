@@ -6,6 +6,10 @@ defmodule App.AuthTest do
   alias App.Auth.User
   alias App.Auth.UserToken
 
+  @valid_user_password "initial valid password"
+  @valid_user_display_name "valid display name"
+  @invalid_user_display_name nil
+
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
       refute Auth.get_user_by_email("unknown@example.com")
@@ -28,10 +32,10 @@ defmodule App.AuthTest do
     end
 
     test "returns the user if the email and password are valid" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = user_fixture(password: @valid_user_password)
 
       assert %User{id: ^id} =
-               Auth.get_user_by_email_and_password(user.email, valid_user_password())
+               Auth.get_user_by_email_and_password(user.email, @valid_user_password)
     end
   end
 
@@ -76,19 +80,19 @@ defmodule App.AuthTest do
 
     test "validates email uniqueness" do
       %{email: email} = user_fixture()
-      {:error, changeset} = Auth.register_user(%{email: email, password: valid_user_password()})
+      {:error, changeset} = Auth.register_user(%{email: email, password: @valid_user_password})
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the upper cased email too, to check that email case is ignored.
       {:error, changeset_upcase} =
-        Auth.register_user(%{email: String.upcase(email), password: valid_user_password()})
+        Auth.register_user(%{email: String.upcase(email), password: @valid_user_password})
 
       assert "has already been taken" in errors_on(changeset_upcase).email
     end
 
     test "registers users with a hashed password" do
       email = unique_user_email()
-      {:ok, user} = Auth.register_user(valid_user_attributes(email: email))
+      {:ok, user} = Auth.register_user(user_attributes(email: email))
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -104,12 +108,12 @@ defmodule App.AuthTest do
 
     test "allows fields to be set" do
       email = unique_user_email()
-      password = valid_user_password()
+      password = @valid_user_password
 
       changeset =
         Auth.change_user_registration(
           %User{},
-          valid_user_attributes(email: email, password: password)
+          user_attributes(email: email, password: password)
         )
 
       assert changeset.valid?
@@ -120,37 +124,33 @@ defmodule App.AuthTest do
   end
 
   describe "change_user_display_name/2" do
-    @valid_display_name "valid display name"
-
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Auth.change_user_display_name(%User{})
       assert changeset.required == [:display_name]
     end
 
     test "allows fields to be set" do
-      changeset = Auth.change_user_display_name(%User{}, %{display_name: @valid_display_name})
+      changeset =
+        Auth.change_user_display_name(%User{}, %{display_name: @valid_user_display_name})
 
       assert changeset.valid?
-      assert get_change(changeset, :display_name) == @valid_display_name
+      assert get_change(changeset, :display_name) == @valid_user_display_name
     end
   end
 
   describe "update_user_display_name/2" do
-    @valid_display_name "valid display name"
-    @invalid_display_name nil
-
     setup do
       %{user: user_fixture()}
     end
 
     test "updates the display name", %{user: user} do
-      {:ok, user} = Auth.update_user_display_name(user, %{display_name: @valid_display_name})
-      assert user.display_name == @valid_display_name
+      {:ok, user} = Auth.update_user_display_name(user, %{display_name: @valid_user_display_name})
+      assert user.display_name == @valid_user_display_name
     end
 
     test "check display name is valid", %{user: user} do
       {:error, changeset} =
-        Auth.update_user_display_name(user, %{display_name: @invalid_display_name})
+        Auth.update_user_display_name(user, %{display_name: @invalid_user_display_name})
 
       assert "can't be blank" in errors_on(changeset).display_name
     end
@@ -165,17 +165,17 @@ defmodule App.AuthTest do
 
   describe "apply_user_email/3" do
     setup do
-      %{user: user_fixture()}
+      %{user: user_fixture(password: @valid_user_password)}
     end
 
     test "requires email to change", %{user: user} do
-      {:error, changeset} = Auth.apply_user_email(user, valid_user_password(), %{})
+      {:error, changeset} = Auth.apply_user_email(user, @valid_user_password, %{})
       assert %{email: ["did not change"]} = errors_on(changeset)
     end
 
     test "validates email", %{user: user} do
       {:error, changeset} =
-        Auth.apply_user_email(user, valid_user_password(), %{email: "not valid"})
+        Auth.apply_user_email(user, @valid_user_password, %{email: "not valid"})
 
       assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
     end
@@ -183,7 +183,7 @@ defmodule App.AuthTest do
     test "validates maximum value for email for security", %{user: user} do
       too_long = String.duplicate("db", 100)
 
-      {:error, changeset} = Auth.apply_user_email(user, valid_user_password(), %{email: too_long})
+      {:error, changeset} = Auth.apply_user_email(user, @valid_user_password, %{email: too_long})
 
       assert "should be at most 160 character(s)" in errors_on(changeset).email
     end
@@ -191,7 +191,7 @@ defmodule App.AuthTest do
     test "validates email uniqueness", %{user: user} do
       %{email: email} = user_fixture()
 
-      {:error, changeset} = Auth.apply_user_email(user, valid_user_password(), %{email: email})
+      {:error, changeset} = Auth.apply_user_email(user, @valid_user_password, %{email: email})
 
       assert "has already been taken" in errors_on(changeset).email
     end
@@ -204,7 +204,7 @@ defmodule App.AuthTest do
 
     test "applies the email without persisting it", %{user: user} do
       email = unique_user_email()
-      {:ok, user} = Auth.apply_user_email(user, valid_user_password(), %{email: email})
+      {:ok, user} = Auth.apply_user_email(user, @valid_user_password, %{email: email})
       assert user.email == email
       assert Auth.get_user!(user.id).email != email
     end
@@ -292,12 +292,12 @@ defmodule App.AuthTest do
 
   describe "update_user_password/3" do
     setup do
-      %{user: user_fixture()}
+      %{user: user_fixture(password: @valid_user_password)}
     end
 
     test "validates password", %{user: user} do
       {:error, changeset} =
-        Auth.update_user_password(user, valid_user_password(), %{
+        Auth.update_user_password(user, @valid_user_password, %{
           password: "not valid",
           password_confirmation: "another"
         })
@@ -312,21 +312,21 @@ defmodule App.AuthTest do
       too_long = String.duplicate("db", 100)
 
       {:error, changeset} =
-        Auth.update_user_password(user, valid_user_password(), %{password: too_long})
+        Auth.update_user_password(user, @valid_user_password, %{password: too_long})
 
       assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "validates current password", %{user: user} do
       {:error, changeset} =
-        Auth.update_user_password(user, "invalid", %{password: valid_user_password()})
+        Auth.update_user_password(user, "invalid", %{password: @valid_user_password})
 
       assert %{current_password: ["is not valid"]} = errors_on(changeset)
     end
 
     test "updates the password", %{user: user} do
       {:ok, user} =
-        Auth.update_user_password(user, valid_user_password(), %{
+        Auth.update_user_password(user, @valid_user_password, %{
           password: "new valid password"
         })
 
@@ -338,7 +338,7 @@ defmodule App.AuthTest do
       _ = Auth.generate_user_session_token(user)
 
       {:ok, _} =
-        Auth.update_user_password(user, valid_user_password(), %{
+        Auth.update_user_password(user, @valid_user_password, %{
           password: "new valid password"
         })
 

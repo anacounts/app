@@ -12,8 +12,11 @@ defmodule App.NotificationsTest do
   @invalid_attrs %{title: "", content: nil, type: :none}
 
   describe "list_notifications_of_user/1" do
-    test "returns all user notifications" do
-      user = user_fixture()
+    setup do
+      %{user: user_fixture()}
+    end
+
+    test "returns all user notifications", %{user: user} do
       notification1 = notification_fixture([user])
       notification2 = notification_fixture([user])
 
@@ -38,15 +41,23 @@ defmodule App.NotificationsTest do
 
   describe "create_notification/2" do
     test "with valid data creates a notification" do
-      user1 = user_fixture()
-      user2 = user_fixture()
+      recipient1 = user_fixture()
+      recipient2 = user_fixture()
 
-      assert {:ok, %Notification{} = notification} =
-               Notifications.create_notification(@valid_attrs, [user1, user2])
+      assert {:ok, notification} =
+               Notifications.create_notification(@valid_attrs, [recipient1, recipient2])
 
       assert notification.title == "the title"
       assert notification.content == "some content"
       assert notification.type == :admin_announcement
+    end
+
+    test "is sent to recipients" do
+      recipient = user_fixture()
+
+      assert {:ok, notification} = Notifications.create_notification(@valid_attrs, [recipient])
+
+      assert Notifications.list_notifications_of_user(recipient) == [notification]
     end
 
     test "with invalid data returns error changeset" do

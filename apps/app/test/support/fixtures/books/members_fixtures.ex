@@ -4,24 +4,20 @@ defmodule App.Books.MembersFixtures do
   entities via the `App.Books.Members` context.
   """
 
-  alias App.Books.Members
+  alias App.Repo
 
-  @doc """
-  Generate a book_member.
-  """
-  def book_member_fixture(book, user) do
-    # XXX In the end, `invite_new_member` will only send an invite
-    # Use a function that will actually create the membership of the user
-    {:ok, book_member} = Members.invite_new_member(book.id, hd(book.members).user, user.email)
+  alias App.Books.Members.BookMember
 
-    book_member
+  def book_member_attributes(book, user, attrs \\ %{}) do
+    Enum.into(attrs, %{
+      book_id: book.id,
+      user_id: user.id,
+      role: :member
+    })
   end
 
-  def setup_book_member_fixture(%{book: book} = context) do
-    book_member_user = App.AuthFixtures.user_fixture()
-
-    context
-    |> Map.put(:book_member_user, book_member_user)
-    |> Map.put(:book_member, book_member_fixture(book, book_member_user))
+  def book_member_fixture(book, user, attrs \\ %{}) do
+    struct!(BookMember, book_member_attributes(book, user, attrs))
+    |> Repo.insert!()
   end
 end

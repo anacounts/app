@@ -5,33 +5,23 @@ defmodule App.TransfersFixtures do
 
   alias App.Transfers
 
-  def valid_money_transfer_label, do: "This is a money transfer"
-  def valid_money_transfer_amount, do: Money.new(1799, :EUR)
-  def valid_money_transfer_date, do: ~D[2022-06-23]
-  def valid_money_transfer_type, do: :payment
-
-  def valid_money_transfer_attributes(attrs) do
+  def money_transfer_attributes(attrs) do
     Enum.into(attrs, %{
-      label: valid_money_transfer_label(),
-      amount: valid_money_transfer_amount(),
-      date: valid_money_transfer_date(),
-      type: valid_money_transfer_type(),
+      label: "This is a money transfer",
+      amount: Money.new(1799, :EUR),
+      date: ~D[2022-06-23],
+      type: :payment,
       balance_params: nil,
       peers: []
     })
   end
 
   def money_transfer_fixture(attrs \\ %{}) do
-    valid_attrs = valid_money_transfer_attributes(attrs)
-    {:ok, transfer} = Transfers.create_money_transfer(valid_attrs)
-    transfer
-  end
+    {:ok, transfer} =
+      attrs
+      |> money_transfer_attributes()
+      |> Transfers.create_money_transfer()
 
-  def setup_money_transfer_fixture(%{book: book, book_member: book_member} = context) do
-    Map.put(
-      context,
-      :money_transfer,
-      money_transfer_fixture(book_id: book.id, tenant_id: book_member.id)
-    )
+    transfer
   end
 end
