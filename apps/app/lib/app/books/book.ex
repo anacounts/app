@@ -5,7 +5,6 @@ defmodule App.Books.Book do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
 
   alias App.Auth
   alias App.Balance
@@ -60,35 +59,5 @@ defmodule App.Books.Book do
   def delete_changeset(book) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(book, deleted_at: now)
-  end
-
-  ## Query
-
-  @spec base_query :: Ecto.Query.t()
-  def base_query do
-    from book in __MODULE__,
-      as: :book,
-      where: is_nil(book.deleted_at)
-  end
-
-  def join_members(query) do
-    with_named_binding(query, :member, fn query ->
-      join(query, :inner, [book: book], assoc(book, :members), as: :member)
-    end)
-  end
-
-  def join_users(query) do
-    with_named_binding(query, :user, fn query ->
-      join(query, :inner, [book: book], assoc(book, :users), as: :user)
-    end)
-  end
-
-  # TODO drop
-
-  @spec user_query(Auth.User.t()) :: Ecto.Query.t()
-  def user_query(%{id: user_id}) do
-    base_query()
-    |> join_users()
-    |> where([user: user], user.id == ^user_id)
   end
 end
