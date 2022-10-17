@@ -9,10 +9,19 @@ defmodule App.BalanceTest do
   alias App.Balance
 
   describe "for_book/1" do
-    setup :setup_user_fixture
-    setup :setup_book_fixture
+    setup do
+      book = book_fixture()
+      user = user_fixture()
+      member = book_member_fixture(book, user, role: :creator)
 
-    test "balances transfers correctly", %{book: %{members: [member]} = book} do
+      %{
+        book: book,
+        user: user,
+        member: member
+      }
+    end
+
+    test "balances transfers correctly", %{book: book, member: member} do
       other_user = user_fixture()
       other_member = book_member_fixture(book, other_user)
 
@@ -39,7 +48,7 @@ defmodule App.BalanceTest do
              }
     end
 
-    test "balances multiple transfers correctly #1", %{book: %{members: [member1]} = book} do
+    test "balances multiple transfers correctly #1", %{book: book, member: member1} do
       member2 = book_member_fixture(book, user_fixture())
       member3 = book_member_fixture(book, user_fixture())
       member4 = book_member_fixture(book, user_fixture())
@@ -84,7 +93,7 @@ defmodule App.BalanceTest do
              }
     end
 
-    test "balances multiple transfers correctly #2", %{book: %{members: [member1]} = book} do
+    test "balances multiple transfers correctly #2", %{book: book, member: member1} do
       member2 = book_member_fixture(book, user_fixture())
       member3 = book_member_fixture(book, user_fixture())
 
@@ -125,7 +134,7 @@ defmodule App.BalanceTest do
              }
     end
 
-    test "does not crash if the book is correctly balanced", %{book: %{members: [member1]} = book} do
+    test "does not crash if the book is correctly balanced", %{book: book, member: member1} do
       member2 = book_member_fixture(book, user_fixture())
       member3 = book_member_fixture(book, user_fixture())
 

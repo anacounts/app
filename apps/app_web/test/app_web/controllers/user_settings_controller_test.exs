@@ -5,6 +5,8 @@ defmodule AppWeb.UserSettingsControllerTest do
 
   alias App.Auth
 
+  @valid_user_password "hello world!"
+
   setup :register_and_log_in_user
 
   describe "GET /users/settings" do
@@ -26,7 +28,7 @@ defmodule AppWeb.UserSettingsControllerTest do
       new_password_conn =
         put(conn, Routes.user_settings_path(conn, :update), %{
           "action" => "update_password",
-          "current_password" => valid_user_password(),
+          "current_password" => @valid_user_password,
           "user" => %{
             "password" => "new valid password",
             "password_confirmation" => "new valid password"
@@ -66,7 +68,7 @@ defmodule AppWeb.UserSettingsControllerTest do
       conn =
         put(conn, Routes.user_settings_path(conn, :update), %{
           "action" => "update_email",
-          "current_password" => valid_user_password(),
+          "current_password" => @valid_user_password,
           "user" => %{"email" => unique_user_email()}
         })
 

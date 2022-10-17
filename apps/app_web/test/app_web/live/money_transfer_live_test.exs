@@ -29,22 +29,17 @@ defmodule AppWeb.MoneyTransferLiveTest do
   }
 
   describe "Index" do
-    setup [:register_and_log_in_user, :setup_book_fixture, :setup_book_member_fixture]
+    setup [:register_and_log_in_user, :book_with_member_context]
 
-    test "lists book money transfers", %{
-      conn: conn,
-      user: user,
-      book: book,
-      book_member: book_member
-    } do
-      money_transfer = money_transfer_fixture(%{book_id: book.id, tenant_id: book_member.id})
+    test "lists book money transfers", %{conn: conn, book: book, member: member} do
+      money_transfer = money_transfer_fixture(book_id: book.id, tenant_id: member.id)
 
-      other_book = book_fixture(user)
+      other_book = book_fixture()
 
       other_money_transfer =
         money_transfer_fixture(%{
           book_id: other_book.id,
-          tenant_id: book_member.id,
+          tenant_id: member.id,
           label: "Other book money transfer"
         })
 
@@ -59,9 +54,8 @@ defmodule AppWeb.MoneyTransferLiveTest do
   describe "Form" do
     setup [
       :register_and_log_in_user,
-      :setup_book_fixture,
-      :setup_book_member_fixture,
-      :setup_money_transfer_fixture
+      :book_with_member_context,
+      :money_transfer_in_book_context
     ]
 
     test "displays money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
@@ -117,5 +111,25 @@ defmodule AppWeb.MoneyTransferLiveTest do
 
       assert html =~ "Transfer deleted successfully"
     end
+  end
+
+  # Depends on :register_and_log_in_user
+  defp book_with_member_context(%{user: user} = context) do
+    book = book_fixture()
+    member = book_member_fixture(book, user, role: :creator)
+
+    Map.merge(context, %{
+      book: book,
+      member: member
+    })
+  end
+
+  # Depends on :book_with_member_context
+  defp money_transfer_in_book_context(%{book: book, member: member} = context) do
+    Map.put(
+      context,
+      :money_transfer,
+      money_transfer_fixture(book_id: book.id, tenant_id: member.id)
+    )
   end
 end

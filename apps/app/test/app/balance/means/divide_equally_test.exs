@@ -9,14 +9,14 @@ defmodule App.Balance.Means.DivideEquallyTest do
   alias App.Balance.Means.DivideEqually
 
   describe "balance_transfer_by_peer/1" do
-    setup :setup_user_fixture
-    setup :setup_book_fixture
-    setup :setup_book_member_fixture
+    setup :book_with_member_context
 
     test "balances transfer amount among 2 peers", %{
-      book: %{members: [member1]} = book,
-      book_member: member2
+      book: book,
+      member: member1
     } do
+      member2 = book_member_fixture(book, user_fixture())
+
       transfer =
         money_transfer_fixture(
           book_id: book.id,
@@ -43,15 +43,10 @@ defmodule App.Balance.Means.DivideEquallyTest do
                 ]}
     end
 
-    test "balances transfer amount among multiple peers", %{book: %{members: [member1]} = book} do
-      user2 = user_fixture()
-      member2 = book_member_fixture(book, user2)
-
-      user3 = user_fixture()
-      member3 = book_member_fixture(book, user3)
-
-      user4 = user_fixture()
-      member4 = book_member_fixture(book, user4)
+    test "balances transfer amount among multiple peers", %{book: book, member: member1} do
+      member2 = book_member_fixture(book, user_fixture())
+      member3 = book_member_fixture(book, user_fixture())
+      member4 = book_member_fixture(book, user_fixture())
 
       transfer =
         money_transfer_fixture(
@@ -96,12 +91,9 @@ defmodule App.Balance.Means.DivideEquallyTest do
                 ]}
     end
 
-    test "takes peer weight into account", %{book: %{members: [member1]} = book} do
-      user2 = user_fixture()
-      member2 = book_member_fixture(book, user2)
-
-      user3 = user_fixture()
-      member3 = book_member_fixture(book, user3)
+    test "takes peer weight into account", %{book: book, member: member1} do
+      member2 = book_member_fixture(book, user_fixture())
+      member3 = book_member_fixture(book, user_fixture())
 
       transfer =
         money_transfer_fixture(
@@ -140,7 +132,7 @@ defmodule App.Balance.Means.DivideEquallyTest do
     end
 
     # FIXME correctly divide non round amounts
-    # test "correctly divide non round amounts", %{book: %{members: [member1]} = book} do
+    # test "correctly divide non round amounts", %{book: book, member: member1} do
     #   user2 = user_fixture()
     #   member2 = book_member_fixture(book, user2)
 
@@ -169,5 +161,17 @@ defmodule App.Balance.Means.DivideEquallyTest do
     #               }
     #             ]}
     # end
+  end
+
+  defp book_with_member_context(_context) do
+    book = book_fixture()
+    user = user_fixture()
+    member = book_member_fixture(book, user)
+
+    %{
+      book: book,
+      user: user,
+      member: member
+    }
   end
 end

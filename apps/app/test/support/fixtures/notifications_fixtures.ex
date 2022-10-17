@@ -6,9 +6,14 @@ defmodule App.NotificationsFixtures do
 
   alias App.Notifications
 
-  @doc """
-  Generate a notification.
-  """
+  def notification_attributes(attrs \\ %{}) do
+    Enum.into(attrs, %{
+      title: "the title",
+      content: "some content",
+      type: :admin_announcement
+    })
+  end
+
   def notification_fixture(attrs_or_recipients \\ [])
 
   def notification_fixture(recipients) when is_list(recipients) do
@@ -22,11 +27,7 @@ defmodule App.NotificationsFixtures do
   def notification_fixture(attrs, recipients) do
     {:ok, notification} =
       attrs
-      |> Enum.into(%{
-        title: "the title",
-        content: "some content",
-        type: :admin_announcement
-      })
+      |> notification_attributes()
       |> Notifications.create_notification(recipients)
 
     notification

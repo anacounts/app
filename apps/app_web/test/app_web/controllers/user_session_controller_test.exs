@@ -3,8 +3,10 @@ defmodule AppWeb.UserSessionControllerTest do
 
   import App.AuthFixtures
 
+  @valid_user_password "initial valid password"
+
   setup do
-    %{user: user_fixture()}
+    %{user: user_fixture(password: @valid_user_password)}
   end
 
   describe "GET /users/log_in" do
@@ -26,7 +28,7 @@ defmodule AppWeb.UserSessionControllerTest do
     test "logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => valid_user_password()}
+          "user" => %{"email" => user.email, "password" => @valid_user_password}
         })
 
       assert get_session(conn, :user_token)
@@ -42,7 +44,7 @@ defmodule AppWeb.UserSessionControllerTest do
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{
             "email" => user.email,
-            "password" => valid_user_password(),
+            "password" => @valid_user_password,
             "remember_me" => "true"
           }
         })
@@ -58,7 +60,7 @@ defmodule AppWeb.UserSessionControllerTest do
         |> post(Routes.user_session_path(conn, :create), %{
           "user" => %{
             "email" => user.email,
-            "password" => valid_user_password()
+            "password" => @valid_user_password
           }
         })
 
