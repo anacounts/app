@@ -3,6 +3,7 @@ defmodule App.Books do
   The Book context. Create, update, delete, and find books.
   """
 
+  import Ecto.Query
   alias App.Repo
 
   alias App.Auth.User
@@ -10,20 +11,6 @@ defmodule App.Books do
   alias App.Books.Members
   alias App.Books.Members.BookMember
   alias App.Books.Members.Rights
-
-  # TODO Delete get_book_of_user/2 and get_book_of_user!/2
-
-  @spec get_book_of_user(Book.id(), User.t()) :: Book.t() | nil
-  def get_book_of_user(id, user) do
-    Book.user_query(user)
-    |> Repo.get(id)
-  end
-
-  @spec get_book_of_user!(Book.id(), User.t()) :: Book.t() | nil
-  def get_book_of_user!(id, user) do
-    Book.user_query(user)
-    |> Repo.get!(id)
-  end
 
   @doc """
   Gets a single book.
@@ -39,15 +26,70 @@ defmodule App.Books do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_book!(Book.id()) :: Book.t()
   def get_book!(id), do: Repo.get!(Book, id)
 
   @doc """
-  Get all books of a specific user, whatever role they may have.
+  Gets a single book if it belongs to the user.
+
+  Returns `nil` if the book does not exist or does not belong to the user.
+
+  ## Examples
+
+      iex> get_book_for_user!(123, user)
+      %Book{}
+
+      iex> get_book_for_user!(456, user)
+      nil
+
+  """
+  @spec get_book_of_user(Book.id(), User.t()) :: Book.t() | nil
+  def get_book_of_user(id, %User{} = user) do
+    books_of_user_query(user)
+    |> Repo.get(id)
+  end
+
+  @doc """
+  Gets a single book if it belongs to the user.
+
+  Raises `Ecto.NoResultsError` if the book does not exist or does not belong to the user.
+
+  ## Examples
+
+      iex> get_book_for_user!(123, user)
+      %Book{}
+
+      iex> get_book_for_user!(456, user)
+      ** (Ecto.NoResultsError)
+
+  """
+  @spec get_book_of_user!(Book.id(), User.t()) :: Book.t() | nil
+  def get_book_of_user!(id, %User{} = user) do
+    books_of_user_query(user)
+    |> Repo.get!(id)
+  end
+
+  @doc """
+  Get all books a specific user belongs to.
+
+  ## Examples
+
+      iex> get_books_of_user(user)
+      [%Book{}, ...]
+
   """
   @spec list_books_of_user(User.t()) :: [Book.t()]
-  def list_books_of_user(user) do
-    Book.user_query(user)
+  def list_books_of_user(%User{} = user) do
+    books_of_user_query(user)
     |> Repo.all()
+  end
+
+  # Returns a query that fetches all books a user belongs to.
+  @spec books_of_user_query(Auth.User.t()) :: Ecto.Query.t()
+  defp books_of_user_query(%User{} = user) do
+    base_query()
+    |> join_users()
+    |> where([user: user], user.id == ^user.id)
   end
 
   @doc """
@@ -147,5 +189,21 @@ defmodule App.Books do
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
+  end
+
+  ## Queries
+
+  # TODO Needs rework, I'm not satisfied with this solution
+
+  defp base_query do
+    from book in Book,
+      as: :book,
+      where: is_nil(book.deleted_at)
+  end
+
+  defp join_users(query) do
+    with_named_binding(query, :user, fn query ->
+      join(query, :inner, [book: book], assoc(book, :users), as: :user)
+    end)
   end
 end
