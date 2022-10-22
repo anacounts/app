@@ -1,9 +1,7 @@
-<% # FIXME Setting `:method` explcitely shouldn't be necessary %>
 <.form
   :let={f}
   for={@changeset}
   action={Routes.user_reset_password_path(@conn, :update, @token)}
-  method="put"
   class="px-4"
 >
   <%= if @changeset.action do %>
