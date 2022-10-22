@@ -27,8 +27,9 @@ defmodule App.Books.Members.BookMember do
     field :role, Ecto.Enum, values: Role.all()
     field :deleted_at, :naive_datetime
 
-    # Filled with the value of `:display_name` of the linked user
+    # Filled with the value of `:display_name` and `:email` of the linked user
     field :display_name, :string, virtual: true
+    field :email, :string, virtual: true
 
     timestamps()
   end

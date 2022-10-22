@@ -17,7 +17,7 @@
 
 <.list>
   <.list_item :for={member <- @book.members}>
-    <.avatar src={Avatars.for_user(member.user)} />
+    <.avatar src={Avatars.avatar_url(member.user)} />
     <div class="grow">
       <span class="font-bold">
         <%= member.user.display_name %>

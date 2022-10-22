@@ -119,7 +119,7 @@
               value="true"
               checked={peer != nil}
             />
-            <.avatar src={Avatars.for_user(member.user)} />
+            <.avatar src={Avatars.avatar_url(member.user)} />
             <div class="grow">
               <%= member.user.display_name %>
             </div>
