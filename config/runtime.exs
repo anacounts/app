@@ -23,7 +23,6 @@ if config_env() == :prod do
     socket_options: maybe_ipv6
 
   # Configure Cloak's vault
-  # TODO Verify if this works, Cloak recommends another way
   cloak_key =
     System.get_env("CLOAK_KEY") ||
       raise "environment variable CLOAK_KEY is missing."

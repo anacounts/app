@@ -30,12 +30,10 @@
   </div>
   <.accordion>
     <:item title={gettext("Change name")}>
-      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
         :let={f}
         for={@email_changeset}
         action={Routes.user_settings_path(@conn, :update)}
-        method="put"
         id="update_display_name"
         class="mx-4"
       >
@@ -81,12 +79,10 @@
       </p>
     </:item>
     <:item title={gettext("Change email")} open={@email_changeset.action}>
-      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
         :let={f}
         for={@email_changeset}
         action={Routes.user_settings_path(@conn, :update)}
-        method="put"
         id="update_email"
         class="mx-4"
       >
@@ -126,12 +122,10 @@
       </.form>
     </:item>
     <:item title={gettext("Change password")} open={@password_changeset.action}>
-      <% # FIXME Setting `:method` explcitely shouldn't be necessary %>
       <.form
         :let={f}
         for={@password_changeset}
         action={Routes.user_settings_path(@conn, :update)}
-        method="put"
         id="update_password"
         class="mx-4"
       >
