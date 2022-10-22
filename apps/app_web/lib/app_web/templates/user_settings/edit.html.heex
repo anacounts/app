@@ -3,7 +3,7 @@
 </.page_header>
 <main>
   <div class="flex items-center gap-4 mx-4 mb-4">
-    <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Your avatar")} size={:lg} />
+    <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("Your avatar")} size={:lg} />
     <div>
       <span class="font-bold"><%= @current_user.display_name %></span>
       <div><%= @current_user.email %></div>

@@ -8,9 +8,28 @@ defmodule App.Books.Members do
 
   alias App.Auth
   alias App.Auth.User
+  alias App.Books.Book
   alias App.Books.Members
   alias App.Books.Members.BookMember
   alias App.Books.Members.Rights
+
+  @doc """
+  Lists all members of a book.
+
+  ## Examples
+
+      iex> list_members_of_book(book)
+      [%BookMember{}, ...]
+
+  """
+  @spec list_members_of_book(Book.t()) :: [BookMember.t()]
+  def list_members_of_book(%Book{} = book) do
+    base_query()
+    |> with_display_name_query()
+    |> with_email_query()
+    |> where_book_id(book.id)
+    |> Repo.all()
+  end
 
   @doc """
   Invite a user to an existing book.
@@ -101,10 +120,21 @@ defmodule App.Books.Members do
     from BookMember, as: :book_member
   end
 
-  # Load `:display_name` virtual field. Only works if querying BookMember entities.
+  # Load the `:display_name` virtual field. Only works if querying BookMember entities.
   defp with_display_name_query(query) do
     from [user: user] in join_user(query),
       select_merge: %{display_name: user.display_name}
+  end
+
+  # Load the `:email` virtual field. Only works if querying BookMember entities.
+  defp with_email_query(query) do
+    from [user: user] in join_user(query),
+      select_merge: %{email: user.email}
+  end
+
+  defp where_book_id(query, book_id) do
+    from [book_member: book_member] in query,
+      where: book_member.book_id == ^book_id
   end
 
   def join_user(query) do

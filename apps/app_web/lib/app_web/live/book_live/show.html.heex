@@ -16,7 +16,7 @@
 </.list>
 
 <.heading level="section">
-  <%= ngettext("%{count} member", "%{count} members", Enum.count(@book.members)) %>
+  <%= ngettext("%{count} member", "%{count} members", Enum.count(@members)) %>
 </.heading>
 
 <.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
@@ -24,11 +24,11 @@
   <%= gettext("Invite member") %>
 </.list_item_link>
 <.list>
-  <.list_item :for={member <- @book.members}>
-    <.avatar src={Avatars.for_user(member.user)} />
+  <.list_item :for={member <- @members}>
+    <.avatar src={Avatars.avatar_url(member)} />
     <div>
       <span class="font-bold">
-        <%= member.user.display_name %>
+        <%= member.display_name %>
       </span>
       <br />
       <span><%= member.role %></span>

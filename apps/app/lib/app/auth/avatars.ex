@@ -5,11 +5,19 @@ defmodule App.Auth.Avatars do
   Uses Gravatar as the default avatar provider.
   """
 
-  alias App.Auth.User
+  @doc """
+  Get the avatar URL for an entity. Currently, only entities with an `:email`
+  field are supported.
 
-  @spec for_user(User.t()) :: String.t()
-  def for_user(user) do
-    gravatar_email_url(user.email)
+  ## Examples
+
+      iex> avatar_url(%{email: "avatar@example.com"})
+      "https://www.gravatar.com/avatar/7671d949664fc1fbce03b4ee41c509a4"
+
+  """
+  @spec avatar_url(%{email: binary()}) :: String.t()
+  def avatar_url(%{email: email}) do
+    gravatar_email_url(email)
   end
 
   # Follow Gravatar instructions to generate URLs to request images.
@@ -17,7 +25,7 @@ defmodule App.Auth.Avatars do
   # appending `?parameter=value` at the end of the string.
   #
   # ref: https://en.gravatar.com/site/implement/images/
-  defp gravatar_email_url(email) do
+  defp gravatar_email_url(email) when is_binary(email) do
     hash = gravatar_email_hash(email)
     "https://www.gravatar.com/avatar/#{hash}"
   end

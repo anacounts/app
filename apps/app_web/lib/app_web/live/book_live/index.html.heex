@@ -11,7 +11,7 @@
   <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>
-        <.avatar src={Avatars.for_user(@current_user)} alt={gettext("Profile")} />
+        <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("Profile")} />
       </:toggle>
 
       <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
