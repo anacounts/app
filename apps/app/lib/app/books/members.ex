@@ -56,7 +56,11 @@ defmodule App.Books.Members do
       ** (Ecto.NoResultsError)
 
   """
-  def get_book_member!(id), do: Repo.get!(BookMember, id)
+  def get_book_member!(id) do
+    base_query()
+    |> with_display_name_query()
+    |> Repo.get!(id)
+  end
 
   @doc """
   Get the book member entity linking a user to a book.
@@ -89,5 +93,23 @@ defmodule App.Books.Members do
   @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
   def change_book_member(book_member, attrs \\ %{}) do
     BookMember.changeset(book_member, attrs)
+  end
+
+  ## Queries
+
+  defp base_query do
+    from BookMember, as: :book_member
+  end
+
+  # Load `:display_name` virtual field. Only works if querying BookMember entities.
+  defp with_display_name_query(query) do
+    from [user: user] in join_user(query),
+      select_merge: %{display_name: user.display_name}
+  end
+
+  def join_user(query) do
+    with_named_binding(query, :user, fn query ->
+      join(query, :inner, [book_member: book_member], assoc(book_member, :user), as: :user)
+    end)
   end
 end
