@@ -486,13 +486,16 @@ defmodule AppWeb.ComponentHelpers do
     values: [:sm, :md],
     doc: "The size of the tile. Defaults to `:md`"
 
+  # TODO Should actually be part of `:rest`
+  attr :navigate, :string, default: nil, doc: "The URL to navigate to when the tile is clicked"
+
   attr :rest, :global
 
   slot(:inner_block)
 
   def tile_link(assigns) do
     ~H"""
-    <.link class={["tile", tile_size_class(@size), tile_clickable_class(true), @class]} {@rest}>
+    <.link class={["tile", tile_size_class(@size), tile_clickable_class(true), @class]} navigate={@navigate} {@rest}>
       <%= render_slot(@inner_block) %>
     </.link>
     """
