@@ -5,7 +5,6 @@ defmodule App.Books.Members.BookMember do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
 
   alias App.Auth
   alias App.Books.Book
@@ -27,6 +26,9 @@ defmodule App.Books.Members.BookMember do
 
     field :role, Ecto.Enum, values: Role.all()
     field :deleted_at, :naive_datetime
+
+    # Filled with the value of `:display_name` of the linked user
+    field :display_name, :string, virtual: true
 
     timestamps()
   end
@@ -60,25 +62,5 @@ defmodule App.Books.Members.BookMember do
     changeset
     |> validate_required(:user_id)
     |> foreign_key_constraint(:user_id)
-  end
-
-  ## Query
-
-  @spec base_query :: Ecto.Query.t()
-  def base_query do
-    from book_member in __MODULE__,
-      as: :book_member,
-      where: is_nil(book_member.deleted_at)
-  end
-
-  def join_user(query) do
-    with_named_binding(query, :user, fn query ->
-      join(query, :inner, [book_member: book_member], assoc(book_member, :user), as: :user)
-    end)
-  end
-
-  @spec book_query(Book.t()) :: Ecto.Query.t()
-  def book_query(book) do
-    from base_query(), where: [book_id: ^book.id]
   end
 end

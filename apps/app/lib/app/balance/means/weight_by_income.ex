@@ -11,7 +11,7 @@ defmodule App.Balance.Means.WeightByIncome do
   alias App.Repo
 
   alias App.Balance.Config.UserConfig
-  alias App.Books.Members.BookMember
+  alias App.Books.Members
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
@@ -64,7 +64,7 @@ defmodule App.Balance.Means.WeightByIncome do
       Peer.base_query()
       |> Peer.where_transfer_id(money_transfer.id)
       |> Peer.join_member()
-      |> BookMember.join_user()
+      |> Members.join_user()
 
     from [peer: peer, user: user] in base_query,
       left_join: user_config in UserConfig,

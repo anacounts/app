@@ -4,13 +4,13 @@
   </.heading>
   <.list>
     <%= for {member_id, amount} <- @members_balance do %>
-      <% member = Members.get_book_member!(member_id) |> App.Repo.preload(:user) %>
+      <% member = Members.get_book_member!(member_id) %>
       <% {icon_name, class_name} = transfer_icon_and_class_for_amount(amount) %>
       <.list_item>
         <.icon name={icon_name} class={class_name} />
         <div class="grow">
           <span class="font-bold">
-            <%= member.user.display_name %>
+            <%= member.display_name %>
           </span>
         </div>
         <span class={"font-bold #{class_name}"}>
@@ -33,13 +33,13 @@
       <.list_item :for={transaction <- @transactions}>
         <div class="grow">
           <span class="font-bold">
-            <% from = Members.get_book_member!(transaction.from) |> App.Repo.preload(:user) %>
-            <%= from.user.display_name %>
+            <% from = Members.get_book_member!(transaction.from) %>
+            <%= from.display_name %>
           </span>
           <span><%= gettext("gives") %></span>
           <span class="font-bold">
-            <% to = Members.get_book_member!(transaction.to) |> App.Repo.preload(:user) %>
-            <%= to.user.display_name %>
+            <% to = Members.get_book_member!(transaction.to) %>
+            <%= to.display_name %>
           </span>
         </div>
         <%= transaction.amount %>
