@@ -16,11 +16,11 @@
 </form>
 
 <.list>
-  <.list_item :for={member <- @book.members}>
-    <.avatar src={Avatars.avatar_url(member.user)} />
+  <.list_item :for={member <- @members}>
+    <.avatar src={Avatars.avatar_url(member)} />
     <div class="grow">
       <span class="font-bold">
-        <%= member.user.display_name %>
+        <%= member.display_name %>
       </span>
       <br />
       <span>

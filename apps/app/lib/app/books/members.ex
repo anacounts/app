@@ -59,6 +59,14 @@ defmodule App.Books.Members do
     # set the member role as default, it can be changed later
     |> BookMember.changeset(%{role: :member})
     |> Repo.insert()
+    |> case do
+      {:ok, member} -> {:ok, set_virtual_fields(member, user)}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
+  defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
+    %{member | email: user.email, display_name: user.display_name}
   end
 
   @doc """
