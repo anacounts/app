@@ -64,6 +64,28 @@ defmodule App.Transfers do
   end
 
   @doc """
+  Preloads the tenant of one or a list of money transfers.
+  Includes the display name of the tenant.
+
+  ## Examples
+
+      iex> with_tenant(money_transfer)
+      %MoneyTransfer{tenant: %BookMember{}}
+
+      iex> with_tenant([money_transfer_1, money_transfer_2])
+      [%MoneyTransfer{tenant: %BookMember{}}, %MoneyTransfer{tenant: %BookMember{}}]
+
+  """
+  @spec with_tenant([MoneyTransfer.t()]) :: [MoneyTransfer.t()]
+  def with_tenant(transfers) do
+    Repo.preload(transfers,
+      tenant:
+        Members.base_query()
+        |> Members.with_display_name_query()
+    )
+  end
+
+  @doc """
   Creates a money_transfer.
 
   ## Examples

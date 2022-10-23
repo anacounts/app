@@ -16,8 +16,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
     money_transfers =
       book_id
       |> Transfers.list_transfers_of_book()
-      # TODO No preload here
-      |> App.Repo.preload(tenant: :user)
+      |> Transfers.with_tenant()
 
     socket =
       assign(socket,
