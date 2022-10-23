@@ -124,12 +124,40 @@ defmodule App.Books.Members do
 
   ## Queries
 
-  defp base_query do
+  @doc """
+  Returns an `%Ecto.Query{}` for fetching all book members.
+
+  Combine with `with_display_name_query/1` to query the display name of the book member
+  along the way.
+
+  ## Examples
+
+      iex> base_query()
+      #Ecto.Query<from b0 in App.Books.Members.BookMember, as: :book_member>
+
+      iex> Repo.all(base_query())
+      [%BookMember{}, ...]
+
+  """
+  def base_query do
     from BookMember, as: :book_member
   end
 
-  # Load the `:display_name` virtual field. Only works if querying BookMember entities.
-  defp with_display_name_query(query) do
+  @doc """
+  Updates an `%Ecto.Query{}` to query the display name of the book members along the way.
+
+  ## Examples
+
+      iex> base_query() |> with_display_name_query()
+      #Ecto.Query<from b0 in App.Books.Members.BookMember, as: :book_member,
+        join: u1 in assoc(b0, :user), as: :user,
+        select: merge(b0, %{display_name: u1.display_name})>
+
+      iex> base_query() |> with_display_name_query() |> Repo.all()
+      [%BookMember{display_name: "John Doe"}, ...]
+
+  """
+  def with_display_name_query(query) do
     from [user: user] in join_user(query),
       select_merge: %{display_name: user.display_name}
   end
