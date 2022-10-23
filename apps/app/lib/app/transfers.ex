@@ -161,6 +161,25 @@ defmodule App.Transfers do
       else: false
   end
 
+  # TODO Rework, a :payment should have a negative amount since it appears as negative to the user
+
+  @doc """
+  Retrieves the amount of money a money transfer costs or provides.
+
+  ## Examples
+
+      iex> amount(%MoneyTransfer{amount: 100, type: :payment})
+      100
+
+      iex> amount(%MoneyTransfer{amount: 100, type: :income})
+      -100
+
+  """
+  @spec amount(MoneyTransfer.t()) :: Money.t()
+  def amount(money_transfer)
+  def amount(%MoneyTransfer{type: :payment} = money_transfer), do: money_transfer.amount
+  def amount(%MoneyTransfer{} = money_transfer), do: Money.neg(money_transfer.amount)
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking money_transfer changes.
 

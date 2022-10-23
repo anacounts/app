@@ -105,11 +105,4 @@ defmodule App.Transfers.MoneyTransfer do
     from [money_transfer: money_transfer] in query,
       where: money_transfer.book_id == ^book_id
   end
-
-  ## Struct functions
-
-  @spec amount(t()) :: Money.t()
-  def amount(transfer)
-  def amount(%{type: :payment, amount: amount}), do: amount
-  def amount(%{type: _income_or_reimbursement, amount: amount}), do: Money.neg(amount)
 end
