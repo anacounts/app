@@ -18,8 +18,7 @@ defmodule App.Balance.Means.DivideEquallyTest do
       member2 = book_member_fixture(book, user_fixture())
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(2, :EUR),
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
@@ -49,8 +48,7 @@ defmodule App.Balance.Means.DivideEquallyTest do
       member4 = book_member_fixture(book, user_fixture())
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(4, :EUR),
           peers: [
@@ -96,8 +94,7 @@ defmodule App.Balance.Means.DivideEquallyTest do
       member3 = book_member_fixture(book, user_fixture())
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(6, :EUR),
           peers: [
@@ -137,8 +134,7 @@ defmodule App.Balance.Means.DivideEquallyTest do
     #   member2 = book_member_fixture(book, user2)
 
     #   transfer =
-    #     money_transfer_fixture(
-    #       book_id: book.id,
+    #     money_transfer_fixture(book,
     #       tenant_id: member1.id,
     #       amount: Money.new(3, :EUR),
     #       peers: [%{member_id: member1.id}, %{member_id: member2.id}]

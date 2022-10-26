@@ -7,6 +7,7 @@ defmodule App.Transfers do
   alias App.Repo
 
   alias App.Auth.User
+  alias App.Books.Book
   alias App.Books.Members
   alias App.Books.Members.Rights
   alias App.Transfers.MoneyTransfer
@@ -90,16 +91,17 @@ defmodule App.Transfers do
 
   ## Examples
 
-      iex> create_money_transfer(%{field: value})
+      iex> create_money_transfer(book, %{field: value})
       {:ok, %MoneyTransfer{}}
 
-      iex> create_money_transfer(%{field: bad_value})
+      iex> create_money_transfer(book, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_money_transfer(attrs \\ %{}) do
-    %MoneyTransfer{}
-    |> MoneyTransfer.create_changeset(attrs)
+  def create_money_transfer(%Book{} = book, attrs \\ %{}) do
+    %MoneyTransfer{book_id: book.id}
+    |> MoneyTransfer.changeset(attrs)
+    |> MoneyTransfer.with_peers(&Peer.create_money_transfer_changeset/2)
     # The `date` field default behaviour cannot be handled by Ecto
     # and is therefore handled by the database.
     # Make the database return its value.
@@ -128,7 +130,8 @@ defmodule App.Transfers do
       money_transfer
       # peers can be updated by the changeset
       |> Repo.preload(:peers)
-      |> MoneyTransfer.update_changeset(attrs)
+      |> MoneyTransfer.changeset(attrs)
+      |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
       |> Repo.update()
     else
       {:error, :unauthorized}
@@ -190,7 +193,9 @@ defmodule App.Transfers do
 
   """
   def change_money_transfer(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
-    MoneyTransfer.update_changeset(money_transfer, attrs)
+    money_transfer
+    |> MoneyTransfer.changeset(attrs)
+    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
   end
 
   ## Peers

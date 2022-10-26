@@ -49,27 +49,20 @@ defmodule App.Transfers.MoneyTransfer do
 
   ## Changesets
 
-  def create_changeset(struct, attrs) do
-    struct
-    |> base_changeset(attrs)
-    |> cast(attrs, [:book_id])
-    |> validate_book_id()
-    |> cast_assoc(:peers, with: &Transfers.Peer.create_money_transfer_changeset/2)
-  end
-
-  def update_changeset(struct, attrs) do
-    struct
-    |> base_changeset(attrs)
-    |> cast_assoc(:peers, with: &Transfers.Peer.update_money_transfer_changeset/2)
-  end
-
-  defp base_changeset(struct, attrs) do
+  def changeset(struct, attrs) do
     struct
     |> cast(attrs, [:label, :amount, :type, :date, :tenant_id, :balance_params])
     |> validate_label()
-    |> validate_required(:amount)
+    |> validate_amount()
     |> validate_type()
     |> validate_tenant_id()
+    |> validate_book_id()
+    |> validate_balance_params()
+  end
+
+  def with_peers(changeset, with_changeset) do
+    changeset
+    |> cast_assoc(:peers, with: with_changeset)
   end
 
   defp validate_label(changeset) do
@@ -78,9 +71,20 @@ defmodule App.Transfers.MoneyTransfer do
     |> validate_length(:label, min: 1, max: 255)
   end
 
+  defp validate_amount(changeset) do
+    changeset
+    |> validate_required(:amount)
+  end
+
   defp validate_type(changeset) do
     changeset
     |> validate_required(:type)
+  end
+
+  defp validate_tenant_id(changeset) do
+    changeset
+    |> validate_required(:tenant_id)
+    |> foreign_key_constraint(:tenant_id)
   end
 
   defp validate_book_id(changeset) do
@@ -89,10 +93,9 @@ defmodule App.Transfers.MoneyTransfer do
     |> foreign_key_constraint(:book_id)
   end
 
-  defp validate_tenant_id(changeset) do
+  defp validate_balance_params(changeset) do
     changeset
-    |> validate_required(:tenant_id)
-    |> foreign_key_constraint(:tenant_id)
+    |> validate_required(:balance_params)
   end
 
   ## Queries

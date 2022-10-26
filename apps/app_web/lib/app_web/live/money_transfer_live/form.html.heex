@@ -102,14 +102,15 @@
       <% peers = Ecto.Changeset.get_field(@changeset, :peers) %>
 
       <%= for {member, index} <- Enum.with_index(@book.members) do %>
-        <input
-          type="hidden"
-          name={"money_transfer[peers][#{index}][member_id]"}
-          value={member.id}
-        />
         <% peer = Enum.find(peers, &(&1.member_id == member.id)) %>
 
         <.list_item class="py-2">
+          <input
+            type="hidden"
+            name={"money_transfer[peers][#{index}][member_id]"}
+            value={member.id}
+          />
+
           <label class="contents" for={"book-form_peers_#{index}_checked"}>
             <input type="hidden" name={"money_transfer[peers][#{index}][checked]"} value="false" />
             <input
