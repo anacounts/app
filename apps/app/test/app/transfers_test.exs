@@ -10,24 +10,23 @@ defmodule App.TransfersTest do
   alias App.Repo
 
   alias App.Balance.TransferParams
+  alias App.Books.Book
   alias App.Transfers
 
   describe "find_transfers_of_book/1" do
     setup :book_with_member_context
 
     test "find all transfers in book", %{book: book, member: member} do
-      transfer = money_transfer_fixture(book_id: book.id, tenant_id: member.id)
+      transfer = money_transfer_fixture(book, tenant_id: member.id)
 
       assert [found_transfer] = Transfers.list_transfers_of_book(book.id)
       assert found_transfer.id == transfer.id
     end
 
     test "finds transfers ordered by descending date", %{book: book, member: member} do
-      transfer_after =
-        money_transfer_fixture(book_id: book.id, tenant_id: member.id, date: ~D[2020-01-02])
+      transfer_after = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-02])
 
-      transfer_before =
-        money_transfer_fixture(book_id: book.id, tenant_id: member.id, date: ~D[2020-01-01])
+      transfer_before = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-01])
 
       assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book.id)
       assert found_transfer1.id == transfer_after.id
@@ -40,32 +39,34 @@ defmodule App.TransfersTest do
 
     test "creates a money transfer", %{book: book, member: member} do
       assert {:ok, transfer} =
-               money_transfer_attributes(
-                 book_id: book.id,
-                 tenant_id: member.id,
-                 label: "A label",
-                 amount: Money.new(1799, :EUR),
-                 type: :payment,
-                 date: ~D[2022-06-23]
+               Transfers.create_money_transfer(
+                 book,
+                 money_transfer_attributes(
+                   tenant_id: member.id,
+                   label: "A label",
+                   amount: Money.new(1799, :EUR),
+                   type: :payment,
+                   date: ~D[2022-06-23]
+                 )
                )
-               |> Transfers.create_money_transfer()
 
       assert transfer.label == "A label"
       assert transfer.amount == Money.new(1799, :EUR)
       assert transfer.type == :payment
       assert transfer.date == ~D[2022-06-23]
-      assert transfer.balance_params == nil
+      assert transfer.balance_params == struct!(TransferParams, transfer_params_attributes())
       assert Enum.empty?(transfer.peers)
     end
 
     test "sets balance params", %{book: book, member: member} do
       assert {:ok, transfer} =
-               money_transfer_attributes(
-                 book_id: book.id,
-                 tenant_id: member.id,
-                 balance_params: transfer_params_attributes()
+               Transfers.create_money_transfer(
+                 book,
+                 money_transfer_attributes(
+                   tenant_id: member.id,
+                   balance_params: transfer_params_attributes()
+                 )
                )
-               |> Transfers.create_money_transfer()
 
       assert transfer.balance_params ==
                struct!(TransferParams, transfer_params_attributes())
@@ -76,15 +77,16 @@ defmodule App.TransfersTest do
       other_member = book_member_fixture(book, other_user)
 
       assert {:ok, transfer} =
-               money_transfer_attributes(
-                 book_id: book.id,
-                 tenant_id: member.id,
-                 peers: [
-                   %{member_id: member.id},
-                   %{member_id: other_member.id, weight: Decimal.new(3)}
-                 ]
+               Transfers.create_money_transfer(
+                 book,
+                 money_transfer_attributes(
+                   tenant_id: member.id,
+                   peers: [
+                     %{member_id: member.id},
+                     %{member_id: other_member.id, weight: Decimal.new(3)}
+                   ]
+                 )
                )
-               |> Transfers.create_money_transfer()
 
       [peer1, peer2] = Enum.sort_by(transfer.peers, & &1.weight)
 
@@ -95,12 +97,13 @@ defmodule App.TransfersTest do
 
     test "cannot create two peers for the same user", %{book: book, member: member} do
       assert {:error, changeset} =
-               money_transfer_attributes(
-                 book_id: book.id,
-                 tenant_id: member.id,
-                 peers: [%{member_id: member.id}, %{member_id: member.id}]
+               Transfers.create_money_transfer(
+                 book,
+                 money_transfer_attributes(
+                   tenant_id: member.id,
+                   peers: [%{member_id: member.id}, %{member_id: member.id}]
+                 )
                )
-               |> Transfers.create_money_transfer()
 
       assert errors_on(changeset) == %{
                peers: [%{}, %{member_id: ["member is already a peer of this money transfer"]}]
@@ -109,24 +112,24 @@ defmodule App.TransfersTest do
 
     test "fails with invalid book_id", %{member: member} do
       assert {:error, changeset} =
-               money_transfer_attributes(book_id: 0, tenant_id: member.id)
-               |> Transfers.create_money_transfer()
+               Transfers.create_money_transfer(
+                 %Book{id: 0},
+                 money_transfer_attributes(tenant_id: member.id)
+               )
 
       assert errors_on(changeset) == %{book_id: ["does not exist"]}
     end
 
     test "fails with missing tenant_id", %{book: book} do
       assert {:error, changeset} =
-               money_transfer_attributes(book_id: book.id)
-               |> Transfers.create_money_transfer()
+               Transfers.create_money_transfer(book, money_transfer_attributes())
 
       assert errors_on(changeset) == %{tenant_id: ["can't be blank"]}
     end
 
     test "fails with invalid tenant_id", %{book: book} do
       assert {:error, changeset} =
-               money_transfer_attributes(book_id: book.id, tenant_id: 0)
-               |> Transfers.create_money_transfer()
+               Transfers.create_money_transfer(book, money_transfer_attributes(tenant_id: 0))
 
       assert errors_on(changeset) == %{tenant_id: ["does not exist"]}
     end
@@ -189,8 +192,7 @@ defmodule App.TransfersTest do
 
     test "updates existing peers", %{book: book, user: user, member: member} do
       money_transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id, weight: Decimal.new(2)}]
         )
@@ -210,8 +212,7 @@ defmodule App.TransfersTest do
 
     test "cannot update member_id of existing peer", %{book: book, user: user, member: member} do
       money_transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )
@@ -237,8 +238,7 @@ defmodule App.TransfersTest do
 
     test "deletes peers", %{book: book, user: user, member: member} do
       money_transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )
@@ -284,8 +284,7 @@ defmodule App.TransfersTest do
 
     test "deleted related peers", %{book: book, user: user, member: member} do
       money_transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )
@@ -313,7 +312,7 @@ defmodule App.TransfersTest do
     Map.put(
       context,
       :money_transfer,
-      money_transfer_fixture(book_id: book.id, tenant_id: member.id)
+      money_transfer_fixture(book, tenant_id: member.id)
     )
   end
 end

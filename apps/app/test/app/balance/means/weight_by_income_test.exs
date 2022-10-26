@@ -17,8 +17,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
       member2 = book_member_fixture(book, user2)
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(30, :EUR),
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
@@ -56,8 +55,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
       member4 = book_member_fixture(book, user4)
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(8, :EUR),
           peers: [
@@ -108,8 +106,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
       member2 = book_member_fixture(book, user2)
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(3, :EUR),
           peers: [
@@ -147,8 +144,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
       member3 = book_member_fixture(book, user3)
 
       transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(100, :EUR),
           peers: [
@@ -191,8 +187,7 @@ defmodule App.Balance.Means.WeightByIncomeTest do
       member2 = book_member_fixture(book, user2)
 
       money_transfer =
-        money_transfer_fixture(
-          book_id: book.id,
+        money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new(30, :EUR),
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]

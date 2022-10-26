@@ -27,8 +27,7 @@ defmodule App.Transfers.Peer do
 
   def create_money_transfer_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:transfer_id, :member_id, :weight])
-    |> foreign_key_constraint(:transfer_id)
+    |> cast(attrs, [:member_id, :weight])
     |> validate_member_id()
     |> validate_unique_by_transfer_and_member()
   end

@@ -8,13 +8,12 @@ defmodule App.Balance.Means.DivideEqually do
   @behaviour App.Balance.Means
 
   alias App.Transfers
-  alias App.Transfers.MoneyTransfer
 
   @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
     peers = Transfers.list_peers_of_transfer(money_transfer.id)
 
-    transfer_amount = MoneyTransfer.amount(money_transfer)
+    transfer_amount = Transfers.amount(money_transfer)
     total_weight = Enum.reduce(peers, Decimal.new(0), &Decimal.add(&2, &1.weight))
 
     # FIXME e.g. total_amount = 15, with 2 peers, relative_weight = 0.5, then peer_amount = 8 twice

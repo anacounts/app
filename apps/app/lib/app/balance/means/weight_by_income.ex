@@ -12,14 +12,14 @@ defmodule App.Balance.Means.WeightByIncome do
 
   alias App.Balance.Config.UserConfig
   alias App.Books.Members
-  alias App.Transfers.MoneyTransfer
+  alias App.Transfers
   alias App.Transfers.Peer
 
   @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
     case peers_income(money_transfer) do
       {:ok, peers_income} ->
-        transfer_amount = MoneyTransfer.amount(money_transfer)
+        transfer_amount = Transfers.amount(money_transfer)
         total_weight = total_weight(peers_income)
 
         peers_balance =

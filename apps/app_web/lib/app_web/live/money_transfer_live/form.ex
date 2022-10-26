@@ -26,7 +26,11 @@ defmodule AppWeb.MoneyTransferLive.Form do
   end
 
   defp mount_action(socket, :new, _params) do
-    peers = Enum.map(socket.assigns.book.members, &%Peer{member_id: &1.id, member: &1})
+    peers =
+      socket.assigns.book.members
+      |> Enum.with_index()
+      |> Enum.map(fn {member, index} -> %Peer{id: index, member_id: member.id, member: member} end)
+
     money_transfer = %MoneyTransfer{date: Date.utc_today(), peers: peers}
 
     assign(socket,
@@ -109,6 +113,21 @@ defmodule AppWeb.MoneyTransferLive.Form do
     end
   end
 
+  defp save_money_transfer(socket, :new, money_transfer_params) do
+    case Transfers.create_money_transfer(socket.assigns.book, money_transfer_params) do
+      {:ok, _money_transfer} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Money transfer created successfully"))
+         |> push_navigate(
+           to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book)
+         )}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
   defp save_money_transfer(socket, :edit, money_transfer_params) do
     %{book: book, current_user: user, money_transfer: money_transfer} = socket.assigns
 
@@ -125,23 +144,8 @@ defmodule AppWeb.MoneyTransferLive.Form do
     end
   end
 
-  defp save_money_transfer(socket, :new, money_transfer_params) do
-    case Transfers.create_money_transfer(money_transfer_params) do
-      {:ok, _money_transfer} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Money transfer created successfully"))
-         |> push_navigate(
-           to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book)
-         )}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
-  end
-
   defp currencies_options do
-    ["€": "EUR"]
+    [[key: "€", value: "EUR"]]
   end
 
   defp type_options do
