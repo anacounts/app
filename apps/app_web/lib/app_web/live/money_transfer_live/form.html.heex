@@ -28,8 +28,6 @@
     phx-change="validate"
     phx-submit="save"
   >
-    <%= hidden_input(f, :book_id, value: @book.id) %>
-
     <% ## Details %>
     <div class="mx-4">
       <%= label f, :label do %>
@@ -65,7 +63,7 @@
 
       <%= label f, :tenant_id do %>
         <%= gettext("Tenant") %>
-        <%= select(f, :tenant_id, tenant_id_options(@book), required: true) %>
+        <%= select(f, :tenant_id, tenant_id_options(@members), required: true) %>
         <%= error_tag(f, :tenant_id) %>
       <% end %>
 
@@ -101,7 +99,7 @@
     <.list>
       <% peers = Ecto.Changeset.get_field(@changeset, :peers) %>
 
-      <%= for {member, index} <- Enum.with_index(@book.members) do %>
+      <%= for {member, index} <- Enum.with_index(@members) do %>
         <% peer = Enum.find(peers, &(&1.member_id == member.id)) %>
 
         <.list_item class="py-2">
@@ -120,9 +118,9 @@
               value="true"
               checked={peer != nil}
             />
-            <.avatar src={Avatars.avatar_url(member.user)} />
+            <.avatar src={Avatars.avatar_url(member)} />
             <div class="grow">
-              <%= member.user.display_name %>
+              <%= member.display_name %>
             </div>
             <input
               type="number"
