@@ -8,26 +8,24 @@ defmodule AppWeb.MoneyTransferLive.Form do
 
   alias App.Auth.Avatars
   alias App.Books
+  alias App.Books.Members
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id} = params, _session, socket) do
-    book =
-      Books.get_book_of_user!(book_id, socket.assigns.current_user)
-      # TODO No preload here
-      # look for all App.Repo.preload in app_web
-      |> App.Repo.preload(members: :user)
+    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+    members = Members.list_members_of_book(book)
 
-    socket = assign(socket, :book, book)
+    socket = assign(socket, book: book, members: members)
 
     {:ok, mount_action(socket, socket.assigns.live_action, params)}
   end
 
   defp mount_action(socket, :new, _params) do
     peers =
-      socket.assigns.book.members
+      socket.assigns.members
       |> Enum.with_index()
       |> Enum.map(fn {member, index} -> %Peer{id: index, member_id: member.id, member: member} end)
 
@@ -45,6 +43,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
 
     money_transfer =
       Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
+      # TODO No preload here
       |> App.Repo.preload(:peers)
 
     assign(socket,
@@ -156,10 +155,10 @@ defmodule AppWeb.MoneyTransferLive.Form do
     ]
   end
 
-  defp tenant_id_options(book) do
-    book.members
-    |> Enum.sort_by(& &1.user.display_name)
-    |> Enum.map(&[key: &1.user.display_name || "", value: &1.id])
+  defp tenant_id_options(book_members) do
+    book_members
+    |> Enum.sort_by(& &1.display_name)
+    |> Enum.map(&[key: &1.display_name || "", value: &1.id])
   end
 
   defp balance_params_options do
