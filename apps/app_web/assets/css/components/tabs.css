@@ -1,8 +1,9 @@
 @layer components {
   .tabs {
-    @apply fixed bottom-0 left-0 bottom-0 right-0
-           flex items-center
-           bg-gray-10;
+    @apply fixed right-0 bottom-0 left-0
+           flex-none
+           flex
+           bg-theme text-white/70;
   }
 
   .tabs__item {
@@ -17,19 +18,17 @@
   }
 
   .tabs__link:hover {
-    @apply text-theme;
+    @apply text-white;
   }
 
   .tabs__link--active {
-    @apply text-theme
-           bg-theme/5
-           border-theme;
+    @apply text-white
+           bg-theme-darker;
   }
 
   @screen md {
     .tabs {
-      @apply static
-             mb-2;
+      @apply static;
     }
 
     .tabs__item {
@@ -37,7 +36,8 @@
     }
 
     .tabs__link {
-      @apply border-t-0 border-b-2;
+      @apply border-t-0
+             rounded;
     }
   }
 }

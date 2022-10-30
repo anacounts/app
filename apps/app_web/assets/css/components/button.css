@@ -51,11 +51,11 @@
   }
 
   .button--ghost:hover {
-    @apply bg-gray-20;
+    @apply bg-white/20;
   }
 
   .button--ghost:focus {
-    @apply bg-gray-30;
+    @apply bg-white/30;
   }
 
   .button--ghost:disabled {

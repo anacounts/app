@@ -10,7 +10,7 @@ module.exports = {
     colors: {
       // Theme colors
       theme: {
-        darker: "#e63700",
+        darker: "#cc3000",
         DEFAULT: "#ff3d00",
         lighter: "#ff501a",
         contrast: "#ffffff",
