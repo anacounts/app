@@ -57,9 +57,9 @@ defmodule AppWeb.LiveHelpers do
 
   attr :back_to, :string, default: nil
 
-  slot :title, required: true
-  slot :tab_item
-  slot :menu
+  slot(:title, required: true)
+  slot(:tab_item)
+  slot(:menu)
 
   def page_header(assigns) do
     ~H"""
@@ -73,10 +73,7 @@ defmodule AppWeb.LiveHelpers do
       <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>
 
       <.tabs :if={not Enum.empty?(@tab_item)}>
-        <:item
-          :for={tab_item <- @tab_item}
-          {assigns_to_attributes(tab_item)}
-        >
+        <:item :for={tab_item <- @tab_item} {assigns_to_attributes(tab_item)}>
           <%= render_slot(tab_item) %>
         </:item>
       </.tabs>
