@@ -1,5 +1,28 @@
 <.page_header back_to={Routes.book_index_path(@socket, :index)}>
-  <:title><%= @layout_heading %></:title>
+  <:title><%= @book.name %></:title>
+
+  <:tab_item
+    to={Routes.book_show_path(@socket, :show, @book)}
+    active={@socket.view == AppWeb.BookLive.Show}
+  >
+    <.icon name="format-list-bulleted" size={:md} />
+    <%= gettext("Details") %>
+  </:tab_item>
+  <:tab_item
+    to={Routes.money_transfer_index_path(@socket, :index, @book)}
+    active={@socket.view == AppWeb.MoneyTransferLive.Index}
+  >
+    <.icon name="swap-horizontal" size={:md} />
+    <%= gettext("Transfers") %>
+  </:tab_item>
+  <:tab_item
+    to={Routes.balance_show_path(@socket, :show, @book)}
+    active={@socket.view == AppWeb.BalanceLive.Show}
+  >
+    <.icon name="wallet" size={:md} />
+    <%= gettext("Balance") %>
+  </:tab_item>
+
   <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>
@@ -18,30 +41,6 @@
     </.dropdown>
   </:menu>
 </.page_header>
-
-<.tabs>
-  <:item
-    to={Routes.book_show_path(@socket, :show, @book)}
-    active={@socket.view == AppWeb.BookLive.Show}
-  >
-    <.icon name="format-list-bulleted" size={:md} />
-    <%= gettext("Details") %>
-  </:item>
-  <:item
-    to={Routes.money_transfer_index_path(@socket, :index, @book)}
-    active={@socket.view == AppWeb.MoneyTransferLive.Index}
-  >
-    <.icon name="swap-horizontal" size={:md} />
-    <%= gettext("Transfers") %>
-  </:item>
-  <:item
-    to={Routes.balance_show_path(@socket, :show, @book)}
-    active={@socket.view == AppWeb.BalanceLive.Show}
-  >
-    <.icon name="wallet" size={:md} />
-    <%= gettext("Balance") %>
-  </:item>
-</.tabs>
 
 <main class="mb-12 md:mb-0">
   <.alert

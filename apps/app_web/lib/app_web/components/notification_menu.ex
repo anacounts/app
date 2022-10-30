@@ -50,7 +50,7 @@ defmodule AppWeb.NotificationMenu do
 
         <:footer>
           <.button
-            color="feature"
+            color="cta"
             phx-click="mark_as_read"
             phx-target={@myself}
             phx-value-id={@displayed_notification.id}

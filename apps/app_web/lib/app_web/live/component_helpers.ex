@@ -540,7 +540,7 @@ defmodule AppWeb.ComponentHelpers do
   """
   def tabs(assigns) do
     ~H"""
-    <menu class="tabs" role="navigation">
+    <menu class={["tabs", assigns[:class]]} role="navigation">
       <li :for={item <- @item} class="tabs__item">
         <.link
           navigate={item.to}

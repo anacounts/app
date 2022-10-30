@@ -19,15 +19,7 @@ defmodule AppWeb.LiveHelpers do
   @doc """
   Generates the base header.
 
-  ## Options
-
-  - :back_to - The path to link to for the back button.
-    Defaults to nil and does not display the back button.
-
-  ## Slots
-
-  - :menu - The menu to use
-  - default - The content in place of the title
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
@@ -39,6 +31,15 @@ defmodule AppWeb.LiveHelpers do
             <:toggle>
               <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
             </:toggle>
+
+            <:tab_item to="/tab_one">
+              <.icon name="account" size={:md} />
+              Go to tab one
+            </:tab_item>
+            <:tab_item to="/tab_two">
+              <.icon name="plus" size={:md} />
+              Go to tab two
+            </:tab_item>
 
             <.list_item_link navigate="/users/settings">
               <.icon name="cog" />
@@ -53,18 +54,31 @@ defmodule AppWeb.LiveHelpers do
       </.page_header>
 
   """
+
+  attr :back_to, :string, default: nil
+
+  slot(:title, required: true)
+  slot(:tab_item)
+  slot(:menu)
+
   def page_header(assigns) do
     ~H"""
     <header class="flex items-center gap-2
                    h-14 mb-2 px-4
-                   bg-gray-10 shadow">
-      <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--ghost">
+                   bg-theme text-white shadow">
+      <.link :if={@back_to} navigate={@back_to} class="button button--ghost">
         <.icon name="arrow-left" alt={gettext("Go back")} />
       </.link>
+
       <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>
-      <%= if assigns[:menu] do %>
-        <%= render_slot(@menu) %>
-      <% end %>
+
+      <.tabs :if={not Enum.empty?(@tab_item)}>
+        <:item :for={tab_item <- @tab_item} {assigns_to_attributes(tab_item)}>
+          <%= render_slot(tab_item) %>
+        </:item>
+      </.tabs>
+
+      <%= render_slot(@menu) %>
     </header>
     """
   end
