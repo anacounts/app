@@ -1,0 +1,43 @@
+@layer components {
+  .tabs {
+    @apply fixed bottom-0 left-0 bottom-0 right-0
+           flex items-center
+           bg-gray-10;
+  }
+
+  .tabs__item {
+    @apply grow;
+  }
+
+  .tabs__link {
+    @apply block
+           pt-3 px-4 pb-2
+           border-t-2 border-transparent
+           transition-colors;
+  }
+
+  .tabs__link:hover {
+    @apply text-theme;
+  }
+
+  .tabs__link--active {
+    @apply text-theme
+           bg-theme/5
+           border-theme;
+  }
+
+  @screen md {
+    .tabs {
+      @apply static
+             mb-2;
+    }
+
+    .tabs__item {
+      @apply grow-0;
+    }
+
+    .tabs__link {
+      @apply border-t-0 border-b-2;
+    }
+  }
+}

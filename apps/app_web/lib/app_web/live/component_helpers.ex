@@ -526,39 +526,36 @@ defmodule AppWeb.ComponentHelpers do
 
   ## Examples
 
-      <.toggle_nav>
-        <:item
-          icon="book"
-          label="Books"
-          to="/book"
-          active
-        />
-        <:item
-          icon="cog"
-          label="Settings"
-          to="/users/settings"
-        />
-      </.toggle_nav>
+      <.tabs>
+        <:item to="/book" active>
+          <.icon name="book" size={:md} />
+          Books
+        </:item>
+        <:item to="/users/settings">
+          <.icon name="cog" size={:md} />
+          Settings
+        </:item>
+      </.tabs>
 
   """
-  def toggle_nav(assigns) do
+  def tabs(assigns) do
     ~H"""
-    <nav class="toggle-nav">
-      <menu class="toggle-nav__menu">
-        <li
-          :for={item <- @item}
-          class={["toggle-nav__item", toggle_nav_item_active_class(item.active)]}
+    <menu class="tabs" role="navigation">
+      <li :for={item <- @item} class="tabs__item">
+        <.link
+          navigate={item.to}
+          replace
+          class={["tabs__link", tabs_link_active_class(item.active)]}
+          aria-current={if item.active, do: "page"}
         >
-          <.link navigate={item.to} replace class="toggle-nav__link">
-            <.icon name={item.icon} size={:lg} class="toggle-nav__item-icon" />
-            <span><%= item.label %></span>
-          </.link>
-        </li>
-      </menu>
-    </nav>
+          <%= render_slot(item) %>
+        </.link>
+      </li>
+    </menu>
     """
   end
 
-  defp toggle_nav_item_active_class(true), do: "toggle-nav__item--active"
-  defp toggle_nav_item_active_class(false), do: nil
+  defp tabs_link_active_class(active?) do
+    if active?, do: "tabs__link--active"
+  end
 end
