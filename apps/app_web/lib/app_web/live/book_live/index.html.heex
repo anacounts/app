@@ -50,7 +50,7 @@
 
   <.tile
     :if={Enum.empty?(@books)}
-    class="flex items-center gap-4 text-xl"
+    class="text-xl"
     navigate={Routes.book_form_path(@socket, :new)}
   >
     <.icon name="plus" />
@@ -58,7 +58,6 @@
   </.tile>
   <.tile
     :for={book <- @books}
-    class="flex items-center gap-4"
     data-book-id={book.id}
     navigate={Routes.money_transfer_index_path(@socket, :index, book)}
     size={:sm}
