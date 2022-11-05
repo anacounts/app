@@ -92,7 +92,7 @@
     <hr class="my-4" />
 
     <% ## Peer list %>
-    <.heading level="section" class="flex justify-between">
+    <.heading level={:section} class="flex justify-between">
       <% # TODO Add "select all" checkbox %> Members <span>Weight</span>
     </.heading>
 
@@ -137,7 +137,7 @@
     </.list>
 
     <div class="mx-4 mb-4">
-      <.button color="cta" phx-disable-with={gettext("Saving...")}>
+      <.button color={:cta} phx-disable-with={gettext("Saving...")}>
         <%= gettext("Save") %>
       </.button>
     </div>

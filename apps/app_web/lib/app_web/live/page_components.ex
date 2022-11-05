@@ -1,9 +1,9 @@
-defmodule AppWeb.LiveHelpers do
+defmodule AppWeb.PageComponents do
   @moduledoc """
   A module defining complex components for live views.
 
   The components defined here are based on the components defined in
-  `AppWeb.ComponentHelpers`. They are more complex and usually only fit
+  `AppWeb.CoreComponents`. They are more complex and usually only fit
   in more specific contexts.
   """
 
@@ -12,7 +12,7 @@ defmodule AppWeb.LiveHelpers do
   import Phoenix.HTML, only: [raw: 1]
 
   import AppWeb.Gettext
-  import AppWeb.ComponentHelpers
+  import AppWeb.CoreComponents
 
   ## Page header
 
@@ -32,11 +32,11 @@ defmodule AppWeb.LiveHelpers do
               <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
             </:toggle>
 
-            <:tab_item to="/tab_one">
+            <:tab_item navigate="/tab_one">
               <.icon name="account" size={:md} />
               Go to tab one
             </:tab_item>
-            <:tab_item to="/tab_two">
+            <:tab_item navigate="/tab_two">
               <.icon name="add" size={:md} />
               Go to tab two
             </:tab_item>
@@ -70,7 +70,7 @@ defmodule AppWeb.LiveHelpers do
         <.icon name="arrow-back" alt={gettext("Go back")} />
       </.link>
 
-      <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>
+      <.heading level={:title} class="mr-auto"><%= render_slot(@title) %></.heading>
 
       <.tabs :if={not Enum.empty?(@tab_item)}>
         <:item :for={tab_item <- @tab_item} {assigns_to_attributes(tab_item)}>

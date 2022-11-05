@@ -90,8 +90,6 @@ defmodule AppWeb do
       use Phoenix.HTML
 
       # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
-      import AppWeb.ComponentHelpers
-      import AppWeb.LiveHelpers
       import Phoenix.Component
 
       # Import basic rendering functionality (render, render_layout, etc)
@@ -100,8 +98,14 @@ defmodule AppWeb do
       # Alias LiveView javascript functions
       alias Phoenix.LiveView.JS
 
+      # Import shared components
+      import AppWeb.CoreComponents
+      import AppWeb.PageComponents
+
+      # Import shared functions
       import AppWeb.DateFormatHelpers
       import AppWeb.ErrorHelpers
+
       import AppWeb.Gettext
       alias AppWeb.Router.Helpers, as: Routes
     end

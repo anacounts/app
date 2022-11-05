@@ -40,7 +40,7 @@
     <%= message %>
   </.alert>
 
-  <.heading level="section">
+  <.heading level={:section}>
     <%= ngettext(
       "%{count} book in your list",
       "%{count} books in your list",
@@ -70,7 +70,7 @@
 
   <.fab_container>
     <:item>
-      <.fab to={Routes.book_form_path(@socket, :new)}>
+      <.fab navigate={Routes.book_form_path(@socket, :new)}>
         <.icon name="add" alt={gettext("Create a new book")} />
       </.fab>
     </:item>
