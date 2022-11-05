@@ -1,4 +1,4 @@
-defmodule AppWeb.ComponentHelpers do
+defmodule AppWeb.CoreComponents do
   @moduledoc """
   A module defining components for live views.
 

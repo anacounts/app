@@ -1,9 +1,9 @@
-defmodule AppWeb.LiveHelpers do
+defmodule AppWeb.PageComponents do
   @moduledoc """
   A module defining complex components for live views.
 
   The components defined here are based on the components defined in
-  `AppWeb.ComponentHelpers`. They are more complex and usually only fit
+  `AppWeb.CoreComponents`. They are more complex and usually only fit
   in more specific contexts.
   """
 
@@ -12,7 +12,7 @@ defmodule AppWeb.LiveHelpers do
   import Phoenix.HTML, only: [raw: 1]
 
   import AppWeb.Gettext
-  import AppWeb.ComponentHelpers
+  import AppWeb.CoreComponents
 
   ## Page header
 
