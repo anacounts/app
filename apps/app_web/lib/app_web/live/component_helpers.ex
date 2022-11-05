@@ -520,7 +520,7 @@ defmodule AppWeb.ComponentHelpers do
     values: [:sm, :md],
     doc: "The size of the tile. Defaults to `:md`"
 
-  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the tile"
 
   attr :rest, :global
 
