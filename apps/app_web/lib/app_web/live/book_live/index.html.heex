@@ -48,15 +48,11 @@
     ) %>
   </.heading>
 
-  <.tile_link
-    :if={Enum.empty?(@books)}
-    class="text-xl"
-    navigate={Routes.book_form_path(@socket, :new)}
-  >
+  <.tile :if={Enum.empty?(@books)} class="text-xl" navigate={Routes.book_form_path(@socket, :new)}>
     <.icon name="plus" />
     <%= gettext("Create your first book") %>
-  </.tile_link>
-  <.tile_link
+  </.tile>
+  <.tile
     :for={book <- @books}
     data-book-id={book.id}
     navigate={Routes.money_transfer_index_path(@socket, :index, book)}
@@ -70,7 +66,7 @@
         <.icon name="arrow-right" class="ml-1 align-bottom" />
       </span>
     </div>
-  </.tile_link>
+  </.tile>
 
   <.fab_container>
     <:item>

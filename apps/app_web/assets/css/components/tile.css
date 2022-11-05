@@ -1,20 +1,29 @@
 @layer components {
   .tile {
-    @apply flex items-center gap-4
+    @apply block
+           m-2
            rounded-lg
            bg-background-2
            shadow;
   }
 
-  .tile--sm {
-    @apply mx-2 my-2
-           px-3 py-2;
+  /* ## Sizing */
+
+  /* .tile--sm {} */
+
+  .tile--sm .tile__summary,
+  .tile--sm .tile__description {
+    @apply px-3 py-2;
   }
 
-  .tile--md {
-    @apply mx-2 my-4
-           p-4;
+  /* .tile--md {} */
+
+  .tile--md .tile__summary,
+  .tile--md .tile__description {
+    @apply p-4;
   }
+
+  /* ## Clickable */
 
   .tile--clickable {
     @apply transition-colors cursor-pointer;
@@ -22,5 +31,48 @@
 
   .tile--clickable:hover {
     @apply bg-gray-20;
+  }
+
+  /* # Summary */
+
+  .tile__summary {
+    @apply flex items-center gap-4;
+  }
+
+  summary.tile__summary {
+    @apply cursor-pointer;
+  }
+
+  [open] .tile__summary {
+    @apply shadow-sm;
+  }
+
+  /* # Icon */
+
+  .tile__collapse-icon {
+    @apply transition-transform;
+  }
+
+  [open] .tile__collapse-icon {
+    @apply rotate-180;
+  }
+
+  /* # Body */
+
+  /* .tile__description {} */
+
+  /* # Footer */
+
+  .tile__footer {
+    @apply flex
+           border-t border-gray-30;
+  }
+
+  .tile__button {
+    @apply flex items-center justify-center
+           w-full
+           px-4 py-3
+           text-action
+           border-x border-gray-30;
   }
 }

@@ -40,6 +40,10 @@ msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\"
 msgstr "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete the transfer?"
+msgstr "Are you sure you want to delete the transfer?"
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Balance"
 
@@ -50,10 +54,6 @@ msgstr "Balance Settings"
 #, elixir-autogen, elixir-format
 msgid "Balance settings updated"
 msgstr "Balance settings updated"
-
-#, elixir-autogen, elixir-format
-msgid "Balancing"
-msgstr "Balancing"
 
 #, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
@@ -288,6 +288,10 @@ msgid "Open details"
 msgstr "Open details"
 
 #, elixir-autogen, elixir-format
+msgid "Paid by %{name}"
+msgstr "Paid by %{name}"
+
+#, elixir-autogen, elixir-format
 msgid "Password"
 msgstr "Password"
 
@@ -304,8 +308,16 @@ msgid "Profile"
 msgstr "Profile"
 
 #, elixir-autogen, elixir-format
+msgid "Received by %{name}"
+msgstr "Received by %{name}"
+
+#, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Register"
+
+#, elixir-autogen, elixir-format
+msgid "Reimbursed to %{name}"
+msgstr "Reimbursed to %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement"
@@ -351,7 +363,7 @@ msgstr "Tenant"
 msgid "The transactions are balanced already!"
 msgstr "The transactions are balanced already!"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 

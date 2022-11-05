@@ -16,6 +16,25 @@ defmodule AppWeb.ComponentHelpers do
   alias AppWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
 
+  # The <.link_or_button> component is used to conditionally render a link or a button
+  # depending on the presence of the `navigate` attribute.
+
+  defp link_or_button(%{navigate: _} = assigns) do
+    ~H"""
+    <.link {assigns_to_attributes(assigns)}>
+      <%= render_slot(@inner_block) %>
+    </.link>
+    """
+  end
+
+  defp link_or_button(assigns) do
+    ~H"""
+    <button {assigns_to_attributes(assigns)}>
+      <%= render_slot(@inner_block) %>
+    </button>
+    """
+  end
+
   ## Accordion
 
   @doc """
@@ -443,73 +462,117 @@ defmodule AppWeb.ComponentHelpers do
   ## Tile
 
   @doc """
-  Generates a tile element.
+  A card is a flexible and extensible content container.
+
+  ## When to use
+
+  Cards can be used as navigation links, so that when the user clicks on them, they are
+  taken to a new page. To enable this behavior, the `<.tile>` must receive a `navigate`
+  attribute with the URL to navigate to.
+
+  They can also be collapsible, so that when the user clicks on them, they are expanded
+  to show more content. To enable this behavior, the `<.tile>` must receive a `collapse`
+  attribute.
+
+  These two behaviors are mutually exclusive. Links do not support the `header` and
+  `button` slots.
 
   [INSERT LVATTRDOCS]
 
-  ## Example
+  ## Examples
 
-        <.tile size={:sm} clickable>
-          The title content
-        </.tile>
+      <.tile navigate="/book/1">
+        My book name
+      </.tile>
+
+      <.tile collapse>
+        <:header>
+          Some content summarized
+        </:header>
+
+        The description of the content
+
+        <:button>
+          Edit
+        </:button>
+        <:button class="text-error">
+          Delete
+        </:button>
+      </.tile>
 
   """
 
-  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
+  attr :collapse, :boolean,
+    default: false,
+    doc: """
+    Whether to collapse the tile.
+    Incompatible with `:navigate` and `:clickable`
+    """
+
+  attr :navigate, :string,
+    doc: """
+    The URL to navigate to when clicking the tile.
+    Incompatible with `:collapse`.
+    """
 
   attr :size, :atom,
     default: :md,
     values: [:sm, :md],
     doc: "The size of the tile. Defaults to `:md`"
 
-  attr :clickable, :boolean, default: false, doc: "Whether the tile is clickable or not"
+  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
+
   attr :rest, :global
 
   slot(:inner_block)
 
-  def tile(assigns) do
+  slot(:description, doc: "When using collapsible tiles, the extended content of the tile")
+
+  slot :button, doc: "The button appearing in the footer of the tile" do
+    # XXX should be removed, circumvent a weird behaviour in LiveView
+    # https://github.com/phoenixframework/phoenix_live_view/issues/2265
+    attr :navigate, :string
+    attr :class, :string
+    attr :"data-confirm", :string
+    attr :"phx-click", :string
+    attr :"phx-value-id", :string
+  end
+
+  def tile(%{collapse: true} = assigns) do
     ~H"""
-    <div class={["tile", tile_size_class(@size), tile_clickable_class(@clickable), @class]} {@rest}>
-      <%= render_slot(@inner_block) %>
-    </div>
+    <details class={["tile", tile_size_class(@size)]} {@rest}>
+      <summary class={["tile__summary", @class]}>
+        <%= render_slot(@inner_block) %>
+        <.icon class="tile__collapse-icon" name="chevron-down" />
+      </summary>
+      <div class="tile__description">
+        <%= render_slot(@description) %>
+      </div>
+      <div :if={not Enum.empty?(@button)} class="tile__footer">
+        <.link_or_button
+          :for={button <- @button}
+          class={["tile__button", button[:class]]}
+          {assigns_to_attributes(button, [:class])}
+        >
+          <%= render_slot(button) %>
+        </.link_or_button>
+      </div>
+    </details>
     """
   end
 
-  @doc """
-  Same as `tile/1` but generates a link as wrapper.
-  """
-
-  attr :class, :string, default: nil, doc: "Extra classes to add to the tile"
-
-  attr :size, :atom,
-    default: :md,
-    values: [:sm, :md],
-    doc: "The size of the tile. Defaults to `:md`"
-
-  # TODO Should actually be part of `:rest`
-  attr :navigate, :string, default: nil, doc: "The URL to navigate to when the tile is clicked"
-
-  attr :rest, :global
-
-  slot(:inner_block)
-
-  def tile_link(assigns) do
+  def tile(%{navigate: _} = assigns) do
     ~H"""
-    <.link
-      class={["tile", tile_size_class(@size), tile_clickable_class(true), @class]}
-      navigate={@navigate}
-      {@rest}
-    >
-      <%= render_slot(@inner_block) %>
+    <.link class={["tile tile--clickable", tile_size_class(@size)]} navigate={@navigate} {@rest}>
+      <div class={["tile__summary", @class]}>
+        <%= render_slot(@inner_block) %>
+      </div>
     </.link>
     """
   end
 
   defp tile_size_class(:sm), do: "tile--sm"
   defp tile_size_class(:md), do: "tile--md"
-
-  defp tile_clickable_class(true), do: "tile--clickable"
-  defp tile_clickable_class(false), do: nil
 
   ## Toggle navigation
 

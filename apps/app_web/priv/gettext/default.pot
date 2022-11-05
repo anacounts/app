@@ -39,6 +39,10 @@ msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete the transfer?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr ""
 
@@ -48,10 +52,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Balance settings updated"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Balancing"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -287,6 +287,10 @@ msgid "Open details"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Paid by %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Password"
 msgstr ""
 
@@ -303,7 +307,15 @@ msgid "Profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Received by %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Register"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reimbursed to %{name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
