@@ -141,7 +141,7 @@ defmodule AppWeb.CoreComponents do
   """
 
   attr :src, :string, required: true, doc: "The source of the image"
-  attr :alt, :string, default: nil, doc: "The alt text for the image"
+  attr :alt, :string, required: true, doc: "The alt text for the image"
   attr :size, :atom, default: nil, values: [nil, :lg], doc: "The size of the avatar"
 
   def avatar(assigns) do

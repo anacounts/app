@@ -58,7 +58,7 @@
     navigate={Routes.money_transfer_index_path(@socket, :index, book)}
     size={:sm}
   >
-    <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} />
+    <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} alt="" />
     <div>
       <div class="text-lg line-clamp-2"><%= book.name %></div>
       <span class="font-bold">
