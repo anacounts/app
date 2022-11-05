@@ -234,13 +234,14 @@ defmodule AppWeb.CoreComponents do
 
   def dropdown(assigns) do
     ~H"""
-    <div
-      class={["dropdown", assigns[:class]]}
+    <div class={["dropdown", assigns[:class]]} id={@id} phx-click-away={close_dropdown(@id)}>
+      <.button
+        color={:ghost}
+        id={"#{@id}-toggle"}
+        phx-click={toggle_dropdown(@id)}
       aria-expanded="false"
-      id={@id}
-      phx-click-away={close_dropdown(@id)}
+        aria-controls={"#{@id}-toggle"}
     >
-      <.button color={:ghost} id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
         <%= render_slot(@toggle) %>
       </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
@@ -251,12 +252,12 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp close_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "false"}, to: id)
+    JS.set_attribute({"aria-expanded", "false"}, to: "#{id}-toggle")
     |> JS.hide(to: "##{id}-popover")
   end
 
   defp toggle_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "true"}, to: id)
+    JS.set_attribute({"aria-expanded", "true"}, to: "#{id}-toggle")
     |> JS.toggle(to: "##{id}-popover")
   end
 
