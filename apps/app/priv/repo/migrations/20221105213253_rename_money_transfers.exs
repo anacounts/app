@@ -8,8 +8,17 @@ defmodule App.Repo.Migrations.RenameMoneyTransfers do
     rename_index("transfers_money_transfers_book_id_index", "money_transfers_book_id_index")
     rename_index("transfers_money_transfers_tenant_id_index", "money_transfers_tenant_id_index")
 
-    rename_constraint("money_transfers", "transfers_money_transfers_book_id_fkey", "money_transfers_book_id_fkey")
-    rename_constraint("money_transfers", "transfers_money_transfers_tenant_id_fkey", "money_transfers_tenant_id_fkey")
+    rename_constraint(
+      "money_transfers",
+      "transfers_money_transfers_book_id_fkey",
+      "money_transfers_book_id_fkey"
+    )
+
+    rename_constraint(
+      "money_transfers",
+      "transfers_money_transfers_tenant_id_fkey",
+      "money_transfers_tenant_id_fkey"
+    )
   end
 
   defp rename_index(from, to) do

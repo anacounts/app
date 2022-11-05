@@ -7,7 +7,11 @@ defmodule App.Repo.Migrations.RenameUserBalanceConfigs do
     rename_index("user_balance_config_pkey", "user_balance_configs_pkey")
     rename_index("user_balance_config_user_id_index", "user_balance_configs_user_id_index")
 
-    rename_constraint("user_balance_configs", "user_balance_config_user_id_fkey", "user_balance_configs_user_id_fkey")
+    rename_constraint(
+      "user_balance_configs",
+      "user_balance_config_user_id_fkey",
+      "user_balance_configs_user_id_fkey"
+    )
   end
 
   defp rename_index(from, to) do
