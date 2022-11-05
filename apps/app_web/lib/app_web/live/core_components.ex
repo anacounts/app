@@ -177,11 +177,15 @@ defmodule AppWeb.CoreComponents do
 
   """
 
-  attr :color, :atom, required: true, values: [:cta, :feature, :ghost], doc: "The color of the button"
+  attr :color, :atom,
+    required: true,
+    values: [:cta, :feature, :ghost],
+    doc: "The color of the button"
+
   attr :class, :any, default: nil, doc: "Extra classes to add to the button"
   attr :rest, :global
 
-  slot :inner_block
+  slot(:inner_block)
 
   def button(assigns) do
     ~H"""
@@ -225,8 +229,8 @@ defmodule AppWeb.CoreComponents do
   attr :id, :string, required: true, doc: "The id of the dropdown"
   attr :class, :any, default: nil, doc: "Extra classes to add to the dropdown"
 
-  slot :toggle, required: true, doc: "The content of the toggle button"
-  slot :inner_block
+  slot(:toggle, required: true, doc: "The content of the toggle button")
+  slot(:inner_block)
 
   def dropdown(assigns) do
     ~H"""
@@ -279,7 +283,7 @@ defmodule AppWeb.CoreComponents do
   attr :class, :any, default: nil, doc: "Extra classes to add to the container"
   attr :rest, :global
 
-  slot :item, required: true, doc: "The items of the floating action button container"
+  slot(:item, required: true, doc: "The items of the floating action button container")
 
   def fab_container(assigns) do
     ~H"""
@@ -306,7 +310,7 @@ defmodule AppWeb.CoreComponents do
 
   attr :rest, :global, include: @link_attrs
 
-  slot :inner_block, required: true
+  slot(:inner_block, required: true)
 
   def fab(assigns) do
     ~H"""
@@ -337,7 +341,7 @@ defmodule AppWeb.CoreComponents do
   attr :class, :any, default: nil, doc: "Extra classes to add to the heading"
   attr :rest, :global
 
-  slot :inner_block, required: true
+  slot(:inner_block, required: true)
 
   def heading(assigns) do
     ~H"""
@@ -481,16 +485,13 @@ defmodule AppWeb.CoreComponents do
   attr :dismiss, :boolean, default: true, doc: "Whether the modal contain a dismiss button"
   attr :open, :boolean, default: false, doc: "Whether the modal is open by default or not"
 
-  slot :header
-  slot :inner_block
-  slot :footer
+  slot(:header)
+  slot(:inner_block)
+  slot(:footer)
 
   def modal(assigns) do
     ~H"""
-    <.focus_wrap
-      id={@id}
-      class={["modal", modal_size_class(@size), modal_open_class(@open)]}
-    >
+    <.focus_wrap id={@id} class={["modal", modal_size_class(@size), modal_open_class(@open)]}>
       <section class="modal__dialog" role="dialog">
         <header :if={@header || @dismiss} class="modal__header">
           <%= render_slot(@header) %>
