@@ -36,7 +36,4 @@ defmodule AppWeb.BookLive.Show do
      |> put_flash(:info, gettext("Book deleted successfully"))
      |> push_navigate(to: Routes.book_index_path(socket, :index))}
   end
-
-  defp format_code(:divide_equally), do: gettext("Divide equally")
-  defp format_code(:weight_by_income), do: gettext("Weight by income")
 end

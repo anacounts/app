@@ -1,25 +1,12 @@
-<.list>
-  <.list_item>
-    <.icon name="wallet" />
-    <div>
-      <span class="font-bold"><%= gettext("Balancing") %></span>
-      <br />
-      <span>
-        <%= format_code(@book.default_balance_params.means_code) %>
-      </span>
-    </div>
-  </.list_item>
-</.list>
-
 <.heading level="section">
   <%= ngettext("%{count} member", "%{count} members", Enum.count(@members)) %>
 </.heading>
 
-<.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
-  <.icon name="account-plus" />
-  <%= gettext("Invite member") %>
-</.list_item_link>
 <.list>
+  <.list_item_link navigate={Routes.invitation_index_path(@socket, :index, @book)}>
+    <.icon name="account-plus" />
+    <%= gettext("Invite member") %>
+  </.list_item_link>
   <.list_item :for={member <- @members}>
     <.avatar src={Avatars.avatar_url(member)} />
     <div>
