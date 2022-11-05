@@ -17,7 +17,7 @@ module.exports = {
       },
       // Action colors
       action: {
-        DEFAULT: "#0000ee",
+        DEFAULT: "#485fc7",
       },
       // Gray colors
       white: "#ffffff",

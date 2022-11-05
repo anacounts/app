@@ -1,27 +1,42 @@
-<.list hoverable>
-  <%= for transfer <- @money_transfers do %>
-    <% {icon_name, class_name} = icon_and_class_for_transfer_type(transfer.type) %>
-    <.list_item_link navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
-      <.icon name={icon_name} class={class_name} />
-      <div class="grow">
-        <span class={["font-bold", class_name]}>
-          <%= transfer.label %>
-        </span>
-        <br />
-        <span>
-          <%= transfer.tenant.display_name %>
-        </span>
+<div class="max-w-lg mx-auto">
+  <.tile
+    :for={transfer <- @money_transfers}
+    class={class_for_transfer_type(transfer.type)}
+    collapse
+  >
+    <.icon name={icon_for_transfer_type(transfer.type)} />
+    <span class="grow"><%= transfer.label %></span>
+    <%= Money.to_string(transfer.amount) %>
+
+    <:description>
+      <div class="flex justify-between mb-3">
+        <div class="font-bold">
+          <%= tenant_label_for_transfer_type(transfer.type, transfer.tenant.display_name) %>
+        </div>
+        <div>
+          <time datetime={to_string(transfer.date)}><%= format_date(transfer.date) %></time>
+          <.icon name="calendar" />
+        </div>
       </div>
       <div class="text-right">
-        <span class={["font-bold", class_name]}>
-          <%= Money.to_string(transfer.amount) %>
-        </span>
-        <br />
-        <%= format_date(transfer.date) %>
+        <%= format_code(transfer.balance_params.means_code) %>
+        <.icon name="swap-horizontal" />
       </div>
-    </.list_item_link>
-  <% end %>
-</.list>
+    </:description>
+
+    <:button navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
+      <%= gettext("Edit") %>
+    </:button>
+    <:button
+      class="text-error"
+      data-confirm={gettext("Are you sure you want to delete the transfer?")}
+      phx-click="delete"
+      phx-value-id={transfer.id}
+    >
+      <%= gettext("Delete") %>
+    </:button>
+  </.tile>
+</div>
 
 <.fab_container class="mb-12 md:mb-0">
   <:item>
