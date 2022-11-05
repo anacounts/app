@@ -15,7 +15,7 @@
       </:toggle>
 
       <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
-        <.icon name="cog" />
+        <.icon name="settings" />
         <%= gettext("Settings") %>
       </.list_item_link>
       <.list_item_link
@@ -23,7 +23,7 @@
         href={Routes.user_session_path(@socket, :delete)}
         method="delete"
       >
-        <.icon name="account-arrow-right" />
+        <.icon name="logout" />
         <%= gettext("Disconnect") %>
       </.list_item_link>
     </.dropdown>
@@ -49,7 +49,7 @@
   </.heading>
 
   <.tile :if={Enum.empty?(@books)} class="text-xl" navigate={Routes.book_form_path(@socket, :new)}>
-    <.icon name="plus" />
+    <.icon name="add" />
     <%= gettext("Create your first book") %>
   </.tile>
   <.tile
@@ -63,7 +63,7 @@
       <div class="text-lg line-clamp-2"><%= book.name %></div>
       <span class="font-bold">
         <%= gettext("Open details") %>
-        <.icon name="arrow-right" class="ml-1 align-bottom" />
+        <.icon name="arrow-forward" class="ml-1 align-bottom" />
       </span>
     </div>
   </.tile>
@@ -71,7 +71,7 @@
   <.fab_container>
     <:item>
       <.fab to={Routes.book_form_path(@socket, :new)}>
-        <.icon name="plus" alt={gettext("Create a new book")} />
+        <.icon name="add" alt={gettext("Create a new book")} />
       </.fab>
     </:item>
   </.fab_container>

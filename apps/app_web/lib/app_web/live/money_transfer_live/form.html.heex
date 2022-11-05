@@ -7,7 +7,7 @@
   <:menu :if={@live_action == :edit}>
     <.dropdown id="contextual-menu">
       <:toggle>
-        <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+        <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
       </:toggle>
 
       <%= if @live_action == :edit do %>
