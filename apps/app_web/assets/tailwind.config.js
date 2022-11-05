@@ -39,8 +39,7 @@ module.exports = {
       },
       // Status colors
       info: "#0b61ec",
-      success: "#4caf50",
-      error: "#f1353a",
+      error: "#cd0000",
       // Helper colors
       transparent: "transparent",
       current: "currentColor",

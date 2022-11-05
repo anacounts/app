@@ -32,7 +32,7 @@ defmodule AppWeb.BalanceLive.Show do
     cond do
       Money.zero?(amount) -> {"check", ""}
       Money.negative?(amount) -> {"remove", "text-error"}
-      true -> {"add", "text-success"}
+      true -> {"add", "text-info"}
     end
   end
 end
