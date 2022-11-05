@@ -1,7 +1,7 @@
 <div class="max-w-lg mx-auto">
   <.tile
     :for={transfer <- @money_transfers}
-    class={class_for_transfer_type(transfer.type)}
+    class={["font-bold", class_for_transfer_type(transfer.type)]}
     collapse
   >
     <.icon name={icon_for_transfer_type(transfer.type)} />
