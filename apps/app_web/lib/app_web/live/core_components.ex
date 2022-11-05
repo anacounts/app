@@ -357,7 +357,7 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp heading_level_tag(:title), do: "h1"
-  defp heading_level_tag(:section), do: "h3"
+  defp heading_level_tag(:section), do: "h2"
 
   defp heading_level_class(:title), do: "heading--title"
   defp heading_level_class(:section), do: "heading--section"
