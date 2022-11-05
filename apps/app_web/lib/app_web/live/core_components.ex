@@ -239,9 +239,9 @@ defmodule AppWeb.CoreComponents do
         color={:ghost}
         id={"#{@id}-toggle"}
         phx-click={toggle_dropdown(@id)}
-      aria-expanded="false"
+        aria-expanded="false"
         aria-controls={"#{@id}-toggle"}
-    >
+      >
         <%= render_slot(@toggle) %>
       </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
@@ -389,7 +389,7 @@ defmodule AppWeb.CoreComponents do
       class={["icon", icon_size_class(assigns[:size]), assigns[:class]]}
       fill="currentColor"
       role="img"
-      aria-hidden={is_nil(@alt)}
+      aria-hidden={"#{is_nil(@alt)}"}
       {@extra}
     >
       <title :if={@alt}><%= @alt %></title>
