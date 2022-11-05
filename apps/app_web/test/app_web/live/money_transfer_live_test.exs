@@ -48,6 +48,44 @@ defmodule AppWeb.MoneyTransferLiveTest do
       assert html =~ money_transfer.label
       refute html =~ other_money_transfer.label
     end
+
+    test "allows to go to edit form", %{conn: conn, book: book, member: member} do
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+
+      {:ok, index_live, html} = live(conn, Routes.money_transfer_index_path(conn, :index, book))
+
+      assert html =~ "Transfers"
+      assert html =~ money_transfer.label
+
+      {:ok, _edit_live, html} =
+        index_live
+        |> element(".tile__button", "Edit")
+        |> render_click()
+        |> follow_redirect(
+          conn,
+          Routes.money_transfer_form_path(conn, :edit, book, money_transfer)
+        )
+
+      assert html =~ "Edit"
+      assert html =~ "<form"
+      assert html =~ money_transfer.label
+    end
+
+    test "allows to delete a transfer", %{conn: conn, book: book, member: member} do
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+
+      {:ok, index_live, html} = live(conn, Routes.money_transfer_index_path(conn, :index, book))
+
+      assert html =~ "Transfers"
+      assert html =~ money_transfer.label
+
+      html =
+        index_live
+        |> element(".tile__button", "Delete")
+        |> render_click()
+
+      refute html =~ money_transfer.label
+    end
   end
 
   describe "Form" do
