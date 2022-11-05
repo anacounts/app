@@ -114,7 +114,7 @@ defmodule AppWeb.CoreComponents do
 
   def alert(assigns) do
     ~H"""
-    <div class={["alert", alert_type_class(@type), assigns[:class]]} role="alert" {@rest}>
+    <div class={["alert", alert_type_class(@type), @class]} role="alert" {@rest}>
       <.icon name={alert_type_icon(@type)} />
       <%= render_slot(@inner_block) %>
     </div>
@@ -234,7 +234,7 @@ defmodule AppWeb.CoreComponents do
 
   def dropdown(assigns) do
     ~H"""
-    <div class={["dropdown", assigns[:class]]} id={@id} phx-click-away={close_dropdown(@id)}>
+    <div class={["dropdown", @class]} id={@id} phx-click-away={close_dropdown(@id)}>
       <.button
         color={:ghost}
         id={"#{@id}-toggle"}
@@ -367,30 +367,28 @@ defmodule AppWeb.CoreComponents do
   @doc """
   Generates an icon.
 
-  ## Attributes
-
-  - name (required): The name of the icon
-  - alt: The alt text of the icon
-  - size: The size of the icon. Defaults to "base"
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
       <.icon name="home" />
 
   """
-  def icon(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:name, :alt, :class]))
-      |> assign_new(:alt, fn -> nil end)
 
+  attr :name, :string, required: true, doc: "The name of the icon"
+  attr :alt, :string, default: nil, doc: "The alt text of the icon"
+  attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
+  attr :rest, :global
+
+  def icon(assigns) do
     ~H"""
     <svg
-      class={["icon", icon_size_class(assigns[:size]), assigns[:class]]}
+      class={["icon", icon_size_class(@size), @class]}
       fill="currentColor"
       role="img"
       aria-hidden={"#{is_nil(@alt)}"}
-      {@extra}
+      {@rest}
     >
       <title :if={@alt}><%= @alt %></title>
       <use href={icon_sprite_url(@name)} />
