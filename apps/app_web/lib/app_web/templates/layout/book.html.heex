@@ -2,21 +2,21 @@
   <:title><%= @book.name %></:title>
 
   <:tab_item
-    to={Routes.book_show_path(@socket, :show, @book)}
+    navigate={Routes.book_show_path(@socket, :show, @book)}
     active={@socket.view == AppWeb.BookLive.Show}
   >
     <.icon name="list" size={:md} />
     <%= gettext("Details") %>
   </:tab_item>
   <:tab_item
-    to={Routes.money_transfer_index_path(@socket, :index, @book)}
+    navigate={Routes.money_transfer_index_path(@socket, :index, @book)}
     active={@socket.view == AppWeb.MoneyTransferLive.Index}
   >
     <.icon name="swap-horiz" size={:md} />
     <%= gettext("Transfers") %>
   </:tab_item>
   <:tab_item
-    to={Routes.balance_show_path(@socket, :show, @book)}
+    navigate={Routes.balance_show_path(@socket, :show, @book)}
     active={@socket.view == AppWeb.BalanceLive.Show}
   >
     <.icon name="account-balance-wallet" size={:md} />

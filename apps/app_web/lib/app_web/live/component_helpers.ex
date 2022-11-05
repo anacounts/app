@@ -16,6 +16,12 @@ defmodule AppWeb.ComponentHelpers do
   alias AppWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
 
+  # Some components need to pass attributes down to a <.link> component. The attributes
+  # of the <.link> component are sometimes out of scope of the `:global` type, but this
+  # can be overriden using the `:include` option of `attr/3`.
+  # e.g. `attr :rest, :global, include: @link_attrs`
+  @link_attrs ~w(navigate patch href replace method csrf_token)
+
   # The <.link_or_button> component is used to conditionally render a link or a button
   # depending on the presence of the `navigate` attribute.
 
@@ -86,14 +92,7 @@ defmodule AppWeb.ComponentHelpers do
   @doc """
   Generates an alert. Alerts are used to display temporary messages to the user.
 
-  ## Attributes
-
-  - type: The type of the alert
-
-  ## Slots
-
-  - default: The content of the alert
-             Note that an icon is automatically added to the alert.
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
@@ -101,42 +100,53 @@ defmodule AppWeb.ComponentHelpers do
         This is an info
       </.alert>
 
-  """
-  def alert(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :type]))
+      <.alert type="error">
+        This is an error
+      </.alert>
 
+  """
+
+  attr :type, :string, required: true, values: ["info", "error"], doc: "The type of the alert"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the alert"
+  attr :rest, :global
+
+  slot(:inner_block)
+
+  def alert(assigns) do
     ~H"""
-    <% {type_class, type_icon} = alert_type_class_and_icon(@type) %>
-    <div class={["alert", type_class, assigns[:class]]} role="alert" {@extra}>
-      <.icon name={type_icon} />
+    <div class={["alert", alert_type_class(@type), assigns[:class]]} role="alert" {@rest}>
+      <.icon name={alert_type_icon(@type)} />
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
 
-  defp alert_type_class_and_icon("info"), do: {"alert--info", "info"}
-  defp alert_type_class_and_icon("error"), do: {"alert--error", "error"}
+  defp alert_type_class("info"), do: "alert--info"
+  defp alert_type_class("error"), do: "alert--error"
+
+  defp alert_type_icon("info"), do: "info"
+  defp alert_type_icon("error"), do: "error"
 
   ## Avatar
 
   @doc """
   Generates an avatar.
 
-  ## Attributes
-
-  - src (required): The image URL.
-  - alt: The alt text for the image.
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
       <.avatar src="https://avatars0.githubusercontent.com/u/1234?s=460&v=4" alt="GitHub avatar" />
 
   """
+
+  attr :src, :string, required: true, doc: "The source of the image"
+  attr :alt, :string, default: nil, doc: "The alt text for the image"
+  attr :size, :atom, default: nil, values: [nil, :lg], doc: "The size of the avatar"
+
   def avatar(assigns) do
     ~H"""
-    <img class={["avatar", avatar_size_class(assigns[:size])]} src={@src} alt={assigns[:alt]} />
+    <img class={["avatar", avatar_size_class(@size)]} src={@src} alt={@alt} />
     """
   end
 
@@ -145,36 +155,53 @@ defmodule AppWeb.ComponentHelpers do
 
   ## Button
 
-  def button(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :color]))
+  @doc """
+  Generates a button.
 
+  [INSERT LVATTRDOCS]
+
+  ## Examples
+
+      <.button color={:cta} type="submit">
+        Submit
+      </.button>
+
+      <.button color={:feature}>
+        Go to index
+      </.button>
+
+      <.button color={:ghost}>
+        <.icon name="add" />
+        Add
+      </.button>
+
+  """
+
+  attr :color, :atom, required: true, values: [:cta, :feature, :ghost], doc: "The color of the button"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the button"
+  attr :rest, :global
+
+  slot :inner_block
+
+  def button(assigns) do
     ~H"""
-    <button class={["button", button_color_class(@color), assigns[:class]]} {@extra}>
+    <button class={["button", button_color_class(@color), @class]} {@rest}>
       <%= render_slot(@inner_block) %>
     </button>
     """
   end
 
   defp button_color_class(nil), do: nil
-  defp button_color_class("cta"), do: "button--cta"
-  defp button_color_class("feature"), do: "button--feature"
-  defp button_color_class("ghost"), do: "button--ghost"
+  defp button_color_class(:cta), do: "button--cta"
+  defp button_color_class(:feature), do: "button--feature"
+  defp button_color_class(:ghost), do: "button--ghost"
 
   ## Dropdown
 
   @doc """
   Generates a dropdown.
 
-  ## Attributes
-
-  - id (required): The id of the dropdown
-
-  ## Slots
-
-  - toggle (required): The content of the toggle button
-  - default: The content of the menu
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
@@ -194,6 +221,13 @@ defmodule AppWeb.ComponentHelpers do
       </.dropdown>
 
   """
+
+  attr :id, :string, required: true, doc: "The id of the dropdown"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the dropdown"
+
+  slot :toggle, required: true, doc: "The content of the toggle button"
+  slot :inner_block
+
   def dropdown(assigns) do
     ~H"""
     <div
@@ -202,7 +236,7 @@ defmodule AppWeb.ComponentHelpers do
       id={@id}
       phx-click-away={close_dropdown(@id)}
     >
-      <.button color="ghost" id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
+      <.button color={:ghost} id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
         <%= render_slot(@toggle) %>
       </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
@@ -228,13 +262,7 @@ defmodule AppWeb.ComponentHelpers do
   Generates a floating action button container.
   The container will place the buttons at the bottom right of the screen.
 
-  ## Attributes
-
-  All attributes are passed to the root `<menu>` element.
-
-  ## Slots
-
-  - item: The items of the floating action button container
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
@@ -247,13 +275,15 @@ defmodule AppWeb.ComponentHelpers do
       </.fab_container>
 
   """
-  def fab_container(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :item]))
 
+  attr :class, :any, default: nil, doc: "Extra classes to add to the container"
+  attr :rest, :global
+
+  slot :item, required: true, doc: "The items of the floating action button container"
+
+  def fab_container(assigns) do
     ~H"""
-    <menu class={["fab-container", assigns[:class]]} {@extra}>
+    <menu class={["fab-container", @class]} {@rest}>
       <li :for={item <- @item}>
         <%= render_slot(item) %>
       </li>
@@ -263,47 +293,69 @@ defmodule AppWeb.ComponentHelpers do
 
   @doc """
   Generates a floating action button.
-  Should usually be used inside a `<.fab_container>` element.
 
-  ## Attributes
-
-  - to (required): The URL to which the button will link.
-
-  ## Slots
-
-  - default: The content of the floating action button.
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
-      <.fab to="https://example.com">
+      <.fab navigate="https://example.com">
         <.icon name="settings" />
       </.fab>
 
   """
+
+  attr :rest, :global, include: @link_attrs
+
+  slot :inner_block, required: true
+
   def fab(assigns) do
     ~H"""
-    <.link navigate={@to} class="fab">
+    <.link class="fab" {@rest}>
       <%= render_slot(@inner_block) %>
     </.link>
     """
   end
 
+  @doc """
+  Generates a heading element.
+
+  [INSERT LVATTRDOCS]
+
+  ## Examples
+
+      <.heading level={:title}>
+        Title
+      </.heading>
+
+      <.heading level={:section}>
+        Section title
+      </.heading>
+
+  """
+
+  attr :level, :atom, required: true, values: [:title, :section], doc: "The level of the heading"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the heading"
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
   def heading(assigns) do
     ~H"""
     <.dynamic_tag
       name={heading_level_tag(@level)}
-      class={["heading", heading_level_class(@level), assigns[:class]]}
+      class={["heading", heading_level_class(@level), @class]}
+      {@rest}
     >
       <%= render_slot(@inner_block) %>
     </.dynamic_tag>
     """
   end
 
-  defp heading_level_tag("title"), do: "h1"
-  defp heading_level_tag("section"), do: "h3"
+  defp heading_level_tag(:title), do: "h1"
+  defp heading_level_tag(:section), do: "h3"
 
-  defp heading_level_class("title"), do: "heading--title"
-  defp heading_level_class("section"), do: "heading--section"
+  defp heading_level_class(:title), do: "heading--title"
+  defp heading_level_class(:section), do: "heading--section"
 
   ## Icon
 
@@ -411,30 +463,40 @@ defmodule AppWeb.ComponentHelpers do
 
       <.modal id="modal">
         <:header>
-          <.heading level="title">Modal title</.heading>
+          <.heading level={:title}>Modal title</.heading>
         </:header>
 
         <p>Modal body</p>
 
         <:footer>
-          <.button color="ghost">Cancel</.button>
+          <.button color={:ghost}>Cancel</.button>
           <.button color="primary">Save</.button>
         </:footer>
       </.modal>
 
   """
+
+  attr :id, :string, required: true, doc: "The id of the modal"
+  attr :size, :atom, default: nil, values: [nil, :xl], doc: "The size of the modal"
+  attr :dismiss, :boolean, default: true, doc: "Whether the modal contain a dismiss button"
+  attr :open, :boolean, default: false, doc: "Whether the modal is open by default or not"
+
+  slot :header
+  slot :inner_block
+  slot :footer
+
   def modal(assigns) do
     ~H"""
     <.focus_wrap
       id={@id}
-      class={["modal", modal_size_class(assigns[:size]), modal_open_class(assigns[:open])]}
+      class={["modal", modal_size_class(@size), modal_open_class(@open)]}
     >
       <section class="modal__dialog" role="dialog">
-        <header :if={assigns[:header] || assigns[:dismiss]} class="modal__header">
+        <header :if={@header || @dismiss} class="modal__header">
           <%= render_slot(@header) %>
           <.button
-            :if={assigns[:dismiss] != false}
-            color="ghost"
+            :if={@dismiss}
+            color={:ghost}
             class="modal__dismiss"
             phx-click={JS.remove_class("modal--open", to: "##{@id}")}
             aria-label={gettext("Close")}
@@ -456,8 +518,8 @@ defmodule AppWeb.ComponentHelpers do
   defp modal_size_class(nil), do: "modal--md"
   defp modal_size_class(:xl), do: "modal--xl"
 
-  defp modal_open_class(nil), do: nil
   defp modal_open_class(true), do: "modal--open"
+  defp modal_open_class(false), do: nil
 
   ## Tile
 
@@ -532,7 +594,7 @@ defmodule AppWeb.ComponentHelpers do
     # XXX should be removed, circumvent a weird behaviour in LiveView
     # https://github.com/phoenixframework/phoenix_live_view/issues/2265
     attr :navigate, :string
-    attr :class, :string
+    attr :class, :any
     attr :"data-confirm", :string
     attr :"phx-click", :string
     attr :"phx-value-id", :string
@@ -574,18 +636,12 @@ defmodule AppWeb.ComponentHelpers do
   defp tile_size_class(:sm), do: "tile--sm"
   defp tile_size_class(:md), do: "tile--md"
 
-  ## Toggle navigation
+  ## Tabs
 
   @doc """
-  Generates a toggle navigation menu.
+  Generates a tab menu.
 
-  ## Slots
-
-  - :item - The items of the toggle navigation
-    - :icon - The icon to use
-    - :label - The label to use
-    - :to - The path to link to
-    - :active - Whether the item is active or not
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
@@ -601,15 +657,21 @@ defmodule AppWeb.ComponentHelpers do
       </.tabs>
 
   """
+
+  slot :item, required: true, doc: "The items of the tabs" do
+    attr :navigate, :string, required: true
+    attr :active, :boolean
+  end
+
   def tabs(assigns) do
     ~H"""
-    <menu class={["tabs", assigns[:class]]} role="navigation">
+    <menu class="tabs" role="navigation">
       <li :for={item <- @item} class="tabs__item">
         <.link
-          navigate={item.to}
+          navigate={item.navigate}
           replace
-          class={["tabs__link", tabs_link_active_class(item.active)]}
-          aria-current={if item.active, do: "page"}
+          class={["tabs__link", tabs_link_active_class(item[:active])]}
+          aria-current={if item[:active], do: "page"}
         >
           <%= render_slot(item) %>
         </.link>
@@ -618,7 +680,6 @@ defmodule AppWeb.ComponentHelpers do
     """
   end
 
-  defp tabs_link_active_class(active?) do
-    if active?, do: "tabs__link--active"
-  end
+  defp tabs_link_active_class(true), do: "tabs__link--active"
+  defp tabs_link_active_class(_active?), do: nil
 end
