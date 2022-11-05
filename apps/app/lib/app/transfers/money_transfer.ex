@@ -12,7 +12,7 @@ defmodule App.Transfers.MoneyTransfer do
   alias App.Balance
   alias App.Books.Book
   alias App.Books.Members.BookMember
-  alias App.Transfers
+  alias App.Transfers.Peers.Peer
 
   # the types
   @transfer_types [:payment, :income, :reimbursement]
@@ -25,7 +25,7 @@ defmodule App.Transfers.MoneyTransfer do
           book: Book.t(),
           tenant: BookMember.t(),
           balance_params: Balance.TransferParams.t(),
-          peers: Transfers.Peer.t()
+          peers: Peer.t()
         }
 
   schema "money_transfers" do
@@ -40,7 +40,7 @@ defmodule App.Transfers.MoneyTransfer do
     # balance
     field :balance_params, Balance.TransferParams
 
-    has_many :peers, Transfers.Peer,
+    has_many :peers, Peer,
       foreign_key: :transfer_id,
       on_replace: :delete_if_exists
 

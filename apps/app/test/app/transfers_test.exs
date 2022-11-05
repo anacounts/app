@@ -12,6 +12,7 @@ defmodule App.TransfersTest do
   alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Transfers
+  alias App.Transfers.Peers.Peer
 
   describe "find_transfers_of_book/1" do
     setup :book_with_member_context
@@ -291,7 +292,7 @@ defmodule App.TransfersTest do
 
       assert {:ok, _deleted_transfer} = Transfers.delete_money_transfer(money_transfer, user)
 
-      refute Repo.get_by(Transfers.Peer, transfer_id: money_transfer.id)
+      refute Repo.get_by(Peer, transfer_id: money_transfer.id)
     end
   end
 

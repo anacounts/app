@@ -1,11 +1,10 @@
-defmodule App.Transfers.Peer do
+defmodule App.Transfers.Peers.Peer do
   @moduledoc """
   Entity linking money transfers to users.
   """
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
 
   alias App.Books.Members.BookMember
   alias App.Transfers
@@ -61,20 +60,5 @@ defmodule App.Transfers.Peer do
       message: "member is already a peer of this money transfer",
       error_key: :member_id
     )
-  end
-
-  def base_query do
-    from __MODULE__, as: :peer
-  end
-
-  def join_member(query) do
-    with_named_binding(query, :book_member, fn query ->
-      join(query, :inner, [peer: peer], assoc(peer, :member), as: :book_member)
-    end)
-  end
-
-  def where_transfer_id(query, transfer_id) do
-    from [peer: peer] in query,
-      where: peer.transfer_id == ^transfer_id
   end
 end
