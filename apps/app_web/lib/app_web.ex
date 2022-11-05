@@ -100,6 +100,7 @@ defmodule AppWeb do
       # Alias LiveView javascript functions
       alias Phoenix.LiveView.JS
 
+      import AppWeb.DateFormatHelpers
       import AppWeb.ErrorHelpers
       import AppWeb.Gettext
       alias AppWeb.Router.Helpers, as: Routes

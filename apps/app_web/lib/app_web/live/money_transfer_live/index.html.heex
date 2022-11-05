@@ -17,7 +17,7 @@
           <%= Money.to_string(transfer.amount) %>
         </span>
         <br />
-        <%= to_string(transfer.date) %>
+        <%= format_date(transfer.date) %>
       </div>
     </.list_item_link>
   <% end %>
