@@ -40,6 +40,10 @@ msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\"
 msgstr "Anacounts utilise <a class=\"text-action\" href=\"https://fr.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> Pour afficher les avatars des utilisateurs."
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete the transfer?"
+msgstr "Êtes-vous certain de vouloir supprimer le transfert ?"
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Solde"
 
@@ -50,10 +54,6 @@ msgstr "Paramètres de solde"
 #, elixir-autogen, elixir-format
 msgid "Balance settings updated"
 msgstr "Paramètres de solde mis à jour"
-
-#, elixir-autogen, elixir-format
-msgid "Balancing"
-msgstr "Solde"
 
 #, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
@@ -288,6 +288,10 @@ msgid "Open details"
 msgstr "Ouvrir le détail"
 
 #, elixir-autogen, elixir-format
+msgid "Paid by %{name}"
+msgstr "Payé par %{name}"
+
+#, elixir-autogen, elixir-format
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -304,8 +308,16 @@ msgid "Profile"
 msgstr "Profil"
 
 #, elixir-autogen, elixir-format
+msgid "Received by %{name}"
+msgstr "Reçu par %{name}"
+
+#, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Créer un compte"
+
+#, elixir-autogen, elixir-format
+msgid "Reimbursed to %{name}"
+msgstr "Remboursé à %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement"
@@ -351,7 +363,7 @@ msgstr "Titulaire"
 msgid "The transactions are balanced already!"
 msgstr "Les transactions sont déjà équilibrée !"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr "Pour modifier votre avatar, <a class=\"text-action\" href=\"https://fr.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">créez un compte</a> et <a class=\"text-action\" href=\"https://fr.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personnalisez votre Gravatar</a>."
 

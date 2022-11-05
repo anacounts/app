@@ -57,7 +57,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
     do: gettext("Received by %{name}", name: name)
 
   defp tenant_label_for_transfer_type(:reimbursement, name),
-    do: gettext("Reimbursed by %{name}", name: name)
+    do: gettext("Reimbursed to %{name}", name: name)
 
   defp format_code(:divide_equally), do: gettext("Divide equally")
   defp format_code(:weight_by_income), do: gettext("Weight by income")
