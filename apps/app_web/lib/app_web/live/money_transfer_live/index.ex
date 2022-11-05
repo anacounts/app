@@ -47,9 +47,9 @@ defmodule AppWeb.MoneyTransferLive.Index do
   defp class_for_transfer_type(:income), do: "text-success"
   defp class_for_transfer_type(:reimbursement), do: nil
 
-  defp icon_for_transfer_type(:payment), do: "minus"
-  defp icon_for_transfer_type(:income), do: "plus"
-  defp icon_for_transfer_type(:reimbursement), do: "arrow-right"
+  defp icon_for_transfer_type(:payment), do: "remove"
+  defp icon_for_transfer_type(:income), do: "add"
+  defp icon_for_transfer_type(:reimbursement), do: "arrow-forward"
 
   defp tenant_label_for_transfer_type(:payment, name), do: gettext("Paid by %{name}", name: name)
 

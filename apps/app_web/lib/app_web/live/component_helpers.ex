@@ -73,7 +73,7 @@ defmodule AppWeb.ComponentHelpers do
       >
         <summary class="accordion__header">
           <strong class="accordion__title"><%= item.title %></strong>
-          <.icon class="accordion__icon" name="chevron-down" />
+          <.icon class="accordion__icon" name="expand-more" />
         </summary>
         <%= render_slot(item) %>
       </details>
@@ -116,8 +116,8 @@ defmodule AppWeb.ComponentHelpers do
     """
   end
 
-  defp alert_type_class_and_icon("info"), do: {"alert--info", "information"}
-  defp alert_type_class_and_icon("error"), do: {"alert--error", "alert-circle"}
+  defp alert_type_class_and_icon("info"), do: {"alert--info", "info"}
+  defp alert_type_class_and_icon("error"), do: {"alert--error", "error"}
 
   ## Avatar
 
@@ -180,11 +180,11 @@ defmodule AppWeb.ComponentHelpers do
 
       <.dropdown>
         <:toggle>
-          <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+          <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
         </:toggle>
 
         <.list_item>
-          <.icon name="cog" />
+          <.icon name="settings" />
           Settings
         </.list_item>
         <.list_item>
@@ -241,7 +241,7 @@ defmodule AppWeb.ComponentHelpers do
       <.fab_container>
         <:item>
           <.fab>
-            <.icon name="cog" />
+            <.icon name="settings" />
           </.fab>
         </:item>
       </.fab_container>
@@ -276,7 +276,7 @@ defmodule AppWeb.ComponentHelpers do
   ## Examples
 
       <.fab to="https://example.com">
-        <.icon name="cog" />
+        <.icon name="settings" />
       </.fab>
 
   """
@@ -543,7 +543,7 @@ defmodule AppWeb.ComponentHelpers do
     <details class={["tile", tile_size_class(@size)]} {@rest}>
       <summary class={["tile__summary", @class]}>
         <%= render_slot(@inner_block) %>
-        <.icon class="tile__collapse-icon" name="chevron-down" />
+        <.icon class="tile__collapse-icon" name="expand-more" />
       </summary>
       <div class="tile__description">
         <%= render_slot(@description) %>
@@ -595,7 +595,7 @@ defmodule AppWeb.ComponentHelpers do
           Books
         </:item>
         <:item to="/users/settings">
-          <.icon name="cog" size={:md} />
+          <.icon name="settings" size={:md} />
           Settings
         </:item>
       </.tabs>

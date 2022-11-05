@@ -15,12 +15,12 @@
         </div>
         <div>
           <time datetime={to_string(transfer.date)}><%= format_date(transfer.date) %></time>
-          <.icon name="calendar" />
+          <.icon name="calendar-month" />
         </div>
       </div>
       <div class="text-right">
         <%= format_code(transfer.balance_params.means_code) %>
-        <.icon name="swap-horizontal" />
+        <.icon name="swap-horiz" />
       </div>
     </:description>
 
@@ -41,7 +41,7 @@
 <.fab_container class="mb-12 md:mb-0">
   <:item>
     <.fab to={Routes.money_transfer_form_path(@socket, :new, @book)}>
-      <.icon name="plus" alt="Add a money transfer" />
+      <.icon name="add" alt="Add a money transfer" />
     </.fab>
   </:item>
 </.fab_container>

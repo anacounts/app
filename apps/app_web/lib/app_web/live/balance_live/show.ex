@@ -31,8 +31,8 @@ defmodule AppWeb.BalanceLive.Show do
   defp transfer_icon_and_class_for_amount(amount) do
     cond do
       Money.zero?(amount) -> {"check", ""}
-      Money.negative?(amount) -> {"minus", "text-error"}
-      true -> {"plus", "text-success"}
+      Money.negative?(amount) -> {"remove", "text-error"}
+      true -> {"add", "text-success"}
     end
   end
 end

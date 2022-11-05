@@ -5,32 +5,32 @@
     to={Routes.book_show_path(@socket, :show, @book)}
     active={@socket.view == AppWeb.BookLive.Show}
   >
-    <.icon name="format-list-bulleted" size={:md} />
+    <.icon name="list" size={:md} />
     <%= gettext("Details") %>
   </:tab_item>
   <:tab_item
     to={Routes.money_transfer_index_path(@socket, :index, @book)}
     active={@socket.view == AppWeb.MoneyTransferLive.Index}
   >
-    <.icon name="swap-horizontal" size={:md} />
+    <.icon name="swap-horiz" size={:md} />
     <%= gettext("Transfers") %>
   </:tab_item>
   <:tab_item
     to={Routes.balance_show_path(@socket, :show, @book)}
     active={@socket.view == AppWeb.BalanceLive.Show}
   >
-    <.icon name="wallet" size={:md} />
+    <.icon name="account-balance-wallet" size={:md} />
     <%= gettext("Balance") %>
   </:tab_item>
 
   <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>
-        <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+        <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
       </:toggle>
 
       <.list_item_link navigate={Routes.book_form_path(@socket, :edit, @book)} replace>
-        <.icon name="pencil" />
+        <.icon name="edit" />
         <%= gettext("Edit") %>
       </.list_item_link>
       <% # TODO Do not display the list item if the user is not allowed to delete the book %>

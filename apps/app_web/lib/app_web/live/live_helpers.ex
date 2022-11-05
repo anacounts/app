@@ -29,7 +29,7 @@ defmodule AppWeb.LiveHelpers do
         <:menu>
           <.dropdown id="contextual-menu">
             <:toggle>
-              <.icon name="dots-vertical" alt={gettext("Contextual menu")} size={:lg} />
+              <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
             </:toggle>
 
             <:tab_item to="/tab_one">
@@ -37,12 +37,12 @@ defmodule AppWeb.LiveHelpers do
               Go to tab one
             </:tab_item>
             <:tab_item to="/tab_two">
-              <.icon name="plus" size={:md} />
+              <.icon name="add" size={:md} />
               Go to tab two
             </:tab_item>
 
             <.list_item_link navigate="/users/settings">
-              <.icon name="cog" />
+              <.icon name="settings" />
               Settings
             </.list_item_link>
             <.list_item_link href="/users/log_out" method="delete">
@@ -67,7 +67,7 @@ defmodule AppWeb.LiveHelpers do
                    h-14 mb-2 px-4
                    bg-theme text-white shadow">
       <.link :if={@back_to} navigate={@back_to} class="button button--ghost">
-        <.icon name="arrow-left" alt={gettext("Go back")} />
+        <.icon name="arrow-back" alt={gettext("Go back")} />
       </.link>
 
       <.heading level="title" class="mr-auto"><%= render_slot(@title) %></.heading>
