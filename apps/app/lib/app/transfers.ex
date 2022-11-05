@@ -11,7 +11,7 @@ defmodule App.Transfers do
   alias App.Books.Members
   alias App.Books.Members.Rights
   alias App.Transfers.MoneyTransfer
-  alias App.Transfers.Peer
+  alias App.Transfers.Peers.Peer
 
   ## Money transfer
 
@@ -196,14 +196,5 @@ defmodule App.Transfers do
     money_transfer
     |> MoneyTransfer.changeset(attrs)
     |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
-  end
-
-  ## Peers
-
-  @spec list_peers_of_transfer(MoneyTransfer.id()) :: [Peer.t()]
-  def list_peers_of_transfer(transfer_id) do
-    Peer.base_query()
-    |> Peer.where_transfer_id(transfer_id)
-    |> Repo.all()
   end
 end

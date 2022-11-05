@@ -11,7 +11,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
   alias App.Books.Members
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
-  alias App.Transfers.Peer
+  alias App.Transfers.Peers.Peer
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id} = params, _session, socket) do

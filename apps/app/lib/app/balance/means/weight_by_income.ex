@@ -13,7 +13,7 @@ defmodule App.Balance.Means.WeightByIncome do
   alias App.Balance.Config.UserConfig
   alias App.Books.Members
   alias App.Transfers
-  alias App.Transfers.Peer
+  alias App.Transfers.Peers
 
   @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
@@ -47,6 +47,7 @@ defmodule App.Balance.Means.WeightByIncome do
 
   defp peers_income(money_transfer) do
     # TODO There should be no querying nor data fetching here
+    # When refactoring this, make Peers query functions private
 
     incomes =
       peers_and_incomes_query(money_transfer)
@@ -61,9 +62,9 @@ defmodule App.Balance.Means.WeightByIncome do
 
   defp peers_and_incomes_query(money_transfer) do
     base_query =
-      Peer.base_query()
-      |> Peer.where_transfer_id(money_transfer.id)
-      |> Peer.join_member()
+      Peers.base_query()
+      |> Peers.where_transfer_id(money_transfer.id)
+      |> Peers.join_member()
       |> Members.join_user()
 
     from [peer: peer, user: user] in base_query,

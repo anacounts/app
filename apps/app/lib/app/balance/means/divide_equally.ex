@@ -8,10 +8,11 @@ defmodule App.Balance.Means.DivideEqually do
   @behaviour App.Balance.Means
 
   alias App.Transfers
+  alias App.Transfers.Peers
 
   @impl App.Balance.Means
   def balance_transfer_by_peer(money_transfer) do
-    peers = Transfers.list_peers_of_transfer(money_transfer.id)
+    peers = Peers.list_peers_of_transfer(money_transfer.id)
 
     transfer_amount = Transfers.amount(money_transfer)
     total_weight = Enum.reduce(peers, Decimal.new(0), &Decimal.add(&2, &1.weight))
