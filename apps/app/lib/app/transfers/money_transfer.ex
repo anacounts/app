@@ -28,7 +28,7 @@ defmodule App.Transfers.MoneyTransfer do
           peers: Transfers.Peer.t()
         }
 
-  schema "transfers_money_transfers" do
+  schema "money_transfers" do
     field :label, :string
     field :amount, Money.Ecto.Composite.Type
     field :type, Ecto.Enum, values: @transfer_types
