@@ -48,11 +48,7 @@
     ) %>
   </.heading>
 
-  <.tile
-    :if={Enum.empty?(@books)}
-    class="text-xl"
-    navigate={Routes.book_form_path(@socket, :new)}
-  >
+  <.tile :if={Enum.empty?(@books)} class="text-xl" navigate={Routes.book_form_path(@socket, :new)}>
     <.icon name="plus" />
     <%= gettext("Create your first book") %>
   </.tile>
