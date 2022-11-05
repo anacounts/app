@@ -114,7 +114,7 @@ defmodule AppWeb.CoreComponents do
 
   def alert(assigns) do
     ~H"""
-    <div class={["alert", alert_type_class(@type), assigns[:class]]} role="alert" {@rest}>
+    <div class={["alert", alert_type_class(@type), @class]} role="alert" {@rest}>
       <.icon name={alert_type_icon(@type)} />
       <%= render_slot(@inner_block) %>
     </div>
@@ -141,7 +141,7 @@ defmodule AppWeb.CoreComponents do
   """
 
   attr :src, :string, required: true, doc: "The source of the image"
-  attr :alt, :string, default: nil, doc: "The alt text for the image"
+  attr :alt, :string, required: true, doc: "The alt text for the image"
   attr :size, :atom, default: nil, values: [nil, :lg], doc: "The size of the avatar"
 
   def avatar(assigns) do
@@ -234,13 +234,14 @@ defmodule AppWeb.CoreComponents do
 
   def dropdown(assigns) do
     ~H"""
-    <div
-      class={["dropdown", assigns[:class]]}
-      aria-expanded="false"
-      id={@id}
-      phx-click-away={close_dropdown(@id)}
-    >
-      <.button color={:ghost} id={"#{@id}-toggle"} phx-click={toggle_dropdown(@id)}>
+    <div class={["dropdown", @class]} id={@id} phx-click-away={close_dropdown(@id)}>
+      <.button
+        color={:ghost}
+        id={"#{@id}-toggle"}
+        phx-click={toggle_dropdown(@id)}
+        aria-expanded="false"
+        aria-controls={"#{@id}-toggle"}
+      >
         <%= render_slot(@toggle) %>
       </.button>
       <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
@@ -251,12 +252,12 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp close_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "false"}, to: id)
+    JS.set_attribute({"aria-expanded", "false"}, to: "#{id}-toggle")
     |> JS.hide(to: "##{id}-popover")
   end
 
   defp toggle_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "true"}, to: id)
+    JS.set_attribute({"aria-expanded", "true"}, to: "#{id}-toggle")
     |> JS.toggle(to: "##{id}-popover")
   end
 
@@ -356,7 +357,7 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp heading_level_tag(:title), do: "h1"
-  defp heading_level_tag(:section), do: "h3"
+  defp heading_level_tag(:section), do: "h2"
 
   defp heading_level_class(:title), do: "heading--title"
   defp heading_level_class(:section), do: "heading--section"
@@ -366,30 +367,28 @@ defmodule AppWeb.CoreComponents do
   @doc """
   Generates an icon.
 
-  ## Attributes
-
-  - name (required): The name of the icon
-  - alt: The alt text of the icon
-  - size: The size of the icon. Defaults to "base"
+  [INSERT LVATTRDOCS]
 
   ## Examples
 
       <.icon name="home" />
 
   """
-  def icon(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:name, :alt, :class]))
-      |> assign_new(:alt, fn -> nil end)
 
+  attr :name, :string, required: true, doc: "The name of the icon"
+  attr :alt, :string, default: nil, doc: "The alt text of the icon"
+  attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
+  attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
+  attr :rest, :global
+
+  def icon(assigns) do
     ~H"""
     <svg
-      class={["icon", icon_size_class(assigns[:size]), assigns[:class]]}
+      class={["icon", icon_size_class(@size), @class]}
       fill="currentColor"
       role="img"
-      aria-hidden={is_nil(@alt)}
-      {@extra}
+      aria-hidden={"#{is_nil(@alt)}"}
+      {@rest}
     >
       <title :if={@alt}><%= @alt %></title>
       <use href={icon_sprite_url(@name)} />

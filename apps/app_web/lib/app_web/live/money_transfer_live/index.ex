@@ -44,7 +44,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
   end
 
   defp class_for_transfer_type(:payment), do: "text-error"
-  defp class_for_transfer_type(:income), do: "text-success"
+  defp class_for_transfer_type(:income), do: "text-info"
   defp class_for_transfer_type(:reimbursement), do: nil
 
   defp icon_for_transfer_type(:payment), do: "remove"
