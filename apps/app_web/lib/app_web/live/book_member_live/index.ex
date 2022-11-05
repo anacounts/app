@@ -1,7 +1,7 @@
-defmodule AppWeb.BookLive.Show do
+defmodule AppWeb.BookMemberLive.Index do
   @moduledoc """
-  The book show live view.
-  Displays details of a book.
+  The book member index live view.
+  Displays the members of a book.
   """
 
   use AppWeb, :live_view

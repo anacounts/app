@@ -45,7 +45,7 @@ defmodule AppWeb.BookLiveTest do
         index_live
         |> form("#book-form", book: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, Routes.book_show_path(conn, :show, book))
+        |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
 
       assert html =~ "some updated name"
     end
@@ -71,30 +71,6 @@ defmodule AppWeb.BookLiveTest do
                |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
 
       assert html =~ "Transfers"
-    end
-  end
-
-  describe "Show" do
-    setup [:register_and_log_in_user, :book_with_member_context]
-
-    test "displays book", %{conn: conn, book: book} do
-      {:ok, _show_live, html} = live(conn, Routes.book_show_path(conn, :show, book))
-
-      assert html =~ "Details"
-      assert html =~ book.name
-    end
-
-    test "deletes book", %{conn: conn, book: book} do
-      {:ok, show_live, _html} = live(conn, Routes.book_show_path(conn, :show, book))
-
-      assert {:ok, _, html} =
-               show_live
-               |> element("#delete-book", "Delete")
-               |> render_click()
-               |> follow_redirect(conn, Routes.book_index_path(conn, :index))
-
-      assert html =~ "Book deleted successfully"
-      refute html =~ book.name
     end
   end
 
