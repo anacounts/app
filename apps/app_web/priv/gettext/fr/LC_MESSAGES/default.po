@@ -36,6 +36,10 @@ msgid "Amount"
 msgstr "Montant"
 
 #, elixir-autogen, elixir-format
+msgid "An error occured while balancing the transactions"
+msgstr "Une erreur est survenue en équilibrant les transactions"
+
+#, elixir-autogen, elixir-format
 msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
 msgstr "Anacounts utilise <a class=\"text-action\" href=\"https://fr.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> Pour afficher les avatars des utilisateurs."
 
@@ -358,6 +362,10 @@ msgstr "Paramètres"
 #, elixir-autogen, elixir-format
 msgid "Tenant"
 msgstr "Titulaire"
+
+#, elixir-autogen, elixir-format
+msgid "The balance of some members cannot be computed"
+msgstr "Le solde de certains membres ne peut pas être calculé"
 
 #, elixir-autogen, elixir-format
 msgid "The transactions are balanced already!"

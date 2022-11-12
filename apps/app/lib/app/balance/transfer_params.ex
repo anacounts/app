@@ -7,27 +7,33 @@ defmodule App.Balance.TransferParams do
 
   use Ecto.Type
 
-  alias App.Balance.Means
+  # When adding a new balance means
+  # - add the code to type `means_code` and module attribute `@means_codes`
+  # - update `cast/1`
+  # - add the value to the database enum (e.g. see migration App.Repo.Migrations.AddMeansWeightByIncome)
+
+  @typedoc "The different means of balancing money transfers"
+  @type means_code :: :divide_equally | :weight_by_income
+
+  @means_codes [:divide_equally, :weight_by_income]
+  @string_codes Enum.map(@means_codes, &Atom.to_string/1)
 
   @enforce_keys [:means_code, :params]
   defstruct means_code: nil, params: nil
 
-  @type t :: %{
-          means_code: Means.code(),
+  @type t :: %__MODULE__{
+          means_code: means_code(),
           params: map()
         }
 
   def type, do: :balance_transfer_params
-
-  @codes Means.codes()
-  @string_codes Enum.map(@codes, &Atom.to_string/1)
 
   # Provide custom casting rules
   def cast(%__MODULE__{} = input) do
     {:ok, input}
   end
 
-  def cast(%{means_code: means_code} = input) when means_code in @codes do
+  def cast(%{means_code: means_code} = input) when means_code in @means_codes do
     cast_normalized(means_code, input[:params])
   end
 

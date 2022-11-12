@@ -31,6 +31,8 @@ defmodule App.Auth.User do
     # display information
     field :display_name, :string
 
+    # TODO this is only used in the balance context and should be removed
+    has_one :balance_config, App.Balance.Config.UserConfig
     many_to_many :books, Book, join_through: BookMember
 
     timestamps()

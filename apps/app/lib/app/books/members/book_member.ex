@@ -6,7 +6,7 @@ defmodule App.Books.Members.BookMember do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth
+  alias App.Auth.User
   alias App.Books.Book
   alias App.Books.Members.Role
 
@@ -15,14 +15,14 @@ defmodule App.Books.Members.BookMember do
   @type t :: %__MODULE__{
           id: id(),
           book: Book.t(),
-          user: Auth.User.t(),
+          user: User.t(),
           role: Role.t(),
           deleted_at: NaiveDateTime.t()
         }
 
   schema "book_members" do
     belongs_to :book, Book
-    belongs_to :user, Auth.User
+    belongs_to :user, User
 
     field :role, Ecto.Enum, values: Role.all()
     field :deleted_at, :naive_datetime
@@ -30,6 +30,10 @@ defmodule App.Books.Members.BookMember do
     # Filled with the value of `:display_name` and `:email` of the linked user
     field :display_name, :string, virtual: true
     field :email, :string, virtual: true
+
+    # Filled by the `Balance` context. Maybe be set to `{:error, reasons}` if the
+    # balance cannot be computed.
+    field :balance, Money.Ecto.Composite.Type, virtual: true
 
     timestamps()
   end
