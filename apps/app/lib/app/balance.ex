@@ -102,8 +102,6 @@ defmodule App.Balance do
   end
 
   defp adjust_balance_from_peers(members, transfer, [peer | other_peers]) do
-    dbg()
-
     relative_weight = Decimal.div(peer.total_weight, transfer.total_peer_weight)
     transfer_amount = Transfers.amount(transfer)
     adjustment_amount = Money.multiply(transfer_amount, relative_weight)
