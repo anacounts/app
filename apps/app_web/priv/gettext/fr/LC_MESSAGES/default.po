@@ -18,12 +18,6 @@ msgstr[0] "%{count} book in your list"
 msgstr[1] "Vous êtes membre de %{count} livrets"
 
 #, elixir-autogen, elixir-format
-msgid "%{count} member"
-msgid_plural "%{count} members"
-msgstr[0] "%{count} membre"
-msgstr[1] "%{count} membres"
-
-#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr "%{transfer_name} · %{book_name}"
 
@@ -110,6 +104,10 @@ msgstr "Créer un livret"
 #, elixir-autogen, elixir-format
 msgid "Create your first book"
 msgstr "Créer mon premier livret"
+
+#, elixir-autogen, elixir-format
+msgid "Creator"
+msgstr "Créateur"
 
 #, elixir-autogen, elixir-format
 msgid "Currency"
@@ -224,6 +222,10 @@ msgid "Invite member"
 msgstr "Inviter un nouveau membre"
 
 #, elixir-autogen, elixir-format
+msgid "Joined"
+msgstr "Accepté"
+
+#, elixir-autogen, elixir-format
 msgid "Keep me logged in for 60 days"
 msgstr "Se souvenir de moi pendant 60 jours"
 
@@ -244,8 +246,12 @@ msgid "Logged out successfully."
 msgstr "Vous êtes déconnecté"
 
 #, elixir-autogen, elixir-format
-msgid "Members balance"
-msgstr "Solde des membres"
+msgid "Member"
+msgstr "Membre"
+
+#, elixir-autogen, elixir-format
+msgid "Members"
+msgstr "Membres"
 
 #, elixir-autogen, elixir-format
 msgid "Money transfer created successfully"
@@ -364,8 +370,8 @@ msgid "Tenant"
 msgstr "Titulaire"
 
 #, elixir-autogen, elixir-format
-msgid "The balance of some members cannot be computed"
-msgstr "Le solde de certains membres ne peut pas être calculé"
+msgid "The member balance could not be computed"
+msgstr "Le solde du membre n'a pas pu être calculé"
 
 #, elixir-autogen, elixir-format
 msgid "The transactions are balanced already!"
@@ -406,6 +412,10 @@ msgstr "Utilisateur confirmé."
 #, elixir-autogen, elixir-format
 msgid "User created successfully."
 msgstr "Utilisateur créé."
+
+#, elixir-autogen, elixir-format
+msgid "Viewer"
+msgstr "Spectateur"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"

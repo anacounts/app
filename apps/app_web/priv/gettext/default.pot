@@ -17,12 +17,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "%{count} member"
-msgid_plural "%{count} members"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr ""
 
@@ -108,6 +102,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Create your first book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Creator"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -223,6 +221,10 @@ msgid "Invite member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Joined"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Keep me logged in for 60 days"
 msgstr ""
 
@@ -243,7 +245,11 @@ msgid "Logged out successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Members balance"
+msgid "Member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -363,7 +369,7 @@ msgid "Tenant"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The balance of some members cannot be computed"
+msgid "The member balance could not be computed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -404,6 +410,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "User created successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Viewer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
