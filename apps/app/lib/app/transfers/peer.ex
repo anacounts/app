@@ -1,4 +1,4 @@
-defmodule App.Transfers.Peers.Peer do
+defmodule App.Transfers.Peer do
   @moduledoc """
   Entity linking money transfers to users.
   """
@@ -7,21 +7,25 @@ defmodule App.Transfers.Peers.Peer do
   import Ecto.Changeset
 
   alias App.Books.Members.BookMember
-  alias App.Transfers
+  alias App.Transfers.MoneyTransfer
 
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
-          transfer: Transfers.MoneyTransfer.t(),
+          transfer: MoneyTransfer.t(),
           member: BookMember.t(),
           weight: Decimal.t()
         }
 
   schema "transfers_peers" do
-    belongs_to :transfer, Transfers.MoneyTransfer
+    belongs_to :transfer, MoneyTransfer
     belongs_to :member, BookMember
+    has_one :user_balance_config, through: [:member, :user, :balance_config]
 
     field :weight, :decimal, default: Decimal.new(1)
+
+    # The sum of all the peer weight. Depends on the transfer balance means
+    field :total_weight, :decimal, virtual: true
   end
 
   def create_money_transfer_changeset(struct, attrs) do

@@ -1,110 +1,226 @@
-# Disable checking that there are too many dependencies
-# See comments below, this module needs to be refactored
-# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule App.Balance do
   @moduledoc """
-  Context to compute balance between book members.
+  Context to compute book members' balance and the transactions to adjust it.
   """
 
-  alias App.Balance.Means
-  alias App.Books.Book
-  alias App.Books.Members.BookMember
+  alias App.Repo
+
   alias App.Transfers
 
-  # TODO Needs refactoring
+  @doc """
+  Compute the `:balance` field of book members.
 
-  @type t :: %{
-          members_balance: %{BookMember.id() => Money.t()},
-          transactions:
-            list(%{
-              from: BookMember.id(),
-              to: BookMember.id(),
-              amount: Money.t()
-            })
-        }
+  ## Examples
 
-  @typedoc "The balance of a member for a transfer."
-  @type peer_balance :: %{
-          from: BookMember.id(),
-          to: BookMember.id(),
-          amount: Money.t(),
-          transfer_id: Transfers.MoneyTransfer.id()
-        }
+      iex> fill_members_balance([%BookMember{balance: nil}])
+      [%BookMember{balance: Decimal.new(0)}]
 
-  @spec for_book(Book.id()) :: t()
-  def for_book(book_id) do
-    members_balance = members_balance(book_id)
-    transactions = transactions(members_balance)
+  """
+  def fill_members_balance(members) do
+    transfers =
+      Transfers.list_transfers_of_members(members)
+      |> load_peers_and_total_weight()
 
-    %{
-      members_balance: members_balance,
-      transactions: transactions
-    }
+    members
+    |> reset_members_balance()
+    |> adjust_balance_from_transfers(transfers)
   end
 
-  defp members_balance(book_id) do
-    transfers = Transfers.list_transfers_of_book(book_id)
-
+  defp load_peers_and_total_weight(transfers) when is_list(transfers) do
     transfers
-    |> Enum.flat_map(&balance_transfer_by_peer/1)
-    |> group_peer_balances()
+    |> Enum.group_by(& &1.balance_params.means_code)
+    |> Enum.flat_map(&load_peers/1)
+    |> Enum.map(fn
+      {:ok, transfer} ->
+        total_peer_weight =
+          Enum.reduce(transfer.peers, Decimal.new(0), &Decimal.add(&2, &1.total_weight))
+
+        {:ok, %{transfer | total_peer_weight: total_peer_weight}}
+
+      {:error, _reason, _transfer} = error ->
+        error
+    end)
   end
 
-  defp balance_transfer_by_peer(transfer) do
-    case Means.balance_transfer_by_peer(transfer) do
-      {:ok, peer_balances} ->
-        peer_balances
+  defp load_peers({:divide_equally, transfers}) do
+    transfers = Repo.preload(transfers, :peers)
 
-      # TODO handle this properly
-      {:error, reason} ->
-        raise "Could not balance transfer##{transfer.id}, reason: #{inspect(reason)}"
+    Enum.map(transfers, fn transfer ->
+      {:ok, %{transfer | peers: peers_with_total_weight(transfer.peers, & &1.weight)}}
+    end)
+  end
+
+  defp load_peers({:weight_by_income, transfers}) do
+    transfers = Repo.preload(transfers, peers: [:user_balance_config])
+
+    Enum.map(transfers, fn transfer ->
+      all_annual_incomes_set? =
+        Enum.all?(transfer.peers, fn peer ->
+          peer.user_balance_config != nil and peer.user_balance_config.annual_income != nil
+        end)
+
+      if all_annual_incomes_set? do
+        peers =
+          peers_with_total_weight(
+            transfer.peers,
+            &Decimal.mult(&1.weight, &1.user_balance_config.annual_income)
+          )
+
+        {:ok, %{transfer | peers: peers}}
+      else
+        {:error, "some members did not set their annual income", transfer}
+      end
+    end)
+  end
+
+  defp peers_with_total_weight(peers, weight_fun) do
+    Enum.map(peers, &%{&1 | total_weight: weight_fun.(&1)})
+  end
+
+  defp reset_members_balance(members) do
+    Enum.map(members, fn member -> %{member | balance: Money.new(0, :EUR)} end)
+  end
+
+  defp adjust_balance_from_transfers(members, []), do: members
+
+  defp adjust_balance_from_transfers(members, [{:ok, transfer} | other_transfers]) do
+    members
+    |> adjust_balance_from_peers(transfer, transfer.peers)
+    |> adjust_balance_from_transfers(other_transfers)
+  end
+
+  defp adjust_balance_from_transfers(members, [{:error, reason, transfer} | other_transfers]) do
+    members
+    |> add_balance_error_on_members_in_transfer(reason, transfer)
+    |> adjust_balance_from_transfers(other_transfers)
+  end
+
+  defp adjust_balance_from_peers(members, _transfer, []), do: members
+
+  defp adjust_balance_from_peers(members, %{tenant_id: id} = transfer, [%{member_id: id} | peers]) do
+    adjust_balance_from_peers(members, transfer, peers)
+  end
+
+  defp adjust_balance_from_peers(members, transfer, [peer | other_peers]) do
+    dbg()
+
+    relative_weight = Decimal.div(peer.total_weight, transfer.total_peer_weight)
+    transfer_amount = Transfers.amount(transfer)
+    adjustment_amount = Money.multiply(transfer_amount, relative_weight)
+
+    member_id = peer.member_id
+    tenant_id = transfer.tenant_id
+
+    members
+    |> Enum.map(fn
+      # If a member's balance has already been corrupted, it cannot be computed correctly
+      %{balance: {:error, _}} = member ->
+        member
+
+      %{id: ^member_id} = member ->
+        %{member | balance: Money.subtract(member.balance, adjustment_amount)}
+
+      %{id: ^tenant_id} = member ->
+        %{member | balance: Money.add(member.balance, adjustment_amount)}
+
+      member ->
+        member
+    end)
+    |> adjust_balance_from_peers(transfer, other_peers)
+  end
+
+  defp add_balance_error_on_members_in_transfer(members, reason, transfer) do
+    Enum.map(members, fn member ->
+      transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
+
+      if member.id in transfer_members_ids,
+        do: add_balance_error(member, reason),
+        else: member
+    end)
+  end
+
+  # add a reason to the balance error list, or initialize the list
+  defp add_balance_error(member, reason) do
+    reasons =
+      case member.balance do
+        {:error, reasons} -> [reason | reasons]
+        _ -> [reason]
+      end
+
+    %{member | balance: {:error, reasons}}
+  end
+
+  # checks if the computed balance of the member has an error
+  defp has_balance_error?(member), do: match?({:error, _reasons}, member.balance)
+
+  @typedoc """
+  A type representing a transaction between two members.
+  This is used to display required operations to balance money between members.
+  """
+  @type transaction :: %{
+          from: BookMember.t(),
+          to: BookMember.t(),
+          amount: Money.t()
+        }
+
+  @doc """
+  Compute the transactions to balance the book members. The result is computed based on
+  the `:balance` field of book members. Make it is filled by `fill_members_balance/1`
+  before.
+
+  Returns `:error` if any balance is set to an error state.
+
+  The total sum of balanced money must be equal to 0, otherwise the function will crash.
+
+  ## Examples
+
+      iex> transactions([member1])
+      {:ok, []}
+
+      iex> transactions([member1, member2])
+      {:ok, [%{amount: Money.new(10, :EUR), from: member1, to: member2}]}
+
+      iex> transactions([member_with_error_in_balance, member2])
+      :error
+
+  """
+  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | :error
+  def transactions(members) do
+    if Enum.any?(members, &has_balance_error?/1) do
+      :error
+    else
+      {debtors, creditors} =
+        members
+        |> Enum.reject(&Money.zero?(&1.balance))
+        |> Enum.split_with(&Money.negative?(&1.balance))
+
+      {:ok, make_transactions(debtors, creditors, [])}
     end
   end
 
-  defp group_peer_balances(peer_balances)
-  defp group_peer_balances([]), do: %{}
-
-  defp group_peer_balances([peer_balance | rest]) do
-    amount = peer_balance.amount
-
-    group_peer_balances(rest)
-    |> Map.update(peer_balance.from, Money.neg(amount), &Money.subtract(&1, amount))
-    |> Map.update(peer_balance.to, amount, &Money.add(&1, amount))
-  end
-
-  defp transactions(members_balance) do
-    {debtors, creditors} =
-      members_balance
-      |> Enum.reject(fn {_member_id, balance} -> Money.zero?(balance) end)
-      |> Enum.split_with(fn {_member_id, amount} -> Money.negative?(amount) end)
-
-    make_transactions(debtors, creditors, [])
-  end
-
-  # Creates necessary transactions between creditors and debitors
-  # to balance things. The total sum of creditors and debitors should be
+  # Creates necessary transactions between creditors and debtors
+  # to balance things. The total sum of creditors and debtors should be
   # equal to 0, or the function will crash.
-  defp make_transactions(creditors, debitors, transactions)
   defp make_transactions([], [], transactions), do: transactions
 
   defp make_transactions(
-         [{_debtor, neg_debt} | _other_debtors] = all_debtors,
-         [{_creditor, credit} | _other_creditors] = all_creditors,
+         [debtor | _other_debtors] = all_debtors,
+         [creditor | _other_creditors] = all_creditors,
          transactions
        ) do
-    debt = Money.neg(neg_debt)
+    debt = Money.neg(debtor.balance)
 
-    Money.cmp(credit, debt)
+    Money.cmp(creditor.balance, debt)
     |> add_transaction_from_cmp(all_debtors, all_creditors, transactions)
   end
 
   defp add_transaction_from_cmp(
          :eq,
-         [{debtor, neg_debt} | other_debtors],
-         [{creditor, _credit} | other_creditors],
+         [debtor | other_debtors],
+         [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.neg(neg_debt)
+    debt = Money.neg(debtor.balance)
     new_transaction = %{from: debtor, to: creditor, amount: debt}
 
     make_transactions(
@@ -116,30 +232,30 @@ defmodule App.Balance do
 
   defp add_transaction_from_cmp(
          :gt,
-         [{debtor, neg_debt} | other_debtors],
-         [{creditor, credit} | other_creditors],
+         [debtor | other_debtors],
+         [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.neg(neg_debt)
+    debt = Money.neg(debtor.balance)
     new_transaction = %{from: debtor, to: creditor, amount: debt}
 
     make_transactions(
       other_debtors,
-      [{creditor, Money.subtract(credit, debt)} | other_creditors],
+      [%{creditor | balance: Money.subtract(creditor.balance, debt)} | other_creditors],
       [new_transaction | transactions]
     )
   end
 
   defp add_transaction_from_cmp(
          :lt,
-         [{debtor, neg_debt} | other_debtors],
-         [{creditor, credit} | other_creditors],
+         [debtor | other_debtors],
+         [creditor | other_creditors],
          transactions
        ) do
-    new_transaction = %{from: debtor, to: creditor, amount: credit}
+    new_transaction = %{from: debtor, to: creditor, amount: creditor.balance}
 
     make_transactions(
-      [{debtor, Money.add(neg_debt, credit)} | other_debtors],
+      [%{debtor | balance: Money.add(debtor.balance, creditor.balance)} | other_debtors],
       other_creditors,
       [new_transaction | transactions]
     )

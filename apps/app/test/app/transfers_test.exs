@@ -12,7 +12,7 @@ defmodule App.TransfersTest do
   alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Transfers
-  alias App.Transfers.Peers.Peer
+  alias App.Transfers.Peer
 
   describe "find_transfers_of_book/1" do
     setup :book_with_member_context

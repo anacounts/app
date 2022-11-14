@@ -48,6 +48,7 @@ defmodule AppWeb.Router do
 
     get "/users/settings/balance", UserSettingsBalanceController, :edit
     post "/users/settings/balance", UserSettingsBalanceController, :update
+    put "/users/settings/balance", UserSettingsBalanceController, :update
   end
 
   scope "/", AppWeb do

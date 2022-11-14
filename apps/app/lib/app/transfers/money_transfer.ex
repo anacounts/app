@@ -7,12 +7,11 @@ defmodule App.Transfers.MoneyTransfer do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
 
-  alias App.Balance
+  alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Books.Members.BookMember
-  alias App.Transfers.Peers.Peer
+  alias App.Transfers.Peer
 
   # the types
   @transfer_types [:payment, :income, :reimbursement]
@@ -24,7 +23,7 @@ defmodule App.Transfers.MoneyTransfer do
           type: :payment | :income | :reimbursement,
           book: Book.t(),
           tenant: BookMember.t(),
-          balance_params: Balance.TransferParams.t(),
+          balance_params: TransferParams.t(),
           peers: Peer.t()
         }
 
@@ -38,11 +37,14 @@ defmodule App.Transfers.MoneyTransfer do
     belongs_to :tenant, BookMember
 
     # balance
-    field :balance_params, Balance.TransferParams
+    field :balance_params, TransferParams
 
     has_many :peers, Peer,
       foreign_key: :transfer_id,
       on_replace: :delete_if_exists
+
+    # Sum of all the peer `:total_weight`. Depends on the transfer balance means
+    field :total_peer_weight, :decimal, virtual: true
 
     timestamps()
   end
@@ -96,16 +98,5 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_balance_params(changeset) do
     changeset
     |> validate_required(:balance_params)
-  end
-
-  ## Queries
-
-  def base_query do
-    from __MODULE__, as: :money_transfer
-  end
-
-  def where_book_id(query, book_id) do
-    from [money_transfer: money_transfer] in query,
-      where: money_transfer.book_id == ^book_id
   end
 end

@@ -9,9 +9,10 @@ defmodule App.Transfers do
   alias App.Auth.User
   alias App.Books.Book
   alias App.Books.Members
+  alias App.Books.Members.BookMember
   alias App.Books.Members.Rights
   alias App.Transfers.MoneyTransfer
-  alias App.Transfers.Peers.Peer
+  alias App.Transfers.Peer
 
   ## Money transfer
 
@@ -58,9 +59,29 @@ defmodule App.Transfers do
   """
   @spec list_transfers_of_book(Book.id()) :: [MoneyTransfer.t()]
   def list_transfers_of_book(book_id) do
-    MoneyTransfer.base_query()
-    |> MoneyTransfer.where_book_id(book_id)
+    base_query()
+    |> where_book_id(book_id)
     |> order_by(desc: :date)
+    |> Repo.all()
+  end
+
+  @doc """
+  Find all money transfers related to book members.
+
+  ## Examples
+
+      iex> list_transfers_of_members([member1, member2])
+      [%MoneyTransfer{}, ...]
+
+  """
+  @spec list_transfers_of_members([BookMember.t()]) :: [MoneyTransfer.t()]
+  def list_transfers_of_members(members) do
+    members_id = Enum.map(members, fn %BookMember{} = member -> member.id end)
+
+    base_query()
+    |> join_peers()
+    |> where([peer: peer], peer.member_id in ^members_id)
+    |> distinct(true)
     |> Repo.all()
   end
 
@@ -164,6 +185,21 @@ defmodule App.Transfers do
       else: false
   end
 
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking money_transfer changes.
+
+  ## Examples
+
+      iex> change_money_transfer(money_transfer)
+      %Ecto.Changeset{data: %MoneyTransfer{}}
+
+  """
+  def change_money_transfer(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
+    money_transfer
+    |> MoneyTransfer.changeset(attrs)
+    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
+  end
+
   # TODO Rework, a :payment should have a negative amount since it appears as negative to the user
 
   @doc """
@@ -183,18 +219,20 @@ defmodule App.Transfers do
   def amount(%MoneyTransfer{type: :payment} = money_transfer), do: money_transfer.amount
   def amount(%MoneyTransfer{} = money_transfer), do: Money.neg(money_transfer.amount)
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking money_transfer changes.
+  ## Queries
 
-  ## Examples
+  defp base_query do
+    from MoneyTransfer, as: :money_transfer
+  end
 
-      iex> change_money_transfer(money_transfer)
-      %Ecto.Changeset{data: %MoneyTransfer{}}
+  defp join_peers(query, qual \\ :inner) do
+    with_named_binding(query, :peer, fn query ->
+      join(query, qual, [money_transfer: transfer], peer in assoc(transfer, :peers), as: :peer)
+    end)
+  end
 
-  """
-  def change_money_transfer(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
-    money_transfer
-    |> MoneyTransfer.changeset(attrs)
-    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
+  defp where_book_id(query, book_id) do
+    from [money_transfer: money_transfer] in query,
+      where: money_transfer.book_id == ^book_id
   end
 end

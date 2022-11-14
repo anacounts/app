@@ -14,18 +14,31 @@ defmodule AppWeb.BalanceLive.Show do
   def mount(%{"book_id" => book_id}, _session, socket) do
     book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
 
-    %{members_balance: members_balance, transactions: transactions} = Balance.for_book(book_id)
+    members =
+      Members.list_members_of_book(book)
+      |> Balance.fill_members_balance()
 
     socket =
-      assign(socket,
+      socket
+      |> assign(
         page_title: "Balance · #{book.name}",
         layout_heading: gettext("Balance"),
         book: book,
-        members_balance: members_balance,
-        transactions: transactions
+        members: members
       )
+      |> assign_transactions()
 
     {:ok, socket, layout: {AppWeb.LayoutView, "book.html"}}
+  end
+
+  defp assign_transactions(socket) do
+    case Balance.transactions(socket.assigns.members) do
+      {:ok, transactions} ->
+        assign(socket, transactions_error?: false, transactions: transactions)
+
+      :error ->
+        assign(socket, transactions_error?: true)
+    end
   end
 
   defp transfer_icon_and_class_for_amount(amount) do
