@@ -69,10 +69,10 @@ defmodule AppWeb.Router do
     live_session :books, on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
       live "/books", BookLive.Index, :index
       live "/books/new", BookLive.Form, :new
-      live "/books/:book_id", BookLive.Show, :show
       live "/books/:book_id/edit", BookLive.Form, :edit
 
       live "/books/:book_id/invite", InvitationLive.Index, :index
+      live "/books/:book_id/members", BookMemberLive.Index, :index
       live "/books/:book_id/transfers", MoneyTransferLive.Index, :index
       live "/books/:book_id/transfers/new", MoneyTransferLive.Form, :new
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferLive.Form, :edit

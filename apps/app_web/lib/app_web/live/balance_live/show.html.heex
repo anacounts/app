@@ -1,43 +1,4 @@
 <section>
-  <.heading level={:section}>
-    <%= gettext("Members balance") %>
-  </.heading>
-  <.list>
-    <%= for member <- @members, not match?({:error, _}, member.balance) do %>
-      <% {icon_name, class_name} = transfer_icon_and_class_for_amount(member.balance) %>
-      <.list_item>
-        <.icon name={icon_name} class={class_name} />
-        <div class="grow">
-          <span class="font-bold">
-            <%= member.display_name %>
-          </span>
-        </div>
-        <span class={"font-bold #{class_name}"}>
-          <%= member.balance %>
-        </span>
-      </.list_item>
-    <% end %>
-    <.list_item :if={Enum.any?(@members, &match?({:error, _}, &1.balance))} class="text-error">
-      <.icon name="error" />
-      <%= gettext("The balance of some members cannot be computed") %>
-    </.list_item>
-    <%= for member <- @members, match?({:error, _}, member.balance) do %>
-      <.list_item class="text-error">
-        <% # The icon is here just to take up the same space as other lines %>
-        <.icon name="" />
-        <div class="grow">
-          <span class="font-bold">
-            <%= member.display_name %>
-          </span>
-        </div>
-        <span class="font-bold">
-          <%= elem(member.balance, 1) %>
-        </span>
-      </.list_item>
-    <% end %>
-  </.list>
-</section>
-<section>
   <.heading level={:section} class="mt-4">
     <%= gettext("How to balance?") %>
   </.heading>

@@ -1,19 +1,23 @@
-defmodule AppWeb.BookLive.Show do
+defmodule AppWeb.BookMemberLive.Index do
   @moduledoc """
-  The book show live view.
-  Displays details of a book.
+  The book member index live view.
+  Displays the members of a book.
   """
 
   use AppWeb, :live_view
 
   alias App.Auth.Avatars
+  alias App.Balance
   alias App.Books
   alias App.Books.Members
 
   @impl Phoenix.LiveView
   def mount(%{"book_id" => book_id}, _session, socket) do
     book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
-    members = Members.list_members_of_book(book)
+
+    members =
+      Members.list_members_of_book(book)
+      |> Balance.fill_members_balance()
 
     socket =
       assign(socket,
@@ -35,5 +39,21 @@ defmodule AppWeb.BookLive.Show do
      socket
      |> put_flash(:info, gettext("Book deleted successfully"))
      |> push_navigate(to: Routes.book_index_path(socket, :index))}
+  end
+
+  defp format_role(:creator), do: gettext("Creator")
+  defp format_role(:member), do: gettext("Member")
+  defp format_role(:viewer), do: gettext("Viewer")
+
+  defp has_balance_error?(member) do
+    match?({:error, _reasons}, member.balance)
+  end
+
+  defp class_for_member_balance(balance) do
+    cond do
+      Money.zero?(balance) -> nil
+      Money.negative?(balance) -> "text-error"
+      true -> "text-info"
+    end
   end
 end

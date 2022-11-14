@@ -2,11 +2,11 @@
   <:title><%= @book.name %></:title>
 
   <:tab_item
-    navigate={Routes.book_show_path(@socket, :show, @book)}
-    active={@socket.view == AppWeb.BookLive.Show}
+    navigate={Routes.book_member_index_path(@socket, :index, @book)}
+    active={@socket.view == AppWeb.BookMemberLive.Index}
   >
-    <.icon name="list" size={:md} />
-    <%= gettext("Details") %>
+    <.icon name="group" size={:md} />
+    <%= gettext("Members") %>
   </:tab_item>
   <:tab_item
     navigate={Routes.money_transfer_index_path(@socket, :index, @book)}

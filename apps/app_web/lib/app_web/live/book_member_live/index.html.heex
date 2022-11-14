@@ -1,0 +1,34 @@
+<div class="max-w-prose mx-auto">
+  <.tile navigate={Routes.invitation_index_path(@socket, :index, @book)}>
+    <.icon name="person-add" />
+    <%= gettext("Invite member") %>
+  </.tile>
+  <.tile :for={member <- @members} collapse>
+    <.avatar src={Avatars.avatar_url(member)} alt="" />
+    <span class="grow font-bold">
+      <%= member.display_name %>
+    </span>
+    <%= if has_balance_error?(member) do %>
+      <span class="font-bold text-gray-50">
+        XX.xx
+      </span>
+    <% else %>
+      <span class={["font-bold", class_for_member_balance(member.balance)]}>
+        <%= member.balance %>
+      </span>
+    <% end %>
+
+    <:description>
+      <.alert :if={has_balance_error?(member)} type="error">
+        <%= gettext("The member balance could not be computed") %>
+      </.alert>
+      <div class="flex justify-between">
+        <%= format_role(member.role) %>
+        <span>
+          <%= gettext("Joined") %>
+          <.icon name="check" />
+        </span>
+      </div>
+    </:description>
+  </.tile>
+</div>
