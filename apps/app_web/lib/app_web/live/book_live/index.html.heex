@@ -1,35 +1,3 @@
-<.page_header>
-  <:title><%= gettext("My books") %></:title>
-
-  <:menu>
-    <.live_component
-      module={AppWeb.NotificationMenu}
-      id="notification_viewer"
-      user={@current_user}
-    />
-  </:menu>
-  <:menu>
-    <.dropdown id="contextual-menu">
-      <:toggle>
-        <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("Profile")} />
-      </:toggle>
-
-      <.list_item_link href={Routes.user_settings_path(@socket, :edit)}>
-        <.icon name="settings" />
-        <%= gettext("Settings") %>
-      </.list_item_link>
-      <.list_item_link
-        class="text-error"
-        href={Routes.user_session_path(@socket, :delete)}
-        method="delete"
-      >
-        <.icon name="logout" />
-        <%= gettext("Disconnect") %>
-      </.list_item_link>
-    </.dropdown>
-  </:menu>
-</.page_header>
-
 <main>
   <.alert
     :for={{type, message} <- @flash}
