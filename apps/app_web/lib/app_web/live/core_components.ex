@@ -183,15 +183,15 @@ defmodule AppWeb.CoreComponents do
     doc: "The color of the button"
 
   attr :class, :any, default: nil, doc: "Extra classes to add to the button"
-  attr :rest, :global
+  attr :rest, :global, include: @link_attrs
 
   slot(:inner_block)
 
   def button(assigns) do
     ~H"""
-    <button class={["button", button_color_class(@color), @class]} {@rest}>
+    <.link_or_button class={["button", button_color_class(@color), @class]} {@rest}>
       <%= render_slot(@inner_block) %>
-    </button>
+    </.link_or_button>
     """
   end
 
@@ -573,11 +573,6 @@ defmodule AppWeb.CoreComponents do
     Incompatible with `:collapse`.
     """
 
-  attr :size, :atom,
-    default: :md,
-    values: [:sm, :md],
-    doc: "The size of the tile. Defaults to `:md`"
-
   attr :class, :any, default: nil, doc: "Extra classes to add to the tile"
 
   attr :rest, :global
@@ -598,7 +593,7 @@ defmodule AppWeb.CoreComponents do
 
   def tile(%{collapse: true} = assigns) do
     ~H"""
-    <details class={["tile", tile_size_class(@size)]} {@rest}>
+    <details class="tile" {@rest}>
       <summary class={["tile__summary", @class]}>
         <%= render_slot(@inner_block) %>
         <.icon class="tile__collapse-icon" name="expand-more" />
@@ -621,16 +616,13 @@ defmodule AppWeb.CoreComponents do
 
   def tile(%{navigate: _} = assigns) do
     ~H"""
-    <.link class={["tile tile--clickable", tile_size_class(@size)]} navigate={@navigate} {@rest}>
+    <.link class="tile tile--clickable" navigate={@navigate} {@rest}>
       <div class={["tile__summary", @class]}>
         <%= render_slot(@inner_block) %>
       </div>
     </.link>
     """
   end
-
-  defp tile_size_class(:sm), do: "tile--sm"
-  defp tile_size_class(:md), do: "tile--md"
 
   ## Tabs
 
