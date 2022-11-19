@@ -183,15 +183,15 @@ defmodule AppWeb.CoreComponents do
     doc: "The color of the button"
 
   attr :class, :any, default: nil, doc: "Extra classes to add to the button"
-  attr :rest, :global
+  attr :rest, :global, include: @link_attrs
 
   slot(:inner_block)
 
   def button(assigns) do
     ~H"""
-    <button class={["button", button_color_class(@color), @class]} {@rest}>
+    <.link_or_button class={["button", button_color_class(@color), @class]} {@rest}>
       <%= render_slot(@inner_block) %>
-    </button>
+    </.link_or_button>
     """
   end
 
