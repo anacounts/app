@@ -7,22 +7,6 @@
            shadow;
   }
 
-  /* ## Sizing */
-
-  /* .tile--sm {} */
-
-  .tile--sm .tile__summary,
-  .tile--sm .tile__description {
-    @apply px-3 py-2;
-  }
-
-  /* .tile--md {} */
-
-  .tile--md .tile__summary,
-  .tile--md .tile__description {
-    @apply p-4;
-  }
-
   /* ## Clickable */
 
   .tile--clickable {
@@ -36,7 +20,8 @@
   /* # Summary */
 
   .tile__summary {
-    @apply flex items-center gap-4;
+    @apply flex items-center gap-4
+           p-4;
   }
 
   summary.tile__summary {
@@ -59,7 +44,9 @@
 
   /* # Body */
 
-  /* .tile__description {} */
+  .tile__description {
+    @apply p-4;
+  }
 
   /* # Footer */
 

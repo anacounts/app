@@ -57,7 +57,6 @@ defmodule AppWeb.BookLiveTest do
     test "lists all accounts_books", %{conn: conn, book: book} do
       {:ok, _index_live, html} = live(conn, Routes.book_index_path(conn, :index))
 
-      assert html =~ "1 book in your list"
       assert html =~ book.name
     end
 

@@ -1,4 +1,4 @@
-<main>
+<main class="max-w-prose mx-auto">
   <.alert
     :for={{type, message} <- @flash}
     type={type}
@@ -8,14 +8,6 @@
     <%= message %>
   </.alert>
 
-  <.heading level={:section}>
-    <%= ngettext(
-      "%{count} book in your list",
-      "%{count} books in your list",
-      Enum.count(@books)
-    ) %>
-  </.heading>
-
   <.tile :if={Enum.empty?(@books)} class="text-xl" navigate={Routes.book_form_path(@socket, :new)}>
     <.icon name="add" />
     <%= gettext("Create your first book") %>
@@ -24,16 +16,12 @@
     :for={book <- @books}
     data-book-id={book.id}
     navigate={Routes.money_transfer_index_path(@socket, :index, book)}
-    size={:sm}
   >
     <.avatar src={Routes.static_path(@socket, "/images/book-default-avatar.png")} alt="" />
-    <div>
-      <div class="text-lg line-clamp-2"><%= book.name %></div>
-      <span class="font-bold">
-        <%= gettext("Open details") %>
-        <.icon name="arrow-forward" class="ml-1 align-bottom" />
-      </span>
-    </div>
+    <div class="grow text-lg line-clamp-2"><%= book.name %></div>
+    <.button color={:ghost} class="shrink-0 hover:bg-transparent">
+      <.icon name="chevron-right" alt={gettext("Open")} />
+    </.button>
   </.tile>
 
   <.fab_container>
