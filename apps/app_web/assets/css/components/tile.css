@@ -3,7 +3,7 @@
     @apply block
            m-2
            rounded-lg
-           bg-background-2
+           bg-white
            shadow;
   }
 
@@ -30,7 +30,7 @@
   }
 
   .tile--clickable:hover {
-    @apply bg-gray-20;
+    @apply bg-gray-10;
   }
 
   /* # Summary */
@@ -65,7 +65,7 @@
 
   .tile__footer {
     @apply flex
-           border-t border-gray-30;
+           border-t border-gray-20;
   }
 
   .tile__button {
@@ -73,6 +73,11 @@
            w-full
            px-4 py-3
            text-action
-           border-x border-gray-30;
+           border-x border-gray-20
+           transition-colors;
+  }
+
+  .tile__button:hover {
+    @apply bg-gray-5;
   }
 }

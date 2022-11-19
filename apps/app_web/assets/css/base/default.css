@@ -1,3 +1,4 @@
 html {
-  @apply accent-theme;
+  @apply accent-theme
+         bg-background;
 }

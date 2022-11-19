@@ -8,16 +8,17 @@
   select {
     @apply block
            my-1 p-2
-           border border-solid border-gray-60
-           bg-gray-10
+           border border-solid border-gray-70
+           bg-white
            rounded-lg
-           text-base placeholder:text-gray-60;
+           text-base;
   }
 
   input:disabled,
   select:disabled {
-    @apply text-gray-40
-           border-gray-50;
+    @apply text-gray-50
+           border-gray-60
+           bg-gray-10;
   }
 
   input:focus,

@@ -9,7 +9,7 @@
   }
 
   .button:disabled {
-    @apply bg-gray-40
+    @apply bg-gray-50
            border-gray-50;
   }
 
@@ -31,16 +31,16 @@
   /* ## Feature */
 
   .button--feature {
-    @apply bg-gray-10
+    @apply bg-white
            border-gray-50;
   }
 
   .button--feature:hover {
-    @apply bg-gray-20;
+    @apply bg-gray-10;
   }
 
   .button--feature:focus {
-    @apply bg-gray-30;
+    @apply bg-gray-20;
   }
 
   /* ## Ghost */
@@ -51,16 +51,16 @@
   }
 
   .button--ghost:hover {
-    @apply bg-white/20;
+    @apply bg-black/5;
   }
 
   .button--ghost:focus {
-    @apply bg-white/30;
+    @apply bg-black/10;
   }
 
   .button--ghost:disabled {
     @apply bg-transparent
            border-transparent
-           text-gray-40;
+           text-gray-50;
   }
 }
