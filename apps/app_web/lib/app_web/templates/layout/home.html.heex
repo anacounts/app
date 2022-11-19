@@ -1,5 +1,12 @@
 <.page_header>
-  <:title><%= gettext("My books") %></:title>
+  <:title>
+    <img
+      class="inline-block"
+      src={Routes.static_path(@socket, "/images/icons-32-inverted.png")}
+      alt=""
+    />
+    <%= gettext("My books") %>
+  </:title>
 
   <:menu>
     <.live_component
