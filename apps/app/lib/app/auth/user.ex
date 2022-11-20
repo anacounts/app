@@ -7,7 +7,7 @@ defmodule App.Auth.User do
   import Ecto.Changeset
 
   alias App.Books.Book
-  alias App.Books.Members.BookMember
+  alias App.Books.BookMember
 
   @type id :: integer()
   @type t :: %__MODULE__{

@@ -6,7 +6,7 @@ defmodule App.Transfers.Peer do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Books.Members.BookMember
+  alias App.Books.BookMember
   alias App.Transfers.MoneyTransfer
 
   @type id :: integer()

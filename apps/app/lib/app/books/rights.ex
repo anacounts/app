@@ -1,9 +1,9 @@
-defmodule App.Books.Members.Rights do
+defmodule App.Books.Rights do
   @moduledoc """
   Rights are the ability to do one or more actions in a book.
 
   Member are associated a role in a book. The role is represented by
-  the module `App.Books.Members.Role`. It defines their capacity to do
+  the module `App.Books.Role`. It defines their capacity to do
   or not to do actions inside the book. These capacities are represented
   by rights.
 
@@ -16,7 +16,7 @@ defmodule App.Books.Members.Rights do
 
   """
 
-  alias App.Books.Members.Role
+  alias App.Books.Role
 
   @type t ::
           :delete_book

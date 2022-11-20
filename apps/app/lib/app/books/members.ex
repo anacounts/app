@@ -9,9 +9,9 @@ defmodule App.Books.Members do
   alias App.Auth
   alias App.Auth.User
   alias App.Books.Book
+  alias App.Books.BookMember
   alias App.Books.Members
-  alias App.Books.Members.BookMember
-  alias App.Books.Members.Rights
+  alias App.Books.Rights
 
   @doc """
   Lists all members of a book.
@@ -133,7 +133,7 @@ defmodule App.Books.Members do
   ## Examples
 
       iex> base_query()
-      #Ecto.Query<from b0 in App.Books.Members.BookMember, as: :book_member>
+      #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member>
 
       iex> Repo.all(base_query())
       [%BookMember{}, ...]
@@ -149,7 +149,7 @@ defmodule App.Books.Members do
   ## Examples
 
       iex> base_query() |> with_display_name_query()
-      #Ecto.Query<from b0 in App.Books.Members.BookMember, as: :book_member,
+      #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member,
         join: u1 in assoc(b0, :user), as: :user,
         select: merge(b0, %{display_name: u1.display_name})>
 

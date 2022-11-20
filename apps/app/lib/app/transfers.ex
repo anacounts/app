@@ -8,9 +8,9 @@ defmodule App.Transfers do
 
   alias App.Auth.User
   alias App.Books.Book
+  alias App.Books.BookMember
   alias App.Books.Members
-  alias App.Books.Members.BookMember
-  alias App.Books.Members.Rights
+  alias App.Books.Rights
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 

@@ -1,4 +1,4 @@
-defmodule App.Books.Members.BookMember do
+defmodule App.Books.BookMember do
   @moduledoc """
   The link between a book and a user.
   It contains the role of the user for this particular book.
@@ -8,7 +8,7 @@ defmodule App.Books.Members.BookMember do
 
   alias App.Auth.User
   alias App.Books.Book
-  alias App.Books.Members.Role
+  alias App.Books.Role
 
   @type id :: integer()
 
