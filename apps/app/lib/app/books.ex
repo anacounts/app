@@ -93,6 +93,45 @@ defmodule App.Books do
   end
 
   @doc """
+  Returns suggestions of people a user can invite to a book.
+
+  ## Examples
+
+      iex> invitations_suggestions(book, user)
+      [%User{}, ...]
+
+  """
+  @spec invitations_suggestions(Book.t(), User.t()) :: [User.t()]
+  def invitations_suggestions(%Book{} = book, %User{} = user) do
+    invitations_suggestions_query(book, user)
+    |> Repo.all()
+  end
+
+  # Returns a query that fetches the users the given user is most often in books with.
+  # Exludes the users that are already members of the book.
+  @spec invitations_suggestions_query(Book.t(), User.t()) :: Ecto.Query.t()
+  defp invitations_suggestions_query(book, user) do
+    from user_member in BookMember,
+      join: suggested_member in BookMember,
+      on:
+        suggested_member.id != user_member.id and suggested_member.book_id == user_member.book_id,
+      join: suggested_user in User,
+      on: suggested_user.id == suggested_member.user_id,
+      where: user_member.user_id == ^user.id,
+      where: suggested_user.id not in subquery(members_of_book_query(book)),
+      group_by: suggested_user.id,
+      order_by: [desc: count()],
+      select: suggested_user,
+      limit: 10
+  end
+
+  defp members_of_book_query(book) do
+    from book_member in BookMember,
+      where: book_member.book_id == ^book.id,
+      select: book_member.user_id
+  end
+
+  @doc """
   Creates a book.
 
   ## Examples

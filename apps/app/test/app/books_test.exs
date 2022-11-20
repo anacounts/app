@@ -15,6 +15,21 @@ defmodule App.BooksTest do
 
   @invalid_book_attrs %{name: nil, default_balance_params: %{}}
 
+  describe "get_book!/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "returns the book with given id", %{book: book} do
+      assert got = Books.get_book!(book.id)
+      assert got.id == book.id
+    end
+
+    test "raises if book does not exist" do
+      assert_raise Ecto.NoResultsError, fn -> Books.get_book!(-1) end
+    end
+  end
+
   describe "get_book_of_user/2" do
     setup :book_with_creator_context
 
@@ -39,22 +54,38 @@ defmodule App.BooksTest do
     end
   end
 
-  describe "get_book!/1" do
-    setup do
-      %{book: book_fixture()}
+  describe "get_book_of_user!/2" do
+    setup :book_with_creator_context
+
+    test "returns the book", %{book: book, user: user} do
+      user_book = Books.get_book_of_user!(book.id, user)
+      assert user_book.id == book.id
     end
 
-    test "returns the book with given id", %{book: book} do
-      assert got = Books.get_book!(book.id)
-      assert got.id == book.id
+    test "raises if the book doesn't belong to the user", %{book: book} do
+      other_user = user_fixture()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Books.get_book_of_user!(book.id, other_user) == nil
+      end
     end
 
-    test "raises if book does not exist" do
-      assert_raise Ecto.NoResultsError, fn -> Books.get_book!(-1) end
+    test "raises if the book doesn't exist", %{book: book, user: user} do
+      assert_raise Ecto.NoResultsError, fn ->
+        Books.get_book_of_user!(book.id + 10, user) == nil
+      end
+    end
+
+    test "raises if the book was deleted", %{book: book, user: user} do
+      assert {:ok, _book} = Books.delete_book(book, user)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Books.get_book_of_user!(book.id, user)
+      end
     end
   end
 
-  describe "find_user_books/1" do
+  describe "list_books_of_user/1" do
     setup :book_with_member_context
 
     test "returns all user books", %{book: book, user: user} do
@@ -67,6 +98,55 @@ defmodule App.BooksTest do
       assert [book1, book2] = Enum.sort_by(user_books, & &1.id)
       assert book1.id == book.id
       assert book2.id == member_of_book.id
+    end
+  end
+
+  describe "invitations_suggestions/2" do
+    test "returns the users the user is most in books with, ordered" do
+      book1 = book_fixture()
+      book2 = book_fixture()
+      book3 = book_fixture()
+
+      user = user_fixture()
+      _member = book_member_fixture(book1, user)
+      _member = book_member_fixture(book2, user)
+
+      other_user1 = user_fixture()
+      _member = book_member_fixture(book1, other_user1)
+      _member = book_member_fixture(book2, other_user1)
+      _member = book_member_fixture(book3, other_user1)
+
+      other_user2 = user_fixture()
+      _member = book_member_fixture(book2, other_user2)
+      _member = book_member_fixture(book3, other_user2)
+
+      other_user3 = user_fixture()
+      _member = book_member_fixture(book3, other_user3)
+
+      # `user` is in `book1` with `other_user1`,
+      #          and `book2` with `other_user1` and `other_user2`.
+      # They are most with `other_user1` (2 books), then `other_user2` (1 book),
+      # but never with `other_user3`.
+      # The function therefore returns `other_user1` first, then `other_user2`.
+
+      assert Books.invitations_suggestions(book_fixture(), user) == [other_user1, other_user2]
+    end
+
+    test "does not return user that are already members of the book" do
+      book1 = book_fixture()
+      book2 = book_fixture()
+
+      user = user_fixture()
+      _member = book_member_fixture(book1, user)
+      _member = book_member_fixture(book2, user)
+
+      other_user = user_fixture()
+      _member = book_member_fixture(book1, other_user)
+
+      suggested_user = user_fixture()
+      _member = book_member_fixture(book2, suggested_user)
+
+      assert Books.invitations_suggestions(book1, user) == [suggested_user]
     end
   end
 
