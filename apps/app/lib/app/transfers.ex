@@ -53,14 +53,14 @@ defmodule App.Transfers do
 
   ## Examples
 
-      iex> list_transfers_of_book(123)
+      iex> list_transfers_of_book(book)
       [%MoneyTransfer{}, ...]
 
   """
-  @spec list_transfers_of_book(Book.id()) :: [MoneyTransfer.t()]
-  def list_transfers_of_book(book_id) do
+  @spec list_transfers_of_book(Book.t()) :: [MoneyTransfer.t()]
+  def list_transfers_of_book(%Book{} = book) do
     base_query()
-    |> where_book_id(book_id)
+    |> where_book_id(book.id)
     |> order_by(desc: :date)
     |> Repo.all()
   end

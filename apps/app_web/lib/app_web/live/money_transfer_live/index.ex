@@ -6,15 +6,16 @@ defmodule AppWeb.MoneyTransferLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Books
   alias App.Transfers
 
+  on_mount {AppWeb.BookAccess, :ensure_book!}
+
   @impl Phoenix.LiveView
-  def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+  def mount(_params, _session, socket) do
+    book = socket.assigns.book
 
     money_transfers =
-      book_id
+      book
       |> Transfers.list_transfers_of_book()
       |> Transfers.with_tenant()
 
@@ -22,7 +23,6 @@ defmodule AppWeb.MoneyTransferLive.Index do
       assign(socket,
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
         layout_heading: gettext("Transfers"),
-        book: book,
         money_transfers: money_transfers
       )
 
