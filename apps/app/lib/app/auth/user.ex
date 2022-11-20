@@ -6,9 +6,6 @@ defmodule App.Auth.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Books.Book
-  alias App.Books.BookMember
-
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
@@ -16,7 +13,6 @@ defmodule App.Auth.User do
           password: String.t(),
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
-          books: [Book.t()],
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -31,9 +27,8 @@ defmodule App.Auth.User do
     # display information
     field :display_name, :string
 
-    # TODO this is only used in the balance context and should be removed
+    # TODO this is only used in the `Balance` context and should be removed
     has_one :balance_config, App.Balance.Config.UserConfig
-    many_to_many :books, Book, join_through: BookMember
 
     timestamps()
   end

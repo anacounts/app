@@ -6,17 +6,13 @@ defmodule App.Books.Book do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth
   alias App.Balance.TransferParams
-  alias App.Books.BookMember
 
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
           name: String.t(),
           deleted_at: NaiveDateTime.t(),
-          members: [BookMember.t()],
-          users: [Auth.User.t()],
           default_balance_params: TransferParams.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
@@ -25,10 +21,6 @@ defmodule App.Books.Book do
   schema "books" do
     field :name, :string
     field :deleted_at, :naive_datetime
-
-    # user relation
-    has_many :members, BookMember
-    many_to_many :users, Auth.User, join_through: BookMember
 
     # balance
     field :default_balance_params, TransferParams
