@@ -2,31 +2,37 @@
   <:title><%= gettext("Invitations") %></:title>
 </.page_header>
 
-<form class="mx-4" phx-submit="invite">
-  <label>
-    <%= gettext("Email") %>
-    <input type="email" name="email" required />
-  </label>
+<main class="max-w-prose mx-auto">
+  <form class="mx-4" phx-submit="invite_email">
+    <label>
+      <%= gettext("Email") %>
+      <input type="email" name="email" required />
+    </label>
 
-  <div>
-    <.button color={:cta} class="mr-4" phx-disable-with={gettext("Sending...")}>
-      <%= gettext("Invite member") %>
-    </.button>
-  </div>
-</form>
-
-<.list>
-  <.list_item :for={member <- @members}>
-    <.avatar src={Avatars.avatar_url(member)} alt="" />
-    <div class="grow">
-      <span class="font-bold">
-        <%= member.display_name %>
-      </span>
-      <br />
-      <span>
-        <%= member.role %>
-      </span>
+    <div>
+      <.button color={:cta} class="mr-4" phx-disable-with={gettext("Sending...")}>
+        <%= gettext("Invite member") %>
+      </.button>
     </div>
-    <.icon name="check" />
-  </.list_item>
-</.list>
+  </form>
+
+  <.heading level={:section} class="mt-6">
+    <%= gettext("Suggestions") %>
+  </.heading>
+
+  <ul class="mx-4">
+    <li :for={user <- @invitations_suggestions} class="flex items-center gap-2 my-4">
+      <.avatar src={Avatars.avatar_url(user)} alt="" />
+      <span class="grow font-bold"><%= user.display_name %></span>
+      <.button
+        color={:cta}
+        class="mr-4"
+        phx-click="invite_email"
+        phx-value-email={user.email}
+        phx-disable-with={gettext("Sending...")}
+      >
+        <%= gettext("Invite") %>
+      </.button>
+    </li>
+  </ul>
+</main>
