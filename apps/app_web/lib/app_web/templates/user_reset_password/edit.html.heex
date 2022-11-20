@@ -10,28 +10,41 @@
     </.alert>
   <% end %>
 
+  <p><%= gettext("Please enter a new password for your account") %></p>
+  <p class="mb-4 font-bold"><%= @user.email %></p>
+
   <%= label f, :password do %>
     <%= gettext("New password") %>
-    <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
+    <%= password_input(f, :password, required: true, class: "w-full", autocomplete: "new-password") %>
     <%= error_tag(f, :password) %>
   <% end %>
 
   <%= label f, :password_confirmation do %>
     <%= gettext("Confirm new password") %>
-    <%= password_input(f, :password_confirmation, required: true, autocomplete: "new-password") %>
+    <%= password_input(f, :password_confirmation,
+      required: true,
+      class: "w-full",
+      autocomplete: "new-password"
+    ) %>
     <%= error_tag(f, :password_confirmation) %>
   <% end %>
 
   <div>
-    <.button color={:cta}>
+    <.button color={:cta} class="w-full">
       <%= gettext("Reset password") %>
     </.button>
   </div>
 </.form>
 
-<p>
-  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
-    gettext("Log in"),
-    to: Routes.user_session_path(@conn, :new)
-  ) %>
-</p>
+<div class="mt-8
+            border-t border-gray-50
+            text-center
+            text-gray-50 font-bold">
+  <span class="relative bottom-3 p-3 bg-white">
+    <%= gettext("Or continue to") %>
+  </span>
+</div>
+
+<.link href={Routes.user_session_path(@conn, :new)} class="text-action">
+  <%= gettext("Sign in to your account") %>
+</.link>

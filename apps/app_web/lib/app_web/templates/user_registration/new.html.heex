@@ -11,27 +11,24 @@
   <% end %>
 
   <%= label f, :email do %>
-    <%= gettext("Email") %>
-    <%= email_input(f, :email, required: true, autocomplete: "email") %>
+    <%= gettext("Email address") %>
+    <%= email_input(f, :email, required: true, class: "w-full", autocomplete: "email") %>
     <%= error_tag(f, :email) %>
   <% end %>
 
   <%= label f, :password do %>
     <%= gettext("Password") %>
-    <%= password_input(f, :password, required: true, autocomplete: "new-password") %>
+    <%= password_input(f, :password, required: true, class: "w-full", autocomplete: "new-password") %>
     <%= error_tag(f, :password) %>
   <% end %>
 
-  <div>
-    <.button color={:cta}>
-      <%= gettext("Register") %>
-    </.button>
+  <div class="text-right mb-4">
+    <.link href={Routes.user_session_path(@conn, :new)} class="text-action">
+      <%= gettext("Already have an account?") %>
+    </.link>
   </div>
-</.form>
 
-<p>
-  <%= link(gettext("Log in"), to: Routes.user_session_path(@conn, :new)) %> | <%= link(
-    gettext("Forgot your password?"),
-    to: Routes.user_reset_password_path(@conn, :new)
-  ) %>
-</p>
+  <.button color={:cta} class="w-full">
+    <%= gettext("Register") %>
+  </.button>
+</.form>

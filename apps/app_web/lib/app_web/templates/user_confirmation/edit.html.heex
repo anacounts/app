@@ -4,16 +4,25 @@
   action={Routes.user_confirmation_path(@conn, :update, @token)}
   class="px-4"
 >
-  <div>
-    <.button color={:cta}>
-      <%= gettext("Confirm my account") %>
-    </.button>
-  </div>
+  <.button color={:cta} class="w-full">
+    <%= gettext("Confirm your account") %>
+  </.button>
 </.form>
 
-<p>
-  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
-    gettext("Log in"),
-    to: Routes.user_session_path(@conn, :new)
-  ) %>
-</p>
+<div class="mt-8
+            border-t border-gray-50
+            text-center
+            text-gray-50 font-bold">
+  <span class="relative bottom-3 p-3 bg-white">
+    <%= gettext("Or continue to") %>
+  </span>
+</div>
+
+<div class="flex justify-between">
+  <.link href={Routes.user_session_path(@conn, :new)} class="text-action">
+    <%= gettext("Sign in to your account") %>
+  </.link>
+  <.link href={Routes.user_registration_path(@conn, :new)} class="text-action">
+    <%= gettext("Create an account") %>
+  </.link>
+</div>

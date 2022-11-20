@@ -31,7 +31,7 @@ defmodule AppWeb.UserResetPasswordController do
 
   def edit(conn, _params) do
     render(conn, "edit.html",
-      page_title: gettext("Reset password"),
+      page_title: gettext("Reset your password"),
       changeset: Auth.change_user_password(conn.assigns.user)
     )
   end
@@ -46,7 +46,7 @@ defmodule AppWeb.UserResetPasswordController do
         |> redirect(to: Routes.user_session_path(conn, :new))
 
       {:error, changeset} ->
-        render(conn, "edit.html", page_title: gettext("Reset password"), changeset: changeset)
+        render(conn, "edit.html", page_title: gettext("Reset your password"), changeset: changeset)
     end
   end
 
