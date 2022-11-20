@@ -1,4 +1,4 @@
-defmodule App.Books.Members.Role do
+defmodule App.Books.Role do
   @moduledoc """
   Position a user has in a book. A user may have different roles in
   different books, but can only have one role in a particular book.
@@ -8,7 +8,8 @@ defmodule App.Books.Members.Role do
   The creator of a book always has a "creator" role, which gives him
   all the rights there can be on the book they created.
   """
-  alias App.Books.Members.Rights
+
+  alias App.Books.Rights
 
   @type t :: atom()
 

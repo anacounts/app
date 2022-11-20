@@ -6,7 +6,7 @@ defmodule App.Books.MembersFixtures do
 
   alias App.Repo
 
-  alias App.Books.Members.BookMember
+  alias App.Books.BookMember
 
   def book_member_attributes(book, user, attrs \\ %{}) do
     Enum.into(attrs, %{

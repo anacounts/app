@@ -10,7 +10,7 @@ defmodule App.Transfers.MoneyTransfer do
 
   alias App.Balance.TransferParams
   alias App.Books.Book
-  alias App.Books.Members.BookMember
+  alias App.Books.BookMember
   alias App.Transfers.Peer
 
   # the types

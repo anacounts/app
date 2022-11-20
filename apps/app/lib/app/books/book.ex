@@ -8,7 +8,7 @@ defmodule App.Books.Book do
 
   alias App.Auth
   alias App.Balance.TransferParams
-  alias App.Books.Members.BookMember
+  alias App.Books.BookMember
 
   @type id :: integer()
   @type t :: %__MODULE__{
