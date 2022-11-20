@@ -40,7 +40,7 @@ defmodule App.Books.Members do
           {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
   def invite_new_member(book_id, %User{} = user, user_email) do
     with %{} = member <- Members.get_membership(book_id, user.id),
-         true <- Rights.member_can_invite_new_member?(member) do
+         true <- Rights.can_member_invite_new_member?(member) do
       user =
         Auth.get_user_by_email(user_email) ||
           raise "User with email does not exist, crashing as inviting external people is not supported yet"

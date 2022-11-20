@@ -49,17 +49,17 @@ defmodule App.Books.Rights do
 
     ## Examples
 
-        iex> member_can_#{right}?(%BookMember{role: :creator})
+        iex> can_member_#{right}?(%BookMember{role: :creator})
         true
 
-        iex> member_can_#{right}?(%BookMember{role: :viewer})
+        iex> can_member_#{right}?(%BookMember{role: :viewer})
         false
 
     """
     # Credo: creating an atom from a string here is safe, as they are only created
     # at compile-time, from a list of known atoms.
     # credo:disable-for-next-line Credo.Check.Warning.UnsafeToAtom
-    def unquote(:"member_can_#{right}?")(member) do
+    def unquote(:"can_member_#{right}?")(member) do
       Role.has_right?(member.role, unquote(right))
     end
   end

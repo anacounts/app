@@ -181,7 +181,7 @@ defmodule App.Transfers do
 
   defp can_handle_transfers?(book_id, user_id) do
     if member = Members.get_membership(book_id, user_id),
-      do: Rights.member_can_handle_money_transfers?(member),
+      do: Rights.can_member_handle_money_transfers?(member),
       else: false
   end
 
