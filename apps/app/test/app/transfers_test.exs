@@ -20,7 +20,7 @@ defmodule App.TransfersTest do
     test "find all transfers in book", %{book: book, member: member} do
       transfer = money_transfer_fixture(book, tenant_id: member.id)
 
-      assert [found_transfer] = Transfers.list_transfers_of_book(book.id)
+      assert [found_transfer] = Transfers.list_transfers_of_book(book)
       assert found_transfer.id == transfer.id
     end
 
@@ -29,7 +29,7 @@ defmodule App.TransfersTest do
 
       transfer_before = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-01])
 
-      assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book.id)
+      assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book)
       assert found_transfer1.id == transfer_after.id
       assert found_transfer2.id == transfer_before.id
     end

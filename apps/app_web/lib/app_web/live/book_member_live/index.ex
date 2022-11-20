@@ -10,20 +10,23 @@ defmodule AppWeb.BookMemberLive.Index do
   alias App.Balance
   alias App.Books
   alias App.Books.Members
+  alias App.Books.Rights
+
+  on_mount {AppWeb.BookAccess, :ensure_book!}
 
   @impl Phoenix.LiveView
-  def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+  def mount(_params, _session, socket) do
+    book = socket.assigns.book
 
     members =
-      Members.list_members_of_book(book)
+      book
+      |> Members.list_members_of_book()
       |> Balance.fill_members_balance()
 
     socket =
       assign(socket,
         page_title: book.name,
         layout_heading: gettext("Details"),
-        book: book,
         members: members
       )
 

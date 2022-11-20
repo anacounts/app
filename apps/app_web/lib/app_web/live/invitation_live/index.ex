@@ -7,18 +7,18 @@ defmodule AppWeb.InvitationLive.Index do
   use AppWeb, :live_view
 
   alias App.Auth.Avatars
-  alias App.Books
   alias App.Books.Members
 
+  on_mount {AppWeb.BookAccess, :ensure_book!}
+
   @impl Phoenix.LiveView
-  def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+  def mount(_params, _session, socket) do
+    book = socket.assigns.book
     members = Members.list_members_of_book(book)
 
     socket =
       assign(socket,
         page_title: gettext("Invitations · %{book_name}", book_name: book.name),
-        book: book,
         members: members
       )
 

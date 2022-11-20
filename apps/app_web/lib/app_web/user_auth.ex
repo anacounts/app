@@ -117,12 +117,12 @@ defmodule AppWeb.UserAuth do
 
   @doc """
   # :mount_current_user:
-  Assigns current_user to socket assigns based on user_token.
+  Assigns `:current_user` to socket assigns based on user_token.
   Returns nil if there's no user_token or if there's no matching user.
 
   # :ensure_authenticated:
   Authenticates the user by looking into the session.
-  Assigns current_user to socket assigns based on user_token.
+  Assigns `:current_user` to socket assigns based on user_token.
   Redirects to login page if there's no logged user.
 
   ## Examples

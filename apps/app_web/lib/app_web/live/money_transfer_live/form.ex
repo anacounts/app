@@ -7,18 +7,19 @@ defmodule AppWeb.MoneyTransferLive.Form do
   use AppWeb, :live_view
 
   alias App.Auth.Avatars
-  alias App.Books
   alias App.Books.Members
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
+  on_mount {AppWeb.BookAccess, :ensure_book!}
+
   @impl Phoenix.LiveView
-  def mount(%{"book_id" => book_id} = params, _session, socket) do
-    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+  def mount(params, _session, socket) do
+    book = socket.assigns.book
     members = Members.list_members_of_book(book)
 
-    socket = assign(socket, book: book, members: members)
+    socket = assign(socket, members: members)
 
     {:ok, mount_action(socket, socket.assigns.live_action, params)}
   end

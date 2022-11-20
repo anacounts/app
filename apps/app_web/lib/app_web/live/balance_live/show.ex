@@ -7,19 +7,19 @@ defmodule AppWeb.BalanceLive.Show do
   use AppWeb, :live_view
 
   alias App.Balance
-  alias App.Books
   alias App.Books.Members
 
+  on_mount {AppWeb.BookAccess, :ensure_book!}
+
   @impl Phoenix.LiveView
-  def mount(%{"book_id" => book_id}, _session, socket) do
-    book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
+  def mount(_params, _session, socket) do
+    book = socket.assigns.book
 
     socket =
       socket
       |> assign(
         page_title: "Balance · #{book.name}",
-        layout_heading: gettext("Balance"),
-        book: book
+        layout_heading: gettext("Balance")
       )
       |> assign_transactions()
 

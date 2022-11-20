@@ -139,7 +139,7 @@ defmodule App.Books do
           {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
   def update_book(book, user, attrs) do
     with %{} = member <- Members.get_membership(book.id, user.id),
-         true <- Rights.member_can_update_book?(member) do
+         true <- Rights.can_member_edit_book?(member) do
       book
       |> Book.changeset(attrs)
       |> Repo.update()
@@ -169,7 +169,7 @@ defmodule App.Books do
           {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
   def delete_book(%Book{} = book, %User{} = user) do
     with %{} = member <- Members.get_membership(book.id, user.id),
-         true <- Rights.member_can_delete_book?(member) do
+         true <- Rights.can_member_delete_book?(member) do
       book
       |> Book.delete_changeset()
       |> Repo.update()

@@ -10,7 +10,6 @@ defmodule App.Books.Members do
   alias App.Auth.User
   alias App.Books.Book
   alias App.Books.BookMember
-  alias App.Books.Members
   alias App.Books.Rights
 
   @doc """
@@ -39,8 +38,8 @@ defmodule App.Books.Members do
   @spec invite_new_member(Book.id(), User.t(), String.t()) ::
           {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
   def invite_new_member(book_id, %User{} = user, user_email) do
-    with %{} = member <- Members.get_membership(book_id, user.id),
-         true <- Rights.member_can_invite_new_member?(member) do
+    with %{} = member <- get_membership(book_id, user.id),
+         true <- Rights.can_member_invite_new_member?(member) do
       user =
         Auth.get_user_by_email(user_email) ||
           raise "User with email does not exist, crashing as inviting external people is not supported yet"
@@ -103,9 +102,29 @@ defmodule App.Books.Members do
       nil
 
   """
+  # TODO use entities instead of ids
   @spec get_membership(Book.id(), User.id()) :: BookMember.t() | nil
   def get_membership(book_id, user_id) do
     Repo.get_by(BookMember, book_id: book_id, user_id: user_id)
+  end
+
+  @doc """
+  Get the book member entity linking a user to a book.
+
+  Raises `Ecto.NoResultsError` if the user is not a member of the book.
+
+  ## Examples
+
+      iex> get_book_member_of_user!(book.id, user.id)
+      %BookMember{}
+
+      iex> get_book_member_of_user!(book.id, non_member_user.id)
+      ** (Ecto.NoResultsError)
+
+  """
+  @spec get_membership!(Book.t(), User.t()) :: BookMember.t() | nil
+  def get_membership!(%Book{} = book, %User{} = user) do
+    Repo.get_by(BookMember, book_id: book.id, user_id: user.id)
   end
 
   @doc """
