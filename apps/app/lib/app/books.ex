@@ -88,8 +88,8 @@ defmodule App.Books do
   @spec books_of_user_query(Auth.User.t()) :: Ecto.Query.t()
   defp books_of_user_query(%User{} = user) do
     base_query()
-    |> join_users()
-    |> where([user: user], user.id == ^user.id)
+    |> join_members()
+    |> Members.where_user_id(user.id)
   end
 
   @doc """
@@ -193,17 +193,18 @@ defmodule App.Books do
 
   ## Queries
 
-  # TODO Needs rework, I'm not satisfied with this solution
-
   defp base_query do
     from book in Book,
       as: :book,
       where: is_nil(book.deleted_at)
   end
 
-  defp join_users(query) do
-    with_named_binding(query, :user, fn query ->
-      join(query, :inner, [book: book], assoc(book, :users), as: :user)
+  defp join_members(query, qual \\ :inner) do
+    with_named_binding(query, :book_member, fn query ->
+      join(query, qual, [book: book], member in BookMember,
+        on: member.book_id == book.id,
+        as: :book_member
+      )
     end)
   end
 end

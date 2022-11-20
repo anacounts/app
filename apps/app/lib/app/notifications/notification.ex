@@ -12,7 +12,6 @@ defmodule App.Notifications.Notification do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth.User
   alias App.Notifications.Recipient
 
   @type type :: :admin_announcement
@@ -24,7 +23,6 @@ defmodule App.Notifications.Notification do
           content: String.t(),
           type: type(),
           recipients: [Recipient.t()] | Ecto.Association.NotLoaded.t(),
-          users: [User.t()] | Ecto.Association.NotLoaded.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -38,7 +36,6 @@ defmodule App.Notifications.Notification do
     field :read_at, :naive_datetime, virtual: true
 
     has_many :recipients, Recipient
-    many_to_many :users, User, join_through: Recipient
 
     timestamps()
   end
