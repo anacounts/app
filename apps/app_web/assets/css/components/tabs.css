@@ -3,6 +3,7 @@
     @apply fixed right-0 bottom-0 left-0
            flex-none
            flex
+           overflow-auto
            bg-theme text-white/70;
   }
 
@@ -14,6 +15,7 @@
     @apply block
            pt-3 px-4 pb-2
            border-t-2 border-transparent
+           truncate
            transition-colors;
   }
 
