@@ -9,7 +9,7 @@ defmodule AppWeb.UserRegistrationController do
 
   def new(conn, _params) do
     changeset = Auth.change_user_registration(%User{})
-    render(conn, "new.html", page_title: gettext("Register"), changeset: changeset)
+    render(conn, "new.html", page_title: gettext("Create an account"), changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -26,7 +26,7 @@ defmodule AppWeb.UserRegistrationController do
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", page_title: gettext("Register"), changeset: changeset)
+        render(conn, "new.html", page_title: gettext("Create an account"), changeset: changeset)
     end
   end
 end

@@ -5,31 +5,8 @@ defmodule AppWeb.UserConfirmationController do
 
   plug :put_layout, "auth.html"
 
-  def new(conn, _params) do
-    render(conn, "new.html", page_title: gettext("Resend confirmation instructions"))
-  end
-
-  def create(conn, %{"user" => %{"email" => email}}) do
-    if user = Auth.get_user_by_email(email) do
-      Auth.deliver_user_confirmation_instructions(
-        user,
-        &Routes.user_confirmation_url(conn, :edit, &1)
-      )
-    end
-
-    conn
-    |> put_flash(
-      :info,
-      gettext(
-        "If your email is in our system and it has not been confirmed yet, " <>
-          "you will receive an email with instructions shortly."
-      )
-    )
-    |> redirect(to: "/")
-  end
-
   def edit(conn, %{"token" => token}) do
-    render(conn, "edit.html", page_title: gettext("Confirm account"), token: token)
+    render(conn, "edit.html", page_title: gettext("Confirm your account"), token: token)
   end
 
   # Do not log in the user after confirmation to avoid a

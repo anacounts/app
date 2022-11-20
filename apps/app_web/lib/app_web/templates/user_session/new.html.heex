@@ -10,30 +10,49 @@
   <% end %>
 
   <%= label f, :email do %>
-    <%= gettext("Email") %>
-    <%= email_input(f, :email, required: true, autocomplete: "email") %>
+    <%= gettext("Email address") %>
+    <%= email_input(f, :email, required: true, class: "w-full", autocomplete: "email") %>
   <% end %>
 
   <%= label f, :password do %>
     <%= gettext("Password") %>
-    <%= password_input(f, :password, required: true, autocomplete: "current-password") %>
+    <%= password_input(f, :password,
+      required: true,
+      class: "w-full",
+      autocomplete: "current-password"
+    ) %>
   <% end %>
 
-  <%= label f, :remember_me, default_value: true do %>
-    <%= checkbox(f, :remember_me) %>
-    <%= gettext("Keep me logged in for 60 days") %>
-  <% end %>
+  <div class="flex justify-between">
+    <%= label f, :remember_me, default_value: true do %>
+      <%= checkbox(f, :remember_me) %>
+      <%= gettext("Remember me") %>
+    <% end %>
 
-  <div>
-    <.button color={:cta}>
-      <%= gettext("Log in") %>
-    </.button>
+    <.link href={Routes.user_reset_password_path(@conn, :new)} class="text-action">
+      <%= gettext("Forgot your password?") %>
+    </.link>
   </div>
+
+  <.button color={:cta} class="w-full">
+    <%= gettext("Sign in") %>
+  </.button>
 </.form>
 
-<p>
-  <%= link(gettext("Register"), to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
-    gettext("Forgot your password?"),
-    to: Routes.user_reset_password_path(@conn, :new)
-  ) %>
-</p>
+<div class="mt-8
+            border-t border-gray-50
+            text-center
+            text-gray-50 font-bold">
+  <span class="relative bottom-3 p-3 bg-white">
+    <%= gettext("Don't have an account?") %>
+  </span>
+</div>
+
+<.button
+  color={:feature}
+  class="block w-fit mx-auto"
+  navigate={Routes.user_registration_path(@conn, :new)}
+>
+  <.icon name="mail" />
+  <%= gettext("Create one here") %>
+</.button>

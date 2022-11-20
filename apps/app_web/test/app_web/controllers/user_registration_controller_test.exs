@@ -7,9 +7,8 @@ defmodule AppWeb.UserRegistrationControllerTest do
     test "renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Register</h1>"
-      assert response =~ "Log in</a>"
-      assert response =~ "Forgot your password?</a>"
+      assert response =~ "Create an account</h1>"
+      assert response =~ "Already have an account?"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -43,7 +42,7 @@ defmodule AppWeb.UserRegistrationControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "Register</h1>"
+      assert response =~ "Create an account</h1>"
       assert response =~ "must have the @ sign and no spaces"
       assert response =~ "should be at least 12 characters"
     end

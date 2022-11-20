@@ -20,6 +20,10 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Un lien de confirmation a été envoyé à votre nouvelle adresse."
 
 #, elixir-autogen, elixir-format
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#, elixir-autogen, elixir-format
 msgid "Amount"
 msgstr "Montant"
 
@@ -72,14 +76,6 @@ msgid "Close"
 msgstr "Fermer"
 
 #, elixir-autogen, elixir-format
-msgid "Confirm account"
-msgstr "Confirmer un compte"
-
-#, elixir-autogen, elixir-format
-msgid "Confirm my account"
-msgstr "Confirmer mon compte"
-
-#, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
@@ -88,12 +84,24 @@ msgid "Confirm password"
 msgstr "Confirmer le mot de passe"
 
 #, elixir-autogen, elixir-format
+msgid "Confirm your account"
+msgstr "Confirmer mon compte"
+
+#, elixir-autogen, elixir-format
 msgid "Contextual menu"
 msgstr "Menu contextuel"
 
 #, elixir-autogen, elixir-format
 msgid "Create a new book"
 msgstr "Créer un livret"
+
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr "Créer un compte"
+
+#, elixir-autogen, elixir-format
+msgid "Create one here"
+msgstr "Créez-en un ici"
 
 #, elixir-autogen, elixir-format
 msgid "Create your first book"
@@ -132,6 +140,10 @@ msgid "Divide equally"
 msgstr "Diviser également"
 
 #, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr "Vous n'avez pas de compte ?"
+
+#, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifier"
 
@@ -152,12 +164,20 @@ msgid "Email"
 msgstr "Email"
 
 #, elixir-autogen, elixir-format
+msgid "Email address"
+msgstr "Adresse email"
+
+#, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr "Le lien de changement d'email est invalide ou a expiré."
 
 #, elixir-autogen, elixir-format
 msgid "Email changed successfully."
 msgstr "Email modifié."
+
+#, elixir-autogen, elixir-format
+msgid "Enter your user account's email address and we will send you a password reset link."
+msgstr "Entrez votre adresse email et nous vous enverrons les instructions de réinitialisation de mot de passe par email."
 
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
@@ -178,10 +198,6 @@ msgstr "Comment équilibrer par défaut ?"
 #, elixir-autogen, elixir-format
 msgid "How to balance?"
 msgstr "Comment équilibrer ?"
-
-#, elixir-autogen, elixir-format
-msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
-msgstr "Si votre adresse email est dans notre système et n'a pas encore été confirmée, vous allez recevoir un email avec les instructions rapidement."
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
@@ -220,20 +236,12 @@ msgid "Joined"
 msgstr "Accepté"
 
 #, elixir-autogen, elixir-format
-msgid "Keep me logged in for 60 days"
-msgstr "Se souvenir de moi pendant 60 jours"
-
-#, elixir-autogen, elixir-format
 msgid "Label"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
-
-#, elixir-autogen, elixir-format
-msgid "Log in"
-msgstr "Se connecter"
 
 #, elixir-autogen, elixir-format
 msgid "Logged out successfully."
@@ -292,6 +300,10 @@ msgid "Open"
 msgstr "Ouvrir"
 
 #, elixir-autogen, elixir-format
+msgid "Or continue to"
+msgstr "Ou aller vers"
+
+#, elixir-autogen, elixir-format
 msgid "Paid by %{name}"
 msgstr "Payé par %{name}"
 
@@ -306,6 +318,10 @@ msgstr "Mot de passe réinitialisé"
 #, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Paiement"
+
+#, elixir-autogen, elixir-format
+msgid "Please enter a new password for your account"
+msgstr "Entrez un nouveau mot de passe pour votre compte"
 
 #, elixir-autogen, elixir-format
 msgid "Profile"
@@ -328,8 +344,8 @@ msgid "Reimbursement"
 msgstr "Remboursement"
 
 #, elixir-autogen, elixir-format
-msgid "Resend confirmation instructions"
-msgstr "Renvoyer les instructions de confirmation"
+msgid "Remember me"
+msgstr "Se souvenir de moi"
 
 #, elixir-autogen, elixir-format
 msgid "Reset password"
@@ -340,6 +356,10 @@ msgid "Reset password link is invalid or it has expired."
 msgstr "Lien de réinitialisation de mot de passe invalide ou expiré."
 
 #, elixir-autogen, elixir-format
+msgid "Reset your password"
+msgstr "Réinitialiser mon mot de passe"
+
+#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -348,8 +368,8 @@ msgid "Saving..."
 msgstr "Enregistrement en cours..."
 
 #, elixir-autogen, elixir-format
-msgid "Send instructions to reset password"
-msgstr "Envoyer les instructions de réinitialisation de mot de passe"
+msgid "Send password reset instructions"
+msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format
 msgid "Sending..."
@@ -358,6 +378,14 @@ msgstr "Envoi en cours..."
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Paramètres"
+
+#, elixir-autogen, elixir-format
+msgid "Sign in"
+msgstr "Se connecter"
+
+#, elixir-autogen, elixir-format
+msgid "Sign in to your account"
+msgstr "Se connecter à mon compte"
 
 #, elixir-autogen, elixir-format
 msgid "Tenant"

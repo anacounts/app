@@ -1,6 +1,12 @@
-<main class="max-w-[min(90%,33em)] p-4 my-4 mx-auto">
-  <h1 class="text-2xl uppercase"><%= @page_title %></h1>
-
+<header>
+  <img
+    class="mt-8 mx-auto mb-6"
+    src={Routes.static_path(@conn, "/images/icons-48.png")}
+    alt="Anacounts"
+  />
+  <h1 class="mb-8 text-center text-3xl font-bold"><%= @page_title %></h1>
+</header>
+<main class="max-w-lg p-8 mx-auto bg-white rounded">
   <.alert :for={{type, message} <- get_flash(@conn)} type={type}><%= message %></.alert>
 
   <%= @inner_content %>

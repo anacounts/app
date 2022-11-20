@@ -13,9 +13,9 @@ defmodule AppWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Log in</h1>"
-      assert response =~ "Register</a>"
-      assert response =~ "Forgot your password?</a>"
+      assert response =~ "Sign in to your account</h1>"
+      assert response =~ "Forgot your password?"
+      assert response =~ "Create one here"
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do
@@ -74,7 +74,7 @@ defmodule AppWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "Log in</h1>"
+      assert response =~ "Sign in to your account</h1>"
       assert response =~ "Invalid email or password"
     end
   end
