@@ -6,6 +6,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
 
   use AppWeb, :live_view
 
+  alias App.Books.Rights
   alias App.Transfers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}

@@ -24,10 +24,14 @@
       </div>
     </:description>
 
-    <:button navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}>
+    <:button
+      :if={Rights.can_member_handle_money_transfers?(@current_member)}
+      navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}
+    >
       <%= gettext("Edit") %>
     </:button>
     <:button
+      :if={Rights.can_member_handle_money_transfers?(@current_member)}
       class="text-error"
       data-confirm={gettext("Are you sure you want to delete the transfer?")}
       phx-click="delete"
@@ -39,7 +43,7 @@
 </div>
 
 <.fab_container class="mb-12 md:mb-0">
-  <:item>
+  <:item :if={Rights.can_member_handle_money_transfers?(@current_member)}>
     <.fab navigate={Routes.money_transfer_form_path(@socket, :new, @book)}>
       <.icon name="add" alt="Add a money transfer" />
     </.fab>

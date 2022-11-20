@@ -10,9 +10,9 @@ defmodule App.Books.Rights do
   ## Exhaustive list of rights
 
   - delete_book: Allow to delete a book
+  - edit_book: Allow to modify the book (e.g. name)
   - handle_money_transfers: Allow to create, update, and delete money transfers
   - invite_new_member: Allow to invite a new member in the book
-  - update_book: Allow to modify the book (e.g. name)
 
   """
 
@@ -20,15 +20,15 @@ defmodule App.Books.Rights do
 
   @type t ::
           :delete_book
+          | :edit_book
           | :handle_money_transfers
           | :invite_new_member
-          | :update_book
 
   @all_rights [
     :delete_book,
+    :edit_book,
     :handle_money_transfers,
-    :invite_new_member,
-    :update_book
+    :invite_new_member
   ]
 
   @creator_rights @all_rights

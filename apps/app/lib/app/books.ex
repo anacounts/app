@@ -139,7 +139,7 @@ defmodule App.Books do
           {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
   def update_book(book, user, attrs) do
     with %{} = member <- Members.get_membership(book.id, user.id),
-         true <- Rights.can_member_update_book?(member) do
+         true <- Rights.can_member_edit_book?(member) do
       book
       |> Book.changeset(attrs)
       |> Repo.update()
