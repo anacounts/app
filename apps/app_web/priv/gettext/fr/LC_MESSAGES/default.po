@@ -228,6 +228,10 @@ msgid "Invitations · %{book_name}"
 msgstr "Invitations · %{book_name}"
 
 #, elixir-autogen, elixir-format
+msgid "Invite"
+msgstr "Inviter"
+
+#, elixir-autogen, elixir-format
 msgid "Invite member"
 msgstr "Inviter un nouveau membre"
 
@@ -386,6 +390,10 @@ msgstr "Se connecter"
 #, elixir-autogen, elixir-format
 msgid "Sign in to your account"
 msgstr "Se connecter à mon compte"
+
+#, elixir-autogen, elixir-format
+msgid "Suggestions"
+msgstr "Suggestions"
 
 #, elixir-autogen, elixir-format
 msgid "Tenant"
