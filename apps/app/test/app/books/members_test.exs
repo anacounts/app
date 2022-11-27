@@ -5,6 +5,8 @@ defmodule App.Books.MembersTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
+  alias App.Books.BookMember
+  alias App.Books.InvitationToken
   alias App.Books.Members
 
   describe "invite_member/2" do
@@ -46,6 +48,74 @@ defmodule App.Books.MembersTest do
 
       assert {:error, changeset} = Members.invite_new_member(book.id, user, invited_user.email)
       assert errors_on(changeset) == %{user_id: ["user is already a member of this book"]}
+    end
+  end
+
+  describe "deliver_invitation/3" do
+    setup do
+      book_member = book_member_fixture(book_fixture())
+
+      %{
+        book_member: book_member,
+        email: unique_user_email()
+      }
+    end
+
+    test "send token through email", %{book_member: book_member, email: email} do
+      token =
+        extract_invitation_token(fn url ->
+          Members.deliver_invitation(book_member, email, url)
+        end)
+
+      {:ok, decoded_token} = Base.url_decode64(token, padding: false)
+
+      assert user_token =
+               Repo.get_by(InvitationToken, token: :crypto.hash(:sha256, decoded_token))
+
+      assert user_token.book_member_id == book_member.id
+      assert user_token.sent_to == email
+    end
+  end
+
+  describe "accept_invitation/2" do
+    setup do
+      book_member = book_member_fixture(book_fixture())
+      email = unique_user_email()
+
+      token =
+        extract_user_token(fn url ->
+          Members.deliver_invitation(book_member, email, url)
+        end)
+
+      %{book_member: book_member, email: email, token: token}
+    end
+
+    test "updates the member found by the token", %{
+      book_member: book_member,
+      email: email,
+      token: token
+    } do
+      user = %{user_fixture() | email: email}
+
+      assert {:ok, found_member} = Members.accept_invitation(token, user)
+
+      assert found_member.id == book_member.id
+      assert found_member.user_id == user.id
+    end
+
+    test "does not update member with invalid token", %{} do
+      user = user_fixture()
+
+      assert {:error, :invalid_token} = Members.accept_invitation("invalid-token", user)
+    end
+
+    test "does not update member if user email changed", %{book_member: book_member, token: token} do
+      user = user_fixture()
+
+      assert {:error, :invalid_token} =
+               Members.accept_invitation(token, %{user | email: "current@example.com"})
+
+      refute Repo.get!(BookMember, book_member.id).user_id
     end
   end
 
