@@ -42,7 +42,7 @@ defmodule App.Books.BookMember do
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:role])
+    |> cast(attrs, [:role, :user_id])
     |> validate_role()
     |> validate_book_id()
     |> validate_user_id()
@@ -65,7 +65,6 @@ defmodule App.Books.BookMember do
 
   defp validate_user_id(changeset) do
     changeset
-    |> validate_required(:user_id)
     |> foreign_key_constraint(:user_id)
   end
 end
