@@ -16,6 +16,12 @@
     <%= error_tag(f, :email) %>
   <% end %>
 
+  <%= label f, :display_name do %>
+    <%= gettext("Display name") %>
+    <%= text_input(f, :display_name, required: true, class: "w-full", autocomplete: "nickname") %>
+    <%= error_tag(f, :display_name) %>
+  <% end %>
+
   <%= label f, :password do %>
     <%= gettext("Password") %>
     <%= password_input(f, :password, required: true, class: "w-full", autocomplete: "new-password") %>

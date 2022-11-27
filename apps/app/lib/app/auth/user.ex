@@ -52,8 +52,9 @@ defmodule App.Auth.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :display_name, :password])
     |> validate_email()
+    |> validate_display_name()
     |> validate_password(opts)
   end
 
