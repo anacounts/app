@@ -55,7 +55,11 @@ defmodule App.Books.MembersTest do
     test "returns the book_member with given id", %{book: book} do
       other_user = user_fixture()
       book_member = book_member_fixture(book, other_user)
-      assert Members.get_book_member!(book_member.id) == book_member
+
+      result = Members.get_book_member!(book_member.id)
+      assert result.id == book_member.id
+      assert result.book_id == book_member.book_id
+      assert result.user_id == book_member.user_id
     end
 
     test "raises if the book_member does not exist" do

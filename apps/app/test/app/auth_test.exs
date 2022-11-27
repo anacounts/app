@@ -53,12 +53,13 @@ defmodule App.AuthTest do
   end
 
   describe "register_user/1" do
-    test "requires email and password to be set" do
+    test "requires email, display_name and password to be set" do
       {:error, changeset} = Auth.register_user(%{})
 
       assert %{
-               password: ["can't be blank"],
-               email: ["can't be blank"]
+               email: ["can't be blank"],
+               display_name: ["can't be blank"],
+               password: ["can't be blank"]
              } = errors_on(changeset)
     end
 
@@ -80,12 +81,23 @@ defmodule App.AuthTest do
 
     test "validates email uniqueness" do
       %{email: email} = user_fixture()
-      {:error, changeset} = Auth.register_user(%{email: email, password: @valid_user_password})
+
+      {:error, changeset} =
+        Auth.register_user(%{
+          email: email,
+          display_name: "Hey, I'm valid !",
+          password: @valid_user_password
+        })
+
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the upper cased email too, to check that email case is ignored.
       {:error, changeset_upcase} =
-        Auth.register_user(%{email: String.upcase(email), password: @valid_user_password})
+        Auth.register_user(%{
+          email: String.upcase(email),
+          display_name: "Oh no, email was taken already",
+          password: @valid_user_password
+        })
 
       assert "has already been taken" in errors_on(changeset_upcase).email
     end
@@ -103,7 +115,7 @@ defmodule App.AuthTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Auth.change_user_registration(%User{})
-      assert changeset.required == [:password, :email]
+      assert changeset.required == [:password, :display_name, :email]
     end
 
     test "allows fields to be set" do
