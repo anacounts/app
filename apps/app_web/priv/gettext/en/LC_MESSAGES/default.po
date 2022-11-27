@@ -136,6 +136,10 @@ msgid "Disconnect"
 msgstr "Disconnect"
 
 #, elixir-autogen, elixir-format
+msgid "Display name"
+msgstr "Display name"
+
+#, elixir-autogen, elixir-format
 msgid "Divide equally"
 msgstr "Divide equally"
 

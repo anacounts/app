@@ -10,7 +10,8 @@ defmodule App.AuthFixtures do
   def user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       email: unique_user_email(),
-      password: "hello world!"
+      password: "hello world!",
+      display_name: "Test User"
     })
   end
 
