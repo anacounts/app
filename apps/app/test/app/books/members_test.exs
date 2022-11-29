@@ -35,6 +35,23 @@ defmodule App.Books.MembersTest do
       assert result.user_id == book_member.user_id
     end
 
+    test "gets the member nickname as `:display_name` if not linked to a user", %{book: book} do
+      book_member = book_member_fixture(book, user_id: nil, nickname: "APublicPseudo")
+
+      assert book_member = Members.get_book_member!(book_member.id)
+      assert book_member.nickname == "APublicPseudo"
+      assert book_member.display_name == "APublicPseudo"
+    end
+
+    test "gets the user display_name as `:display_name` if linked to a user", %{book: book} do
+      user = user_fixture()
+      book_member = book_member_fixture(book, user_id: user.id, nickname: "APublicPseudo")
+
+      assert book_member = Members.get_book_member!(book_member.id)
+      assert book_member.nickname == "APublicPseudo"
+      assert book_member.display_name == user.display_name
+    end
+
     test "raises if the book_member does not exist" do
       assert_raise Ecto.NoResultsError, fn ->
         Members.get_book_member!(-1)

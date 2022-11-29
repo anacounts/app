@@ -13,7 +13,8 @@ defmodule App.Books.MembersFixtures do
   def book_member_attributes(book, attrs \\ %{}) do
     Enum.into(attrs, %{
       book_id: book.id,
-      role: :member
+      role: :member,
+      nickname: "Member of #{book.name}"
     })
   end
 

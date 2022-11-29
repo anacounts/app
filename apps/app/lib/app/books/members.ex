@@ -291,16 +291,16 @@ defmodule App.Books.Members do
 
       iex> base_query() |> with_display_name_query()
       #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member,
-        join: u1 in assoc(b0, :user), as: :user,
-        select: merge(b0, %{display_name: u1.display_name})>
+        left_join: u1 in assoc(b0, :user), as: :user,
+        select: merge(b0, %{display_name: coalesce(u1.display_name, b0.nickname)})>
 
       iex> base_query() |> with_display_name_query() |> Repo.all()
       [%BookMember{display_name: "John Doe"}, ...]
 
   """
   def with_display_name_query(query) do
-    from [user: user] in join_user(query),
-      select_merge: %{display_name: user.display_name}
+    from [book_member: book_member, user: user] in join_user(query),
+      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
   end
 
   # Load the `:email` virtual field. Only works if querying BookMember entities.
