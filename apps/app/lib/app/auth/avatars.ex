@@ -25,6 +25,11 @@ defmodule App.Auth.Avatars do
   # appending `?parameter=value` at the end of the string.
   #
   # ref: https://en.gravatar.com/site/implement/images/
+  defp gravatar_email_url(nil) do
+    # TODO Add an actual default avatar, using the user initials for example
+    "https://www.gravatar.com/avatar/default"
+  end
+
   defp gravatar_email_url(email) when is_binary(email) do
     hash = gravatar_email_hash(email)
     "https://www.gravatar.com/avatar/#{hash}"
