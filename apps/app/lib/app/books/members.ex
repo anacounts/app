@@ -8,6 +8,7 @@ defmodule App.Books.Members do
 
   alias App.Auth
   alias App.Auth.User
+  alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
@@ -30,97 +31,6 @@ defmodule App.Books.Members do
     |> with_email_query()
     |> where_book_id(book.id)
     |> Repo.all()
-  end
-
-  @doc """
-  Invite a user to an existing book.
-
-  # TODO This is a temporary solution until we have a proper invitation system.
-  """
-  @spec invite_new_member(Book.id(), User.t(), String.t()) ::
-          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def invite_new_member(book_id, %User{} = user, user_email) do
-    with %{} = member <- get_membership(book_id, user.id),
-         true <- Rights.can_member_invite_new_member?(member) do
-      user =
-        Auth.get_user_by_email(user_email) ||
-          raise "User with email does not exist, crashing as inviting external people is not supported yet"
-
-      create_book_member(book_id, user)
-    else
-      _ -> {:error, :unauthorized}
-    end
-  end
-
-  defp create_book_member(book_id, user) do
-    %BookMember{
-      book_id: book_id,
-      user_id: user.id
-    }
-    # set the member role as default, it can be changed later
-    |> BookMember.changeset(%{role: :member})
-    |> Repo.insert()
-    |> case do
-      {:ok, member} -> {:ok, set_virtual_fields(member, user)}
-      {:error, changeset} -> {:error, changeset}
-    end
-  end
-
-  defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
-    %{member | email: user.email, display_name: user.display_name}
-  end
-
-  @doc """
-  Deliver an invitation to a user to join a book as a existing member. This is the most
-  common way to invite a user to a book, which allows to create book members without them
-  being linked to an existing user yet.
-
-  ## Examples
-
-      iex> deliver_invitation(book_member, user, &"/invitation/\#{&1}")
-      {:ok, email}
-
-      iex> deliver_invitation(%{user_id: 1} = book_member, user, &"/invitation/\#{&1}")
-      ** (ArgumentError)
-
-  """
-
-  def deliver_invitation(%BookMember{user_id: nil} = member, email, sent_invite_url_fun)
-      when is_function(sent_invite_url_fun, 1) do
-    {hashed_token, invitation_token} = InvitationToken.build_invitation_token(member, email)
-
-    Repo.insert!(invitation_token)
-    MemberNotifier.deliver_invitation(email, sent_invite_url_fun.(hashed_token))
-  end
-
-  @doc """
-  Accept an invitation to join a book. The first parameter is the invitation token, the
-  second is the user accepting the invitation.
-
-  This will link the book member found by the token to the user. The function fails if
-  the token is invalid, or if the book member is already linked to a user.
-
-  ## Examples
-
-      iex> accept_invitation(token, user)
-      %BookMember{}
-
-      iex> accept_invitation(invalid_token, user)
-      {:error, :invalid_token}
-
-  """
-  @spec accept_invitation(String.t(), User.t()) ::
-          {:ok, BookMember.t()} | {:error, :invalid_token}
-  def accept_invitation(token, %User{} = user) when is_binary(token) do
-    with {:ok, query} <- InvitationToken.verify_invitation_token_query(token, user),
-         %BookMember{user_id: nil} = member <- Repo.one(query) do
-      {:ok,
-       member
-       |> BookMember.changeset(%{user_id: user.id})
-       |> Repo.update!()}
-    else
-      _ -> {:error, :invalid_token}
-    end
   end
 
   @doc """
@@ -180,6 +90,98 @@ defmodule App.Books.Members do
   @spec get_membership!(Book.t(), User.t()) :: BookMember.t() | nil
   def get_membership!(%Book{} = book, %User{} = user) do
     Repo.get_by(BookMember, book_id: book.id, user_id: user.id)
+  end
+
+  @doc """
+  Invite a user to an existing book.
+
+  # TODO This is a temporary solution until we have a proper invitation system.
+  """
+  @spec invite_new_member(Book.id(), User.t(), String.t()) ::
+          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def invite_new_member(book_id, %User{} = user, user_email) do
+    with %{} = member <- get_membership(book_id, user.id),
+         true <- Rights.can_member_invite_new_member?(member) do
+      user =
+        Auth.get_user_by_email(user_email) ||
+          raise "User with email does not exist, crashing as inviting external people is not supported yet"
+
+      create_book_member(book_id, user)
+    else
+      _ -> {:error, :unauthorized}
+    end
+  end
+
+  defp create_book_member(book_id, user) do
+    %BookMember{
+      book_id: book_id,
+      user_id: user.id
+    }
+    # set the member role as default, it can be changed later
+    |> BookMember.changeset(%{role: :member})
+    |> Repo.insert()
+    |> case do
+      {:ok, member} -> {:ok, set_virtual_fields(member, user)}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
+  defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
+    %{member | email: user.email, display_name: user.display_name}
+  end
+
+  @doc """
+  Deliver an invitation to a user to join a book as a existing member. This is the most
+  common way to invite a user to a book, which allows to create book members without them
+  being linked to an existing user yet.
+
+  ## Examples
+
+      iex> deliver_invitation(book_member, user, &"/invitation/\#{&1}")
+      {:ok, email}
+
+      iex> deliver_invitation(%{user_id: 1} = book_member, user, &"/invitation/\#{&1}")
+      ** (ArgumentError)
+
+  """
+
+  def deliver_invitation(%BookMember{user_id: nil} = member, email, sent_invite_url_fun)
+      when is_function(sent_invite_url_fun, 1) do
+    book = Books.get_book!(member.book_id)
+    {hashed_token, invitation_token} = InvitationToken.build_invitation_token(member, email)
+
+    Repo.insert!(invitation_token)
+    MemberNotifier.deliver_invitation(email, book.name, sent_invite_url_fun.(hashed_token))
+  end
+
+  @doc """
+  Accept an invitation to join a book. The first parameter is the invitation token, the
+  second is the user accepting the invitation.
+
+  This will link the book member found by the token to the user. The function fails if
+  the token is invalid, or if the book member is already linked to a user.
+
+  ## Examples
+
+      iex> accept_invitation(token, user)
+      %BookMember{}
+
+      iex> accept_invitation(invalid_token, user)
+      {:error, :invalid_token}
+
+  """
+  @spec accept_invitation(String.t(), User.t()) ::
+          {:ok, BookMember.t()} | {:error, :invalid_token}
+  def accept_invitation(token, %User{} = user) when is_binary(token) do
+    with {:ok, query} <- InvitationToken.verify_invitation_token_query(token, user),
+         %BookMember{user_id: nil} = member <- Repo.one(query) do
+      {:ok,
+       member
+       |> BookMember.changeset(%{user_id: user.id})
+       |> Repo.update!()}
+    else
+      _ -> {:error, :invalid_token}
+    end
   end
 
   @doc """

@@ -9,6 +9,26 @@ defmodule App.Books.MembersTest do
   alias App.Books.InvitationToken
   alias App.Books.Members
 
+  describe "get_book_member!/1" do
+    setup :book_with_creator_context
+
+    test "returns the book_member with given id", %{book: book} do
+      other_user = user_fixture()
+      book_member = book_member_fixture(book, other_user)
+
+      result = Members.get_book_member!(book_member.id)
+      assert result.id == book_member.id
+      assert result.book_id == book_member.book_id
+      assert result.user_id == book_member.user_id
+    end
+
+    test "raises if the book_member does not exist" do
+      assert_raise Ecto.NoResultsError, fn ->
+        Members.get_book_member!(-1)
+      end
+    end
+  end
+
   describe "invite_member/2" do
     setup :book_with_creator_context
 
@@ -116,26 +136,6 @@ defmodule App.Books.MembersTest do
                Members.accept_invitation(token, %{user | email: "current@example.com"})
 
       refute Repo.get!(BookMember, book_member.id).user_id
-    end
-  end
-
-  describe "get_book_member!/1" do
-    setup :book_with_creator_context
-
-    test "returns the book_member with given id", %{book: book} do
-      other_user = user_fixture()
-      book_member = book_member_fixture(book, other_user)
-
-      result = Members.get_book_member!(book_member.id)
-      assert result.id == book_member.id
-      assert result.book_id == book_member.book_id
-      assert result.user_id == book_member.user_id
-    end
-
-    test "raises if the book_member does not exist" do
-      assert_raise Ecto.NoResultsError, fn ->
-        Members.get_book_member!(-1)
-      end
     end
   end
 
