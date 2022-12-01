@@ -226,7 +226,8 @@ defmodule App.Books.Members do
       ** (ArgumentError)
 
   """
-
+  @spec deliver_invitation(BookMember.t(), String.t(), (String.t() -> String.t())) ::
+          {:ok, Swoosh.Email.t()}
   def deliver_invitation(%BookMember{user_id: nil} = member, email, sent_invite_url_fun)
       when is_function(sent_invite_url_fun, 1) do
     book = Books.get_book!(member.book_id)
