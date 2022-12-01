@@ -26,11 +26,51 @@ defmodule App.Books.Members do
   """
   @spec list_members_of_book(Book.t()) :: [BookMember.t()]
   def list_members_of_book(%Book{} = book) do
+    members_of_book_query(book)
+    |> Repo.all()
+  end
+
+  @doc """
+  List members of a book that have been confirmed.
+  Confirmed members are those who have accepted the invitation, therefore
+  they are associated with a user.
+
+  ## Examples
+
+      iex> list_confirmed_members_of_book(book)
+      [%BookMember{user_id: 1}, ...]
+
+  """
+  @spec list_confirmed_members_of_book(Book.t()) :: [BookMember.t()]
+  def list_confirmed_members_of_book(%Book{} = book) do
+    members_of_book_query(book)
+    |> where_confirmed?()
+    |> Repo.all()
+  end
+
+  @doc """
+  List members of a book that have not been confirmed yet.
+  Confirmed members are those who have accepted the invitation, therefore
+  they are associated with a user.
+
+  ## Examples
+
+      iex> list_pending_members_of_book(book)
+      [%BookMember{user_id: nil}, ...]
+
+  """
+  @spec list_pending_members_of_book(Book.t()) :: [BookMember.t()]
+  def list_pending_members_of_book(%Book{} = book) do
+    members_of_book_query(book)
+    |> where_pending?()
+    |> Repo.all()
+  end
+
+  defp members_of_book_query(book) do
     base_query()
     |> with_display_name_query()
     |> with_email_query()
     |> where_book_id(book.id)
-    |> Repo.all()
   end
 
   @doc """
@@ -254,9 +294,19 @@ defmodule App.Books.Members do
       where: book_member.user_id == ^user_id
   end
 
-  def join_user(query) do
+  defp where_confirmed?(query) do
+    from [book_member: book_member] in query,
+      where: not is_nil(book_member.user_id)
+  end
+
+  defp where_pending?(query) do
+    from [book_member: book_member] in query,
+      where: is_nil(book_member.user_id)
+  end
+
+  def join_user(query, qual \\ :left) do
     with_named_binding(query, :user, fn query ->
-      join(query, :inner, [book_member: book_member], assoc(book_member, :user), as: :user)
+      join(query, qual, [book_member: book_member], assoc(book_member, :user), as: :user)
     end)
   end
 end

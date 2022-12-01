@@ -220,6 +220,10 @@ msgid "Invalid email or password"
 msgstr "Invalid email or password"
 
 #, elixir-autogen, elixir-format
+msgid "Invitation sent"
+msgstr "Invitation sent"
+
+#, elixir-autogen, elixir-format
 msgid "Invitation sent successfully"
 msgstr "Invitation sent successfully"
 
@@ -326,6 +330,10 @@ msgstr "Password reset successfully."
 #, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Payment"
+
+#, elixir-autogen, elixir-format
+msgid "Pending members"
+msgstr "Pending members"
 
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
