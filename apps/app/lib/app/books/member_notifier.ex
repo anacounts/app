@@ -26,14 +26,14 @@ defmodule App.Books.MemberNotifier do
   @doc """
   Deliver book invitations.
   """
-  def deliver_invitation(email, url) do
-    deliver(email, "You've been invited to a new book !", """
+  def deliver_invitation(email, book_name, url) do
+    deliver(email, "You've been invited to join #{book_name} !", """
 
     ==============================
 
     Hi,
 
-    Someone invited you to join a new book on Anacounts.
+    Someone invited you to join #{book_name} on Anacounts.
     You can join it by clicking on the following link:
 
     #{url}

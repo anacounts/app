@@ -8,6 +8,7 @@ defmodule App.Books.Members do
 
   alias App.Auth
   alias App.Auth.User
+  alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
@@ -87,10 +88,11 @@ defmodule App.Books.Members do
 
   def deliver_invitation(%BookMember{user_id: nil} = member, email, sent_invite_url_fun)
       when is_function(sent_invite_url_fun, 1) do
+    book = Books.get_book!(member.book_id)
     {hashed_token, invitation_token} = InvitationToken.build_invitation_token(member, email)
 
     Repo.insert!(invitation_token)
-    MemberNotifier.deliver_invitation(email, sent_invite_url_fun.(hashed_token))
+    MemberNotifier.deliver_invitation(email, book.name, sent_invite_url_fun.(hashed_token))
   end
 
   @doc """
