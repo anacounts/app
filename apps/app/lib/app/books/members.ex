@@ -34,6 +34,65 @@ defmodule App.Books.Members do
   end
 
   @doc """
+  Gets a single book_member.
+
+  Raises `Ecto.NoResultsError` if the Book member does not exist.
+
+  ## Examples
+
+      iex> get_book_member!(123)
+      %BookMember{}
+
+      iex> get_book_member!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_book_member!(id) do
+    base_query()
+    |> with_display_name_query()
+    |> Repo.get!(id)
+  end
+
+  @doc """
+  Get the book member entity linking a user to a book.
+
+  Returns `nil` if the user is not a member of the book.
+
+  ## Examples
+
+      iex> get_book_member_of_user(book.id, user.id)
+      %BookMember{}
+
+      iex> get_book_member_of_user(book.id, non_member_user.id)
+      nil
+
+  """
+  # TODO use entities instead of ids
+  @spec get_membership(Book.id(), User.id()) :: BookMember.t() | nil
+  def get_membership(book_id, user_id) do
+    Repo.get_by(BookMember, book_id: book_id, user_id: user_id)
+  end
+
+  @doc """
+  Get the book member entity linking a user to a book.
+
+  Raises `Ecto.NoResultsError` if the user is not a member of the book.
+
+  ## Examples
+
+      iex> get_book_member_of_user!(book.id, user.id)
+      %BookMember{}
+
+      iex> get_book_member_of_user!(book.id, non_member_user.id)
+      ** (Ecto.NoResultsError)
+
+  """
+  @spec get_membership!(Book.t(), User.t()) :: BookMember.t() | nil
+  def get_membership!(%Book{} = book, %User{} = user) do
+    Repo.get_by(BookMember, book_id: book.id, user_id: user.id)
+  end
+
+  @doc """
   Invite a user to an existing book.
 
   # TODO This is a temporary solution until we have a proper invitation system.
@@ -123,65 +182,6 @@ defmodule App.Books.Members do
     else
       _ -> {:error, :invalid_token}
     end
-  end
-
-  @doc """
-  Gets a single book_member.
-
-  Raises `Ecto.NoResultsError` if the Book member does not exist.
-
-  ## Examples
-
-      iex> get_book_member!(123)
-      %BookMember{}
-
-      iex> get_book_member!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_book_member!(id) do
-    base_query()
-    |> with_display_name_query()
-    |> Repo.get!(id)
-  end
-
-  @doc """
-  Get the book member entity linking a user to a book.
-
-  Returns `nil` if the user is not a member of the book.
-
-  ## Examples
-
-      iex> get_book_member_of_user(book.id, user.id)
-      %BookMember{}
-
-      iex> get_book_member_of_user(book.id, non_member_user.id)
-      nil
-
-  """
-  # TODO use entities instead of ids
-  @spec get_membership(Book.id(), User.id()) :: BookMember.t() | nil
-  def get_membership(book_id, user_id) do
-    Repo.get_by(BookMember, book_id: book_id, user_id: user_id)
-  end
-
-  @doc """
-  Get the book member entity linking a user to a book.
-
-  Raises `Ecto.NoResultsError` if the user is not a member of the book.
-
-  ## Examples
-
-      iex> get_book_member_of_user!(book.id, user.id)
-      %BookMember{}
-
-      iex> get_book_member_of_user!(book.id, non_member_user.id)
-      ** (Ecto.NoResultsError)
-
-  """
-  @spec get_membership!(Book.t(), User.t()) :: BookMember.t() | nil
-  def get_membership!(%Book{} = book, %User{} = user) do
-    Repo.get_by(BookMember, book_id: book.id, user_id: user.id)
   end
 
   @doc """
