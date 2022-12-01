@@ -146,28 +146,45 @@ defmodule App.Books.Members do
         Auth.get_user_by_email(user_email) ||
           raise "User with email does not exist, crashing as inviting external people is not supported yet"
 
-      create_book_member(book_id, user)
+      %BookMember{
+        book_id: book_id,
+        user_id: user.id
+      }
+      # set the member role as default, it can be changed later
+      |> BookMember.changeset(%{role: :member})
+      |> Repo.insert()
+      |> case do
+        {:ok, member} -> {:ok, set_virtual_fields(member, user)}
+        {:error, changeset} -> {:error, changeset}
+      end
     else
       _ -> {:error, :unauthorized}
     end
   end
 
-  defp create_book_member(book_id, user) do
-    %BookMember{
-      book_id: book_id,
-      user_id: user.id
-    }
-    # set the member role as default, it can be changed later
-    |> BookMember.changeset(%{role: :member})
-    |> Repo.insert()
-    |> case do
-      {:ok, member} -> {:ok, set_virtual_fields(member, user)}
-      {:error, changeset} -> {:error, changeset}
-    end
-  end
-
   defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
     %{member | email: user.email, display_name: user.display_name}
+  end
+
+  @doc """
+  Create a new book member within a book.
+
+  # Examples
+
+        iex> create_book_member(book, %{nickname: "John Doe", role: :member})
+        {:ok, %BookMember{}}
+
+        iex> create_book_member(book, %{nickname: nil, role: :unknown})
+        {:error, %Ecto.Changeset{}}
+
+  """
+  @spec create_book_member(Book.t(), map()) ::
+          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
+  def create_book_member(%Book{} = book, attrs) do
+    %BookMember{book_id: book.id}
+    # set the member role as default, it can be changed later
+    |> BookMember.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """

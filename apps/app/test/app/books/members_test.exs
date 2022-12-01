@@ -12,8 +12,8 @@ defmodule App.Books.MembersTest do
   describe "list_members_of_book/1" do
     test "lists all members of a book" do
       book = book_fixture()
-      confirmed_member = book_member_fixture(book, %{user_id: user_fixture().id})
-      pending_member = book_member_fixture(book, %{user_id: nil})
+      confirmed_member = book_member_fixture(book, user_id: user_fixture().id)
+      pending_member = book_member_fixture(book, user_id: nil)
       _other_member = book_member_fixture(book_fixture())
 
       assert book
@@ -26,8 +26,8 @@ defmodule App.Books.MembersTest do
   describe "list_confirmed_members_of_book/1" do
     test "lists members of a book that have been confirmed" do
       book = book_fixture()
-      confirmed_member = book_member_fixture(book, %{user_id: user_fixture().id})
-      _pending_member = book_member_fixture(book, %{user_id: nil})
+      confirmed_member = book_member_fixture(book, user_id: user_fixture().id)
+      _pending_member = book_member_fixture(book, user_id: nil)
       _other_member = book_member_fixture(book_fixture())
 
       assert book
@@ -39,9 +39,9 @@ defmodule App.Books.MembersTest do
   describe "list_pending_members_of_book/1" do
     test "lists members of a book that have not been confirmed yet" do
       book = book_fixture()
-      _confirmed_member = book_member_fixture(book, %{user_id: user_fixture().id})
-      pending_member = book_member_fixture(book, %{user_id: nil})
-      _other_member = book_member_attributes(book_fixture())
+      _confirmed_member = book_member_fixture(book, user_id: user_fixture().id)
+      pending_member = book_member_fixture(book, user_id: nil)
+      _other_member = book_member_fixture(book_fixture())
 
       assert book
              |> Members.list_pending_members_of_book()
@@ -54,7 +54,7 @@ defmodule App.Books.MembersTest do
 
     test "returns the book_member with given id", %{book: book} do
       other_user = user_fixture()
-      book_member = book_member_fixture(book, other_user)
+      book_member = book_member_fixture(book, user_id: other_user.id)
 
       result = Members.get_book_member!(book_member.id)
       assert result.id == book_member.id
@@ -92,7 +92,7 @@ defmodule App.Books.MembersTest do
 
     test "returns an error if the user is not allowed to invite new members", %{book: book} do
       other_user = user_fixture()
-      _other_member = book_member_fixture(book, other_user)
+      _other_member = book_member_fixture(book, user_id: other_user.id)
 
       invited_user = user_fixture()
 
@@ -107,6 +107,42 @@ defmodule App.Books.MembersTest do
       assert {:ok, _book_member} = Members.invite_new_member(book.id, user, invited_user.email)
 
       assert {:error, changeset} = Members.invite_new_member(book.id, user, invited_user.email)
+      assert errors_on(changeset) == %{user_id: ["user is already a member of this book"]}
+    end
+  end
+
+  describe "create_book_member/2" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "create a new book member", %{book: book} do
+      assert {:ok, _book_member} = Members.create_book_member(book, book_member_attributes(book))
+    end
+
+    test "can link to a user", %{book: book} do
+      user = user_fixture()
+
+      assert {:ok, book_member} =
+               Members.create_book_member(book, book_member_attributes(book, user_id: user.id))
+
+      assert book_member.user_id == user.id
+    end
+
+    test "returns an error if given invalid attributes", %{book: book} do
+      assert {:error, changeset} =
+               Members.create_book_member(book, book_member_attributes(book, role: :invalid))
+
+      assert errors_on(changeset) == %{role: ["is invalid"]}
+    end
+
+    test "fails if the user is already a member of the book", %{book: book} do
+      user = user_fixture()
+      book_member_fixture(book, user_id: user.id)
+
+      assert {:error, changeset} =
+               Members.create_book_member(book, book_member_attributes(book, user_id: user.id))
+
       assert errors_on(changeset) == %{user_id: ["user is already a member of this book"]}
     end
   end
@@ -182,7 +218,7 @@ defmodule App.Books.MembersTest do
   defp book_with_creator_context(_context) do
     book = book_fixture()
     user = user_fixture()
-    member = book_member_fixture(book, user, role: :creator)
+    member = book_member_fixture(book, user_id: user.id, role: :creator)
 
     %{
       book: book,

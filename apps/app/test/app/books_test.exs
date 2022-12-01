@@ -90,7 +90,7 @@ defmodule App.BooksTest do
 
     test "returns all user books", %{book: book, user: user} do
       member_of_book = book_fixture()
-      _book_membership = book_member_fixture(member_of_book, user)
+      _book_membership = book_member_fixture(member_of_book, user_id: user.id)
 
       _not_member_of_book = book_fixture()
 
@@ -108,20 +108,20 @@ defmodule App.BooksTest do
       book3 = book_fixture()
 
       user = user_fixture()
-      _member = book_member_fixture(book1, user)
-      _member = book_member_fixture(book2, user)
+      _member = book_member_fixture(book1, user_id: user.id)
+      _member = book_member_fixture(book2, user_id: user.id)
 
       other_user1 = user_fixture()
-      _member = book_member_fixture(book1, other_user1)
-      _member = book_member_fixture(book2, other_user1)
-      _member = book_member_fixture(book3, other_user1)
+      _member = book_member_fixture(book1, user_id: other_user1.id)
+      _member = book_member_fixture(book2, user_id: other_user1.id)
+      _member = book_member_fixture(book3, user_id: other_user1.id)
 
       other_user2 = user_fixture()
-      _member = book_member_fixture(book2, other_user2)
-      _member = book_member_fixture(book3, other_user2)
+      _member = book_member_fixture(book2, user_id: other_user2.id)
+      _member = book_member_fixture(book3, user_id: other_user2.id)
 
       other_user3 = user_fixture()
-      _member = book_member_fixture(book3, other_user3)
+      _member = book_member_fixture(book3, user_id: other_user3.id)
 
       # `user` is in `book1` with `other_user1`,
       #          and `book2` with `other_user1` and `other_user2`.
@@ -137,14 +137,14 @@ defmodule App.BooksTest do
       book2 = book_fixture()
 
       user = user_fixture()
-      _member = book_member_fixture(book1, user)
-      _member = book_member_fixture(book2, user)
+      _member = book_member_fixture(book1, user_id: user.id)
+      _member = book_member_fixture(book2, user_id: user.id)
 
       other_user = user_fixture()
-      _member = book_member_fixture(book1, other_user)
+      _member = book_member_fixture(book1, user_id: other_user.id)
 
       suggested_user = user_fixture()
-      _member = book_member_fixture(book2, suggested_user)
+      _member = book_member_fixture(book2, user_id: suggested_user.id)
 
       assert Books.invitations_suggestions(book1, user) == [suggested_user]
     end
@@ -234,7 +234,7 @@ defmodule App.BooksTest do
 
     test "returns error unauthorized if the user if not allowed to update the book", %{book: book} do
       other_user = user_fixture()
-      _other_member = book_member_fixture(book, other_user)
+      _other_member = book_member_fixture(book, user_id: other_user.id)
 
       assert {:error, :unauthorized} = Books.update_book(book, other_user, %{name: "foo"})
     end
@@ -264,7 +264,7 @@ defmodule App.BooksTest do
 
     test "does not delete the book if the user is not allowed to", %{book: book} do
       other_user = user_fixture()
-      _other_member = book_member_fixture(book, other_user)
+      _other_member = book_member_fixture(book, user_id: other_user.id)
 
       assert {:error, :unauthorized} = Books.delete_book(book, other_user)
     end
@@ -287,7 +287,7 @@ defmodule App.BooksTest do
   defp book_with_member_role(role) do
     book = book_fixture()
     user = user_fixture()
-    member = book_member_fixture(book, user, role: role)
+    member = book_member_fixture(book, user_id: user.id, role: role)
 
     %{
       book: book,
