@@ -18,16 +18,19 @@ defmodule AppWeb.BookMemberLive.Index do
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    members =
+    confirmed_members =
       book
-      |> Members.list_members_of_book()
+      |> Members.list_confirmed_members_of_book()
       |> Balance.fill_members_balance()
+
+    pending_members = Members.list_pending_members_of_book(book)
 
     socket =
       assign(socket,
         page_title: book.name,
         layout_heading: gettext("Details"),
-        members: members
+        confirmed_members: confirmed_members,
+        pending_members: pending_members
       )
 
     {:ok, socket, layout: {AppWeb.LayoutView, "book.html"}}

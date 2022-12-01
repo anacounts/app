@@ -6,7 +6,7 @@
     <.icon name="person-add" />
     <%= gettext("Invite member") %>
   </.tile>
-  <.tile :for={member <- @members} collapse>
+  <.tile :for={member <- @confirmed_members} collapse>
     <.avatar src={Avatars.avatar_url(member)} alt="" />
     <span class="grow font-bold">
       <%= member.display_name %>
@@ -30,6 +30,26 @@
         <span>
           <%= gettext("Joined") %>
           <.icon name="check" />
+        </span>
+      </div>
+    </:description>
+  </.tile>
+
+  <.heading :if={not Enum.empty?(@pending_members)} level={:section} class="mt-6">
+    <%= gettext("Pending members") %>
+  </.heading>
+
+  <.tile :for={member <- @pending_members} collapse>
+    <.avatar src={Avatars.avatar_url(member)} alt="" />
+    <span class="grow font-bold">
+      <%= member.display_name %>
+    </span>
+    <:description>
+      <div class="flex justify-between">
+        <%= format_role(member.role) %>
+        <span>
+          <%= gettext("Invitation sent") %>
+          <.icon name="mail" />
         </span>
       </div>
     </:description>
