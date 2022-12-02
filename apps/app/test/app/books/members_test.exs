@@ -69,6 +69,47 @@ defmodule App.Books.MembersTest do
     end
   end
 
+  describe "get_book_member_by_invitation_token/2" do
+    setup :book_with_creator_context
+
+    @valid_invitation_email "email@example.com"
+
+    test "returns the book_member with given invitation token", %{book: book} do
+      book_member = book_member_fixture(book)
+
+      {hashed_token, _invitation_token} =
+        invitation_token_fixture(book_member, @valid_invitation_email)
+
+      user = user_fixture(email: @valid_invitation_email)
+
+      assert result = Members.get_book_member_by_invitation_token(hashed_token, user)
+      assert result.id == book_member.id
+      assert result.book_id == book_member.book_id
+      assert result.user_id == book_member.user_id
+    end
+
+    test "returns nil if the invitation token cannot be found" do
+      user = user_fixture()
+
+      refute Base.encode64("notfound")
+             |> Members.get_book_member_by_invitation_token(user)
+    end
+
+    test "returns nil if the invitation token is invalid" do
+      user = user_fixture()
+      refute Members.get_book_member_by_invitation_token("invalid", user)
+    end
+
+    test "returns nil if user email does not match the token", %{book: book} do
+      book_member = book_member_fixture(book)
+      {hashed_token, _invitation_token} = invitation_token_fixture(book_member)
+
+      other_user = user_fixture()
+
+      refute Members.get_book_member_by_invitation_token(hashed_token, other_user)
+    end
+  end
+
   describe "invite_member/2" do
     setup :book_with_creator_context
 

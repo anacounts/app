@@ -133,6 +133,31 @@ defmodule App.Books.Members do
   end
 
   @doc """
+  Get the book member linked to an invitation token. Returns `nil` if the token is
+  invalid, not found, or if the user email does not match the email the token was
+  sent to.
+
+  ## Examples
+
+      iex> get_book_member_of_invitation_token(token, user)
+      %BookMember{}
+
+      iex> get_book_member_of_invitation_token(invalid_token, user)
+      nil
+
+      iex> get_book_member_of_invitation_token(token, user_the_token_was_not_sent_to)
+      nil
+
+  """
+  @spec get_book_member_by_invitation_token(String.t(), User.t()) :: BookMember.t() | nil
+  def get_book_member_by_invitation_token(token, %User{} = user) do
+    case InvitationToken.verify_invitation_token_query(token, user) do
+      {:ok, query} -> Repo.one(query)
+      :error -> nil
+    end
+  end
+
+  @doc """
   Invite a user to an existing book.
 
   # TODO This is a temporary solution until we have a proper invitation system.
