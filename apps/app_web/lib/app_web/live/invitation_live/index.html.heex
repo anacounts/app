@@ -3,20 +3,35 @@
 </.page_header>
 
 <main class="max-w-prose mx-auto">
-  <form class="mx-4" phx-submit="invite_email">
+  <.heading level={:section} class="mt-6">
+    <%= gettext("Invite a new member") %>
+  </.heading>
+
+  <.alert :for={{type, message} <- @flash} type={type}><%= message %></.alert>
+
+  <.form
+    :let={f}
+    for={@changeset}
+    id="invite-member"
+    class="mx-4"
+    phx-change="validate_member"
+    phx-submit="invite_member"
+  >
     <label>
-      <%= gettext("Email") %>
-      <input type="email" name="email" required />
+      <%= gettext("Nickname") %>
+      <%= text_input(f, :nickname, required: true, class: "w-full") %>
+    </label>
+    <label>
+      <%= gettext("Send invitation to email (optional)") %>
+      <input type="email" name="send_to" id="send_to" class="w-full" />
     </label>
 
-    <div>
-      <.button color={:cta} class="mr-4" phx-disable-with={gettext("Sending...")}>
-        <%= gettext("Invite member") %>
-      </.button>
-    </div>
-  </form>
+    <.button color={:cta} class="mr-4" phx-disable-with={gettext("Sending...")}>
+      <%= gettext("Create member") %>
+    </.button>
+  </.form>
 
-  <.heading level={:section} class="mt-6">
+  <.heading :if={not Enum.empty?(@invitations_suggestions)} level={:section} class="mt-6">
     <%= gettext("Suggestions") %>
   </.heading>
 
@@ -27,9 +42,9 @@
       <.button
         color={:cta}
         class="mr-4"
-        phx-click="invite_email"
-        phx-value-email={user.email}
-        phx-disable-with={gettext("Sending...")}
+        phx-click="invite_user"
+        phx-value-id={user.id}
+        phx-disable-with={gettext("Inviting...")}
       >
         <%= gettext("Invite") %>
       </.button>
