@@ -40,6 +40,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr "Are you sure you want to delete the transfer?"
 
 #, elixir-autogen, elixir-format
+msgid "Back to the app"
+msgstr "Back to the app"
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Balance"
 
@@ -196,6 +200,10 @@ msgid "Gravatar is a service providing globally unique avatars"
 msgstr "Gravatar is a service providing globally unique avatars"
 
 #, elixir-autogen, elixir-format
+msgid "Hi %{user_name}"
+msgstr "Hi %{user_name}"
+
+#, elixir-autogen, elixir-format
 msgid "How to balance by default?"
 msgstr "How to balance by default?"
 
@@ -220,6 +228,10 @@ msgid "Invalid email or password"
 msgstr "Invalid email or password"
 
 #, elixir-autogen, elixir-format
+msgid "Invitation link is invalid or it has expired."
+msgstr "Invitation link is invalid or it has expired."
+
+#, elixir-autogen, elixir-format
 msgid "Invitation sent"
 msgstr "Invitation sent"
 
@@ -242,6 +254,14 @@ msgstr "Invite"
 #, elixir-autogen, elixir-format
 msgid "Invite member"
 msgstr "Invite member"
+
+#, elixir-autogen, elixir-format
+msgid "Join"
+msgstr "Join"
+
+#, elixir-autogen, elixir-format
+msgid "Join %{book_name}"
+msgstr "Join %{book_name}"
 
 #, elixir-autogen, elixir-format
 msgid "Joined"
@@ -302,6 +322,10 @@ msgstr "New email"
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "New password"
+
+#, elixir-autogen, elixir-format
+msgid "Not %{user_name}? Disconnect"
+msgstr "Not %{user_name}? Disconnect"
 
 #, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
@@ -420,6 +444,10 @@ msgid "The transactions are balanced already!"
 msgstr "The transactions are balanced already!"
 
 #, elixir-autogen, elixir-format
+msgid "This invitation is irrelevant?"
+msgstr "This invitation is irrelevant?"
+
+#, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 
@@ -458,6 +486,14 @@ msgstr "Viewer"
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
 msgstr "Weight by income"
+
+#, elixir-autogen, elixir-format
+msgid "You have been added to the book."
+msgstr "You have been added to the book."
+
+#, elixir-autogen, elixir-format
+msgid "You have been invited to join a new book:"
+msgstr "You have been invited to join a new book:"
 
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."

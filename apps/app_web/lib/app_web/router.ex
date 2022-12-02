@@ -76,6 +76,8 @@ defmodule AppWeb.Router do
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferLive.Form, :edit
       live "/books/:book_id/balance", BalanceLive.Show, :show
     end
+
+    resources "/invitation", BookInvitationController, param: "token", only: [:edit, :update]
   end
 
   ## Metrics routes
