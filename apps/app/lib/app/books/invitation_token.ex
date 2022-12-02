@@ -73,4 +73,11 @@ defmodule App.Books.InvitationToken do
   defp token_query(token) do
     from __MODULE__, where: [token: ^token]
   end
+
+  @doc """
+  The query returns the tokens linked to the book member.
+  """
+  def book_member_tokens_query(book_member) do
+    from __MODULE__, where: [book_member_id: ^book_member.id]
+  end
 end

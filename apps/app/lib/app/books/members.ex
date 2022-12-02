@@ -237,33 +237,33 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Accept an invitation to join a book. The first parameter is the invitation token, the
-  second is the user accepting the invitation.
+  Accept an invitation to join a book. The first parameter is the book member that will
+  get updated, the second is the user accepting the invitation.
 
-  This will link the book member found by the token to the user. The function fails if
-  the token is invalid, or if the book member is already linked to a user.
+  This will link the book member to the user. The function raises if the book member is
+  already linked to a user.
 
   ## Examples
 
-      iex> accept_invitation(token, user)
-      %BookMember{}
+      iex> accept_invitation(book_member, user)
+      {:ok, %BookMember{}}
 
-      iex> accept_invitation(invalid_token, user)
-      {:error, :invalid_token}
+      iex> accept_invitation(%{user_id: 1} = book_member, user)
+      ** (FunctionClauseError)
 
   """
-  @spec accept_invitation(String.t(), User.t()) ::
-          {:ok, BookMember.t()} | {:error, :invalid_token}
-  def accept_invitation(token, %User{} = user) when is_binary(token) do
-    with {:ok, query} <- InvitationToken.verify_invitation_token_query(token, user),
-         %BookMember{user_id: nil} = member <- Repo.one(query) do
-      {:ok,
-       member
-       |> BookMember.changeset(%{user_id: user.id})
-       |> Repo.update!()}
-    else
-      _ -> {:error, :invalid_token}
-    end
+  @spec accept_invitation(BookMember.t(), User.t()) :: {:ok, BookMember.t()}
+  def accept_invitation(%BookMember{user_id: nil} = book_member, %User{} = user) do
+    {:ok, %{book_member: book_member}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:book_member, BookMember.changeset(book_member, %{user_id: user.id}))
+      |> Ecto.Multi.delete_all(
+        :invitation_tokens,
+        InvitationToken.book_member_tokens_query(book_member)
+      )
+      |> Repo.transaction()
+
+    {:ok, book_member}
   end
 
   @doc """
