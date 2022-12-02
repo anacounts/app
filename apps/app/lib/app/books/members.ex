@@ -3,17 +3,15 @@ defmodule App.Books.Members do
   The Books.Members context.
   """
 
-  import Ecto.Query, warn: false
+  import Ecto.Query
   alias App.Repo
 
-  alias App.Auth
   alias App.Auth.User
   alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
   alias App.Books.MemberNotifier
-  alias App.Books.Rights
 
   @doc """
   Lists all members of a book.
@@ -137,40 +135,6 @@ defmodule App.Books.Members do
   @spec pending?(BookMember.t()) :: boolean()
   def pending?(%BookMember{} = book_member) do
     book_member.user_id == nil
-  end
-
-  @doc """
-  Invite a user to an existing book.
-
-  # TODO This is a temporary solution until we have a proper invitation system.
-  """
-  @spec invite_new_member(Book.id(), User.t(), String.t()) ::
-          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def invite_new_member(book_id, %User{} = user, user_email) do
-    with %{} = member <- get_membership(book_id, user.id),
-         true <- Rights.can_member_invite_new_member?(member) do
-      user =
-        Auth.get_user_by_email(user_email) ||
-          raise "User with email does not exist, crashing as inviting external people is not supported yet"
-
-      %BookMember{
-        book_id: book_id,
-        user_id: user.id
-      }
-      # set the member role as default, it can be changed later
-      |> BookMember.changeset(%{role: :member})
-      |> Repo.insert()
-      |> case do
-        {:ok, member} -> {:ok, set_virtual_fields(member, user)}
-        {:error, changeset} -> {:error, changeset}
-      end
-    else
-      _ -> {:error, :unauthorized}
-    end
-  end
-
-  defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
-    %{member | email: user.email, display_name: user.display_name}
   end
 
   @doc """
