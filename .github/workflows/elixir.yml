@@ -12,7 +12,8 @@ permissions:
 jobs:
   build:
     name: Validate code
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +43,8 @@ jobs:
 
   test:
     name: Build and test
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     services:
       postgres:
