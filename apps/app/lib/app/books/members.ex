@@ -30,42 +30,6 @@ defmodule App.Books.Members do
     |> Repo.all()
   end
 
-  @doc """
-  List members of a book that have been confirmed.
-  Confirmed members are those who have accepted the invitation, therefore
-  they are associated with a user.
-
-  ## Examples
-
-      iex> list_confirmed_members_of_book(book)
-      [%BookMember{user_id: 1}, ...]
-
-  """
-  @spec list_confirmed_members_of_book(Book.t()) :: [BookMember.t()]
-  def list_confirmed_members_of_book(%Book{} = book) do
-    members_of_book_query(book)
-    |> where_confirmed?()
-    |> Repo.all()
-  end
-
-  @doc """
-  List members of a book that have not been confirmed yet.
-  Confirmed members are those who have accepted the invitation, therefore
-  they are associated with a user.
-
-  ## Examples
-
-      iex> list_pending_members_of_book(book)
-      [%BookMember{user_id: nil}, ...]
-
-  """
-  @spec list_pending_members_of_book(Book.t()) :: [BookMember.t()]
-  def list_pending_members_of_book(%Book{} = book) do
-    members_of_book_query(book)
-    |> where_pending?()
-    |> Repo.all()
-  end
-
   defp members_of_book_query(book) do
     base_query()
     |> with_display_name_query()
@@ -155,6 +119,24 @@ defmodule App.Books.Members do
       {:ok, query} -> Repo.one(query)
       :error -> nil
     end
+  end
+
+  @doc """
+  Check if a book member is yet to accept an invitation. In other words, a pending member
+  is not linked to a user yet. This means that if the user is invoved in a trasnfer using
+  a balance mean that required information about the user, the balance will fail.
+
+  ## Examples
+
+      iex> pending?(book_member)
+      true
+
+      iex> pending?(book_member_with_user)
+      false
+  """
+  @spec pending?(BookMember.t()) :: boolean()
+  def pending?(%BookMember{} = book_member) do
+    book_member.user_id == nil
   end
 
   @doc """
@@ -335,16 +317,6 @@ defmodule App.Books.Members do
   def where_user_id(query, user_id) do
     from [book_member: book_member] in query,
       where: book_member.user_id == ^user_id
-  end
-
-  defp where_confirmed?(query) do
-    from [book_member: book_member] in query,
-      where: not is_nil(book_member.user_id)
-  end
-
-  defp where_pending?(query) do
-    from [book_member: book_member] in query,
-      where: is_nil(book_member.user_id)
   end
 
   def join_user(query, qual \\ :left) do
