@@ -22,32 +22,6 @@ defmodule App.Books.MembersTest do
     end
   end
 
-  describe "list_confirmed_members_of_book/1" do
-    test "lists members of a book that have been confirmed" do
-      book = book_fixture()
-      confirmed_member = book_member_fixture(book, user_id: user_fixture().id)
-      _pending_member = book_member_fixture(book, user_id: nil)
-      _other_member = book_member_fixture(book_fixture())
-
-      assert book
-             |> Members.list_confirmed_members_of_book()
-             |> Enum.map(& &1.id) == [confirmed_member.id]
-    end
-  end
-
-  describe "list_pending_members_of_book/1" do
-    test "lists members of a book that have not been confirmed yet" do
-      book = book_fixture()
-      _confirmed_member = book_member_fixture(book, user_id: user_fixture().id)
-      pending_member = book_member_fixture(book, user_id: nil)
-      _other_member = book_member_fixture(book_fixture())
-
-      assert book
-             |> Members.list_pending_members_of_book()
-             |> Enum.map(& &1.id) == [pending_member.id]
-    end
-  end
-
   describe "get_book_member!/1" do
     setup :book_with_creator_context
 
