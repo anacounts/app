@@ -39,6 +39,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Back to the app"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr ""
 
@@ -195,6 +199,10 @@ msgid "Gravatar is a service providing globally unique avatars"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Hi %{user_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "How to balance by default?"
 msgstr ""
 
@@ -219,6 +227,10 @@ msgid "Invalid email or password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Invitation link is invalid or it has expired."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Invitation sent"
 msgstr ""
 
@@ -240,6 +252,14 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Invite member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Join"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Join %{book_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -300,6 +320,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Not %{user_name}? Disconnect"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -419,6 +443,10 @@ msgid "The transactions are balanced already!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This invitation is irrelevant?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
 msgstr ""
 
@@ -456,6 +484,14 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You have been added to the book."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You have been invited to join a new book:"
 msgstr ""
 
 #, elixir-autogen, elixir-format

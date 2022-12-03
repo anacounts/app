@@ -133,6 +133,31 @@ defmodule App.Books.Members do
   end
 
   @doc """
+  Get the book member linked to an invitation token. Returns `nil` if the token is
+  invalid, not found, or if the user email does not match the email the token was
+  sent to.
+
+  ## Examples
+
+      iex> get_book_member_of_invitation_token(token, user)
+      %BookMember{}
+
+      iex> get_book_member_of_invitation_token(invalid_token, user)
+      nil
+
+      iex> get_book_member_of_invitation_token(token, user_the_token_was_not_sent_to)
+      nil
+
+  """
+  @spec get_book_member_by_invitation_token(String.t(), User.t()) :: BookMember.t() | nil
+  def get_book_member_by_invitation_token(token, %User{} = user) do
+    case InvitationToken.verify_invitation_token_query(token, user) do
+      {:ok, query} -> Repo.one(query)
+      :error -> nil
+    end
+  end
+
+  @doc """
   Invite a user to an existing book.
 
   # TODO This is a temporary solution until we have a proper invitation system.
@@ -212,33 +237,33 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Accept an invitation to join a book. The first parameter is the invitation token, the
-  second is the user accepting the invitation.
+  Accept an invitation to join a book. The first parameter is the book member that will
+  get updated, the second is the user accepting the invitation.
 
-  This will link the book member found by the token to the user. The function fails if
-  the token is invalid, or if the book member is already linked to a user.
+  This will link the book member to the user. The function raises if the book member is
+  already linked to a user.
 
   ## Examples
 
-      iex> accept_invitation(token, user)
-      %BookMember{}
+      iex> accept_invitation(book_member, user)
+      {:ok, %BookMember{}}
 
-      iex> accept_invitation(invalid_token, user)
-      {:error, :invalid_token}
+      iex> accept_invitation(%{user_id: 1} = book_member, user)
+      ** (FunctionClauseError)
 
   """
-  @spec accept_invitation(String.t(), User.t()) ::
-          {:ok, BookMember.t()} | {:error, :invalid_token}
-  def accept_invitation(token, %User{} = user) when is_binary(token) do
-    with {:ok, query} <- InvitationToken.verify_invitation_token_query(token, user),
-         %BookMember{user_id: nil} = member <- Repo.one(query) do
-      {:ok,
-       member
-       |> BookMember.changeset(%{user_id: user.id})
-       |> Repo.update!()}
-    else
-      _ -> {:error, :invalid_token}
-    end
+  @spec accept_invitation(BookMember.t(), User.t()) :: {:ok, BookMember.t()}
+  def accept_invitation(%BookMember{user_id: nil} = book_member, %User{} = user) do
+    {:ok, %{book_member: book_member}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:book_member, BookMember.changeset(book_member, %{user_id: user.id}))
+      |> Ecto.Multi.delete_all(
+        :invitation_tokens,
+        InvitationToken.book_member_tokens_query(book_member)
+      )
+      |> Repo.transaction()
+
+    {:ok, book_member}
   end
 
   @doc """

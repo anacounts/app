@@ -5,7 +5,6 @@ defmodule App.Books.MembersTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
-  alias App.Books.BookMember
   alias App.Books.InvitationToken
   alias App.Books.Members
 
@@ -66,6 +65,47 @@ defmodule App.Books.MembersTest do
       assert_raise Ecto.NoResultsError, fn ->
         Members.get_book_member!(-1)
       end
+    end
+  end
+
+  describe "get_book_member_by_invitation_token/2" do
+    setup :book_with_creator_context
+
+    @valid_invitation_email "email@example.com"
+
+    test "returns the book_member with given invitation token", %{book: book} do
+      book_member = book_member_fixture(book)
+
+      {hashed_token, _invitation_token} =
+        invitation_token_fixture(book_member, @valid_invitation_email)
+
+      user = user_fixture(email: @valid_invitation_email)
+
+      assert result = Members.get_book_member_by_invitation_token(hashed_token, user)
+      assert result.id == book_member.id
+      assert result.book_id == book_member.book_id
+      assert result.user_id == book_member.user_id
+    end
+
+    test "returns nil if the invitation token cannot be found" do
+      user = user_fixture()
+
+      refute Base.encode64("notfound")
+             |> Members.get_book_member_by_invitation_token(user)
+    end
+
+    test "returns nil if the invitation token is invalid" do
+      user = user_fixture()
+      refute Members.get_book_member_by_invitation_token("invalid", user)
+    end
+
+    test "returns nil if user email does not match the token", %{book: book} do
+      book_member = book_member_fixture(book)
+      {hashed_token, _invitation_token} = invitation_token_fixture(book_member)
+
+      other_user = user_fixture()
+
+      refute Members.get_book_member_by_invitation_token(hashed_token, other_user)
     end
   end
 
@@ -176,42 +216,35 @@ defmodule App.Books.MembersTest do
   describe "accept_invitation/2" do
     setup do
       book_member = book_member_fixture(book_fixture())
-      email = unique_user_email()
+      user = user_fixture()
 
+      %{book_member: book_member, user: user}
+    end
+
+    test "link the user to the book member", %{book_member: book_member, user: user} do
+      assert {:ok, book_member} = Members.accept_invitation(book_member, user)
+      assert book_member.user_id == user.id
+    end
+
+    test "raises if the book member is already linked to a user", %{user: user} do
+      other_user = user_fixture()
+      book_member = book_member_fixture(book_fixture(), user_id: other_user.id)
+
+      assert_raise FunctionClauseError, fn ->
+        Members.accept_invitation(book_member, user)
+      end
+    end
+
+    test "deletes the invitation token", %{book_member: book_member, user: user} do
       token =
-        extract_user_token(fn url ->
-          Members.deliver_invitation(book_member, email, url)
+        extract_invitation_token(fn url ->
+          Members.deliver_invitation(book_member, user.email, url)
         end)
 
-      %{book_member: book_member, email: email, token: token}
-    end
+      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
 
-    test "updates the member found by the token", %{
-      book_member: book_member,
-      email: email,
-      token: token
-    } do
-      user = %{user_fixture() | email: email}
-
-      assert {:ok, found_member} = Members.accept_invitation(token, user)
-
-      assert found_member.id == book_member.id
-      assert found_member.user_id == user.id
-    end
-
-    test "does not update member with invalid token", %{} do
-      user = user_fixture()
-
-      assert {:error, :invalid_token} = Members.accept_invitation("invalid-token", user)
-    end
-
-    test "does not update member if user email changed", %{book_member: book_member, token: token} do
-      user = user_fixture()
-
-      assert {:error, :invalid_token} =
-               Members.accept_invitation(token, %{user | email: "current@example.com"})
-
-      refute Repo.get!(BookMember, book_member.id).user_id
+      {:ok, decoded_token} = Base.url_decode64(token, padding: false)
+      refute Repo.get_by(InvitationToken, token: :crypto.hash(:sha256, decoded_token))
     end
   end
 

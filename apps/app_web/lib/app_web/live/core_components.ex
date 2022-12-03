@@ -20,24 +20,28 @@ defmodule AppWeb.CoreComponents do
   # of the <.link> component are sometimes out of scope of the `:global` type, but this
   # can be overriden using the `:include` option of `attr/3`.
   # e.g. `attr :rest, :global, include: @link_attrs`
-  @link_attrs ~w(navigate patch href replace method csrf_token)
+  @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
 
   # The <.link_or_button> component is used to conditionally render a link or a button
   # depending on the presence of the `navigate` attribute.
 
-  defp link_or_button(%{navigate: _} = assigns) do
-    ~H"""
-    <.link {assigns_to_attributes(assigns)}>
-      <%= render_slot(@inner_block) %>
-    </.link>
-    """
-  end
+  defp link_or_button(%{navigate: _} = assigns), do: render_link(assigns)
+  defp link_or_button(%{patch: _} = assigns), do: render_link(assigns)
+  defp link_or_button(%{href: _} = assigns), do: render_link(assigns)
 
   defp link_or_button(assigns) do
     ~H"""
     <button {assigns_to_attributes(assigns)}>
       <%= render_slot(@inner_block) %>
     </button>
+    """
+  end
+
+  defp render_link(assigns) do
+    ~H"""
+    <.link {assigns_to_attributes(assigns)}>
+      <%= render_slot(@inner_block) %>
+    </.link>
     """
   end
 
