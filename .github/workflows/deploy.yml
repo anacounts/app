@@ -6,7 +6,9 @@ on:
 jobs:
   deploy:
     name: Deploy app
-    runs-on: ubuntu-latest
+    # TODO put back ubuntu-latest once GitHub makes it work properly
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: superfly/flyctl-actions/setup-flyctl@master
