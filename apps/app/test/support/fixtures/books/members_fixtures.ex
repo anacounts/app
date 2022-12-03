@@ -4,9 +4,8 @@ defmodule App.Books.MembersFixtures do
   entities via the `App.Books.Members` context.
   """
 
-  alias App.Repo
-
   alias App.Books.BookMember
+  alias App.Books.Members
 
   def book_member_attributes(book, attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -15,26 +14,13 @@ defmodule App.Books.MembersFixtures do
     })
   end
 
-  def book_member_fixture(book) do
-    struct!(BookMember, book_member_attributes(book))
-    |> Repo.insert!()
-  end
+  def book_member_fixture(book, attrs \\ %{}) do
+    attrs_map = Enum.into(attrs, %{})
+    virtual_fields = Map.take(attrs_map, BookMember.__schema__(:virtual_fields))
 
-  def book_member_fixture(book, %_{} = user) do
-    struct!(BookMember, book_member_attributes(book, %{user_id: user.id}))
-    |> Repo.insert!()
-  end
+    {:ok, book_member} = Members.create_book_member(book, book_member_attributes(book, attrs_map))
 
-  def book_member_fixture(book, attrs) do
-    struct!(BookMember, book_member_attributes(book, attrs))
-    |> Repo.insert!()
-  end
-
-  def book_member_fixture(book, user, attrs) do
-    attrs = book_member_attributes(book, Enum.into(attrs, %{user_id: user.id}))
-
-    struct!(BookMember, attrs)
-    |> Repo.insert!()
+    Map.merge(book_member, virtual_fields)
   end
 
   def extract_invitation_token(fun) do

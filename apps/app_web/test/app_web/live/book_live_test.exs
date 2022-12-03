@@ -76,7 +76,7 @@ defmodule AppWeb.BookLiveTest do
   # Depends on :register_and_log_in_user
   defp book_with_member_context(%{user: user} = context) do
     book = book_fixture()
-    member = book_member_fixture(book, user, role: :creator)
+    member = book_member_fixture(book, user_id: user.id, role: :creator)
 
     Map.merge(context, %{
       book: book,

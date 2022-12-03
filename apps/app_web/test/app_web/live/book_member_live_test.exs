@@ -10,7 +10,7 @@ defmodule AppWeb.BookMemberLiveTest do
     setup [:register_and_log_in_user, :book_with_member_context]
 
     test "displays book members", %{conn: conn, book: book} do
-      _member = book_member_fixture(book, user_fixture(display_name: "Samuel"))
+      _member = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
 
       {:ok, _show_live, html} = live(conn, Routes.book_member_index_path(conn, :index, book))
 
@@ -44,7 +44,7 @@ defmodule AppWeb.BookMemberLiveTest do
   # Depends on :register_and_log_in_user
   defp book_with_member_context(%{user: user} = context) do
     book = book_fixture()
-    member = book_member_fixture(book, user, role: :creator)
+    member = book_member_fixture(book, user_id: user.id, role: :creator)
 
     Map.merge(context, %{
       book: book,

@@ -75,7 +75,7 @@ defmodule App.TransfersTest do
 
     test "creates peers along the way", %{book: book, member: member} do
       other_user = user_fixture()
-      other_member = book_member_fixture(book, other_user)
+      other_member = book_member_fixture(book, user_id: other_user.id)
 
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
@@ -142,7 +142,7 @@ defmodule App.TransfersTest do
 
     test "updates the money transfer", %{book: book, user: user, money_transfer: money_transfer} do
       other_user = user_fixture()
-      other_member = book_member_fixture(book, other_user)
+      other_member = book_member_fixture(book, user_id: other_user.id)
 
       assert {:ok, updated} =
                Transfers.update_money_transfer(money_transfer, user, %{
@@ -221,7 +221,7 @@ defmodule App.TransfersTest do
       [peer] = money_transfer.peers
 
       other_user = user_fixture()
-      other_member = book_member_fixture(book, other_user)
+      other_member = book_member_fixture(book, user_id: other_user.id)
 
       assert {:ok, updated_transfer} =
                Transfers.update_money_transfer(
@@ -299,7 +299,7 @@ defmodule App.TransfersTest do
   defp book_with_member_context(_context) do
     book = book_fixture()
     user = user_fixture()
-    member = book_member_fixture(book, user)
+    member = book_member_fixture(book, user_id: user.id)
 
     %{
       book: book,
