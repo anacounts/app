@@ -112,22 +112,23 @@ defmodule App.Books do
   @spec invitations_suggestions_query(Book.t(), User.t()) :: Ecto.Query.t()
   defp invitations_suggestions_query(book, user) do
     from user_member in BookMember,
-      join: suggested_member in BookMember,
-      on:
-        suggested_member.id != user_member.id and suggested_member.book_id == user_member.book_id,
+      join: suggested_user_member in BookMember,
+      on: suggested_user_member.id != user_member.id,
+      on: suggested_user_member.book_id == user_member.book_id,
       join: suggested_user in User,
-      on: suggested_user.id == suggested_member.user_id,
+      on: suggested_user.id == suggested_user_member.user_id,
       where: user_member.user_id == ^user.id,
-      where: suggested_user.id not in subquery(members_of_book_query(book)),
+      where: suggested_user.id not in subquery(user_ids_of_book_query(book)),
       group_by: suggested_user.id,
       order_by: [desc: count()],
       select: suggested_user,
       limit: 10
   end
 
-  defp members_of_book_query(book) do
+  defp user_ids_of_book_query(book) do
     from book_member in BookMember,
       where: book_member.book_id == ^book.id,
+      where: not is_nil(book_member.user_id),
       select: book_member.user_id
   end
 

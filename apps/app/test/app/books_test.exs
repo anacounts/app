@@ -123,13 +123,21 @@ defmodule App.BooksTest do
       other_user3 = user_fixture()
       _member = book_member_fixture(book3, user_id: other_user3.id)
 
+      # pending members aren't suggested and do not interfere
+      _member = book_member_fixture(book1)
+      _member = book_member_fixture(book1)
+      _member = book_member_fixture(book2)
+
       # `user` is in `book1` with `other_user1`,
       #          and `book2` with `other_user1` and `other_user2`.
       # They are most with `other_user1` (2 books), then `other_user2` (1 book),
       # but never with `other_user3`.
       # The function therefore returns `other_user1` first, then `other_user2`.
 
-      assert Books.invitations_suggestions(book_fixture(), user) == [other_user1, other_user2]
+      book = book_fixture()
+      _member = book_member_fixture(book)
+
+      assert Books.invitations_suggestions(book, user) == [other_user1, other_user2]
     end
 
     test "does not return user that are already members of the book" do
@@ -142,6 +150,11 @@ defmodule App.BooksTest do
 
       other_user = user_fixture()
       _member = book_member_fixture(book1, user_id: other_user.id)
+
+      # pending members aren't suggested and do not interfere
+      _member = book_member_fixture(book1)
+      _member = book_member_fixture(book1)
+      _member = book_member_fixture(book2)
 
       suggested_user = user_fixture()
       _member = book_member_fixture(book2, user_id: suggested_user.id)
