@@ -54,6 +54,7 @@ defmodule AppWeb.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:app, in_umbrella: true},
+      {:sentry, "~> 8.0"},
       {:jason, "~> 1.4"},
       {:earmark, "~> 1.4"},
       {:plug_cowboy, "~> 2.5"}
