@@ -103,6 +103,10 @@ msgid "Create an account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Create member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Create one here"
 msgstr ""
 
@@ -164,10 +168,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -235,10 +235,6 @@ msgid "Invitation sent"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invitation sent successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Invitations"
 msgstr ""
 
@@ -251,7 +247,11 @@ msgid "Invite"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invite member"
+msgid "Invite a new member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Inviting..."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -280,6 +280,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Member added"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -320,6 +324,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -404,6 +412,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Saving..."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Send invitation to email (optional)"
 msgstr ""
 
 #, elixir-autogen, elixir-format

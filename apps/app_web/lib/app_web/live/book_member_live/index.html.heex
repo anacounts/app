@@ -4,7 +4,7 @@
     navigate={Routes.invitation_index_path(@socket, :index, @book)}
   >
     <.icon name="person-add" />
-    <%= gettext("Invite member") %>
+    <%= gettext("Invite a new member") %>
   </.tile>
 
   <.member_tile :for={member <- @confirmed_members} member={member} />

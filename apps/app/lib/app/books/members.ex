@@ -3,17 +3,15 @@ defmodule App.Books.Members do
   The Books.Members context.
   """
 
-  import Ecto.Query, warn: false
+  import Ecto.Query
   alias App.Repo
 
-  alias App.Auth
   alias App.Auth.User
   alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
   alias App.Books.MemberNotifier
-  alias App.Books.Rights
 
   @doc """
   Lists all members of a book.
@@ -140,40 +138,6 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Invite a user to an existing book.
-
-  # TODO This is a temporary solution until we have a proper invitation system.
-  """
-  @spec invite_new_member(Book.id(), User.t(), String.t()) ::
-          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def invite_new_member(book_id, %User{} = user, user_email) do
-    with %{} = member <- get_membership(book_id, user.id),
-         true <- Rights.can_member_invite_new_member?(member) do
-      user =
-        Auth.get_user_by_email(user_email) ||
-          raise "User with email does not exist, crashing as inviting external people is not supported yet"
-
-      %BookMember{
-        book_id: book_id,
-        user_id: user.id
-      }
-      # set the member role as default, it can be changed later
-      |> BookMember.changeset(%{role: :member})
-      |> Repo.insert()
-      |> case do
-        {:ok, member} -> {:ok, set_virtual_fields(member, user)}
-        {:error, changeset} -> {:error, changeset}
-      end
-    else
-      _ -> {:error, :unauthorized}
-    end
-  end
-
-  defp set_virtual_fields(%BookMember{} = member, %User{} = user) do
-    %{member | email: user.email, display_name: user.display_name}
-  end
-
-  @doc """
   Create a new book member within a book.
 
   # Examples
@@ -291,16 +255,16 @@ defmodule App.Books.Members do
 
       iex> base_query() |> with_display_name_query()
       #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member,
-        join: u1 in assoc(b0, :user), as: :user,
-        select: merge(b0, %{display_name: u1.display_name})>
+        left_join: u1 in assoc(b0, :user), as: :user,
+        select: merge(b0, %{display_name: coalesce(u1.display_name, b0.nickname)})>
 
       iex> base_query() |> with_display_name_query() |> Repo.all()
       [%BookMember{display_name: "John Doe"}, ...]
 
   """
   def with_display_name_query(query) do
-    from [user: user] in join_user(query),
-      select_merge: %{display_name: user.display_name}
+    from [book_member: book_member, user: user] in join_user(query),
+      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
   end
 
   # Load the `:email` virtual field. Only works if querying BookMember entities.

@@ -35,6 +35,23 @@ defmodule App.Books.MembersTest do
       assert result.user_id == book_member.user_id
     end
 
+    test "gets the member nickname as `:display_name` if not linked to a user", %{book: book} do
+      book_member = book_member_fixture(book, user_id: nil, nickname: "APublicPseudo")
+
+      assert book_member = Members.get_book_member!(book_member.id)
+      assert book_member.nickname == "APublicPseudo"
+      assert book_member.display_name == "APublicPseudo"
+    end
+
+    test "gets the user display_name as `:display_name` if linked to a user", %{book: book} do
+      user = user_fixture()
+      book_member = book_member_fixture(book, user_id: user.id, nickname: "APublicPseudo")
+
+      assert book_member = Members.get_book_member!(book_member.id)
+      assert book_member.nickname == "APublicPseudo"
+      assert book_member.display_name == user.display_name
+    end
+
     test "raises if the book_member does not exist" do
       assert_raise Ecto.NoResultsError, fn ->
         Members.get_book_member!(-1)
@@ -80,48 +97,6 @@ defmodule App.Books.MembersTest do
       other_user = user_fixture()
 
       refute Members.get_book_member_by_invitation_token(hashed_token, other_user)
-    end
-  end
-
-  describe "invite_member/2" do
-    setup :book_with_creator_context
-
-    test "adds a member to the book", %{book: book, user: user} do
-      invited_user = user_fixture()
-
-      assert {:ok, book_member} = Members.invite_new_member(book.id, user, invited_user.email)
-
-      assert book_member.book_id == book.id
-      assert book_member.user_id == invited_user.id
-      assert book_member.role == :member
-    end
-
-    test "returns an error if the user is not allowed a member of the book", %{book: book} do
-      other_user = user_fixture()
-      invited_user = user_fixture()
-
-      assert {:error, :unauthorized} =
-               Members.invite_new_member(book.id, other_user, invited_user.email)
-    end
-
-    test "returns an error if the user is not allowed to invite new members", %{book: book} do
-      other_user = user_fixture()
-      _other_member = book_member_fixture(book, user_id: other_user.id)
-
-      invited_user = user_fixture()
-
-      assert {:error, :unauthorized} =
-               Members.invite_new_member(book.id, other_user, invited_user.email)
-    end
-
-    test "fails if the user is already member", %{book: book, user: user} do
-      invited_user = user_fixture()
-
-      # Create the first membership
-      assert {:ok, _book_member} = Members.invite_new_member(book.id, user, invited_user.email)
-
-      assert {:error, changeset} = Members.invite_new_member(book.id, user, invited_user.email)
-      assert errors_on(changeset) == %{user_id: ["user is already a member of this book"]}
     end
   end
 

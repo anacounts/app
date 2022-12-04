@@ -14,10 +14,16 @@ defmodule App.Books.BookMember do
 
   @type t :: %__MODULE__{
           id: id(),
+          book_id: Book.id(),
           book: Book.t(),
-          user: User.t(),
+          user_id: User.id() | nil,
+          user: User.t() | nil,
           role: Role.t(),
-          deleted_at: NaiveDateTime.t()
+          deleted_at: NaiveDateTime.t(),
+          nickname: String.t(),
+          display_name: String.t() | nil,
+          email: String.t() | nil,
+          balance: Money.t() | {:error, reasons :: [String.t()]} | nil
         }
 
   schema "book_members" do
@@ -27,8 +33,13 @@ defmodule App.Books.BookMember do
     field :role, Ecto.Enum, values: Role.all()
     field :deleted_at, :naive_datetime
 
-    # Filled with the value of `:display_name` and `:email` of the linked user
+    # When the member is not linked to a user, the display name falls back to the book
+    # member's `:nickname`, set at creation
+    field :nickname, :string
+
+    # Filled with the user `:display_name` if there is one, otherwise `:nickname`
     field :display_name, :string, virtual: true
+    # Filled with the user `:email` if there is one
     field :email, :string, virtual: true
 
     # Filled by the `Balance` context. Maybe be set to `{:error, reasons}` if the
@@ -42,19 +53,15 @@ defmodule App.Books.BookMember do
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:role, :user_id])
-    |> validate_role()
+    |> cast(attrs, [:user_id, :role, :nickname])
     |> validate_book_id()
     |> validate_user_id()
+    |> validate_role()
+    |> validate_nickname()
     |> unique_constraint([:book_id, :user_id],
       message: "user is already a member of this book",
       error_key: :user_id
     )
-  end
-
-  defp validate_role(changeset) do
-    changeset
-    |> validate_required(:role)
   end
 
   defp validate_book_id(changeset) do
@@ -66,5 +73,16 @@ defmodule App.Books.BookMember do
   defp validate_user_id(changeset) do
     changeset
     |> foreign_key_constraint(:user_id)
+  end
+
+  defp validate_role(changeset) do
+    changeset
+    |> validate_required(:role)
+  end
+
+  defp validate_nickname(changeset) do
+    changeset
+    |> validate_required(:nickname)
+    |> validate_length(:nickname, min: 1, max: 255)
   end
 end
