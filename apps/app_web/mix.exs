@@ -17,7 +17,7 @@ defmodule AppWeb.MixProject do
       deps: deps(),
       gettext: [
         write_reference_comments: false,
-        sort_by_msgid: true
+        sort_by_msgid: :case_sensitive
       ]
     ]
   end
