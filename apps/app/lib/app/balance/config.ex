@@ -5,8 +5,6 @@ defmodule App.Balance.Config do
   This currently only includes configuration per user, but should evolve to
   include configuration per transfer, as the two are closely related.
   """
-  import Ecto.Query
-
   alias App.Auth.User
   alias App.Balance.Config.UserConfig
 
@@ -27,20 +25,13 @@ defmodule App.Balance.Config do
   """
   @spec get_user_config_or_default(User.t()) :: UserConfig.t() | nil
   def get_user_config_or_default(%User{} = user) do
-    user_config =
-      user_config_query(user)
-      |> Repo.one()
+    user_config = user_config(user)
 
-    user_config || default_config_for_user(user)
+    user_config || %UserConfig{}
   end
 
-  defp user_config_query(user) do
-    from UserConfig,
-      where: [user_id: ^user.id]
-  end
-
-  defp default_config_for_user(user) do
-    %UserConfig{user: user, user_id: user.id}
+  defp user_config(user) do
+    Repo.get(UserConfig, user.balance_config_id)
   end
 
   @doc """
@@ -52,7 +43,7 @@ defmodule App.Balance.Config do
       iex> update_user_config(user_config, %{annual_income: 42})
       {:ok, %UserConfig{}}
 
-      iex> update_user_config(%UserConfig{user_id: 11}, %{annual_income: 42})
+      iex> update_user_config(%UserConfig{}, %{annual_income: 42})
       {:ok, %UserConfig{}}
 
       iex> update_user_config(user_config, %{annual_income: -1})
