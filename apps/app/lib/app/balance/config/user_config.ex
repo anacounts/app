@@ -19,7 +19,7 @@ defmodule App.Balance.Config.UserConfig do
         }
 
   @derive {Inspect, only: [:id, :user, :user_id]}
-  schema "user_balance_configs" do
+  schema "balance_configs" do
     field :annual_income, App.Encrypted.Integer
 
     belongs_to :user, User
