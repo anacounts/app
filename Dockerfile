@@ -30,7 +30,7 @@ RUN mix assets.deploy
 RUN mix release
 
 # ---- Application Stage ----
-FROM alpine:3.16 AS app
+FROM alpine:3.17 AS app
 
 ENV LANG=C.UTF-8
 
