@@ -8,11 +8,11 @@ defmodule App.Balance.BalanceConfigsFixtures do
   def user_balance_config_fixture(user, attrs \\ %{}) do
     clean_attrs = Enum.into(attrs, %{})
 
-    {:ok, user_config} =
+    {:ok, balance_config} =
       user
       |> BalanceConfigs.get_user_config_or_default()
-      |> BalanceConfigs.update_user_config(clean_attrs)
+      |> BalanceConfigs.update_balance_config(clean_attrs)
 
-    user_config
+    balance_config
   end
 end

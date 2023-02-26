@@ -27,42 +27,42 @@ defmodule App.Balance.BalanceConfigs do
   """
   @spec get_user_config_or_default(User.t()) :: BalanceConfig.t() | nil
   def get_user_config_or_default(%User{} = user) do
-    user_config =
-      user_config_query(user)
+    balance_config =
+      user_balance_config_query(user)
       |> Repo.one()
 
-    user_config || default_config_for_user(user)
+    balance_config || default_balance_config_for_user(user)
   end
 
-  defp user_config_query(user) do
+  defp user_balance_config_query(user) do
     from BalanceConfig,
       where: [user_id: ^user.id]
   end
 
-  defp default_config_for_user(user) do
+  defp default_balance_config_for_user(user) do
     %BalanceConfig{user: user, user_id: user.id}
   end
 
   @doc """
-  Update the user's balance configuration. If the passed `user_config` was built and not
+  Update the user's balance configuration. If the passed `balance_config` was built and not
   loaded from the database, it will be inserted instead of updated.
 
   ## Examples
 
-      iex> update_user_config(user_config, %{annual_income: 42})
+      iex> update_balance_config(balance_config, %{annual_income: 42})
       {:ok, %BalanceConfig{}}
 
-      iex> update_user_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
+      iex> update_balance_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
       {:ok, %BalanceConfig{}}
 
-      iex> update_user_config(user_config, %{annual_income: -1})
+      iex> update_balance_config(balance_config, %{annual_income: -1})
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_user_config(BalanceConfig.t(), map()) ::
+  @spec update_balance_config(BalanceConfig.t(), map()) ::
           {:ok, BalanceConfig.t()} | {:error, Ecto.Changeset.t()}
-  def update_user_config(user_config, attrs) do
-    user_config
+  def update_balance_config(balance_config, attrs) do
+    balance_config
     |> BalanceConfig.changeset(attrs)
     |> Repo.insert_or_update()
   end
@@ -72,12 +72,12 @@ defmodule App.Balance.BalanceConfigs do
 
   ## Examples
 
-      iex> change_user_config(user_config)
+      iex> change_balance_config(balance_config)
       %Ecto.Changeset{data: %BalanceConfig{}}
 
   """
-  @spec change_user_config(BalanceConfig.t(), map()) :: Ecto.Changeset.t()
-  def change_user_config(%BalanceConfig{} = user_config, params \\ %{}) do
-    BalanceConfig.changeset(user_config, params)
+  @spec change_balance_config(BalanceConfig.t(), map()) :: Ecto.Changeset.t()
+  def change_balance_config(%BalanceConfig{} = balance_config, params \\ %{}) do
+    BalanceConfig.changeset(balance_config, params)
   end
 end
