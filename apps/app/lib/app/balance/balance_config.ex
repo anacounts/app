@@ -39,6 +39,8 @@ defmodule App.Balance.BalanceConfig do
     # see @moduledoc for more details
     belongs_to :user, User
     belongs_to :book_member, BookMember
+
+    timestamps()
   end
 
   def changeset(struct, attrs) do
