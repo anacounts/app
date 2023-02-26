@@ -1,7 +1,7 @@
 defmodule AppWeb.UserSettingsBalanceController do
   use AppWeb, :controller
 
-  alias App.Balance.Config
+  alias App.Balance.BalanceConfigs
 
   plug :assign_user_config
 
@@ -9,8 +9,8 @@ defmodule AppWeb.UserSettingsBalanceController do
     render(conn, "edit.html", page_title: gettext("Balance Settings"))
   end
 
-  def update(conn, %{"user_config" => user_config_params}) do
-    case Config.update_user_config(conn.assigns.user_config, user_config_params) do
+  def update(conn, %{"balance_config" => user_config_params}) do
+    case BalanceConfigs.update_balance_config(conn.assigns.balance_config, user_config_params) do
       {:ok, _user_config} ->
         conn
         |> put_flash(:info, gettext("Balance settings updated"))
@@ -25,10 +25,10 @@ defmodule AppWeb.UserSettingsBalanceController do
   end
 
   defp assign_user_config(conn, _opts) do
-    user_config = Config.get_user_config_or_default(conn.assigns.current_user)
+    balance_config = BalanceConfigs.get_user_config_or_default(conn.assigns.current_user)
 
     conn
-    |> assign(:user_config, user_config)
-    |> assign(:changeset, Config.change_user_config(user_config))
+    |> assign(:balance_config, balance_config)
+    |> assign(:changeset, BalanceConfigs.change_balance_config(balance_config))
   end
 end

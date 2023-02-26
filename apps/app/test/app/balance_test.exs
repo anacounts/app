@@ -2,7 +2,7 @@ defmodule App.BalanceTest do
   use App.DataCase, async: true
 
   import App.AuthFixtures
-  import App.Balance.ConfigFixtures
+  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
   import App.TransfersFixtures

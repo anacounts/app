@@ -28,7 +28,7 @@ defmodule App.Auth.User do
     field :display_name, :string
 
     # TODO this is only used in the `Balance` context and should be removed
-    has_one :balance_config, App.Balance.Config.UserConfig
+    has_one :balance_config, App.Balance.BalanceConfig
 
     timestamps()
   end

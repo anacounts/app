@@ -1,4 +1,4 @@
-defmodule App.Balance.Config.UserConfig do
+defmodule App.Balance.BalanceConfig do
   @moduledoc """
   The users configuration related to balancing.
 
