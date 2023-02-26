@@ -22,7 +22,7 @@ defmodule App.Notifications.Notification do
           id: id(),
           content: String.t(),
           type: type(),
-          recipients: [Recipient.t()] | Ecto.Association.NotLoaded.t(),
+          recipients: [Recipient.t()],
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
