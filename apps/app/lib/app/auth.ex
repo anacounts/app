@@ -10,6 +10,8 @@ defmodule App.Auth do
   alias App.Auth.User
   alias App.Auth.UserNotifier
   alias App.Auth.UserToken
+  alias App.Balance.BalanceConfig
+  alias App.Balance.BalanceConfigs
 
   ## Database getters
 
@@ -78,9 +80,16 @@ defmodule App.Auth do
 
   """
   def register_user(attrs) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:user, User.registration_changeset(%User{}, attrs))
+    |> Ecto.Multi.insert(:balance_config, fn %{user: user} ->
+      BalanceConfigs.change_balance_config(%BalanceConfig{user_id: user.id})
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
   end
 
   @doc """

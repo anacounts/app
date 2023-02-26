@@ -12,6 +12,7 @@ defmodule App.Balance.BalanceConfigs do
 
   alias App.Repo
 
+  # TODO Delete this function, all users have a balance config now
   @doc """
   Get the user's balance configuration. If the user does not have a configuration,
   returns the default configuration.
@@ -64,6 +65,7 @@ defmodule App.Balance.BalanceConfigs do
   def update_balance_config(balance_config, attrs) do
     balance_config
     |> BalanceConfig.changeset(attrs)
+    # TODO Update only, all users have a balance config now
     |> Repo.insert_or_update()
   end
 
