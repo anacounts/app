@@ -6,7 +6,7 @@ defmodule App.Balance.BalanceConfigsTest do
 
   alias App.Balance.BalanceConfigs
 
-  describe "get_user_config_or_default/2" do
+  describe "get_user_balance_config!/2" do
     setup do
       %{user: user_fixture()}
     end
@@ -14,7 +14,7 @@ defmodule App.Balance.BalanceConfigsTest do
     test "returns the balance config of the user", %{user: user} do
       user_balance_config_fixture(user, annual_income: 1234)
 
-      assert %{annual_income: 1234} = BalanceConfigs.get_user_config_or_default(user)
+      assert %{annual_income: 1234} = BalanceConfigs.get_user_balance_config!(user)
     end
   end
 

@@ -1,9 +1,6 @@
 defmodule App.Balance.BalanceConfigs do
   @moduledoc """
   The configuration related to balancing.
-
-  This currently only includes configuration per user, but should evolve to
-  include configuration per transfer, as the two are closely related.
   """
   import Ecto.Query
 
@@ -12,27 +9,22 @@ defmodule App.Balance.BalanceConfigs do
 
   alias App.Repo
 
-  # TODO Delete this function, all users have a balance config now
   @doc """
-  Get the user's balance configuration. If the user does not have a configuration,
-  returns the default configuration.
+  Get the balance configuration of a user.
 
   ## Examples
 
-      iex> get_user_config_or_default(user)
+      iex> get_user_balance_config!(user)
       %BalanceConfig{}
 
-      iex> get_user_config_or_default(user_without_config)
+      iex> get_user_balance_config!(user_without_config)
       %BalanceConfig{}
 
   """
-  @spec get_user_config_or_default(User.t()) :: BalanceConfig.t() | nil
-  def get_user_config_or_default(%User{} = user) do
-    balance_config =
-      user_balance_config_query(user)
-      |> Repo.one()
-
-    balance_config || default_balance_config_for_user(user)
+  @spec get_user_balance_config!(User.t()) :: BalanceConfig.t() | nil
+  def get_user_balance_config!(%User{} = user) do
+    user_balance_config_query(user)
+    |> Repo.one!()
   end
 
   defp user_balance_config_query(user) do
@@ -40,20 +32,12 @@ defmodule App.Balance.BalanceConfigs do
       where: [user_id: ^user.id]
   end
 
-  defp default_balance_config_for_user(user) do
-    %BalanceConfig{user: user, user_id: user.id}
-  end
-
   @doc """
-  Update the user's balance configuration. If the passed `balance_config` was built and not
-  loaded from the database, it will be inserted instead of updated.
+  Update the balance configuration.
 
   ## Examples
 
       iex> update_balance_config(balance_config, %{annual_income: 42})
-      {:ok, %BalanceConfig{}}
-
-      iex> update_balance_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
       {:ok, %BalanceConfig{}}
 
       iex> update_balance_config(balance_config, %{annual_income: -1})
@@ -65,12 +49,11 @@ defmodule App.Balance.BalanceConfigs do
   def update_balance_config(balance_config, attrs) do
     balance_config
     |> BalanceConfig.changeset(attrs)
-    # TODO Update only, all users have a balance config now
-    |> Repo.insert_or_update()
+    |> Repo.update()
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user's balance configuration changes.
+  Returns an `%Ecto.Changeset{}` for tracking balance configuration changes.
 
   ## Examples
 
