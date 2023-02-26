@@ -1,4 +1,4 @@
-defmodule App.Balance.Config do
+defmodule App.Balance.BalanceConfigs do
   @moduledoc """
   The configuration related to balancing.
 
@@ -8,7 +8,7 @@ defmodule App.Balance.Config do
   import Ecto.Query
 
   alias App.Auth.User
-  alias App.Balance.Config.UserConfig
+  alias App.Balance.BalanceConfig
 
   alias App.Repo
 
@@ -19,13 +19,13 @@ defmodule App.Balance.Config do
   ## Examples
 
       iex> get_user_config_or_default(user)
-      %UserConfig{}
+      %BalanceConfig{}
 
       iex> get_user_config_or_default(user_without_config)
-      %UserConfig{}
+      %BalanceConfig{}
 
   """
-  @spec get_user_config_or_default(User.t()) :: UserConfig.t() | nil
+  @spec get_user_config_or_default(User.t()) :: BalanceConfig.t() | nil
   def get_user_config_or_default(%User{} = user) do
     user_config =
       user_config_query(user)
@@ -35,12 +35,12 @@ defmodule App.Balance.Config do
   end
 
   defp user_config_query(user) do
-    from UserConfig,
+    from BalanceConfig,
       where: [user_id: ^user.id]
   end
 
   defp default_config_for_user(user) do
-    %UserConfig{user: user, user_id: user.id}
+    %BalanceConfig{user: user, user_id: user.id}
   end
 
   @doc """
@@ -50,20 +50,20 @@ defmodule App.Balance.Config do
   ## Examples
 
       iex> update_user_config(user_config, %{annual_income: 42})
-      {:ok, %UserConfig{}}
+      {:ok, %BalanceConfig{}}
 
-      iex> update_user_config(%UserConfig{user_id: 11}, %{annual_income: 42})
-      {:ok, %UserConfig{}}
+      iex> update_user_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
+      {:ok, %BalanceConfig{}}
 
       iex> update_user_config(user_config, %{annual_income: -1})
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_user_config(UserConfig.t(), map()) ::
-          {:ok, UserConfig.t()} | {:error, Ecto.Changeset.t()}
+  @spec update_user_config(BalanceConfig.t(), map()) ::
+          {:ok, BalanceConfig.t()} | {:error, Ecto.Changeset.t()}
   def update_user_config(user_config, attrs) do
     user_config
-    |> UserConfig.changeset(attrs)
+    |> BalanceConfig.changeset(attrs)
     |> Repo.insert_or_update()
   end
 
@@ -73,11 +73,11 @@ defmodule App.Balance.Config do
   ## Examples
 
       iex> change_user_config(user_config)
-      %Ecto.Changeset{data: %UserConfig{}}
+      %Ecto.Changeset{data: %BalanceConfig{}}
 
   """
-  @spec change_user_config(UserConfig.t(), map()) :: Ecto.Changeset.t()
-  def change_user_config(%UserConfig{} = user_config, params \\ %{}) do
-    UserConfig.changeset(user_config, params)
+  @spec change_user_config(BalanceConfig.t(), map()) :: Ecto.Changeset.t()
+  def change_user_config(%BalanceConfig{} = user_config, params \\ %{}) do
+    BalanceConfig.changeset(user_config, params)
   end
 end
