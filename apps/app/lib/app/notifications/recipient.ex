@@ -14,9 +14,9 @@ defmodule App.Notifications.Recipient do
   @type t :: %__MODULE__{
           id: id(),
           notification_id: Notification.id(),
-          notification: Notification.t() | Ecto.Association.NotLoaded.t(),
+          notification: Notification.t(),
           user_id: User.id(),
-          user: User.t() | Ecto.Association.NotLoaded.t(),
+          user: User.t(),
           read_at: NaiveDateTime.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()

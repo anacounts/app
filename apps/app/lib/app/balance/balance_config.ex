@@ -14,7 +14,7 @@ defmodule App.Balance.BalanceConfig do
   @type t :: %__MODULE__{
           id: id(),
           annual_income: non_neg_integer(),
-          user: User.t() | Ecto.Association.NotLoaded.t(),
+          user: User.t(),
           user_id: User.id()
         }
 
