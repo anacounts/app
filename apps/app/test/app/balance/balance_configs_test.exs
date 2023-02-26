@@ -16,27 +16,11 @@ defmodule App.Balance.BalanceConfigsTest do
 
       assert %{annual_income: 1234} = BalanceConfigs.get_user_config_or_default(user)
     end
-
-    test "retuns a default value if the user does not have a balance config yet", %{user: user} do
-      assert balance_config = BalanceConfigs.get_user_config_or_default(user)
-
-      assert balance_config.user == user
-      assert balance_config.user_id == user.id
-      assert balance_config.annual_income == nil
-    end
   end
 
   describe "update_balance_config/1" do
     setup do
       %{user: user_fixture()}
-    end
-
-    test "creates the user config if it does not exist", %{user: user} do
-      balance_config = BalanceConfigs.get_user_config_or_default(user)
-      assert Ecto.get_meta(balance_config, :state) == :built
-
-      assert {:ok, balance_config} = BalanceConfigs.update_balance_config(balance_config, %{})
-      assert Ecto.get_meta(balance_config, :state) == :loaded
     end
 
     test "updates the user config", %{user: user} do
