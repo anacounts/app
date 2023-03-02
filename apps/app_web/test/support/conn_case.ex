@@ -19,15 +19,15 @@ defmodule AppWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint AppWeb.Endpoint
+
+      use AppWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import AppWeb.ConnCase
-
-      alias AppWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint AppWeb.Endpoint
     end
   end
 
@@ -45,7 +45,7 @@ defmodule AppWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = App.AuthFixtures.user_fixture()
+    user = App.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -55,7 +55,7 @@ defmodule AppWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = App.Auth.generate_user_session_token(user)
+    token = App.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

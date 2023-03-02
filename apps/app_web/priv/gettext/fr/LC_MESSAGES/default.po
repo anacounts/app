@@ -20,6 +20,10 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Un lien de confirmation a été envoyé à votre nouvelle adresse."
 
 #, elixir-autogen, elixir-format
+msgid "Account created successfully!"
+msgstr "Votre compte a été créé avec succès!"
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
@@ -76,6 +80,10 @@ msgid "Change password"
 msgstr "Modifier mon mot de passe"
 
 #, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "Changement..."
+
+#, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Fermer"
 
@@ -90,6 +98,10 @@ msgstr "Confirmer le mot de passe"
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
 msgstr "Confirmer mon compte"
+
+#, elixir-autogen, elixir-format
+msgid "Confirming..."
+msgstr "Confirmation..."
 
 #, elixir-autogen, elixir-format
 msgid "Contextual menu"
@@ -114,6 +126,10 @@ msgstr "Créez-en un ici"
 #, elixir-autogen, elixir-format
 msgid "Create your first book"
 msgstr "Créer mon premier livret"
+
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr "Création du compte..."
 
 #, elixir-autogen, elixir-format
 msgid "Creator"
@@ -212,8 +228,8 @@ msgid "How to balance?"
 msgstr "Comment équilibrer ?"
 
 #, elixir-autogen, elixir-format
-msgid "If your email is in our system, you will receive instructions to reset your password shortly."
-msgstr "Si you adresse email est dans notre système, vous allez recevoir les instructions pour réinitialiser votre mot de passe rapidement."
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Si votre adresse email est dans notre système et n'a pas encore été confirmé, vous allez recevoir un email contenant les instructions."
 
 #, elixir-autogen, elixir-format
 msgid "Income"
@@ -266,6 +282,10 @@ msgstr "Rejoindre %{book_name}"
 #, elixir-autogen, elixir-format
 msgid "Joined"
 msgstr "Accepté"
+
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in"
+msgstr "Rester connecté"
 
 #, elixir-autogen, elixir-format
 msgid "Label"
@@ -324,6 +344,10 @@ msgid "New email"
 msgstr "Nouvel email"
 
 #, elixir-autogen, elixir-format
+msgid "New name"
+msgstr "Nouveau nom"
+
+#, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
@@ -360,6 +384,10 @@ msgid "Password reset successfully."
 msgstr "Mot de passe réinitialisé"
 
 #, elixir-autogen, elixir-format
+msgid "Password updated successfully!"
+msgstr "Mot de passe mis à jour!"
+
+#, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Paiement"
 
@@ -392,8 +420,8 @@ msgid "Reimbursement"
 msgstr "Remboursement"
 
 #, elixir-autogen, elixir-format
-msgid "Remember me"
-msgstr "Se souvenir de moi"
+msgid "Resend confirmation instructions"
+msgstr "Envoyer les instructions de confirmation à nouveau"
 
 #, elixir-autogen, elixir-format
 msgid "Reset password"
@@ -406,6 +434,10 @@ msgstr "Lien de réinitialisation de mot de passe invalide ou expiré."
 #, elixir-autogen, elixir-format
 msgid "Reset your password"
 msgstr "Réinitialiser mon mot de passe"
+
+#, elixir-autogen, elixir-format
+msgid "Resetting..."
+msgstr "Réinitialisation..."
 
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -438,6 +470,10 @@ msgstr "Se connecter"
 #, elixir-autogen, elixir-format
 msgid "Sign in to your account"
 msgstr "Se connecter à mon compte"
+
+#, elixir-autogen, elixir-format
+msgid "Signing in..."
+msgstr "Connexion..."
 
 #, elixir-autogen, elixir-format
 msgid "Suggestions"
@@ -488,16 +524,16 @@ msgid "User confirmed successfully."
 msgstr "Utilisateur confirmé."
 
 #, elixir-autogen, elixir-format
-msgid "User created successfully."
-msgstr "Utilisateur créé."
-
-#, elixir-autogen, elixir-format
 msgid "Viewer"
 msgstr "Spectateur"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
 msgstr "Pondérer par revenu"
+
+#, elixir-autogen, elixir-format
+msgid "Welcome back!"
+msgstr "Heureux de vous revoir!"
 
 #, elixir-autogen, elixir-format
 msgid "You have been added to the book."

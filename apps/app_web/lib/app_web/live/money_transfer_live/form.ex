@@ -6,7 +6,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
 
   use AppWeb, :live_view
 
-  alias App.Auth.Avatars
+  alias App.Accounts.Avatars
   alias App.Books.Members
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
@@ -84,7 +84,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Transfer deleted successfully"))
-     |> push_navigate(to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book))}
+     |> push_navigate(to: ~p"/books/#{socket.assigns.book}/transfers")}
   end
 
   defp normalize_params(params) do
@@ -119,11 +119,9 @@ defmodule AppWeb.MoneyTransferLive.Form do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Money transfer created successfully"))
-         |> push_navigate(
-           to: Routes.money_transfer_index_path(socket, :index, socket.assigns.book)
-         )}
+         |> push_navigate(to: ~p"/books/#{socket.assigns.book}/transfers")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
@@ -137,7 +135,7 @@ defmodule AppWeb.MoneyTransferLive.Form do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Money transfer updated successfully"))
-         |> push_navigate(to: Routes.money_transfer_index_path(socket, :index, book))}
+         |> push_navigate(to: ~p"/books/#{book}/transfers")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

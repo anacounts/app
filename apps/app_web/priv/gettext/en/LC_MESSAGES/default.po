@@ -20,6 +20,10 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "A link to confirm your email change has been sent to the new address."
 
 #, elixir-autogen, elixir-format
+msgid "Account created successfully!"
+msgstr "Account created successfully!"
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -76,6 +80,10 @@ msgid "Change password"
 msgstr "Change password"
 
 #, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "Changing..."
+
+#, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Close"
 
@@ -90,6 +98,10 @@ msgstr "Confirm password"
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
 msgstr "Confirm your account"
+
+#, elixir-autogen, elixir-format
+msgid "Confirming..."
+msgstr "Confirming..."
 
 #, elixir-autogen, elixir-format
 msgid "Contextual menu"
@@ -114,6 +126,10 @@ msgstr "Create one here"
 #, elixir-autogen, elixir-format
 msgid "Create your first book"
 msgstr "Create your first book"
+
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr "Creating account..."
 
 #, elixir-autogen, elixir-format
 msgid "Creator"
@@ -212,8 +228,8 @@ msgid "How to balance?"
 msgstr "How to balance?"
 
 #, elixir-autogen, elixir-format
-msgid "If your email is in our system, you will receive instructions to reset your password shortly."
-msgstr "If your email is in our system, you will receive instructions to reset your password shortly."
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 
 #, elixir-autogen, elixir-format
 msgid "Income"
@@ -266,6 +282,10 @@ msgstr "Join %{book_name}"
 #, elixir-autogen, elixir-format
 msgid "Joined"
 msgstr "Joined"
+
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in"
+msgstr "Keep me logged in"
 
 #, elixir-autogen, elixir-format
 msgid "Label"
@@ -324,6 +344,10 @@ msgid "New email"
 msgstr "New email"
 
 #, elixir-autogen, elixir-format
+msgid "New name"
+msgstr "New name"
+
+#, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "New password"
 
@@ -360,6 +384,10 @@ msgid "Password reset successfully."
 msgstr "Password reset successfully."
 
 #, elixir-autogen, elixir-format
+msgid "Password updated successfully!"
+msgstr "Password updated successfully!"
+
+#, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Payment"
 
@@ -392,8 +420,8 @@ msgid "Reimbursement"
 msgstr "Reimbursement"
 
 #, elixir-autogen, elixir-format
-msgid "Remember me"
-msgstr "Remember me"
+msgid "Resend confirmation instructions"
+msgstr "Resend confirmation instructions"
 
 #, elixir-autogen, elixir-format
 msgid "Reset password"
@@ -406,6 +434,10 @@ msgstr "Reset password link is invalid or it has expired."
 #, elixir-autogen, elixir-format
 msgid "Reset your password"
 msgstr "Reset your password"
+
+#, elixir-autogen, elixir-format
+msgid "Resetting..."
+msgstr "Resetting..."
 
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -438,6 +470,10 @@ msgstr "Sign in"
 #, elixir-autogen, elixir-format
 msgid "Sign in to your account"
 msgstr "Sign in to your account"
+
+#, elixir-autogen, elixir-format
+msgid "Signing in..."
+msgstr "Signing in..."
 
 #, elixir-autogen, elixir-format
 msgid "Suggestions"
@@ -488,16 +524,16 @@ msgid "User confirmed successfully."
 msgstr "User confirmed successfully."
 
 #, elixir-autogen, elixir-format
-msgid "User created successfully."
-msgstr "User created successfully."
-
-#, elixir-autogen, elixir-format
 msgid "Viewer"
 msgstr "Viewer"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
 msgstr "Weight by income"
+
+#, elixir-autogen, elixir-format
+msgid "Welcome back!"
+msgstr "Welcome back!"
 
 #, elixir-autogen, elixir-format
 msgid "You have been added to the book."

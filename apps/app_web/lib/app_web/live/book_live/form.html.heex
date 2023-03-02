@@ -8,21 +8,17 @@
 
 <main class="mx-4">
   <.form :let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
-    <%= label f, :name do %>
-      <%= gettext("Name") %>
-      <%= text_input(f, :name) %>
-      <%= error_tag(f, :name) %>
-    <% end %>
+    <.input type="text" label={gettext("Name")} field={f[:name]} />
 
-    <%= label f, :default_balance_params do %>
+    <.label>
       <%= gettext("How to balance by default?") %>
       <% # TODO Set value from changeset %>
       <select name="book[default_balance_params][means_code]">
         <option value="divide_equally"><%= gettext("Divide equally") %></option>
         <option value="weight_by_income"><%= gettext("Weight by income") %></option>
       </select>
-      <%= error_tag(f, :default_balance_params) %>
-    <% end %>
+      <.error :for={msg <- f[:default_balance_params].errors}><%= msg %></.error>
+    </.label>
 
     <div>
       <.button color={:cta} phx-disable-with={gettext("Saving...")}>

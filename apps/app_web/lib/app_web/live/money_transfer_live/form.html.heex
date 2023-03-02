@@ -1,4 +1,4 @@
-<.page_header back_to={Routes.money_transfer_index_path(@socket, :index, @book)}>
+<.page_header back_to={~p"/books/#{@book}/transfers"}>
   <:title>
     <%= if @live_action == :new,
       do: gettext("New Transfer"),
@@ -30,63 +30,65 @@
   >
     <% ## Details %>
     <div class="mx-4">
-      <%= label f, :label do %>
-        <%= gettext("Label") %>
-        <%= text_input(f, :label, pattern: ".{1,255}", required: true) %>
-        <%= error_tag(f, :label) %>
-      <% end %>
+      <.input type="text" label={gettext("Label")} field={f[:label]} pattern=".{1,255}" required />
 
       <div class="flex items-baseline gap-4">
-        <%= label f, :amount do %>
-          <%= gettext("Amount") %>
-          <% # XXX When supporting other currencies, the "/ 100" and step must be different based on currency %>
-          <% amount =
-            case Ecto.Changeset.get_field(@changeset, :amount, Money.new(0, :EUR)) do
-              %{amount: amount} -> amount / 100
-              nil -> nil
-            end %>
-          <%= number_input(f, :amount, value: amount, step: "0.01", min: "0", required: true) %>
-          <%= error_tag(f, :amount) %>
-        <% end %>
-
-        <%= label f, :currency, class: "flex-1" do %>
-          <%= gettext("Currency") %>
-          <%= select(f, :currency, currencies_options(), disabled: true) %>
-        <% end %>
-      </div>
-
-      <%= label f, :type do %>
-        <%= gettext("Type") %>
-        <%= select(f, :type, type_options(), required: true) %>
-        <%= error_tag(f, :type) %>
-      <% end %>
-
-      <%= label f, :tenant_id do %>
-        <%= gettext("Tenant") %>
-        <%= select(f, :tenant_id, tenant_id_options(@members), required: true) %>
-        <%= error_tag(f, :tenant_id) %>
-      <% end %>
-
-      <%= label f, :balance_means_code do %>
-        <%= gettext("How to balance?") %>
-        <% means_code =
-          case Ecto.Changeset.get_field(@changeset, :balance_params) do
-            %{means_code: means_code} -> means_code
+        <% # XXX When supporting other currencies, the "/ 100" and step must be different based on currency %>
+        <% amount =
+          case Ecto.Changeset.get_field(@changeset, :amount, Money.new(0, :EUR)) do
+            %{amount: amount} -> amount / 100
             nil -> nil
           end %>
-        <%= select(f, :balance_means_code, balance_params_options(),
-          value: means_code,
-          required: true
-        ) %>
-        <%= error_tag(f, :balance_params) %>
-        <% # TODO <button>More information</button> %>
-      <% end %>
+        <.input
+          type="number"
+          label={gettext("Amount")}
+          field={f[:amount]}
+          value={amount}
+          step="0.01"
+          min="0"
+          required
+        />
+        <.input
+          type="select"
+          label={gettext("Currency")}
+          field={f[:currency]}
+          options={currencies_options()}
+          disabled
+        />
+      </div>
 
-      <%= label f, :date do %>
-        <%= gettext("Date") %>
-        <%= date_input(f, :date, required: true) %>
-        <%= error_tag(f, :date) %>
-      <% end %>
+      <.input
+        type="select"
+        label={gettext("Type")}
+        field={f[:type]}
+        options={type_options()}
+        required
+      />
+      <.input
+        type="select"
+        label={gettext("Tenant")}
+        field={f[:tenant_id]}
+        options={tenant_id_options(@members)}
+        required
+      />
+
+      <% means_code =
+        case Ecto.Changeset.get_field(@changeset, :balance_params) do
+          %{means_code: means_code} -> means_code
+          nil -> nil
+        end %>
+
+      <.input
+        type="select"
+        label={gettext("How to balance?")}
+        field={f[:balance_means_code]}
+        options={balance_params_options()}
+        value={means_code}
+        required
+      />
+      <% # TODO <button>More information</button> %>
+
+      <.input type="date" label={gettext("Date")} field={f[:date]} required />
     </div>
 
     <hr class="my-4" />

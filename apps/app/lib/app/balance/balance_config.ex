@@ -17,7 +17,7 @@ defmodule App.Balance.BalanceConfig do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Books.BookMember
 
   @type id :: integer()

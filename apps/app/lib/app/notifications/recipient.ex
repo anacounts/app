@@ -7,7 +7,7 @@ defmodule App.Notifications.Recipient do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Notifications.Notification
 
   @type id :: integer()

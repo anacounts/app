@@ -1,7 +1,7 @@
 defmodule App.NotificationsTest do
   use App.DataCase
 
-  import App.AuthFixtures
+  import App.AccountsFixtures
   import App.NotificationsFixtures
 
   alias App.Notifications

@@ -6,7 +6,7 @@ defmodule AppWeb.BookMemberLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Auth.Avatars
+  alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
   alias App.Books.Members
@@ -33,7 +33,7 @@ defmodule AppWeb.BookMemberLive.Index do
         pending_members: pending_members
       )
 
-    {:ok, socket, layout: {AppWeb.LayoutView, :book}}
+    {:ok, socket, layout: {AppWeb.Layouts, :book}}
   end
 
   @impl Phoenix.LiveView
@@ -44,7 +44,7 @@ defmodule AppWeb.BookMemberLive.Index do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: Routes.book_index_path(socket, :index))}
+     |> push_navigate(to: ~p"/books")}
   end
 
   defp member_tile(assigns) do

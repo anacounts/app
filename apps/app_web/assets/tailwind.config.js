@@ -22,7 +22,7 @@ module.exports = {
       // Gray colors
       white: "#ffffff",
       gray: {
-        5:  "#f8f9fa",
+        5: "#f8f9fa",
         10: "#f1f3f4",
         20: "#e9ecef",
         30: "#dadce0",
@@ -52,23 +52,23 @@ module.exports = {
     require("@tailwindcss/typography"),
     require("@tailwindcss/line-clamp"),
     plugin(({ addVariant }) =>
-      addVariant("phx-no-feedback", ["&.phx-no-feedback", ".phx-no-feedback &"])
+      addVariant("phx-no-feedback", [".phx-no-feedback&", ".phx-no-feedback &"])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-click-loading", [
-        "&.phx-click-loading",
+        ".phx-click-loading&",
         ".phx-click-loading &",
       ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-submit-loading", [
-        "&.phx-submit-loading",
+        ".phx-submit-loading&",
         ".phx-submit-loading &",
       ])
     ),
     plugin(({ addVariant }) =>
       addVariant("phx-change-loading", [
-        "&.phx-change-loading",
+        ".phx-change-loading&",
         ".phx-change-loading &",
       ])
     ),

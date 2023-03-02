@@ -4,7 +4,7 @@ defmodule AppWeb.InvitationLiveTest do
   import Phoenix.LiveViewTest
   import Swoosh.TestAssertions
 
-  import App.AuthFixtures
+  import App.AccountsFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
@@ -17,7 +17,7 @@ defmodule AppWeb.InvitationLiveTest do
     setup [:register_and_log_in_user, :book_with_member_context]
 
     test "creates a new book member", %{conn: conn, book: book} do
-      {:ok, index_live, _html} = live(conn, Routes.invitation_index_path(conn, :index, book))
+      {:ok, index_live, _html} = live(conn, ~p"/books/#{book}/invite")
 
       assert index_live
              |> form("#invite-member", %{book_member: %{nickname: "New Member"}, send_to: ""})
@@ -28,7 +28,7 @@ defmodule AppWeb.InvitationLiveTest do
     end
 
     test "sends invitation email", %{conn: conn, book: book} do
-      {:ok, index_live, _html} = live(conn, Routes.invitation_index_path(conn, :index, book))
+      {:ok, index_live, _html} = live(conn, ~p"/books/#{book}/invite")
 
       assert index_live
              |> form("#invite-member", %{
@@ -51,14 +51,14 @@ defmodule AppWeb.InvitationLiveTest do
       other_user = user_fixture(display_name: "Other User")
       _member = book_member_fixture(other_book, user_id: other_user.id)
 
-      {:ok, _index_live, html} = live(conn, Routes.invitation_index_path(conn, :index, book))
+      {:ok, _index_live, html} = live(conn, ~p"/books/#{book}/invite")
 
       assert html =~ other_user.display_name
       refute html =~ user.display_name
     end
 
     test "does not show suggestions if the list is empty", %{conn: conn, book: book} do
-      {:ok, _index_live, html} = live(conn, Routes.invitation_index_path(conn, :index, book))
+      {:ok, _index_live, html} = live(conn, ~p"/books/#{book}/invite")
 
       refute html =~ "Suggestions"
     end
@@ -72,7 +72,7 @@ defmodule AppWeb.InvitationLiveTest do
       other_user = user_fixture(display_name: "Other User")
       _member = book_member_fixture(other_book, user_id: other_user.id)
 
-      {:ok, index_live, _html} = live(conn, Routes.invitation_index_path(conn, :index, book))
+      {:ok, index_live, _html} = live(conn, ~p"/books/#{book}/invite")
 
       assert index_live
              |> element("button[phx-value-id=#{other_user.id}]", "Invite")

@@ -9,7 +9,7 @@ defmodule App.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -44,7 +44,7 @@ defmodule App.MixProject do
       {:jason, "~> 1.4"},
       {:swoosh, "~> 1.9"},
       {:gen_smtp, "~> 1.2"},
-      {:hackney, "~> 1.18"},
+      {:finch, "~> 0.14"},
       {:decimal, "~> 2.0"},
       # TODO Move to ex_money (migration is gonna be hard)
       {:money, "~> 1.12"}

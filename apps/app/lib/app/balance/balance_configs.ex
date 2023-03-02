@@ -7,7 +7,7 @@ defmodule App.Balance.BalanceConfigs do
   """
   import Ecto.Query
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Balance.BalanceConfig
 
   alias App.Repo

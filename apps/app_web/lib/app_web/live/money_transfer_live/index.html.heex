@@ -26,7 +26,7 @@
 
     <:button
       :if={Rights.can_member_handle_money_transfers?(@current_member)}
-      navigate={Routes.money_transfer_form_path(@socket, :edit, @book, transfer)}
+      navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
     >
       <%= gettext("Edit") %>
     </:button>
@@ -44,7 +44,7 @@
 
 <.fab_container class="mb-12 md:mb-0">
   <:item :if={Rights.can_member_handle_money_transfers?(@current_member)}>
-    <.fab navigate={Routes.money_transfer_form_path(@socket, :new, @book)}>
+    <.fab navigate={~p"/books/#{@book}/transfers/new"}>
       <.icon name="add" alt="Add a money transfer" />
     </.fab>
   </:item>

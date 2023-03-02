@@ -9,9 +9,8 @@ defmodule AppWeb.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -41,7 +40,7 @@ defmodule AppWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.16"},
+      {:phoenix, "~> 1.7.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
@@ -55,6 +54,7 @@ defmodule AppWeb.MixProject do
       {:gettext, "~> 0.22"},
       {:app, in_umbrella: true},
       {:sentry, "~> 8.0"},
+      {:finch, "~> 0.14"},
       {:jason, "~> 1.4"},
       {:earmark, "~> 1.4"},
       {:plug_cowboy, "~> 2.6"}
@@ -66,11 +66,17 @@ defmodule AppWeb.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"],
+      setup: ["deps.get", "assets.setup", "assets.build"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": [
+        "tailwind default",
+        "esbuild default",
+        "sprite.generate"
+      ],
       "assets.deploy": [
-        "esbuild default --minify",
         "tailwind default --minify",
+        "esbuild default --minify",
         "sprite.generate",
         "phx.digest"
       ],

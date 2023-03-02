@@ -15,7 +15,7 @@ defmodule AppWeb.BookInvitationController do
   alias App.Books.Members
 
   plug :get_book_member_by_token
-  plug :put_layout, :auth
+  plug :put_layout, html: :auth
 
   def edit(conn, _opts) do
     book_member = conn.assigns.book_member
@@ -34,7 +34,7 @@ defmodule AppWeb.BookInvitationController do
 
     conn
     |> put_flash(:info, gettext("You have been added to the book."))
-    |> redirect(to: Routes.money_transfer_index_path(conn, :index, book_member.book_id))
+    |> redirect(to: ~p"/books/#{book_member.book_id}/transfers")
   end
 
   defp get_book_member_by_token(conn, _opts) do

@@ -19,7 +19,7 @@ defmodule AppWeb.BookLiveTest do
     setup [:register_and_log_in_user, :book_with_member_context]
 
     test "saves new book", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, Routes.book_form_path(conn, :new))
+      {:ok, index_live, _html} = live(conn, ~p"/books/new")
 
       assert index_live
              |> form("#book-form", book: @invalid_attrs)
@@ -35,7 +35,7 @@ defmodule AppWeb.BookLiveTest do
     end
 
     test "updates book", %{conn: conn, book: book} do
-      {:ok, index_live, _html} = live(conn, Routes.book_form_path(conn, :edit, book))
+      {:ok, index_live, _html} = live(conn, ~p"/books/#{book}/edit")
 
       assert index_live
              |> form("#book-form", book: @invalid_attrs)
@@ -45,7 +45,7 @@ defmodule AppWeb.BookLiveTest do
         index_live
         |> form("#book-form", book: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+        |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "some updated name"
     end
@@ -55,19 +55,19 @@ defmodule AppWeb.BookLiveTest do
     setup [:register_and_log_in_user, :book_with_member_context]
 
     test "lists all accounts_books", %{conn: conn, book: book} do
-      {:ok, _index_live, html} = live(conn, Routes.book_index_path(conn, :index))
+      {:ok, _index_live, html} = live(conn, ~p"/books")
 
       assert html =~ book.name
     end
 
     test "links to books transfers", %{conn: conn, book: book} do
-      {:ok, index_live, _html} = live(conn, Routes.book_index_path(conn, :index))
+      {:ok, index_live, _html} = live(conn, ~p"/books")
 
       assert {:ok, _, html} =
                index_live
                |> element("[data-book-id='#{book.id}']", book.name)
                |> render_click()
-               |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+               |> follow_redirect(conn, ~p"/books/#{book.id}/transfers")
 
       assert html =~ "Transfers"
     end

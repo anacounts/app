@@ -20,12 +20,7 @@ config :app,
 #
 # For production, a different adapter and identity are configured
 # at the `config/runtime.exs`.
-config :app, App.Mailer,
-  adapter: Swoosh.Adapters.Local,
-  identity: "example.com"
-
-# Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+config :app, App.Mailer, adapter: Swoosh.Adapters.Local
 
 config :app_web,
   ecto_repos: [App.Repo],
@@ -34,7 +29,10 @@ config :app_web,
 # Configures the endpoint
 config :app_web, AppWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: AppWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    formats: [html: AppWeb.ErrorHTML, json: AppWeb.ErrorJSON],
+    layout: false
+  ],
   pubsub_server: App.PubSub,
   live_view: [signing_salt: "F5OA2rrK"]
 
@@ -67,6 +65,9 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Use Finch as Sentry's HTTP client
+config :sentry, client: Sentry.FinchClient
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

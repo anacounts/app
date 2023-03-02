@@ -2,7 +2,7 @@ defmodule AppWeb.BookMemberLiveTest do
   use AppWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import App.AuthFixtures
+  import App.AccountsFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
@@ -12,14 +12,14 @@ defmodule AppWeb.BookMemberLiveTest do
     test "displays book members", %{conn: conn, book: book} do
       _member = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
 
-      {:ok, _show_live, html} = live(conn, Routes.book_member_index_path(conn, :index, book))
+      {:ok, _show_live, html} = live(conn, ~p"/books/#{book}/members")
 
       # the book name is the main title
       assert html =~ book.name <> "\n</h1>"
       # the tabs are displayed
       assert html =~ "Members"
       # there is a link to go to the invitations page
-      assert html =~ ~s{href="#{Routes.invitation_index_path(conn, :index, book)}"}
+      assert html =~ ~s{href="#{~p|/books/#{book}/invite|}"}
       # the member is displayed, along with its balance and join status
       # FIXME It's not possible to set the `display_name` in the fixture
       # assert html =~ "Samuel"
@@ -28,13 +28,13 @@ defmodule AppWeb.BookMemberLiveTest do
     end
 
     test "deletes book", %{conn: conn, book: book} do
-      {:ok, show_live, _html} = live(conn, Routes.book_member_index_path(conn, :index, book))
+      {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/members")
 
       assert {:ok, _, html} =
                show_live
                |> element("#delete-book", "Delete")
                |> render_click()
-               |> follow_redirect(conn, Routes.book_index_path(conn, :index))
+               |> follow_redirect(conn, ~p"/books")
 
       assert html =~ "Book deleted successfully"
       refute html =~ book.name

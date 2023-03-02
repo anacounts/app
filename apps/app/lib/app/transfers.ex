@@ -6,7 +6,7 @@ defmodule App.Transfers do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.Members
