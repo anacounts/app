@@ -10,7 +10,7 @@ defmodule App.Balance.BalanceConfigsFixtures do
 
     {:ok, balance_config} =
       user
-      |> BalanceConfigs.get_user_balance_config!()
+      |> BalanceConfigs.get_user_balance_config_or_default()
       |> BalanceConfigs.update_balance_config(clean_attrs)
 
     balance_config

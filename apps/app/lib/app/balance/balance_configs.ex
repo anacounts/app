@@ -1,6 +1,9 @@
 defmodule App.Balance.BalanceConfigs do
   @moduledoc """
   The configuration related to balancing.
+
+  TODO Add a description of how balance configs work, how they will be/are shared between
+  users, members and peers, and everything.
   """
   import Ecto.Query
 
@@ -10,21 +13,25 @@ defmodule App.Balance.BalanceConfigs do
   alias App.Repo
 
   @doc """
-  Get the balance configuration of a user.
+  Get the user's balance configuration. If the user does not have a configuration,
+  returns the default configuration.
 
   ## Examples
 
-      iex> get_user_balance_config!(user)
+      iex> get_user_balance_config_or_default(user)
       %BalanceConfig{}
 
-      iex> get_user_balance_config!(user_without_config)
+      iex> get_user_balance_config_or_default(user_without_config)
       %BalanceConfig{}
 
   """
-  @spec get_user_balance_config!(User.t()) :: BalanceConfig.t() | nil
-  def get_user_balance_config!(%User{} = user) do
-    user_balance_config_query(user)
-    |> Repo.one!()
+  @spec get_user_balance_config_or_default(User.t()) :: BalanceConfig.t() | nil
+  def get_user_balance_config_or_default(%User{} = user) do
+    balance_config =
+      user_balance_config_query(user)
+      |> Repo.one()
+
+    balance_config || default_balance_config_for_user(user)
   end
 
   defp user_balance_config_query(user) do
@@ -32,12 +39,20 @@ defmodule App.Balance.BalanceConfigs do
       where: [user_id: ^user.id]
   end
 
+  defp default_balance_config_for_user(user) do
+    %BalanceConfig{user: user, user_id: user.id}
+  end
+
   @doc """
-  Update the balance configuration.
+  Update the user's balance configuration. If the passed `balance_config` was built and not
+  loaded from the database, it will be inserted instead of updated.
 
   ## Examples
 
       iex> update_balance_config(balance_config, %{annual_income: 42})
+      {:ok, %BalanceConfig{}}
+
+      iex> update_balance_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
       {:ok, %BalanceConfig{}}
 
       iex> update_balance_config(balance_config, %{annual_income: -1})
@@ -49,7 +64,7 @@ defmodule App.Balance.BalanceConfigs do
   def update_balance_config(balance_config, attrs) do
     balance_config
     |> BalanceConfig.changeset(attrs)
-    |> Repo.update()
+    |> Repo.insert_or_update()
   end
 
   @doc """

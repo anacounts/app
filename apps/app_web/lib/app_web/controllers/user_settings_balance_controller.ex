@@ -25,7 +25,7 @@ defmodule AppWeb.UserSettingsBalanceController do
   end
 
   defp assign_user_config(conn, _opts) do
-    balance_config = BalanceConfigs.get_user_balance_config!(conn.assigns.current_user)
+    balance_config = BalanceConfigs.get_user_balance_config_or_default(conn.assigns.current_user)
 
     conn
     |> assign(:balance_config, balance_config)
