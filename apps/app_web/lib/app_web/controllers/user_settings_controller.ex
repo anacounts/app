@@ -7,7 +7,7 @@ defmodule AppWeb.UserSettingsController do
   plug :assign_changesets
 
   def edit(conn, _params) do
-    render(conn, "edit.html", page_title: gettext("Settings"))
+    render(conn, :edit, page_title: gettext("Settings"))
   end
 
   def update(conn, %{"action" => "update_display_name"} = params) do
@@ -21,7 +21,7 @@ defmodule AppWeb.UserSettingsController do
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       {:error, changeset} ->
-        render(conn, "edit.html",
+        render(conn, :edit,
           page_title: gettext("Settings"),
           display_name_changeset: changeset
         )
@@ -48,7 +48,7 @@ defmodule AppWeb.UserSettingsController do
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       {:error, changeset} ->
-        render(conn, "edit.html", page_title: gettext("Settings"), email_changeset: changeset)
+        render(conn, :edit, page_title: gettext("Settings"), email_changeset: changeset)
     end
   end
 
@@ -64,7 +64,7 @@ defmodule AppWeb.UserSettingsController do
         |> UserAuth.log_in_user(user)
 
       {:error, changeset} ->
-        render(conn, "edit.html", page_title: gettext("Settings"), password_changeset: changeset)
+        render(conn, :edit, page_title: gettext("Settings"), password_changeset: changeset)
     end
   end
 

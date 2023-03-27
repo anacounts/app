@@ -15,13 +15,13 @@ defmodule AppWeb.BookInvitationController do
   alias App.Books.Members
 
   plug :get_book_member_by_token
-  plug :put_layout, "auth.html"
+  plug :put_layout, :auth
 
   def edit(conn, _opts) do
     book_member = conn.assigns.book_member
     book = Books.get_book!(book_member.book_id)
 
-    render(conn, "edit.html",
+    render(conn, :edit,
       page_title: gettext("Join %{book_name}", book_name: book.name),
       book: book
     )

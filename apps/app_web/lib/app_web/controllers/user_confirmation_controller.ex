@@ -3,10 +3,10 @@ defmodule AppWeb.UserConfirmationController do
 
   alias App.Auth
 
-  plug :put_layout, "auth.html"
+  plug :put_layout, :auth
 
   def edit(conn, %{"token" => token}) do
-    render(conn, "edit.html", page_title: gettext("Confirm your account"), token: token)
+    render(conn, :edit, page_title: gettext("Confirm your account"), token: token)
   end
 
   # Do not log in the user after confirmation to avoid a

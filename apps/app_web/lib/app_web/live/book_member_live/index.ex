@@ -33,7 +33,7 @@ defmodule AppWeb.BookMemberLive.Index do
         pending_members: pending_members
       )
 
-    {:ok, socket, layout: {AppWeb.LayoutView, "book.html"}}
+    {:ok, socket, layout: {AppWeb.LayoutView, :book}}
   end
 
   @impl Phoenix.LiveView
