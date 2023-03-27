@@ -5,11 +5,11 @@ defmodule AppWeb.UserRegistrationController do
   alias App.Auth.User
   alias AppWeb.UserAuth
 
-  plug :put_layout, "auth.html"
+  plug :put_layout, :auth
 
   def new(conn, _params) do
     changeset = Auth.change_user_registration(%User{})
-    render(conn, "new.html", page_title: gettext("Create an account"), changeset: changeset)
+    render(conn, :new, page_title: gettext("Create an account"), changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -26,7 +26,7 @@ defmodule AppWeb.UserRegistrationController do
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", page_title: gettext("Create an account"), changeset: changeset)
+        render(conn, :new, page_title: gettext("Create an account"), changeset: changeset)
     end
   end
 end

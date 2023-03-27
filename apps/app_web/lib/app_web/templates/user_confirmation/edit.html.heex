@@ -1,6 +1,7 @@
 <.form
   :let={_f}
-  for={:user}
+  for={%{}}
+  as={:user}
   action={Routes.user_confirmation_path(@conn, :update, @token)}
   class="px-4"
 >

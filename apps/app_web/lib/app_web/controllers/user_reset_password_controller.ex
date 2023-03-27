@@ -3,12 +3,12 @@ defmodule AppWeb.UserResetPasswordController do
 
   alias App.Auth
 
-  plug :put_layout, "auth.html"
+  plug :put_layout, :auth
 
   plug :get_user_by_reset_password_token when action in [:edit, :update]
 
   def new(conn, _params) do
-    render(conn, "new.html", page_title: gettext("Forgot your password?"))
+    render(conn, :new, page_title: gettext("Forgot your password?"))
   end
 
   def create(conn, %{"user" => %{"email" => email}}) do
@@ -30,7 +30,7 @@ defmodule AppWeb.UserResetPasswordController do
   end
 
   def edit(conn, _params) do
-    render(conn, "edit.html",
+    render(conn, :edit,
       page_title: gettext("Reset your password"),
       changeset: Auth.change_user_password(conn.assigns.user)
     )
@@ -46,7 +46,7 @@ defmodule AppWeb.UserResetPasswordController do
         |> redirect(to: Routes.user_session_path(conn, :new))
 
       {:error, changeset} ->
-        render(conn, "edit.html", page_title: gettext("Reset your password"), changeset: changeset)
+        render(conn, :edit, page_title: gettext("Reset your password"), changeset: changeset)
     end
   end
 

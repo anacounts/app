@@ -33,10 +33,10 @@ defmodule Anacounts.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
     [
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
 
       # Needed for the formatter to work in apps
-      {:phoenix_live_view, "~> 0.18.2"}
+      {:phoenix_live_view, "~> 0.18.18"}
     ]
   end
 

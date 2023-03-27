@@ -37,17 +37,17 @@ defmodule App.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.6"},
+      {:phoenix_pubsub, "~> 2.1"},
+      {:ecto_sql, "~> 3.9"},
       {:postgrex, ">= 0.0.0"},
       {:cloak_ecto, "~> 1.2.0"},
-      {:jason, "~> 1.2"},
-      {:swoosh, "~> 1.8"},
-      {:gen_smtp, "~> 1.0"},
+      {:jason, "~> 1.4"},
+      {:swoosh, "~> 1.9"},
+      {:gen_smtp, "~> 1.2"},
       {:hackney, "~> 1.18"},
       {:decimal, "~> 2.0"},
       # TODO Move to ex_money (migration is gonna be hard)
-      {:money, "~> 1.10"}
+      {:money, "~> 1.12"}
     ]
   end
 

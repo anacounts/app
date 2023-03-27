@@ -6,7 +6,7 @@ defmodule AppWeb.UserSettingsBalanceController do
   plug :assign_user_config
 
   def edit(conn, _params) do
-    render(conn, "edit.html", page_title: gettext("Balance Settings"))
+    render(conn, :edit, page_title: gettext("Balance Settings"))
   end
 
   def update(conn, %{"balance_config" => user_config_params}) do
@@ -17,7 +17,7 @@ defmodule AppWeb.UserSettingsBalanceController do
         |> redirect(to: Routes.user_settings_balance_path(conn, :edit))
 
       {:error, changeset} ->
-        render(conn, "edit.html",
+        render(conn, :edit,
           page_title: gettext("Balance Settings"),
           changeset: changeset
         )

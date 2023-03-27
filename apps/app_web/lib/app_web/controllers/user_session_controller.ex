@@ -4,10 +4,10 @@ defmodule AppWeb.UserSessionController do
   alias App.Auth
   alias AppWeb.UserAuth
 
-  plug :put_layout, "auth.html"
+  plug :put_layout, :auth
 
   def new(conn, _params) do
-    render(conn, "new.html", page_title: gettext("Sign in to your account"), error_message: nil)
+    render(conn, :new, page_title: gettext("Sign in to your account"), error_message: nil)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -17,7 +17,7 @@ defmodule AppWeb.UserSessionController do
       UserAuth.log_in_user(conn, user, user_params)
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
-      render(conn, "new.html",
+      render(conn, :new,
         page_title: gettext("Sign in to your account"),
         error_message: gettext("Invalid email or password")
       )
