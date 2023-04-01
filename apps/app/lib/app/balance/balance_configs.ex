@@ -2,8 +2,7 @@ defmodule App.Balance.BalanceConfigs do
   @moduledoc """
   The configuration related to balancing.
 
-  TODO Add a description of how balance configs work, how they will be/are shared between
-  users, members and peers, and everything.
+  To know more about the balance config lifecycle, see `App.Balance.BalanceConfig`.
   """
   import Ecto.Query
 
