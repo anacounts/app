@@ -10,7 +10,7 @@ processes = []
 
 [env]
   HOST = "app.anacounts.com"
-  ECTO_IPV6 = true
+  ECTO_IPV6 = "true"
 
 [[services]]
   http_checks = []
