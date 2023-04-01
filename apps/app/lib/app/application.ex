@@ -13,7 +13,9 @@ defmodule App.Application do
       # Start Cloak vault
       App.Vault,
       # Start the PubSub system
-      {Phoenix.PubSub, name: App.PubSub}
+      {Phoenix.PubSub, name: App.PubSub},
+      # Start Finch
+      {Finch, name: App.Finch}
       # Start a worker by calling: App.Worker.start_link(arg)
       # {App.Worker, arg}
     ]

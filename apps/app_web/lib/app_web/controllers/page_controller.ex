@@ -3,9 +3,9 @@ defmodule AppWeb.PageController do
 
   def index(conn, _params) do
     if conn.assigns[:current_user] do
-      redirect(conn, to: Routes.book_index_path(conn, :index))
+      redirect(conn, to: ~p"/books")
     else
-      redirect(conn, to: Routes.user_session_path(conn, :new))
+      redirect(conn, to: ~p"/users/log_in")
     end
   end
 end

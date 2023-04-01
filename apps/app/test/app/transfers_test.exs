@@ -2,7 +2,7 @@ defmodule App.TransfersTest do
   use App.DataCase, async: true
 
   import App.BalanceFixtures
-  import App.AuthFixtures
+  import App.AccountsFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
   import App.TransfersFixtures

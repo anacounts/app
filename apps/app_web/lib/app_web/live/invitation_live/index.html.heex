@@ -1,4 +1,4 @@
-<.page_header back_to={Routes.book_member_index_path(@socket, :index, @book)}>
+<.page_header back_to={~p"/books/#{@book}/members"}>
   <:title><%= gettext("Invitations") %></:title>
 </.page_header>
 
@@ -17,10 +17,8 @@
     phx-change="validate_member"
     phx-submit="invite_member"
   >
-    <label>
-      <%= gettext("Nickname") %>
-      <%= text_input(f, :nickname, required: true, class: "w-full") %>
-    </label>
+    <.input type="text" label={gettext("Nickname")} field={f[:nickname]} required class="w-full" />
+
     <label>
       <%= gettext("Send invitation to email (optional)") %>
       <input type="email" name="send_to" id="send_to" class="w-full" />

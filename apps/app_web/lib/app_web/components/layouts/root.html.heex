@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · Anacounts"><%= @page_title %></.live_title>
+    <%!-- TODO Add a description for each page --%>
+    <link rel="icon" type="image/png" href={~p"/images/icons-32.png"} />
+    <link rel="apple-touch-icon" href={~p"/images/icons-180-bg-white.png"} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#ff3d00" />
+    <meta name="color-scheme" content="only light" />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body>
+    <%= @inner_content %>
+  </body>
+</html>

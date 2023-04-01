@@ -6,7 +6,7 @@ defmodule App.Books.Members do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember

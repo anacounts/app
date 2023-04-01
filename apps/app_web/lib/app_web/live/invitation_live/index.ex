@@ -6,8 +6,8 @@ defmodule AppWeb.InvitationLive.Index do
 
   use AppWeb, :live_view
 
-  alias App.Auth
-  alias App.Auth.Avatars
+  alias App.Accounts
+  alias App.Accounts.Avatars
   alias App.Books
   alias App.Books.BookMember
   alias App.Books.Members
@@ -53,7 +53,7 @@ defmodule AppWeb.InvitationLive.Index do
 
     with {:ok, book_member} <-
            Members.create_book_member(socket.assigns.book, member_params_with_default),
-         {:ok, email} <- maybe_deliver_invitation(book_member, send_to) do
+         {:ok, email} <- maybe_deliver_invitation(socket, book_member, send_to) do
       changeset = Members.change_book_member(socket.assigns.book_member)
 
       {:noreply,
@@ -65,14 +65,14 @@ defmodule AppWeb.InvitationLive.Index do
 
   def handle_event("invite_user", %{"id" => id}, socket) do
     book = socket.assigns.book
-    user = Auth.get_user!(id)
+    user = Accounts.get_user!(id)
 
     with {:ok, book_member} <-
            Members.create_book_member(socket.assigns.book, %{
              nickname: user.display_name,
              role: :member
            }),
-         {:ok, _email} <- deliver_invitation(book_member, user.email) do
+         {:ok, _email} <- deliver_invitation(socket, book_member, user.email) do
       {:noreply,
        socket
        |> assign(
@@ -82,17 +82,13 @@ defmodule AppWeb.InvitationLive.Index do
     end
   end
 
-  defp maybe_deliver_invitation(_book_member, ""), do: {:ok, nil}
+  defp maybe_deliver_invitation(_socket, _book_member, ""), do: {:ok, nil}
 
-  defp maybe_deliver_invitation(book_member, sent_to),
-    do: deliver_invitation(book_member, sent_to)
+  defp maybe_deliver_invitation(socket, book_member, sent_to),
+    do: deliver_invitation(socket, book_member, sent_to)
 
-  defp deliver_invitation(book_member, sent_to) do
-    Members.deliver_invitation(
-      book_member,
-      sent_to,
-      &Routes.book_invitation_url(AppWeb.Endpoint, :edit, &1)
-    )
+  defp deliver_invitation(socket, book_member, sent_to) do
+    Members.deliver_invitation(book_member, sent_to, &url(socket, ~p"/invitation/#{&1}/edit"))
   end
 
   defp member_added_flash(nil), do: gettext("Member added")

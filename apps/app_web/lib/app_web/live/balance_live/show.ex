@@ -23,7 +23,7 @@ defmodule AppWeb.BalanceLive.Show do
       )
       |> assign_transactions()
 
-    {:ok, socket, layout: {AppWeb.LayoutView, :book}}
+    {:ok, socket, layout: {AppWeb.Layouts, :book}}
   end
 
   defp assign_transactions(socket) do

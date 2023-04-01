@@ -23,6 +23,6 @@ erl_crash.dump
 *.ez
 
 # Temporary files, for example, from tests.
-/tmp
+/tmp/
 
 

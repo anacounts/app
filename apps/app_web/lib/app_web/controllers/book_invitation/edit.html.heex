@@ -1,0 +1,29 @@
+<div class="text-center">
+  <p class="text-xl mb-4">
+    <%= gettext("Hi %{user_name}", user_name: @current_user.display_name) %>
+  </p>
+  <p class="mb-2"><%= gettext("You have been invited to join a new book:") %></p>
+  <p class="text-3xl font-bold mb-8"><%= @book.name %></p>
+
+  <.button href={~p"/invitation/#{@token}"} method="put" color={:cta} class="w-32">
+    <%= gettext("Join") %>
+  </.button>
+</div>
+
+<div class="mt-8
+            border-t border-gray-50
+            text-center
+            text-gray-50 font-bold">
+  <span class="relative bottom-3 p-3 bg-white">
+    <%= gettext("This invitation is irrelevant?") %>
+  </span>
+</div>
+
+<div class="flex justify-between">
+  <.link href="/" class="text-action">
+    <%= gettext("Back to the app") %>
+  </.link>
+  <.link href={~p"/users/log_out"} method="delete" class="text-right text-action">
+    <%= gettext("Not %{user_name}? Disconnect", user_name: @current_user.display_name) %>
+  </.link>
+</div>

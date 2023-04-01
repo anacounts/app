@@ -27,7 +27,7 @@ defmodule AppWeb.MoneyTransferLive.Index do
         money_transfers: money_transfers
       )
 
-    {:ok, socket, layout: {AppWeb.LayoutView, :book}}
+    {:ok, socket, layout: {AppWeb.Layouts, :book}}
   end
 
   @impl Phoenix.LiveView

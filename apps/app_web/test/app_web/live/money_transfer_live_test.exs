@@ -42,7 +42,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
           label: "Other book money transfer"
         )
 
-      {:ok, _index_live, html} = live(conn, Routes.money_transfer_index_path(conn, :index, book))
+      {:ok, _index_live, html} = live(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Transfers"
       assert html =~ money_transfer.label
@@ -52,7 +52,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
     test "allows to go to edit form", %{conn: conn, book: book, member: member} do
       money_transfer = money_transfer_fixture(book, tenant_id: member.id)
 
-      {:ok, index_live, html} = live(conn, Routes.money_transfer_index_path(conn, :index, book))
+      {:ok, index_live, html} = live(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Transfers"
       assert html =~ money_transfer.label
@@ -61,10 +61,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
         index_live
         |> element(".tile__button", "Edit")
         |> render_click()
-        |> follow_redirect(
-          conn,
-          Routes.money_transfer_form_path(conn, :edit, book, money_transfer)
-        )
+        |> follow_redirect(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
       assert html =~ "Edit"
       assert html =~ "<form"
@@ -74,7 +71,7 @@ defmodule AppWeb.MoneyTransferLiveTest do
     test "allows to delete a transfer", %{conn: conn, book: book, member: member} do
       money_transfer = money_transfer_fixture(book, tenant_id: member.id)
 
-      {:ok, index_live, html} = live(conn, Routes.money_transfer_index_path(conn, :index, book))
+      {:ok, index_live, html} = live(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Transfers"
       assert html =~ money_transfer.label
@@ -96,15 +93,14 @@ defmodule AppWeb.MoneyTransferLiveTest do
     ]
 
     test "displays money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
-      {:ok, _form_live, html} =
-        live(conn, Routes.money_transfer_form_path(conn, :edit, book, money_transfer))
+      {:ok, _form_live, html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
       assert html =~ "Transfer"
       assert html =~ "<form"
     end
 
     test "saves new money_transfer", %{conn: conn, book: book} do
-      {:ok, form_live, _html} = live(conn, Routes.money_transfer_form_path(conn, :new, book))
+      {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/new")
 
       assert form_live
              |> form("#money-transfer-form", money_transfer: @invalid_attrs)
@@ -114,14 +110,13 @@ defmodule AppWeb.MoneyTransferLiveTest do
         form_live
         |> form("#money-transfer-form", money_transfer: @create_attrs)
         |> render_submit()
-        |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+        |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Money transfer created successfully"
     end
 
     test "updates money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
-      {:ok, form_live, _html} =
-        live(conn, Routes.money_transfer_form_path(conn, :edit, book, money_transfer))
+      {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
       assert form_live
              |> form("#money-transfer-form", money_transfer: @invalid_attrs)
@@ -131,20 +126,19 @@ defmodule AppWeb.MoneyTransferLiveTest do
         form_live
         |> form("#money-transfer-form", money_transfer: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+        |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Money transfer updated successfully"
     end
 
     test "deletes money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
-      {:ok, form_live, _html} =
-        live(conn, Routes.money_transfer_form_path(conn, :edit, book, money_transfer))
+      {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
       {:ok, _, html} =
         form_live
         |> element("#delete-money-transfer", "Delete")
         |> render_click()
-        |> follow_redirect(conn, Routes.money_transfer_index_path(conn, :index, book))
+        |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
       assert html =~ "Transfer deleted successfully"
     end

@@ -6,7 +6,7 @@ defmodule App.Books.BookMember do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.Role
 

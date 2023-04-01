@@ -1,7 +1,7 @@
 <div class="max-w-prose mx-auto">
   <.tile
     :if={Rights.can_member_invite_new_member?(@current_member)}
-    navigate={Routes.invitation_index_path(@socket, :index, @book)}
+    navigate={~p"/books/#{@book}/invite"}
   >
     <.icon name="person-add" />
     <%= gettext("Invite a new member") %>

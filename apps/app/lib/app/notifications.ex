@@ -9,7 +9,7 @@ defmodule App.Notifications do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Auth.User
+  alias App.Accounts.User
   alias App.Notifications.Notification
   alias App.Notifications.Recipient
 

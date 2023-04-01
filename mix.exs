@@ -7,15 +7,7 @@ defmodule Anacounts.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases(),
-      releases: [
-        app_web: [
-          applications: [
-            app: :permanent,
-            app_web: :permanent
-          ]
-        ]
-      ]
+      aliases: aliases()
     ]
   end
 
@@ -33,10 +25,9 @@ defmodule Anacounts.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
     [
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-
-      # Needed for the formatter to work in apps
-      {:phoenix_live_view, "~> 0.18.18"}
+      # Required to run "mix format" on ~H/.heex files from the umbrella root
+      {:phoenix_live_view, ">= 0.0.0"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

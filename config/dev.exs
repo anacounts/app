@@ -35,7 +35,6 @@ config :app_web, AppWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "Y8PSvX0+ZmmWKSfOyF3MRuaFKjHRwPA8IZKDm3A8RjiRF4jIoNq6cE07D1XWEdvV",
   watchers: [
-    # Start the esbuild and tailwind watchers
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
@@ -48,7 +47,6 @@ config :app_web, AppWeb.Endpoint,
 #
 #     mix phx.gen.cert
 #
-# Note that this task requires Erlang/OTP 20 or later.
 # Run `mix help phx.gen.cert` for more information.
 #
 # The `http:` config above can be replaced with:
@@ -70,16 +68,21 @@ config :app_web, AppWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/app_web/(live|views)/.*(ex)$",
-      ~r"lib/app_web/templates/.*(eex)$"
+      ~r"lib/app_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
+
+# Enable dev routes for dashboard and mailbox
+config :app_web, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Disable swoosh api client as it is only required for production adapters.
+config :swoosh, :api_client, false
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
