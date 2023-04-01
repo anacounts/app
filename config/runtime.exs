@@ -97,9 +97,4 @@ if config_env() == :prod do
     access_key: ses_access_key,
     secret: ses_secret_key,
     identity: ses_identity
-
-  # A HTTP client is required by Swoosh API client for most providers (including SES).
-  # Swoosh supports Hackney and Finch out of the box:
-
-  config :swoosh, :api_client, Swoosh.ApiClient.Hackney
 end
