@@ -120,20 +120,19 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Check if a book member is yet to accept an invitation. In other words, a pending member
-  is not linked to a user yet. This means that if the user is invoved in a trasnfer using
-  a balance mean that required information about the user, the balance will fail.
+  Check if a book member is linked to a user.
 
   ## Examples
 
-      iex> pending?(book_member)
+      iex> independent?(book_member)
       true
 
-      iex> pending?(book_member_with_user)
+      iex> independent?(book_member_with_user)
       false
+
   """
-  @spec pending?(BookMember.t()) :: boolean()
-  def pending?(%BookMember{} = book_member) do
+  @spec independent?(BookMember.t()) :: boolean()
+  def independent?(%BookMember{} = book_member) do
     book_member.user_id == nil
   end
 

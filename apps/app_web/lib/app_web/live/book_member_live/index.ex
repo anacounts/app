@@ -23,14 +23,14 @@ defmodule AppWeb.BookMemberLive.Index do
       |> Members.list_members_of_book()
       |> Balance.fill_members_balance()
 
-    {pending_members, confirmed_members} = Enum.split_with(members, &Members.pending?/1)
+    {independent_members, linked_members} = Enum.split_with(members, &Members.independent?/1)
 
     socket =
       assign(socket,
         page_title: book.name,
         layout_heading: gettext("Details"),
-        confirmed_members: confirmed_members,
-        pending_members: pending_members
+        linked_members: linked_members,
+        independent_members: independent_members
       )
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}
@@ -96,7 +96,7 @@ defmodule AppWeb.BookMemberLive.Index do
   end
 
   defp member_status(assigns) do
-    if Members.pending?(assigns.member) do
+    if Members.independent?(assigns.member) do
       ~H"""
       <%= gettext("Invitation sent") %>
       <.icon name="pending" />
