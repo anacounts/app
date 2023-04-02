@@ -7,11 +7,11 @@
     <%= gettext("Invite a new member") %>
   </.tile>
 
-  <.member_tile :for={member <- @confirmed_members} member={member} />
+  <.member_tile :for={member <- @linked_members} member={member} />
 
-  <.heading :if={not Enum.empty?(@pending_members)} level={:section} class="mt-6">
+  <.heading :if={not Enum.empty?(@independent_members)} level={:section} class="mt-6">
     <%= gettext("Pending members") %>
   </.heading>
 
-  <.member_tile :for={member <- @pending_members} member={member} />
+  <.member_tile :for={member <- @independent_members} member={member} />
 </div>
