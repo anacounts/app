@@ -12,7 +12,7 @@ defmodule AppWeb.BalanceConfigLive.Edit do
 
     <.alert :for={{type, message} <- @flash} type={type}><%= message %></.alert>
 
-    <.form for={@form} phx-change="validate" phx-submit="save" class="mx-4">
+    <.form for={@form} id="balance_config_form" phx-change="validate" phx-submit="save" class="mx-4">
       <.input
         field={@form[:annual_income]}
         type="number"
@@ -58,11 +58,18 @@ defmodule AppWeb.BalanceConfigLive.Edit do
       BalanceConfigs.get_user_balance_config_or_default(socket.assigns.current_user)
 
     case BalanceConfigs.update_balance_config(balance_config, balance_config_params) do
-      {:ok, _user_config} ->
+      {:ok, updated_balance_config} ->
+        if Ecto.get_meta(balance_config, :state) == :built do
+          BalanceConfigs.link_balance_config_to_user!(
+            updated_balance_config,
+            socket.assigns.current_user
+          )
+        end
+
         {:noreply,
          socket
          |> put_flash(:info, gettext("Balance settings updated"))
-         |> push_navigate(to: ~p"/users/settings")}
+         |> redirect(to: ~p"/users/settings")}
 
       {:error, form} ->
         {:noreply, assign(socket, form: to_form(form))}

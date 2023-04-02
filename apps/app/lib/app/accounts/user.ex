@@ -6,6 +6,8 @@ defmodule App.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias App.Balance.BalanceConfig
+
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
@@ -14,6 +16,8 @@ defmodule App.Accounts.User do
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
           display_name: String.t(),
+          balance_config: BalanceConfig.t(),
+          balance_config_id: BalanceConfig.id(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -28,8 +32,7 @@ defmodule App.Accounts.User do
     # display information
     field :display_name, :string
 
-    # TODO this is only used in the `Balance` context and should be removed
-    has_one :balance_config, App.Balance.BalanceConfig
+    belongs_to :balance_config, BalanceConfig
 
     timestamps()
   end
@@ -109,21 +112,6 @@ defmodule App.Accounts.User do
   end
 
   @doc """
-  A user changeset for changing the user display name.
-  """
-  def display_name_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:display_name])
-    |> validate_display_name()
-  end
-
-  defp validate_display_name(changeset) do
-    changeset
-    |> validate_required(:display_name)
-    |> validate_length(:display_name, max: 255)
-  end
-
-  @doc """
   A user changeset for changing the email.
 
   It requires the email to change otherwise an error is added.
@@ -190,5 +178,35 @@ defmodule App.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  A user changeset for changing the user display name.
+  """
+  def display_name_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:display_name])
+    |> validate_display_name()
+  end
+
+  defp validate_display_name(changeset) do
+    changeset
+    |> validate_required(:display_name)
+    |> validate_length(:display_name, max: 255)
+  end
+
+  @doc """
+  A user changeset for changing the user balance config.
+  """
+  @spec balance_config_changeset(t(), map()) :: Ecto.Changeset.t()
+  def balance_config_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:balance_config_id])
+    |> validate_balance_config_id()
+  end
+
+  defp validate_balance_config_id(changeset) do
+    changeset
+    |> foreign_key_constraint(:balance_config_id)
   end
 end

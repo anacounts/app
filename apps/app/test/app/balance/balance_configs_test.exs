@@ -6,15 +6,21 @@ defmodule App.Balance.BalanceConfigsTest do
 
   alias App.Balance.BalanceConfigs
 
+  @valid_annual_income 1234
+  @updated_annual_income 2345
+
   describe "get_user_balance_config_or_default/1" do
     setup do
       %{user: user_fixture()}
     end
 
     test "returns the balance config of the user", %{user: user} do
-      user_balance_config_fixture(user, annual_income: 1234)
+      user_balance_config_fixture(user, annual_income: @valid_annual_income)
 
-      assert %{annual_income: 1234} = BalanceConfigs.get_user_balance_config_or_default(user)
+      user = Repo.reload(user)
+
+      assert %{annual_income: @valid_annual_income} =
+               BalanceConfigs.get_user_balance_config_or_default(user)
     end
   end
 
@@ -24,12 +30,14 @@ defmodule App.Balance.BalanceConfigsTest do
     end
 
     test "updates the user config", %{user: user} do
-      balance_config = user_balance_config_fixture(user, annual_income: 1234)
+      balance_config = user_balance_config_fixture(user, annual_income: @valid_annual_income)
 
       assert {:ok, balance_config} =
-               BalanceConfigs.update_balance_config(balance_config, %{annual_income: 2345})
+               BalanceConfigs.update_balance_config(balance_config, %{
+                 annual_income: @updated_annual_income
+               })
 
-      assert balance_config.annual_income == 2345
+      assert balance_config.annual_income == @updated_annual_income
     end
 
     test "fails if a value is incorrect", %{user: user} do

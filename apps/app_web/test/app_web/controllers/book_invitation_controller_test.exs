@@ -48,7 +48,9 @@ defmodule AppWeb.BookInvitationControllerTest do
       conn = get(conn, ~p"/invitation/invalid-token/edit")
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) == "Invitation link is invalid or it has expired."
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Invitation link is invalid or it has expired."
     end
   end
 
@@ -64,7 +66,7 @@ defmodule AppWeb.BookInvitationControllerTest do
 
       assert redirected_to(conn) == ~p"/books/#{book}/transfers"
 
-      assert get_flash(conn, :info) =~ "You have been added to the book"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "You have been added to the book"
       assert Repo.get!(BookMember, book_member.id).user_id == user.id
     end
 
@@ -72,7 +74,9 @@ defmodule AppWeb.BookInvitationControllerTest do
       conn = put(conn, ~p"/invitation/invalid-token")
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) == "Invitation link is invalid or it has expired."
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "Invitation link is invalid or it has expired."
     end
   end
 end

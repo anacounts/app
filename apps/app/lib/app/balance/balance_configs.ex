@@ -4,8 +4,6 @@ defmodule App.Balance.BalanceConfigs do
 
   To know more about the balance config lifecycle, see `App.Balance.BalanceConfig`.
   """
-  import Ecto.Query
-
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
 
@@ -26,20 +24,13 @@ defmodule App.Balance.BalanceConfigs do
   """
   @spec get_user_balance_config_or_default(User.t()) :: BalanceConfig.t() | nil
   def get_user_balance_config_or_default(%User{} = user) do
-    balance_config =
-      user_balance_config_query(user)
-      |> Repo.one()
-
-    balance_config || default_balance_config_for_user(user)
+    user_balance_config(user) || %BalanceConfig{owner: user, owner_id: user.id}
   end
 
-  defp user_balance_config_query(user) do
-    from BalanceConfig,
-      where: [user_id: ^user.id]
-  end
+  defp user_balance_config(%{balance_config_id: nil} = _user), do: nil
 
-  defp default_balance_config_for_user(user) do
-    %BalanceConfig{user: user, user_id: user.id}
+  defp user_balance_config(user) do
+    Repo.get(BalanceConfig, user.balance_config_id)
   end
 
   @doc """
@@ -64,6 +55,28 @@ defmodule App.Balance.BalanceConfigs do
     balance_config
     |> BalanceConfig.changeset(attrs)
     |> Repo.insert_or_update()
+  end
+
+  @doc """
+  Link a balance configuration to a user.
+
+  XXX This function temporary. It is used during the reword of balance configs
+  """
+  @spec link_balance_config_to_user!(BalanceConfig.t(), User.t()) :: User.t()
+  def link_balance_config_to_user!(%BalanceConfig{} = balance_config, %User{} = user) do
+    {:ok, %{user: user}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(
+        :user,
+        User.balance_config_changeset(user, %{balance_config_id: balance_config.id})
+      )
+      |> Ecto.Multi.update(
+        :balance_config,
+        BalanceConfig.changeset(balance_config, %{owner_id: user.id})
+      )
+      |> Repo.transaction()
+
+    user
   end
 
   @doc """
