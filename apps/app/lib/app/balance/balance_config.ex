@@ -107,11 +107,11 @@ defmodule App.Balance.BalanceConfig do
           updated_at: NaiveDateTime.t()
         }
 
-  @derive {Inspect, only: [:id]}
+  @derive {Inspect, only: [:id, :owner, :owner_id]}
   schema "balance_configs" do
     field :annual_income, App.Encrypted.Integer
 
-    belongs_to :owner, User, source: :user_id
+    belongs_to :owner, User
 
     timestamps()
   end
