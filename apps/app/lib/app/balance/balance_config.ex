@@ -100,37 +100,62 @@ defmodule App.Balance.BalanceConfig do
 
   @type t :: %__MODULE__{
           id: id(),
-          annual_income: non_neg_integer(),
+          annual_income: non_neg_integer() | nil,
           owner: User.t(),
           owner_id: User.id(),
+          created_for: :user | :book_member,
+          start_date_of_validity: DateTime.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
 
   @derive {Inspect, only: [:id, :owner, :owner_id]}
   schema "balance_configs" do
-    field :annual_income, App.Encrypted.Integer
-
     belongs_to :owner, User
+    field :created_for, Ecto.Enum, values: [:user, :book_member]
+
+    field :start_date_of_validity, :utc_datetime
+
+    # Confidential information
+    field :annual_income, App.Encrypted.Integer
 
     timestamps()
   end
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:annual_income, :owner_id])
-    |> validate_annual_income()
+    |> cast(attrs, [:owner_id, :created_for, :start_date_of_validity, :annual_income])
     |> validate_owner_id()
-  end
-
-  defp validate_annual_income(changeset) do
-    changeset
-    |> validate_number(:annual_income, greater_than_or_equal_to: 0)
+    |> validate_created_for()
+    |> validate_start_date_of_validity()
+    |> validate_annual_income()
   end
 
   defp validate_owner_id(changeset) do
     changeset
     |> validate_required(:owner_id)
     |> foreign_key_constraint(:owner_id)
+  end
+
+  defp validate_created_for(changeset) do
+    changeset
+    |> validate_required(:created_for)
+  end
+
+  defp validate_start_date_of_validity(changeset) do
+    changeset
+    |> validate_required(:start_date_of_validity)
+    |> validate_change(:start_date_of_validity, fn _, value ->
+      if value < DateTime.utc_now() do
+        []
+      else
+        [start_date_of_validity: "must be now or a past date"]
+      end
+    end)
+  end
+
+  defp validate_annual_income(changeset) do
+    changeset
+    |> validate_number(:annual_income, greater_than_or_equal_to: 0)
   end
 end

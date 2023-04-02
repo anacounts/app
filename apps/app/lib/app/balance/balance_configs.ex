@@ -24,7 +24,13 @@ defmodule App.Balance.BalanceConfigs do
   """
   @spec get_user_balance_config_or_default(User.t()) :: BalanceConfig.t() | nil
   def get_user_balance_config_or_default(%User{} = user) do
-    user_balance_config(user) || %BalanceConfig{owner: user, owner_id: user.id}
+    user_balance_config(user) ||
+      %BalanceConfig{
+        owner: user,
+        owner_id: user.id,
+        created_for: :user,
+        start_date_of_validity: DateTime.utc_now() |> DateTime.truncate(:second)
+      }
   end
 
   defp user_balance_config(%{balance_config_id: nil} = _user), do: nil

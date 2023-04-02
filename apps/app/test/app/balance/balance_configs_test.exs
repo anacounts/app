@@ -1,8 +1,8 @@
 defmodule App.Balance.BalanceConfigsTest do
   use App.DataCase, async: true
 
-  import App.Balance.BalanceConfigsFixtures
   import App.AccountsFixtures
+  import App.Balance.BalanceConfigsFixtures
 
   alias App.Balance.BalanceConfigs
 

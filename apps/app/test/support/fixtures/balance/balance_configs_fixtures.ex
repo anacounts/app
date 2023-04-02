@@ -8,14 +8,21 @@ defmodule App.Balance.BalanceConfigsFixtures do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
 
-  def user_balance_config_fixture(user, attrs \\ %{}) do
-    clean_attrs = Enum.into(attrs, %{})
+  def balance_config_attributes(owner, attrs \\ %{}) do
+    Enum.into(attrs, %{
+      owner_id: owner.id,
+      created_for: :user,
+      start_date_of_validity: DateTime.utc_now(),
+      annual_income: 1234
+    })
+  end
 
+  def user_balance_config_fixture(user, attrs \\ %{}) do
     {:ok, %{balance_config: balance_config}} =
       Ecto.Multi.new()
       |> Ecto.Multi.insert(
         :balance_config,
-        BalanceConfig.changeset(%BalanceConfig{owner_id: user.id}, clean_attrs)
+        BalanceConfig.changeset(%BalanceConfig{}, balance_config_attributes(user, attrs))
       )
       |> Ecto.Multi.update(
         :user,
