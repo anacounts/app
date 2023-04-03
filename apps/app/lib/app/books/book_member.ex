@@ -7,6 +7,7 @@ defmodule App.Books.BookMember do
   import Ecto.Changeset
 
   alias App.Accounts.User
+  alias App.Balance.BalanceConfig
   alias App.Books.Book
   alias App.Books.Role
 
@@ -23,6 +24,8 @@ defmodule App.Books.BookMember do
           nickname: String.t(),
           display_name: String.t() | nil,
           email: String.t() | nil,
+          balance_config: BalanceConfig.t() | nil,
+          balance_config_id: BalanceConfig.id() | nil,
           balance: Money.t() | {:error, reasons :: [String.t()]} | nil
         }
 
@@ -42,6 +45,8 @@ defmodule App.Books.BookMember do
     # Filled with the user `:email` if there is one
     field :email, :string, virtual: true
 
+    # the current balance configuration for this member
+    belongs_to :balance_config, BalanceConfig
     # Filled by the `Balance` context. Maybe be set to `{:error, reasons}` if the
     # balance cannot be computed.
     field :balance, Money.Ecto.Composite.Type, virtual: true
@@ -84,5 +89,20 @@ defmodule App.Books.BookMember do
     changeset
     |> validate_required(:nickname)
     |> validate_length(:nickname, min: 1, max: 255)
+  end
+
+  @doc """
+  Changeset for updating the balance config of a book member.
+  """
+  @spec balance_config_changeset(t(), map()) :: Ecto.Changeset.t()
+  def balance_config_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:balance_config_id])
+    |> validate_balance_config_id()
+  end
+
+  defp validate_balance_config_id(changeset) do
+    changeset
+    |> foreign_key_constraint(:balance_config_id)
   end
 end
