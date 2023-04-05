@@ -3,8 +3,9 @@ defmodule App.BooksTest do
 
   import App.BalanceFixtures
   import App.AccountsFixtures
-  import App.BooksFixtures
+  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
+  import App.BooksFixtures
 
   alias App.Balance.TransferParams
   alias App.Books
@@ -169,6 +170,8 @@ defmodule App.BooksTest do
     end
 
     test "creates a new book and sets the user the creator", %{user: user} do
+      user_balance_config_fixture(user)
+
       {:ok, book} =
         book_attributes(
           name: @valid_book_name,
@@ -181,8 +184,9 @@ defmodule App.BooksTest do
       assert book.default_balance_params ==
                struct!(TransferParams, transfer_params_attributes())
 
-      assert membership = Members.get_membership(book.id, user.id)
-      assert membership.role == :creator
+      assert member = Members.get_membership(book.id, user.id)
+      assert member.role == :creator
+      assert member.balance_config_id == user.balance_config_id
     end
 
     test "fails when not given a name", %{user: user} do

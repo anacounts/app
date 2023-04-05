@@ -150,7 +150,12 @@ defmodule App.Books do
       Ecto.Multi.new()
       |> Ecto.Multi.insert(:book, Book.changeset(%Book{}, attrs))
       |> Ecto.Multi.insert(:creator, fn %{book: book} ->
-        %BookMember{role: :creator, book_id: book.id, user_id: creator.id}
+        %BookMember{
+          role: :creator,
+          book_id: book.id,
+          user_id: creator.id,
+          balance_config_id: creator.balance_config_id
+        }
       end)
       |> Repo.transaction()
 
