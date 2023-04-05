@@ -7,6 +7,8 @@ defmodule App.Balance.BalanceConfigsFixtures do
 
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
+  alias App.Books.BookMember
+  alias App.Transfers.Peer
 
   def balance_config_attributes(owner, attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -29,6 +31,24 @@ defmodule App.Balance.BalanceConfigsFixtures do
         &User.balance_config_changeset(user, %{balance_config_id: &1.balance_config.id})
       )
       |> Repo.transaction()
+
+    balance_config
+  end
+
+  def member_balance_config_link_fixture(member, balance_config) do
+    {:ok, balance_config} =
+      member
+      |> BookMember.balance_config_changeset(%{balance_config_id: balance_config.id})
+      |> Repo.update()
+
+    balance_config
+  end
+
+  def peer_balance_config_link_fixture(peer, balance_config) do
+    {:ok, balance_config} =
+      peer
+      |> Peer.balance_config_changeset(%{balance_config_id: balance_config.id})
+      |> Repo.update()
 
     balance_config
   end

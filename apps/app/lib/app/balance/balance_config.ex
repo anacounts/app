@@ -158,4 +158,30 @@ defmodule App.Balance.BalanceConfig do
     changeset
     |> validate_number(:annual_income, greater_than_or_equal_to: 0)
   end
+
+  @doc """
+  Create a change that copies the attributes of the given struct, except for the
+  `:id`, `:inserted_at` and `:updated_at` fields, which are set to `nil`.
+
+  Note that the `:start_date_of_validity` is set to the current time as a hack
+  to prevent the user from setting a different date. This is temporary until
+  we implement the logic to create new balance configs with a past start date.
+
+  ## Examples
+
+      iex> BalanceConfig.copy_changeset(%BalanceConfig{}, %{field: value})
+      #Ecto.Changeset<...>
+
+  """
+  @spec copy_changeset(t(), map()) :: Ecto.Changeset.t()
+  def copy_changeset(struct, attrs) do
+    %{
+      struct
+      | id: nil,
+        start_date_of_validity: DateTime.utc_now() |> DateTime.truncate(:second),
+        inserted_at: nil,
+        updated_at: nil
+    }
+    |> changeset(attrs)
+  end
 end

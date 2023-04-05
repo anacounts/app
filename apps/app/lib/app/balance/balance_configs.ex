@@ -4,8 +4,11 @@ defmodule App.Balance.BalanceConfigs do
 
   To know more about the balance config lifecycle, see `App.Balance.BalanceConfig`.
   """
+  import Ecto.Query
+
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
+  alias App.Books.BookMember
 
   alias App.Repo
 
@@ -40,49 +43,57 @@ defmodule App.Balance.BalanceConfigs do
   end
 
   @doc """
-  Update the user's balance configuration. If the passed `balance_config` was built and not
-  loaded from the database, it will be inserted instead of updated.
+  Update the balance configuration of a user by creating a new one and linking the user
+  to it.
+
+  This also updates members and peers linked to the old configuration to reference the
+  new one. Peers are only updated if their transfer date is later than the start date of
+  validity.
+
+  See `BalanceConfig` for more details.
 
   ## Examples
 
-      iex> update_balance_config(balance_config, %{annual_income: 42})
+      iex> update_user_balance_config(user, balance_config, %{annual_income: 42})
       {:ok, %BalanceConfig{}}
 
-      iex> update_balance_config(%BalanceConfig{user_id: 11}, %{annual_income: 42})
-      {:ok, %BalanceConfig{}}
-
-      iex> update_balance_config(balance_config, %{annual_income: -1})
+      iex> update_user_balance_config(user, balance_config, %{annual_income: -1})
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update_balance_config(BalanceConfig.t(), map()) ::
+  @spec update_user_balance_config(User.t(), BalanceConfig.t(), map()) ::
           {:ok, BalanceConfig.t()} | {:error, Ecto.Changeset.t()}
-  def update_balance_config(balance_config, attrs) do
-    balance_config
-    |> BalanceConfig.changeset(attrs)
-    |> Repo.insert_or_update()
+  def update_user_balance_config(%User{} = user, %BalanceConfig{} = old_balance_config, attrs) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:new_balance_config, fn _ ->
+      BalanceConfig.copy_changeset(old_balance_config, attrs)
+    end)
+    |> Ecto.Multi.update(:user, fn %{new_balance_config: new_balance_config} ->
+      User.balance_config_changeset(user, %{balance_config_id: new_balance_config.id})
+    end)
+    |> update_members_multi()
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{new_balance_config: new_balance_config}} ->
+        {:ok, new_balance_config}
+
+      {:error, :new_balance_config, changeset, _changes} ->
+        {:error, changeset}
+    end
   end
 
-  @doc """
-  Link a balance configuration to a user.
-
-  XXX This function temporary. It is used during the reword of balance configs
-  """
-  @spec link_balance_config_to_user!(BalanceConfig.t(), User.t()) :: User.t()
-  def link_balance_config_to_user!(%BalanceConfig{} = balance_config, %User{} = user) do
-    {:ok, %{user: user}} =
-      Ecto.Multi.new()
-      |> Ecto.Multi.update(
-        :user,
-        User.balance_config_changeset(user, %{balance_config_id: balance_config.id})
-      )
-      |> Ecto.Multi.update(
-        :balance_config,
-        BalanceConfig.changeset(balance_config, %{owner_id: user.id})
-      )
-      |> Repo.transaction()
-
-    user
+  # update members that are linked to the user
+  defp update_members_multi(multi) do
+    Ecto.Multi.update_all(
+      multi,
+      :members,
+      fn %{new_balance_config: new_balance_config, user: user} ->
+        from m in BookMember,
+          where: m.user_id == ^user.id,
+          update: [set: [balance_config_id: ^new_balance_config.id]]
+      end,
+      []
+    )
   end
 
   @doc """
