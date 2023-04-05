@@ -59,6 +59,9 @@ defmodule App.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.gen.data_migration": [
+        "ecto.gen.migration --migrations-path priv/repo/data_migrations"
+      ],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end

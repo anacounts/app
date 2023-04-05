@@ -52,7 +52,11 @@ defmodule Anacounts.Umbrella.MixProject do
     [
       # run `mix setup` in all child apps
       setup: ["cmd mix setup"],
-      "assets.deploy": ["cmd --app app_web mix assets.deploy"]
+      "assets.deploy": ["cmd --app app_web mix assets.deploy"],
+      # generate a data migration, counterpart of `mix ecto.gen.migration`
+      "ecto.gen.data_migration": ["cmd --app app mix ecto.gen.data_migration"],
+      # run data migrations, counterpart of `mix ecto.migrate`
+      "ecto.migrate_data": ["eval App.ReleaseTasks.migrate_data"]
     ]
   end
 end
