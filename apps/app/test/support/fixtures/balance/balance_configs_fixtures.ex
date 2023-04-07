@@ -2,6 +2,7 @@ defmodule App.Balance.BalanceConfigsFixtures do
   @moduledoc """
   Fixtures for the `App.Balance.BalanceConfigs` context
   """
+  import App.AccountsFixtures
 
   alias App.Repo
 
@@ -29,6 +30,25 @@ defmodule App.Balance.BalanceConfigsFixtures do
       |> Ecto.Multi.update(
         :user,
         &User.balance_config_changeset(user, %{balance_config_id: &1.balance_config.id})
+      )
+      |> Repo.transaction()
+
+    balance_config
+  end
+
+  def member_balance_config_fixture(member, attrs \\ %{}) do
+    {:ok, %{balance_config: balance_config}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(
+        :balance_config,
+        BalanceConfig.changeset(
+          %BalanceConfig{},
+          balance_config_attributes(user_fixture(), attrs)
+        )
+      )
+      |> Ecto.Multi.update(
+        :member,
+        &BookMember.balance_config_changeset(member, %{balance_config_id: &1.balance_config.id})
       )
       |> Repo.transaction()
 

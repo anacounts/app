@@ -97,6 +97,27 @@ defmodule App.Balance.BalanceConfigs do
   end
 
   @doc """
+  Link a member to the user's balance configuration.
+
+  ## Examples
+
+      iex> link_user_balance_configs_to_member!(user, member)
+      :ok
+
+      iex> link_user_balance_configs_to_member!(user_without_config, member)
+      :ok
+
+  """
+  @spec link_user_balance_configs_to_member!(User.t(), BookMember.t()) :: :ok
+  def link_user_balance_configs_to_member!(user, member) do
+    member
+    |> BookMember.balance_config_changeset(%{balance_config_id: user.balance_config_id})
+    |> Repo.update!()
+
+    :ok
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking balance configuration changes.
 
   ## Examples
@@ -108,5 +129,28 @@ defmodule App.Balance.BalanceConfigs do
   @spec change_balance_config(BalanceConfig.t(), map()) :: Ecto.Changeset.t()
   def change_balance_config(%BalanceConfig{} = balance_config, params \\ %{}) do
     BalanceConfig.changeset(balance_config, params)
+  end
+
+  @doc """
+  Try to delete a balance configuration. If the balance configuration is linked to
+  an entity, this will fail silently.
+
+  ## Examples
+
+      iex> try_to_delete_balance_config(balance_config_with_no_links)
+      :ok
+
+      iex> try_to_delete_balance_config(balance_config_that_will_not_be_deleted)
+      :ok
+
+  """
+  @spec try_to_delete_balance_config(BalanceConfig.t()) :: :ok
+  def try_to_delete_balance_config(%BalanceConfig{} = balance_config) do
+    Repo.savepoint(fn ->
+      from(BalanceConfig, where: [id: ^balance_config.id])
+      |> Repo.delete_all()
+    end)
+
+    :ok
   end
 end
