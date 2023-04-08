@@ -126,6 +126,7 @@ defmodule App.Transfers do
     # The `date` field default behaviour cannot be handled by Ecto
     # and is therefore handled by the database.
     # Make the database return its value.
+    # TODO Use `:read_after_writes`
     |> Repo.insert(returning: [:date])
   end
 
