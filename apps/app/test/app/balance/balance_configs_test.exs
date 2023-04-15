@@ -5,7 +5,6 @@ defmodule App.Balance.BalanceConfigsTest do
   import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
-  import App.TransfersFixtures
 
   alias App.Repo
 
