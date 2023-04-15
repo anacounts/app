@@ -51,19 +51,19 @@ defmodule App.Balance do
   end
 
   defp load_peers({:weight_by_income, transfers}) do
-    transfers = Repo.preload(transfers, peers: [:user_balance_config])
+    transfers = Repo.preload(transfers, peers: [:balance_config])
 
     Enum.map(transfers, fn transfer ->
       all_annual_incomes_set? =
         Enum.all?(transfer.peers, fn peer ->
-          peer.user_balance_config != nil and peer.user_balance_config.annual_income != nil
+          peer.balance_config != nil and peer.balance_config.annual_income != nil
         end)
 
       if all_annual_incomes_set? do
         peers =
           peers_with_total_weight(
             transfer.peers,
-            &Decimal.mult(&1.weight, &1.user_balance_config.annual_income)
+            &Decimal.mult(&1.weight, &1.balance_config.annual_income)
           )
 
         {:ok, %{transfer | peers: peers}}

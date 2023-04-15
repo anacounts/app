@@ -148,13 +148,11 @@ defmodule App.BalanceTest do
     # end
 
     test "weight transfer amount using peers income #1", %{book: book} do
-      user1 = user_fixture()
-      _balance_config1 = user_balance_config_fixture(user1, annual_income: 1)
-      member1 = book_member_fixture(book, user_id: user1.id)
+      member1 = book_member_fixture(book)
+      _balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
 
-      user2 = user_fixture()
-      _balance_config2 = user_balance_config_fixture(user2, annual_income: 2)
-      member2 = book_member_fixture(book, user_id: user2.id)
+      member2 = book_member_fixture(book)
+      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
       _transfer =
         money_transfer_fixture(book,
@@ -171,21 +169,17 @@ defmodule App.BalanceTest do
     end
 
     test "weight transfer amount using peers income #2", %{book: book} do
-      user1 = user_fixture()
-      _balance_config1 = user_balance_config_fixture(user1, annual_income: 2)
-      member1 = book_member_fixture(book, user_id: user1.id)
+      member1 = book_member_fixture(book)
+      _balance_config1 = member_balance_config_fixture(member1, annual_income: 2)
 
-      user2 = user_fixture()
-      _balance_config2 = user_balance_config_fixture(user2, annual_income: 2)
-      member2 = book_member_fixture(book, user_id: user2.id)
+      member2 = book_member_fixture(book)
+      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
-      user3 = user_fixture()
-      _balance_config3 = user_balance_config_fixture(user3, annual_income: 2)
-      member3 = book_member_fixture(book, user_id: user3.id)
+      member3 = book_member_fixture(book)
+      _balance_config3 = member_balance_config_fixture(member3, annual_income: 2)
 
-      user4 = user_fixture()
-      _balance_config4 = user_balance_config_fixture(user4, annual_income: 3)
-      member4 = book_member_fixture(book, user_id: user4.id)
+      member4 = book_member_fixture(book)
+      _balance_config4 = member_balance_config_fixture(member4, annual_income: 3)
 
       _transfer =
         money_transfer_fixture(book,
@@ -210,17 +204,14 @@ defmodule App.BalanceTest do
     end
 
     test "weighting by incomes takes user-defined weight into account", %{book: book} do
-      user1 = user_fixture()
-      _balance_config1 = user_balance_config_fixture(user1, annual_income: 1)
-      member1 = book_member_fixture(book, user_id: user1.id)
+      member1 = book_member_fixture(book)
+      _balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
 
-      user2 = user_fixture()
-      _balance_config2 = user_balance_config_fixture(user2, annual_income: 2)
-      member2 = book_member_fixture(book, user_id: user2.id)
+      member2 = book_member_fixture(book)
+      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
-      user3 = user_fixture()
-      _balance_config3 = user_balance_config_fixture(user3, annual_income: 3)
-      member3 = book_member_fixture(book, user_id: user3.id)
+      member3 = book_member_fixture(book)
+      _balance_config3 = member_balance_config_fixture(member3, annual_income: 3)
 
       _transfer =
         money_transfer_fixture(book,
@@ -243,16 +234,14 @@ defmodule App.BalanceTest do
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
-      user1 = user_fixture()
-      member1 = book_member_fixture(book, user_id: user1.id)
+      member1 = book_member_fixture(book)
+      _balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
 
-      user2 = user_fixture()
-      _balance_config2 = user_balance_config_fixture(user2, annual_income: 1)
-      member2 = book_member_fixture(book, user_id: user2.id)
+      member2 = book_member_fixture(book)
+      _balance_config2 = member_balance_config_fixture(member2, annual_income: 1)
 
-      user3 = user_fixture()
-      _balance_config3 = user_balance_config_fixture(user3, annual_income: 1)
-      member3 = book_member_fixture(book, user_id: user3.id)
+      member3 = book_member_fixture(book)
+      _balance_config3 = member_balance_config_fixture(member3, annual_income: 1)
 
       _transfer1 =
         money_transfer_fixture(book,
