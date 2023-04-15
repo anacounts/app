@@ -46,9 +46,7 @@ defmodule App.Balance.BalanceConfigs do
   Update the balance configuration of a user by creating a new one and linking the user
   to it.
 
-  This also updates members and peers linked to the old configuration to reference the
-  new one. Peers are only updated if their transfer date is later than the start date of
-  validity.
+  This also updates members linked to the user to use the new one.
 
   See `BalanceConfig` for more details.
 

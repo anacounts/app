@@ -3,32 +3,42 @@ defmodule App.Balance.BalanceConfig do
   A configuration containing data for balancing the money transfers. This therefore
   includes private data, which is encrypted in the database.
 
-  # XXX This is a work in progress. The following is a draft of the documentation.
+  **Warning: The following documentation is a draft of the final desired state.**
+  This in not implemented yet, nor does it pretend being the final state of the context
+  documentation.
 
-  Balance configurations are referenced by users, user's history, book members,
-  members's history and peers. Each one of them can be references by multiple entities
-  at the same time.
+  To ease the process, simplfications have been done and are used before enhancement of
+  the application. A "State of the art" section can be found at the end of this
+  documentation.
+
+  _End of the warning. Enjoy the doc !_
+
+  Balance configurations are referenced by users, book members, and peers. They can be
+  referenced by multiple entities at the same time.
 
   ## History
 
   Balance configurations are immutable. When updating a balance configuration, a new one
-  is created and linked to the entity. For users and book members, the old configuration
-  is kept in their `:balance_config_history` field, except if is not referenced by any
-  entity, in which case it is deleted.
+  is created and linked to the entity.
+  Users and members reference their balance configurations through a join table, allowing
+  to have a history of the configuration, along with a period of validity of each entry.
+  Peers on the other side have a simple foreign key to the balance configuration, since
+  they are fixed in time.
 
   ## Confidential information
 
-  Due to the nature of the data, most of balance configurations' fields are encrypted in
-  the database using Cloak and Cloak.Ecto.
+  Due to the nature of the data, the balance configurations' fields filled by the user
+  are encrypted in the database using Cloak and Cloak.Ecto.
 
   This information should never be displayed to anyone but their owner. The owner is a
-  user referenced by the `:owner` association.
+  user referenced by the `:owner` association. A balance configuration may not have a
+  owner - e.g. if the user deleted their account.
 
   As an extra security measure, balance configurations have a `:created_for` field
   indicating whether they were created for a user or a book member. This enables to do
   extra checks when linking a balance configuration to a user or a book member.
-  For example, a balance configuration created for a book member should not be linked to
-  another book member.
+  For example, a balance configuration created for a user should not be linked to another
+  user.
 
   ## Lifecycle
 
@@ -55,40 +65,64 @@ defmodule App.Balance.BalanceConfig do
   New balances are created with a start date of validity that can only be past or
   present. Associated peers linked to a transfer which date is later than this date
   are updated to reference the new balance configuration.
+  XXX What to do if the period of validity of the new config overlaps with other configs ?
 
-  Old balance configurations are stored in the users `:balance_config_history` field.
+  Balance configuration are stored in a join entity `UserBalanceConfig`, which contains
+  the period of validity of the configuration.
 
   ### Book members
 
-  When a book member is created with a user, it is linked to the balance configuration of
-  the user. When created independantly, no configuration is created.
+  When a book member is created, no configuration is created.
 
   A new configuration can be created for independent book members at any time, which
   start date of validity must also be past or present.
 
-  When a user is invited, accepts the invitation, and is linked to a member, their
-  balance configuration is linked to the member. Before that, the balance config of
-  the book member should try to be deleted.
+  When a user is invited, accepts the invitation, and is linked to a member, a link
+  between the member and their balance configuration is created, starting at the time
+  the invitation is accepted. The old balance config of the book member is then attempted
+  to be deleted. Finally, if peers associated with the members do not have a
+  balance config, they are updated to reference the new balance config.
 
-  At any point, if a configuration is linked to a member, the existing peers'
-  configuration is updated if the transfer date is later than the start date of validity,
-  or if they are not linked to a balance configuration.
+  XXX What to do if the period of validity of the new config overlaps with other configs ?
 
-  Old balance configurations are stored in the members `:balance_config_history` field.
+  Balance configuration are stored in a join entity `MemberBalanceConfig`, which contains
+  the period of validity of the configuration.
 
   ### Peers
 
   When a peer is created through a money transfer, it is linked to the balance config of
-  the linked member. The member may not have a balance config, in which case the peer
-  will not be linked to a balance config either.
+  the linked member. If the transfer's date is modified, the peer is updated to reference
+  the balance config of the member at the time of the transfer, or the first one.
 
   ## Deletion
 
   A balance configuration can only be deleted if no entity references it. To make
   deletion the least painful possible, all entities referencing a balance config have
-  their foreign key set to RESTRICT. This way, when trying to delete an entity, the app
-  will also try to delete their balance config: if the balance config is referenced by
-  another entity, the operation will fail, but the error can safely be ignored.
+  their foreign key set to RESTRICT.
+
+  XXX Should we really try to delete the balance config when deleting an entity ?
+      This way, when trying to delete an entity, the app will also try to delete their balance config:
+      if the balance config is referenced by another entity, the operation will fail, but the error can safely be ignored.
+
+  ## FIXME
+
+  - `balance_configs.owner_id` references `users` with a `ON DELETE CASCADE` foreign key.
+    Hence, when a user is deleted, we will try to delete the balance config they own, which most likely
+    isn't possible because they will be referenced elsewhere.
+    To fix: owner_id nullable
+
+  ## State of the art
+
+  To simplify implementation, there is no history for now. All entities simply reference
+  the latest balance configuration through a `balance_config` association.
+
+  When a user creates a new balance config, the members associated to the user are updated
+  to use the new balance config.
+
+  When a member is linked to a user, the member's balance config is updated to the user's.
+  The old balance config of the member is then attempted to be deleted.
+
+  When a peer is created, it is linked to the balance config of the member.
 
   """
   use Ecto.Schema
