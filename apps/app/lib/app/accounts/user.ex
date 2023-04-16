@@ -32,6 +32,7 @@ defmodule App.Accounts.User do
     # display information
     field :display_name, :string
 
+    # the current balance configuration of the user
     belongs_to :balance_config, BalanceConfig
 
     timestamps()

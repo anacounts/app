@@ -53,19 +53,12 @@ defmodule AppWeb.BalanceConfigLive.Edit do
 
   def handle_event("save", params, socket) do
     %{"balance_config" => balance_config_params} = params
+    user = socket.assigns.current_user
 
-    balance_config =
-      BalanceConfigs.get_user_balance_config_or_default(socket.assigns.current_user)
+    balance_config = BalanceConfigs.get_user_balance_config_or_default(user)
 
-    case BalanceConfigs.update_balance_config(balance_config, balance_config_params) do
-      {:ok, updated_balance_config} ->
-        if Ecto.get_meta(balance_config, :state) == :built do
-          BalanceConfigs.link_balance_config_to_user!(
-            updated_balance_config,
-            socket.assigns.current_user
-          )
-        end
-
+    case BalanceConfigs.update_user_balance_config(user, balance_config, balance_config_params) do
+      {:ok, _balance_config} ->
         {:noreply,
          socket
          |> put_flash(:info, gettext("Balance settings updated"))

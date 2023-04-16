@@ -1,10 +1,11 @@
 defmodule App.TransfersTest do
   use App.DataCase, async: true
 
-  import App.BalanceFixtures
   import App.AccountsFixtures
-  import App.BooksFixtures
+  import App.Balance.BalanceConfigsFixtures
+  import App.BalanceFixtures
   import App.Books.MembersFixtures
+  import App.BooksFixtures
   import App.TransfersFixtures
 
   alias App.Repo
@@ -74,6 +75,8 @@ defmodule App.TransfersTest do
     end
 
     test "creates peers along the way", %{book: book, member: member} do
+      member_balance_config = member_balance_config_fixture(member)
+
       other_user = user_fixture()
       other_member = book_member_fixture(book, user_id: other_user.id)
 
@@ -92,7 +95,9 @@ defmodule App.TransfersTest do
       [peer1, peer2] = Enum.sort_by(transfer.peers, & &1.weight)
 
       assert peer1.member_id == member.id
+      assert peer1.balance_config_id == member_balance_config.id
       assert peer2.member_id == other_member.id
+      refute peer2.balance_config_id
       assert peer2.weight == Decimal.new(3)
     end
 

@@ -2,9 +2,11 @@ defmodule App.Books.MembersTest do
   use App.DataCase, async: true
 
   import App.AccountsFixtures
+  import App.Balance.BalanceConfigsFixtures
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
+  alias App.Balance.BalanceConfig
   alias App.Books.InvitationToken
   alias App.Books.Members
 
@@ -170,9 +172,56 @@ defmodule App.Books.MembersTest do
       %{book_member: book_member, user: user}
     end
 
-    test "link the user to the book member", %{book_member: book_member, user: user} do
+    test "links the user to the book member", %{book_member: book_member, user: user} do
       assert {:ok, book_member} = Members.accept_invitation(book_member, user)
       assert book_member.user_id == user.id
+      assert book_member.balance_config_id == nil
+    end
+
+    test "copies the user balance config if they have one", %{
+      book_member: book_member,
+      user: user
+    } do
+      user_balance_config = user_balance_config_fixture(user)
+      user = Repo.reload(user)
+
+      assert {:ok, book_member} = Members.accept_invitation(book_member, user)
+      assert Repo.reload(book_member).balance_config_id == user_balance_config.id
+    end
+
+    # TODO
+    test "deletes the book member former balance config if it is not used anymore", %{
+      book_member: book_member,
+      user: user
+    } do
+      _user_balance_config = user_balance_config_fixture(user)
+      user = Repo.reload(user)
+
+      member_balance_config = member_balance_config_fixture(book_member)
+      book_member = Repo.reload(book_member)
+
+      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
+
+      refute Repo.get(BalanceConfig, member_balance_config.id)
+    end
+
+    test "does not delete the book member former balance config if it is used by another entity",
+         %{
+           book_member: book_member,
+           user: user
+         } do
+      _user_balance_config = user_balance_config_fixture(user)
+      user = Repo.reload(user)
+
+      member_balance_config = member_balance_config_fixture(book_member)
+      book_member = Repo.reload(book_member)
+
+      other_book_member = book_member_fixture(book_fixture())
+      member_balance_config_link_fixture(other_book_member, member_balance_config)
+
+      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
+
+      assert Repo.get(BalanceConfig, member_balance_config.id)
     end
 
     test "raises if the book member is already linked to a user", %{user: user} do

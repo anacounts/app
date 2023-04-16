@@ -7,6 +7,8 @@ defmodule App.Books.Members do
   alias App.Repo
 
   alias App.Accounts.User
+  alias App.Balance.BalanceConfig
+  alias App.Balance.BalanceConfigs
   alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
@@ -203,6 +205,8 @@ defmodule App.Books.Members do
     {:ok, %{book_member: book_member}} =
       Ecto.Multi.new()
       |> Ecto.Multi.update(:book_member, BookMember.changeset(book_member, %{user_id: user.id}))
+      |> link_user_balance_configs_multi(user)
+      |> maybe_try_to_delete_balance_config_multi(book_member.balance_config_id)
       |> Ecto.Multi.delete_all(
         :invitation_tokens,
         InvitationToken.book_member_tokens_query(book_member)
@@ -210,6 +214,23 @@ defmodule App.Books.Members do
       |> Repo.transaction()
 
     {:ok, book_member}
+  end
+
+  defp link_user_balance_configs_multi(multi, user) do
+    Ecto.Multi.run(multi, :balance_config, fn _repo, %{book_member: book_member} ->
+      BalanceConfigs.link_user_balance_configs_to_member!(user, book_member)
+      {:ok, nil}
+    end)
+  end
+
+  defp maybe_try_to_delete_balance_config_multi(multi, nil), do: multi
+
+  defp maybe_try_to_delete_balance_config_multi(multi, balance_config_id) do
+    Ecto.Multi.run(multi, :delete_balance_config, fn _repo, _changes ->
+      balance_config = %BalanceConfig{id: balance_config_id}
+      BalanceConfigs.try_to_delete_balance_config(balance_config)
+      {:ok, nil}
+    end)
   end
 
   @doc """

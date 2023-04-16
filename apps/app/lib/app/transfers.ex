@@ -123,10 +123,38 @@ defmodule App.Transfers do
     %MoneyTransfer{book_id: book.id}
     |> MoneyTransfer.changeset(attrs)
     |> MoneyTransfer.with_peers(&Peer.create_money_transfer_changeset/2)
+    |> link_balance_config_to_peers_changeset()
     # The `date` field default behaviour cannot be handled by Ecto
     # and is therefore handled by the database.
     # Make the database return its value.
+    # TODO Use `:read_after_writes`
     |> Repo.insert(returning: [:date])
+  end
+
+  defp link_balance_config_to_peers_changeset(changeset) do
+    case Ecto.Changeset.fetch_change(changeset, :peers) do
+      {:ok, peers_changeset} ->
+        peers =
+          changeset
+          |> Ecto.Changeset.fetch_field!(:peers)
+          # Members are required to fetch their balance config id
+          |> Repo.preload(member: from(BookMember, select: [:balance_config_id]))
+
+        balance_config_id_by_member_id =
+          Map.new(peers, fn peer -> {peer.member_id, peer.member.balance_config_id} end)
+
+        peers_changeset_with_balance_config =
+          Enum.map(peers_changeset, fn peer_changeset ->
+            member_id = Ecto.Changeset.fetch_field!(peer_changeset, :member_id)
+            balance_config_id = balance_config_id_by_member_id[member_id]
+            Ecto.Changeset.put_change(peer_changeset, :balance_config_id, balance_config_id)
+          end)
+
+        Ecto.Changeset.put_assoc(changeset, :peers, peers_changeset_with_balance_config)
+
+      _ ->
+        changeset
+    end
   end
 
   @doc """

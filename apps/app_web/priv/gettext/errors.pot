@@ -62,6 +62,9 @@ msgstr ""
 msgid "must be less than or equal to %{number}"
 msgstr ""
 
+msgid "must be now or a past date"
+msgstr ""
+
 ## From Ecto.Changeset.validate_length/3
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"

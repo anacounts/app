@@ -65,6 +65,9 @@ msgstr "must be less than %{number}"
 msgid "must be less than or equal to %{number}"
 msgstr "must be less than or equal to %{number}"
 
+msgid "must be now or a past date"
+msgstr "must be now or a past date"
+
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"
 msgstr[0] "should be %{count} character"
