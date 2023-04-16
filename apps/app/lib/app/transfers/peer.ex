@@ -16,7 +16,6 @@ defmodule App.Transfers.Peer do
           transfer: MoneyTransfer.t(),
           member: BookMember.t(),
           weight: Decimal.t(),
-          user_balance_config: BalanceConfig.t() | nil,
           balance_config: BalanceConfig.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
           total_weight: Decimal.t() | nil
@@ -28,7 +27,6 @@ defmodule App.Transfers.Peer do
 
     field :weight, :decimal, default: Decimal.new(1)
 
-    has_one :user_balance_config, through: [:member, :user, :balance_config]
     belongs_to :balance_config, BalanceConfig
     # The sum of all the peer weight. Depends on the transfer balance means
     field :total_weight, :decimal, virtual: true

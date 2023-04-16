@@ -104,13 +104,6 @@ defmodule App.Balance.BalanceConfig do
       This way, when trying to delete an entity, the app will also try to delete their balance config:
       if the balance config is referenced by another entity, the operation will fail, but the error can safely be ignored.
 
-  ## FIXME
-
-  - `balance_configs.owner_id` references `users` with a `ON DELETE CASCADE` foreign key.
-    Hence, when a user is deleted, we will try to delete the balance config they own, which most likely
-    isn't possible because they will be referenced elsewhere.
-    To fix: owner_id nullable
-
   ## State of the art
 
   To simplify implementation, there is no history for now. All entities simply reference
