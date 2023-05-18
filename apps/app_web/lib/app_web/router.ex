@@ -71,8 +71,8 @@ defmodule AppWeb.Router do
 
     live_session :books, on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
       live "/books", BooksLive, :index
-      live "/books/new", BookLive.Form, :new
-      live "/books/:book_id/edit", BookLive.Form, :edit
+      live "/books/new", BookFormLive, :new
+      live "/books/:book_id/edit", BookFormLive, :edit
 
       live "/books/:book_id/invite", BookInvitationsLive, :show
       live "/books/:book_id/members", BookMemberLive, :index
