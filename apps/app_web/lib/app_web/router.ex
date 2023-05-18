@@ -74,7 +74,7 @@ defmodule AppWeb.Router do
       live "/books/new", BookLive.Form, :new
       live "/books/:book_id/edit", BookLive.Form, :edit
 
-      live "/books/:book_id/invite", InvitationLive.Index, :index
+      live "/books/:book_id/invite", BookInvitationsLive, :show
       live "/books/:book_id/members", BookMemberLive.Index, :index
       live "/books/:book_id/transfers", MoneyTransferLive.Index, :index
       live "/books/:book_id/transfers/new", MoneyTransferLive.Form, :new

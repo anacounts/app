@@ -1,4 +1,4 @@
-defmodule AppWeb.InvitationLive.Index do
+defmodule AppWeb.BookInvitationsLive do
   @moduledoc """
   The invitation live view.
   List and send new invitations for a book.
@@ -14,6 +14,63 @@ defmodule AppWeb.InvitationLive.Index do
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
   # TODO Do not allow access to the page if not allowed to invite people
+
+  @impl Phoenix.LiveView
+  def render(assigns) do
+    ~H"""
+    <.page_header back_to={~p"/books/#{@book}/members"}>
+      <:title><%= gettext("Invitations") %></:title>
+    </.page_header>
+
+    <main class="max-w-prose mx-auto">
+      <.heading level={:section} class="mt-6">
+        <%= gettext("Invite a new member") %>
+      </.heading>
+
+      <.alert :for={{type, message} <- @flash} type={type}><%= message %></.alert>
+
+      <.form
+        :let={f}
+        for={@changeset}
+        id="invite-member"
+        class="mx-4"
+        phx-change="validate_member"
+        phx-submit="invite_member"
+      >
+        <.input type="text" label={gettext("Nickname")} field={f[:nickname]} required class="w-full" />
+
+        <label>
+          <%= gettext("Send invitation to email (optional)") %>
+          <input type="email" name="send_to" id="send_to" class="w-full" />
+        </label>
+
+        <.button color={:cta} class="mr-4" phx-disable-with={gettext("Sending...")}>
+          <%= gettext("Create member") %>
+        </.button>
+      </.form>
+
+      <.heading :if={not Enum.empty?(@invitations_suggestions)} level={:section} class="mt-6">
+        <%= gettext("Suggestions") %>
+      </.heading>
+
+      <ul class="mx-4">
+        <li :for={user <- @invitations_suggestions} class="flex items-center gap-2 my-4">
+          <.avatar src={Avatars.avatar_url(user)} alt="" />
+          <span class="grow font-bold"><%= user.display_name %></span>
+          <.button
+            color={:cta}
+            class="mr-4"
+            phx-click="invite_user"
+            phx-value-id={user.id}
+            phx-disable-with={gettext("Inviting...")}
+          >
+            <%= gettext("Invite") %>
+          </.button>
+        </li>
+      </ul>
+    </main>
+    """
+  end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
