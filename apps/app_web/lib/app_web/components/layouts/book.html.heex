@@ -7,7 +7,7 @@
   </:tab_item>
   <:tab_item
     navigate={~p"/books/#{@book}/transfers"}
-    active={@socket.view == AppWeb.MoneyTransferLive.Index}
+    active={@socket.view == AppWeb.MoneyTransfersLive}
   >
     <.icon name="swap-horiz" size={:md} />
     <%= gettext("Transfers") %>
