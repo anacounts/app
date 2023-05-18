@@ -70,7 +70,7 @@ defmodule AppWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :books, on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
-      live "/books", BookLive.Index, :index
+      live "/books", BooksLive, :index
       live "/books/new", BookLive.Form, :new
       live "/books/:book_id/edit", BookLive.Form, :edit
 
