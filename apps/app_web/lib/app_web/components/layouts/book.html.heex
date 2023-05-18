@@ -17,7 +17,7 @@
   </:tab_item>
   <:tab_item
     navigate={~p"/books/#{@book}/balance"}
-    active={@socket.view == AppWeb.BalanceLive.Show}
+    active={@socket.view == AppWeb.BookBalanceLive}
   >
     <.icon name="account-balance-wallet" size={:md} />
     <%= gettext("Balance") %>

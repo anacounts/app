@@ -79,7 +79,7 @@ defmodule AppWeb.Router do
       live "/books/:book_id/transfers", MoneyTransferLive.Index, :index
       live "/books/:book_id/transfers/new", MoneyTransferLive.Form, :new
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferLive.Form, :edit
-      live "/books/:book_id/balance", BalanceLive.Show, :show
+      live "/books/:book_id/balance", BookBalanceLive, :show
     end
 
     resources "/invitation", BookInvitationController, param: "token", only: [:edit, :update]
