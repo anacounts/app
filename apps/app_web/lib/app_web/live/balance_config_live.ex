@@ -1,4 +1,4 @@
-defmodule AppWeb.BalanceConfigLive.Edit do
+defmodule AppWeb.BalanceConfigLive do
   use AppWeb, :live_view
 
   alias App.Balance.BalanceConfig

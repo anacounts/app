@@ -48,7 +48,7 @@ defmodule AppWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
-      live "/users/settings/balance", BalanceConfigLive.Edit, :edit
+      live "/users/settings/balance", BalanceConfigLive, :edit
     end
   end
 
