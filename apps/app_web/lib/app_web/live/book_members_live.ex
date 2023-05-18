@@ -1,4 +1,4 @@
-defmodule AppWeb.BookMemberLive.Index do
+defmodule AppWeb.BookMemberLive do
   @moduledoc """
   The book member index live view.
   Displays the members of a book.
@@ -13,6 +13,29 @@ defmodule AppWeb.BookMemberLive.Index do
   alias App.Books.Rights
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+
+  @impl Phoenix.LiveView
+  def render(assigns) do
+    ~H"""
+    <div class="max-w-prose mx-auto">
+      <.tile
+        :if={Rights.can_member_invite_new_member?(@current_member)}
+        navigate={~p"/books/#{@book}/invite"}
+      >
+        <.icon name="person-add" />
+        <%= gettext("Invite a new member") %>
+      </.tile>
+
+      <.member_tile :for={member <- @linked_members} member={member} />
+
+      <.heading :if={not Enum.empty?(@independent_members)} level={:section} class="mt-6">
+        <%= gettext("Pending members") %>
+      </.heading>
+
+      <.member_tile :for={member <- @independent_members} member={member} />
+    </div>
+    """
+  end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do

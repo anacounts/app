@@ -1,4 +1,4 @@
-defmodule AppWeb.BookLive.Form do
+defmodule AppWeb.BookFormLive do
   @moduledoc """
   The book form live view.
   Create or update a book.
@@ -8,6 +8,41 @@ defmodule AppWeb.BookLive.Form do
 
   alias App.Books
   alias App.Books.Book
+
+  @impl Phoenix.LiveView
+  def render(assigns) do
+    ~H"""
+    <.page_header back_to={@back_to}>
+      <:title>
+        <%= if @live_action == :new,
+          do: gettext("New Book"),
+          else: gettext("Edit Book") %>
+      </:title>
+    </.page_header>
+
+    <main class="mx-4">
+      <.form :let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
+        <.input type="text" label={gettext("Name")} field={f[:name]} />
+
+        <.label>
+          <%= gettext("How to balance by default?") %>
+          <% # TODO Set value from changeset %>
+          <select name="book[default_balance_params][means_code]">
+            <option value="divide_equally"><%= gettext("Divide equally") %></option>
+            <option value="weight_by_income"><%= gettext("Weight by income") %></option>
+          </select>
+          <.error :for={msg <- f[:default_balance_params].errors}><%= msg %></.error>
+        </.label>
+
+        <div>
+          <.button color={:cta} phx-disable-with={gettext("Saving...")}>
+            <%= gettext("Save") %>
+          </.button>
+        </div>
+      </.form>
+    </main>
+    """
+  end
 
   @impl Phoenix.LiveView
   def mount(params, _session, socket) do

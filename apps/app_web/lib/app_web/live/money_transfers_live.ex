@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransferLive.Index do
+defmodule AppWeb.MoneyTransfersLive do
   @moduledoc """
   The money transfer index live view.
   Shows money transfers for the current book.
@@ -10,6 +10,63 @@ defmodule AppWeb.MoneyTransferLive.Index do
   alias App.Transfers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+
+  @impl Phoenix.LiveView
+  def render(assigns) do
+    ~H"""
+    <div class="max-w-prose mx-auto">
+      <.tile
+        :for={transfer <- @money_transfers}
+        class={["font-bold", class_for_transfer_type(transfer.type)]}
+        collapse
+      >
+        <.icon name={icon_for_transfer_type(transfer.type)} />
+        <span class="grow"><%= transfer.label %></span>
+        <%= Money.to_string(transfer.amount) %>
+
+        <:description>
+          <div class="flex justify-between mb-3">
+            <div class="font-bold">
+              <%= tenant_label_for_transfer_type(transfer.type, transfer.tenant.display_name) %>
+            </div>
+            <div>
+              <time datetime={to_string(transfer.date)}><%= format_date(transfer.date) %></time>
+              <.icon name="calendar-month" />
+            </div>
+          </div>
+          <div class="text-right">
+            <%= format_code(transfer.balance_params.means_code) %>
+            <.icon name="swap-horiz" />
+          </div>
+        </:description>
+
+        <:button
+          :if={Rights.can_member_handle_money_transfers?(@current_member)}
+          navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
+        >
+          <%= gettext("Edit") %>
+        </:button>
+        <:button
+          :if={Rights.can_member_handle_money_transfers?(@current_member)}
+          class="text-error"
+          data-confirm={gettext("Are you sure you want to delete the transfer?")}
+          phx-click="delete"
+          phx-value-id={transfer.id}
+        >
+          <%= gettext("Delete") %>
+        </:button>
+      </.tile>
+    </div>
+
+    <.fab_container class="mb-12 md:mb-0">
+      <:item :if={Rights.can_member_handle_money_transfers?(@current_member)}>
+        <.fab navigate={~p"/books/#{@book}/transfers/new"}>
+          <.icon name="add" alt="Add a money transfer" />
+        </.fab>
+      </:item>
+    </.fab_container>
+    """
+  end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do

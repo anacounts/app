@@ -48,7 +48,7 @@ defmodule AppWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
-      live "/users/settings/balance", BalanceConfigLive.Edit, :edit
+      live "/users/settings/balance", BalanceConfigLive, :edit
     end
   end
 
@@ -70,16 +70,16 @@ defmodule AppWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :books, on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
-      live "/books", BookLive.Index, :index
-      live "/books/new", BookLive.Form, :new
-      live "/books/:book_id/edit", BookLive.Form, :edit
+      live "/books", BooksLive, :index
+      live "/books/new", BookFormLive, :new
+      live "/books/:book_id/edit", BookFormLive, :edit
 
-      live "/books/:book_id/invite", InvitationLive.Index, :index
-      live "/books/:book_id/members", BookMemberLive.Index, :index
-      live "/books/:book_id/transfers", MoneyTransferLive.Index, :index
-      live "/books/:book_id/transfers/new", MoneyTransferLive.Form, :new
-      live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferLive.Form, :edit
-      live "/books/:book_id/balance", BalanceLive.Show, :show
+      live "/books/:book_id/invite", BookInvitationsLive, :show
+      live "/books/:book_id/members", BookMemberLive, :index
+      live "/books/:book_id/transfers", MoneyTransfersLive, :index
+      live "/books/:book_id/transfers/new", MoneyTransferFormLive, :new
+      live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
+      live "/books/:book_id/balance", BookBalanceLive, :show
     end
 
     resources "/invitation", BookInvitationController, param: "token", only: [:edit, :update]

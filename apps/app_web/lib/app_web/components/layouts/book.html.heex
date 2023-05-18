@@ -1,23 +1,20 @@
 <.page_header back_to={~p"/books"}>
   <:title><%= @book.name %></:title>
 
-  <:tab_item
-    navigate={~p"/books/#{@book}/members"}
-    active={@socket.view == AppWeb.BookMemberLive.Index}
-  >
+  <:tab_item navigate={~p"/books/#{@book}/members"} active={@socket.view == AppWeb.BookMemberLive}>
     <.icon name="group" size={:md} />
     <%= gettext("Members") %>
   </:tab_item>
   <:tab_item
     navigate={~p"/books/#{@book}/transfers"}
-    active={@socket.view == AppWeb.MoneyTransferLive.Index}
+    active={@socket.view == AppWeb.MoneyTransfersLive}
   >
     <.icon name="swap-horiz" size={:md} />
     <%= gettext("Transfers") %>
   </:tab_item>
   <:tab_item
     navigate={~p"/books/#{@book}/balance"}
-    active={@socket.view == AppWeb.BalanceLive.Show}
+    active={@socket.view == AppWeb.BookBalanceLive}
   >
     <.icon name="account-balance-wallet" size={:md} />
     <%= gettext("Balance") %>
