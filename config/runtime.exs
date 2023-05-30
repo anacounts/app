@@ -71,9 +71,7 @@ if config_env() == :prod do
 
   # ## Configuring the mailer
   #
-  # In production you need to configure the mailer to use a different adapter.
-  # Also, you may need to configure the Swoosh API client of your choice if you
-  # are not using SMTP. Here is an example of the configuration:
+  # Configure Swoosh to use the SES adapter.
 
   ses_region =
     System.get_env("SES_REGION") ||

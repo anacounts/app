@@ -15,7 +15,7 @@ defmodule App.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: App.PubSub},
       # Start Finch
-      {Finch, name: App.Finch}
+      {Finch, name: Swoosh.Finch}
       # Start a worker by calling: App.Worker.start_link(arg)
       # {App.Worker, arg}
     ]
