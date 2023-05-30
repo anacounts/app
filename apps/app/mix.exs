@@ -42,10 +42,10 @@ defmodule App.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:cloak_ecto, "~> 1.2.0"},
       {:jason, "~> 1.4"},
-      {:swoosh, "~> 1.9"},
+      {:swoosh, "~> 1.11"},
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.14"},
-      {:decimal, "~> 2.0"},
+      {:decimal, "~> 2.1"},
       # TODO Move to ex_money (migration is gonna be hard)
       {:money, "~> 1.12"}
     ]
