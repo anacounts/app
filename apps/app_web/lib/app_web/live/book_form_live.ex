@@ -24,7 +24,7 @@ defmodule AppWeb.BookFormLive do
       <.form :let={f} for={@changeset} id="book-form" phx-change="validate" phx-submit="save">
         <.input type="text" label={gettext("Name")} field={f[:name]} />
 
-        <.label>
+        <label>
           <%= gettext("How to balance by default?") %>
           <% # TODO Set value from changeset %>
           <select name="book[default_balance_params][means_code]">
@@ -32,7 +32,7 @@ defmodule AppWeb.BookFormLive do
             <option value="weight_by_income"><%= gettext("Weight by income") %></option>
           </select>
           <.error :for={msg <- f[:default_balance_params].errors}><%= msg %></.error>
-        </.label>
+        </label>
 
         <div>
           <.button color={:cta} phx-disable-with={gettext("Saving...")}>
