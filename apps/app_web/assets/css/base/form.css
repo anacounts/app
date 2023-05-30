@@ -7,7 +7,8 @@
   input,
   select {
     @apply block
-           my-1 p-2
+           h-11
+           my-1 px-2
            border border-solid border-gray-70
            bg-white
            rounded-lg

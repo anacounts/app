@@ -703,6 +703,8 @@ defmodule AppWeb.CoreComponents do
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+
+  attr :label_class, :any, default: nil, doc: "Extra classes to add to the label"
   attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
                                    pattern placeholder readonly required rows size step)
   slot :inner_block
@@ -721,7 +723,7 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <label phx-feedback-for={@name}>
+    <label class={@label_class} phx-feedback-for={@name}>
       <input type="hidden" name={@name} value="false" />
       <input type="checkbox" id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
       <%= @label %>
@@ -732,30 +734,30 @@ defmodule AppWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <.label phx-feedback-for={@name}>
+    <label class={@label_class} phx-feedback-for={@name}>
       <%= @label %>
       <select id={@id} name={@name} multiple={@multiple} {@rest}>
         <option :if={@prompt} value=""><%= @prompt %></option>
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </.label>
+    </label>
     """
   end
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <.label phx-feedback-for={@name}>
+    <label class={@label_class} phx-feedback-for={@name}>
       <%= @label %>
       <textarea id={@id || @name} name={@name} {@rest}><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </.label>
+    </label>
     """
   end
 
   def input(assigns) do
     ~H"""
-    <.label phx-feedback-for={@name}>
+    <label class={@label_class} phx-feedback-for={@name}>
       <%= @label %>
       <input
         type={@type}
@@ -765,21 +767,6 @@ defmodule AppWeb.CoreComponents do
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </.label>
-    """
-  end
-
-  @doc """
-  Renders a label.
-  """
-  attr :for, :string, default: nil
-  attr :rest, :global
-  slot :inner_block, required: true
-
-  def label(assigns) do
-    ~H"""
-    <label for={@for} {@rest}>
-      <%= render_slot(@inner_block) %>
     </label>
     """
   end
