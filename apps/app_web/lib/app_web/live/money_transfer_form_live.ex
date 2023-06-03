@@ -50,32 +50,7 @@ defmodule AppWeb.MoneyTransferFormLive do
         <% ## Details %>
         <div class="mx-4">
           <.input type="text" label={gettext("Label")} field={f[:label]} pattern=".{1,255}" required />
-
-          <div class="flex items-baseline gap-4">
-            <% # XXX When supporting other currencies, the "/ 100" and step must be different based on currency %>
-            <% amount =
-              case Ecto.Changeset.get_field(@changeset, :amount, Money.new(0, :EUR)) do
-                %{amount: amount} -> amount / 100
-                nil -> nil
-              end %>
-            <.input
-              type="number"
-              label={gettext("Amount")}
-              field={f[:amount]}
-              value={amount}
-              step="0.01"
-              min="0"
-              required
-            />
-            <.input
-              type="select"
-              label={gettext("Currency")}
-              field={f[:currency]}
-              options={currencies_options()}
-              disabled
-            />
-          </div>
-
+          <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
           <.input
             type="select"
             label={gettext("Type")}
@@ -299,10 +274,6 @@ defmodule AppWeb.MoneyTransferFormLive do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
-  end
-
-  defp currencies_options do
-    [[key: "€", value: "EUR"]]
   end
 
   defp type_options do
