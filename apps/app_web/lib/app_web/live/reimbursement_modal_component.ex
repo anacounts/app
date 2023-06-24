@@ -7,6 +7,8 @@ defmodule AppWeb.ReimbursementModalComponent do
   use AppWeb, :live_component
 
   alias App.Books.Members
+  alias App.Transfers
+  alias App.Transfers.MoneyTransfer
 
   @impl Phoenix.LiveComponent
   def render(assigns) do
@@ -87,11 +89,6 @@ defmodule AppWeb.ReimbursementModalComponent do
   end
 
   @impl Phoenix.LiveComponent
-  def mount(socket) do
-    {:ok, socket, temporary_assigns: [member_options: []]}
-  end
-
-  @impl Phoenix.LiveComponent
   def update(assigns, socket) do
     {:ok,
      socket
@@ -117,37 +114,91 @@ defmodule AppWeb.ReimbursementModalComponent do
     transaction = assigns[:transaction] || socket.assigns[:transaction]
 
     form =
-      if transaction,
-        do:
-          to_form(%{
+      if transaction do
+        to_form(
+          %{
             "label" => new_transfer_label(transaction.to, transaction.from),
             "creditor_id" => transaction.to.id,
             "amount" => transaction.amount,
             "debtor_id" => transaction.from.id,
             "date" => Date.utc_today()
-          }),
-        else: to_form(%{})
+          },
+          as: "reimbursement"
+        )
+      else
+        to_form(%{}, as: "reimbursement")
+      end
 
-    assign(socket, form: form)
+    assign(socket, :form, form)
   end
 
   defp new_transfer_label(creditor, debtor) do
-    if debtor && creditor do
-      gettext("Reimbursement from %{debtor_name} to %{creditor_name}",
-        debtor_name: debtor.display_name,
-        creditor_name: creditor.display_name
-      )
-    end
+    gettext("Reimbursement from %{debtor_name} to %{creditor_name}",
+      debtor_name: debtor.display_name,
+      creditor_name: creditor.display_name
+    )
   end
 
   @impl Phoenix.LiveComponent
-  def handle_event("validate", params, socket) do
-    # TODO validate form
-    {:noreply, socket}
+  def handle_event("validate", %{"reimbursement" => reimbursement_params}, socket) do
+    money_transfer_params = money_transfer_params(reimbursement_params)
+
+    form =
+      %MoneyTransfer{}
+      |> Transfers.change_money_transfer(money_transfer_params)
+      |> to_reimbursement_form()
+
+    {:noreply, assign(socket, :form, form)}
   end
 
-  def handle_event("submit", params, socket) do
-    # TODO submit form
-    {:noreply, socket}
+  def handle_event("submit", %{"reimbursement" => reimbursement_params}, socket) do
+    money_transfer_params = money_transfer_params(reimbursement_params)
+
+    case Transfers.create_money_transfer(socket.assigns.book, money_transfer_params) do
+      {:ok, _money_transfer} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Reimbursement created successfully"))
+         |> push_navigate(to: ~p"/books/#{socket.assigns.book}/transfers")}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :form, to_reimbursement_form(changeset))}
+    end
+  end
+
+  defp money_transfer_params(params) do
+    {amount, params} = Map.pop(params, "amount")
+    {currency, params} = Map.pop(params, "currency", "EUR")
+
+    %{
+      type: :reimbursement,
+      balance_params: %{means_code: :divide_equally},
+      label: params["label"],
+      amount: parse_money_or_nil(amount, currency),
+      date: params["date"],
+      tenant_id: params["creditor_id"],
+      peers: [%{member_id: params["debtor_id"]}]
+    }
+  end
+
+  defp parse_money_or_nil(amount, currency) do
+    with true <- amount != nil and currency != nil,
+         {:ok, money} <- Money.parse(amount, currency) do
+      money
+    else
+      _ -> nil
+    end
+  end
+
+  defp to_reimbursement_form(changeset) do
+    changeset
+    |> to_form(as: "reimbursement")
+    |> Map.update!(:params, fn params ->
+      {tenant_id, params} = Map.pop(params, "tenant_id")
+      params = Map.put(params, "creditor_id", tenant_id)
+
+      {[peer], params} = Map.pop(params, "peers")
+      Map.put(params, "debtor_id", peer.member_id)
+    end)
   end
 end
