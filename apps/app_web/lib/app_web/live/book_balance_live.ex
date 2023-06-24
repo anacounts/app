@@ -4,6 +4,8 @@ defmodule AppWeb.BookBalanceLive do
   alias App.Balance
   alias App.Books.Members
 
+  alias AppWeb.ReimbursementModalComponent
+
   on_mount {AppWeb.BookAccess, :ensure_book!}
 
   @impl Phoenix.LiveView
@@ -35,10 +37,24 @@ defmodule AppWeb.BookBalanceLive do
                 </span>
               </div>
               <%= transaction.amount %>
+              <.button
+                color={:cta}
+                phx-click="select-transaction"
+                phx-value-transaction-id={transaction.id}
+              >
+                <%= gettext("Settle up") %>
+              </.button>
             </.list_item>
           <% end %>
         <% end %>
       </.list>
+      <.live_component
+        module={ReimbursementModalComponent}
+        id="reimbursement-modal"
+        book={@book}
+        open={@current_transaction != nil}
+        transaction={@current_transaction}
+      />
     </section>
     """
   end
@@ -51,7 +67,8 @@ defmodule AppWeb.BookBalanceLive do
       socket
       |> assign(
         page_title: "Balance · #{book.name}",
-        layout_heading: gettext("Balance")
+        layout_heading: gettext("Balance"),
+        current_transaction: nil
       )
       |> assign_transactions()
 
@@ -70,5 +87,16 @@ defmodule AppWeb.BookBalanceLive do
       :error ->
         assign(socket, transactions_error?: true)
     end
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do
+    transaction = Enum.find(socket.assigns.transactions, &(&1.id == transaction_id))
+
+    {:noreply, assign(socket, current_transaction: transaction)}
+  end
+
+  def handle_event("reimbursement-modal/close", _params, socket) do
+    {:noreply, assign(socket, current_transaction: nil)}
   end
 end

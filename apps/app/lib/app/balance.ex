@@ -156,6 +156,7 @@ defmodule App.Balance do
   This is used to display required operations to balance money between members.
   """
   @type transaction :: %{
+          id: String.t(),
           from: BookMember.t(),
           to: BookMember.t(),
           amount: Money.t()
@@ -219,7 +220,7 @@ defmodule App.Balance do
          transactions
        ) do
     debt = Money.neg(debtor.balance)
-    new_transaction = %{from: debtor, to: creditor, amount: debt}
+    new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
       other_debtors,
@@ -235,7 +236,7 @@ defmodule App.Balance do
          transactions
        ) do
     debt = Money.neg(debtor.balance)
-    new_transaction = %{from: debtor, to: creditor, amount: debt}
+    new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
       other_debtors,
@@ -250,7 +251,7 @@ defmodule App.Balance do
          [creditor | other_creditors],
          transactions
        ) do
-    new_transaction = %{from: debtor, to: creditor, amount: creditor.balance}
+    new_transaction = transaction_for(debtor, creditor, creditor.balance)
 
     make_transactions(
       [%{debtor | balance: Money.add(debtor.balance, creditor.balance)} | other_debtors],
@@ -258,4 +259,15 @@ defmodule App.Balance do
       [new_transaction | transactions]
     )
   end
+
+  defp transaction_for(debtor, creditor, amount) do
+    %{
+      id: transaction_id(debtor, creditor),
+      from: debtor,
+      to: creditor,
+      amount: amount
+    }
+  end
+
+  defp transaction_id(debtor, creditor), do: "#{debtor.id}-#{creditor.id}"
 end

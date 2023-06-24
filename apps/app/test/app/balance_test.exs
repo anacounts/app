@@ -324,7 +324,12 @@ defmodule App.BalanceTest do
       assert {:ok, transactions} = Balance.transactions([member1, member2, member3])
 
       assert transactions_equal?(transactions, [
-               %{from: member2, to: member1, amount: Money.new(10, :EUR)}
+               %{
+                 id: "#{member2.id}-#{member1.id}",
+                 from: member2,
+                 to: member1,
+                 amount: Money.new(10, :EUR)
+               }
              ])
     end
 
@@ -348,10 +353,30 @@ defmodule App.BalanceTest do
                Balance.transactions([member1, member2, member3, member4, member5])
 
       assert transactions_equal?(transactions, [
-               %{from: member5, to: member2, amount: Money.new(20, :EUR)},
-               %{from: member4, to: member2, amount: Money.new(13, :EUR)},
-               %{from: member4, to: member1, amount: Money.new(108, :EUR)},
-               %{from: member3, to: member1, amount: Money.new(12, :EUR)}
+               %{
+                 id: "#{member5.id}-#{member2.id}",
+                 from: member5,
+                 to: member2,
+                 amount: Money.new(20, :EUR)
+               },
+               %{
+                 id: "#{member4.id}-#{member2.id}",
+                 from: member4,
+                 to: member2,
+                 amount: Money.new(13, :EUR)
+               },
+               %{
+                 id: "#{member4.id}-#{member1.id}",
+                 from: member4,
+                 to: member1,
+                 amount: Money.new(108, :EUR)
+               },
+               %{
+                 id: "#{member3.id}-#{member1.id}",
+                 from: member3,
+                 to: member1,
+                 amount: Money.new(12, :EUR)
+               }
              ])
     end
 
