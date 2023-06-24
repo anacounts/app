@@ -6,6 +6,9 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
+  alias App.Repo
+  alias App.Transfers.Peer
+
   @create_attrs %{
     label: "Created transfer",
     amount: "10.60",
@@ -71,6 +74,32 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
     assert html =~ "Money transfer updated successfully"
+  end
+
+  test "update the peers instead of deleting them", %{conn: conn, book: book} do
+    member = book_member_fixture(book)
+
+    money_transfer =
+      money_transfer_fixture(book, tenant_id: member.id, peers: [%{member_id: member.id}])
+
+    {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
+
+    {:ok, _, html} =
+      form_live
+      |> form("#money-transfer-form", money_transfer: @update_attrs)
+      |> render_submit()
+      |> follow_redirect(conn, ~p"/books/#{book}/transfers")
+
+    assert html =~ "Money transfer updated successfully"
+
+    original_peer_ids = Enum.map(money_transfer.peers, & &1.id)
+
+    new_peer_ids =
+      Peer
+      |> Repo.all(transfer_id: money_transfer.id)
+      |> Enum.map(& &1.id)
+
+    assert original_peer_ids == new_peer_ids
   end
 
   test "deletes money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
