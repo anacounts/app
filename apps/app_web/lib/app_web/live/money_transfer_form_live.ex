@@ -126,6 +126,12 @@ defmodule AppWeb.MoneyTransferFormLive do
             <.list_item class="py-2">
               <input
                 type="hidden"
+                name={"money_transfer[peers][#{index}][id]"}
+                value={if peer, do: peer.id, else: nil}
+              />
+
+              <input
+                type="hidden"
                 name={"money_transfer[peers][#{index}][member_id]"}
                 value={member.id}
               />
