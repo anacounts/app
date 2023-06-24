@@ -6,6 +6,9 @@ defmodule AppWeb.MoneyTransferFormLive do
 
   use AppWeb, :live_view
 
+  import Ecto.Query
+  alias App.Repo
+
   alias App.Accounts.Avatars
   alias App.Books.Members
   alias App.Transfers
@@ -177,9 +180,13 @@ defmodule AppWeb.MoneyTransferFormLive do
     book = socket.assigns.book
 
     money_transfer =
-      Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
-      # TODO No preload here
-      |> App.Repo.preload(:peers)
+      from(transfer in MoneyTransfer,
+        where: transfer.id == ^money_transfer_id,
+        where: transfer.book_id == ^book.id,
+        where: transfer.type != :reimbursement,
+        preload: :peers
+      )
+      |> Repo.one!()
 
     assign(socket,
       page_title:
@@ -279,8 +286,7 @@ defmodule AppWeb.MoneyTransferFormLive do
   defp type_options do
     [
       [key: gettext("Payment"), value: "payment"],
-      [key: gettext("Income"), value: "income"],
-      [key: gettext("Reimbursement"), value: "reimbursement"]
+      [key: gettext("Income"), value: "income"]
     ]
   end
 
