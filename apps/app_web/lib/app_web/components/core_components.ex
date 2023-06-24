@@ -478,7 +478,7 @@ defmodule AppWeb.CoreComponents do
   """
 
   attr :id, :string, required: true, doc: "The id of the modal"
-  attr :size, :atom, default: nil, values: [nil, :xl], doc: "The size of the modal"
+  attr :size, :atom, default: :md, values: [:md, :xl], doc: "The size of the modal"
   attr :dismiss, :boolean, default: true, doc: "Whether the modal contain a dismiss button"
   attr :open, :boolean, default: false, doc: "Whether the modal is open by default or not"
 
@@ -513,7 +513,7 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp modal_size_class(nil), do: "modal--md"
+  defp modal_size_class(:md), do: "modal--md"
   defp modal_size_class(:xl), do: "modal--xl"
 
   defp modal_open_class(true), do: "modal--open"

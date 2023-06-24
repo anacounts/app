@@ -37,18 +37,18 @@
            rounded-none;
   }
 
+  /* FIXME use fixed height instead of padding to size component */
   .modal__header {
     @apply sticky top-0
            flex items-center gap-4
            py-2 px-4
            border-b border-gray-30 rounded-t-lg
-           text-xl
+           text-white text-xl
            bg-theme;
   }
 
   .modal__dismiss {
-    @apply ml-auto
-           self-start;
+    @apply absolute top-0 right-0;
   }
 
   .modal__body {

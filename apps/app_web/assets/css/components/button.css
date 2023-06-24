@@ -1,4 +1,5 @@
 @layer components {
+  /* FIXME use fixed height instead of padding to size component */
   .button {
     @apply inline-block
            p-2
