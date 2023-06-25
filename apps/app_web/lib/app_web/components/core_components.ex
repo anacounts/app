@@ -478,7 +478,7 @@ defmodule AppWeb.CoreComponents do
   """
 
   attr :id, :string, required: true, doc: "The id of the modal"
-  attr :size, :atom, default: nil, values: [nil, :xl], doc: "The size of the modal"
+  attr :size, :atom, default: :md, values: [:md, :xl], doc: "The size of the modal"
   attr :dismiss, :boolean, default: true, doc: "Whether the modal contain a dismiss button"
   attr :open, :boolean, default: false, doc: "Whether the modal is open by default or not"
 
@@ -513,7 +513,7 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp modal_size_class(nil), do: "modal--md"
+  defp modal_size_class(:md), do: "modal--md"
   defp modal_size_class(:xl), do: "modal--xl"
 
   defp modal_open_class(true), do: "modal--open"
@@ -692,8 +692,8 @@ defmodule AppWeb.CoreComponents do
 
   attr :type, :string,
     default: "text",
-    values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week)
+    values: ~w(checkbox color date datetime-local email file hidden money month number
+               password range radio search select tel text textarea time url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -755,6 +755,37 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "money"} = assigns) do
+    assigns =
+      assign_new(assigns, :normalized_value, fn ->
+        # XXX When supporting other currencies, the "/ 100" and "step" attribute
+        # must be based on currency
+        if assigns.value, do: assigns.value.amount / 100, else: nil
+      end)
+
+    ~H"""
+    <div class="flex items-end gap-4">
+      <label class={@label_class} phx-feedback-for={@name}>
+        <%= @label %>
+        <input
+          type="number"
+          name={@name}
+          id={@id || @name}
+          value={Phoenix.HTML.Form.normalize_value("number", @normalized_value)}
+          step="0.01"
+          {@rest}
+        />
+        <.error :for={msg <- @errors}><%= msg %></.error>
+      </label>
+      <label class={@label_class}>
+        <select disabled>
+          <%= Phoenix.HTML.Form.options_for_select(currencies_options(), "EUR") %>
+        </select>
+      </label>
+    </div>
+    """
+  end
+
   def input(assigns) do
     ~H"""
     <label class={@label_class} phx-feedback-for={@name}>
@@ -769,6 +800,10 @@ defmodule AppWeb.CoreComponents do
       <.error :for={msg <- @errors}><%= msg %></.error>
     </label>
     """
+  end
+
+  defp currencies_options do
+    [[key: "€", value: "EUR"]]
   end
 
   @doc """

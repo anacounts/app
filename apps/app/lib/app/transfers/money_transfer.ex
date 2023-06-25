@@ -19,12 +19,17 @@ defmodule App.Transfers.MoneyTransfer do
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
+          label: String.t(),
           amount: Money.t(),
           type: :payment | :income | :reimbursement,
+          date: Date.t(),
           book: Book.t(),
           tenant: BookMember.t(),
           balance_params: TransferParams.t(),
-          peers: Peer.t()
+          peers: Peer.t(),
+          total_peer_weight: Decimal.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
         }
 
   schema "money_transfers" do

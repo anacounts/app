@@ -63,6 +63,10 @@ msgid "Book deleted successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr ""
 
@@ -132,10 +136,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Creator"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Currency"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -335,6 +335,10 @@ msgid "New Book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "New Reimbursement"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "New Transfer"
 msgstr ""
 
@@ -371,6 +375,10 @@ msgid "Or continue to"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Paid by"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Paid by %{name}"
 msgstr ""
 
@@ -403,6 +411,10 @@ msgid "Profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Received by"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Received by %{name}"
 msgstr ""
 
@@ -415,7 +427,11 @@ msgid "Reimbursed to %{name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Reimbursement"
+msgid "Reimbursement created successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -460,6 +476,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Settle up"
 msgstr ""
 
 #, elixir-autogen, elixir-format

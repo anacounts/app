@@ -6,6 +6,9 @@ defmodule AppWeb.MoneyTransferFormLive do
 
   use AppWeb, :live_view
 
+  import Ecto.Query
+  alias App.Repo
+
   alias App.Accounts.Avatars
   alias App.Books.Members
   alias App.Transfers
@@ -50,32 +53,7 @@ defmodule AppWeb.MoneyTransferFormLive do
         <% ## Details %>
         <div class="mx-4">
           <.input type="text" label={gettext("Label")} field={f[:label]} pattern=".{1,255}" required />
-
-          <div class="flex items-baseline gap-4">
-            <% # XXX When supporting other currencies, the "/ 100" and step must be different based on currency %>
-            <% amount =
-              case Ecto.Changeset.get_field(@changeset, :amount, Money.new(0, :EUR)) do
-                %{amount: amount} -> amount / 100
-                nil -> nil
-              end %>
-            <.input
-              type="number"
-              label={gettext("Amount")}
-              field={f[:amount]}
-              value={amount}
-              step="0.01"
-              min="0"
-              required
-            />
-            <.input
-              type="select"
-              label={gettext("Currency")}
-              field={f[:currency]}
-              options={currencies_options()}
-              disabled
-            />
-          </div>
-
+          <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
           <.input
             type="select"
             label={gettext("Type")}
@@ -202,9 +180,13 @@ defmodule AppWeb.MoneyTransferFormLive do
     book = socket.assigns.book
 
     money_transfer =
-      Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
-      # TODO No preload here
-      |> App.Repo.preload(:peers)
+      from(transfer in MoneyTransfer,
+        where: transfer.id == ^money_transfer_id,
+        where: transfer.book_id == ^book.id,
+        where: transfer.type != :reimbursement,
+        preload: :peers
+      )
+      |> Repo.one!()
 
     assign(socket,
       page_title:
@@ -301,15 +283,10 @@ defmodule AppWeb.MoneyTransferFormLive do
     end
   end
 
-  defp currencies_options do
-    [[key: "€", value: "EUR"]]
-  end
-
   defp type_options do
     [
       [key: gettext("Payment"), value: "payment"],
-      [key: gettext("Income"), value: "income"],
-      [key: gettext("Reimbursement"), value: "reimbursement"]
+      [key: gettext("Income"), value: "income"]
     ]
   end
 

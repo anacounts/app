@@ -34,14 +34,17 @@ defmodule AppWeb.MoneyTransfersLive do
               <.icon name="calendar-month" />
             </div>
           </div>
-          <div class="text-right">
+          <div :if={transfer.type != :reimbursement} class="text-right">
             <%= format_code(transfer.balance_params.means_code) %>
             <.icon name="swap-horiz" />
           </div>
         </:description>
 
         <:button
-          :if={Rights.can_member_handle_money_transfers?(@current_member)}
+          :if={
+            transfer.type != :reimbursement and
+              Rights.can_member_handle_money_transfers?(@current_member)
+          }
           navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
         >
           <%= gettext("Edit") %>

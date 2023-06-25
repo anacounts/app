@@ -19,7 +19,7 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
   @update_attrs %{
     label: "Updated transfer",
     amount: "6.70",
-    type: "reimbursement",
+    type: "income",
     date: "2022-04-10",
     balance_means_code: "weight_by_income"
   }
