@@ -205,7 +205,7 @@ defmodule App.Balance.BalanceConfig do
     %{
       struct
       | id: nil,
-        start_date_of_validity: DateTime.utc_now() |> DateTime.truncate(:second),
+        start_date_of_validity: DateTime.utc_now(:second),
         inserted_at: nil,
         updated_at: nil
     }
