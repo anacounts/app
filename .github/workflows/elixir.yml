@@ -20,8 +20,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
         with:
-          elixir-version: "1.14.3" # Define the elixir version [required]
-          otp-version: "25.3" # Define the OTP version [required]
+          elixir-version: "1.15.1" # Define the elixir version [required]
+          otp-version: "26.0.1" # Define the OTP version [required]
       - name: Restore dependencies cache
         uses: actions/cache@v3
         with:
@@ -29,11 +29,11 @@ jobs:
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - name: Install dependencies
-        run: mix deps.get
+        run: mix deps.get --check-locked
       - name: Look out for unused dependencies
         run: mix deps.unlock --check-unused
       - name: Check compilation
-        run: mix compile --all-warnings --warnings-as-errors
+        run: mix compile --warnings-as-errors
       - name: Check formatting
         run: mix format --check-formatted
       - name: Run Credo
@@ -67,8 +67,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
         with:
-          elixir-version: "1.14.3" # Define the elixir version [required]
-          otp-version: "25.3" # Define the OTP version [required]
+          elixir-version: "1.15.1" # Define the elixir version [required]
+          otp-version: "26.0.1" # Define the OTP version [required]
       - name: Restore dependencies cache
         uses: actions/cache@v3
         with:
@@ -78,4 +78,4 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
       - name: Run tests
-        run: mix test
+        run: mix test --warnings-as-errors

@@ -49,7 +49,7 @@ defmodule App.Books.Book do
   end
 
   def delete_changeset(book) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.utc_now(:second)
     change(book, deleted_at: now)
   end
 end

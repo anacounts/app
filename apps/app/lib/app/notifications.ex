@@ -98,9 +98,7 @@ defmodule App.Notifications do
   end
 
   defp insert_notification_with_recipients(attrs, recipients) do
-    now =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.utc_now(:second)
 
     Ecto.Multi.new()
     |> Ecto.Multi.insert(:notification, Notification.changeset(%Notification{}, attrs))

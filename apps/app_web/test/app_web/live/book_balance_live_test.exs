@@ -1,4 +1,4 @@
-defmodule AppWeb.BalanceConfigLiveTest do
+defmodule AppWeb.BookBalanceLiveTest do
   use AppWeb.ConnCase
 
   import Phoenix.LiveViewTest

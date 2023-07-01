@@ -1,5 +1,12 @@
+ARG ELIXIR_VERSION=1.15.1
+ARG ERLANG_VERSION=26.0.1
+ARG ALPINE_VERSION=3.17.4
+
+ARG BUILD_ELIXIR_IMAGE=hexpm/elixir:${ELIXIR_VERSION}-erlang-${ERLANG_VERSION}-alpine-${ALPINE_VERSION}
+ARG RUNTIME_IMAGE=alpine:${ALPINE_VERSION}
+
 # ---- Build Stage ----
-FROM elixir:1.14.3-alpine as app_builder
+FROM ${BUILD_ELIXIR_IMAGE} as app_builder
 
 # Set environment variables for building the application
 ENV MIX_ENV=prod \
@@ -30,7 +37,7 @@ RUN mix assets.deploy
 RUN mix release
 
 # ---- Application Stage ----
-FROM alpine:3.17 AS app
+FROM ${RUNTIME_IMAGE} AS app
 
 ENV LANG=C.UTF-8
 

@@ -173,10 +173,10 @@ defmodule App.Balance.BalanceConfig do
     changeset
     |> validate_required(:start_date_of_validity)
     |> validate_change(:start_date_of_validity, fn _, value ->
-      if value < DateTime.utc_now() do
-        []
-      else
+      if DateTime.after?(value, DateTime.utc_now()) do
         [start_date_of_validity: "must be now or a past date"]
+      else
+        []
       end
     end)
   end
@@ -205,7 +205,7 @@ defmodule App.Balance.BalanceConfig do
     %{
       struct
       | id: nil,
-        start_date_of_validity: DateTime.utc_now() |> DateTime.truncate(:second),
+        start_date_of_validity: DateTime.utc_now(:second),
         inserted_at: nil,
         updated_at: nil
     }

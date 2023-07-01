@@ -32,7 +32,7 @@ defmodule App.Balance.BalanceConfigs do
         owner: user,
         owner_id: user.id,
         created_for: :user,
-        start_date_of_validity: DateTime.utc_now() |> DateTime.truncate(:second)
+        start_date_of_validity: DateTime.utc_now(:second)
       }
   end
 
