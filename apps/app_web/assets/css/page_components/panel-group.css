@@ -1,0 +1,27 @@
+@layer components {
+  /* .panel-group {} */
+
+  .panel-group__panel {
+    @apply hidden;
+  }
+
+  .panel-group__panel--active {
+    @apply block;
+  }
+
+  @media screen(md) {
+    .panel-group {
+      @apply flex;
+    }
+
+    .panel-group__panel {
+      @apply block;
+    }
+
+    .panel-group__panel:not(:last-child) {
+      @apply border-r border-solid border-gray-50;
+    }
+
+    /* .panel-group__panel--active {} */
+  }
+}

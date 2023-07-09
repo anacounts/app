@@ -15,3 +15,5 @@
 @import "./components/tabs.css";
 @import "./components/tile.css";
 @import "./components/toggle-group.css";
+
+@import "./page_components/panel-group.css";
