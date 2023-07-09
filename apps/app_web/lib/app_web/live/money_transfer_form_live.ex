@@ -53,6 +53,8 @@ defmodule AppWeb.MoneyTransferFormLive do
         <.panel_group class="md:justify-center">
           <:panel :let={show_panel} id="details" active>
             <div class="mx-4 mb-4 md:min-w-[380px]">
+              <.input type="toggle-group" field={f[:type]} options={type_options()} />
+
               <.input
                 type="text"
                 label={gettext("Label")}
@@ -63,14 +65,7 @@ defmodule AppWeb.MoneyTransferFormLive do
               <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
               <.input
                 type="select"
-                label={gettext("Type")}
-                field={f[:type]}
-                options={type_options()}
-                required
-              />
-              <.input
-                type="select"
-                label={gettext("Tenant")}
+                label={tenant_id_label(f[:type].value)}
                 field={f[:tenant_id]}
                 options={tenant_id_options(@members)}
                 required
@@ -190,7 +185,7 @@ defmodule AppWeb.MoneyTransferFormLive do
       |> Enum.with_index()
       |> Enum.map(fn {member, index} -> %Peer{id: index, member_id: member.id, member: member} end)
 
-    money_transfer = %MoneyTransfer{date: Date.utc_today(), peers: peers}
+    money_transfer = %MoneyTransfer{date: Date.utc_today(), type: :payment, peers: peers}
 
     assign(socket,
       page_title: gettext("New Transfer"),
@@ -312,6 +307,10 @@ defmodule AppWeb.MoneyTransferFormLive do
       [key: gettext("Income"), value: "income"]
     ]
   end
+
+  defp tenant_id_label(type) when is_atom(type), do: tenant_id_label(Atom.to_string(type))
+  defp tenant_id_label("payment"), do: gettext("Paid by")
+  defp tenant_id_label("income"), do: gettext("Received by")
 
   defp tenant_id_options(book_members) do
     book_members
