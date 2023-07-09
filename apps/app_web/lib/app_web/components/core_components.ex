@@ -684,6 +684,7 @@ defmodule AppWeb.CoreComponents do
 
       <.input field={@form[:email]} type="email" />
       <.input name="my-input" errors={["oh no!"]} />
+
   """
   attr :id, :any, default: nil
   attr :name, :any
@@ -693,7 +694,7 @@ defmodule AppWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden money month number
-               password range radio search select tel text textarea time url week)
+               password range radio search select tel text textarea time toggle-group url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -701,13 +702,16 @@ defmodule AppWeb.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :options, :list,
+    doc:
+      "the options to pass to Phoenix.HTML.Form.options_for_select/2, or for the toggle-group input"
+
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
   attr :label_class, :any, default: nil, doc: "Extra classes to add to the label"
   attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
                                    pattern placeholder readonly required rows size step)
-  slot :inner_block
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
@@ -782,6 +786,29 @@ defmodule AppWeb.CoreComponents do
           <%= Phoenix.HTML.Form.options_for_select(currencies_options(), "EUR") %>
         </select>
       </label>
+    </div>
+    """
+  end
+
+  def input(%{type: "toggle-group"} = assigns) do
+    ~H"""
+    <div class={@label_class} phx-feedback-for={@name}>
+      <%= @label %>
+      <div class="toggle-group">
+        <label :for={option <- @options} class="toggle-group__label">
+          <input
+            type="radio"
+            name={@name}
+            id={option[:id]}
+            value={option[:value]}
+            checked={{:safe, option[:value]} == Phoenix.HTML.html_escape(@value)}
+            class="toggle-group__input"
+            {@rest}
+          />
+          <%= option[:key] %>
+        </label>
+      </div>
+      <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end

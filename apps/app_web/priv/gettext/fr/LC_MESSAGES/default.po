@@ -500,10 +500,6 @@ msgid "Suggestions"
 msgstr "Suggestions"
 
 #, elixir-autogen, elixir-format
-msgid "Tenant"
-msgstr "Titulaire"
-
-#, elixir-autogen, elixir-format
 msgid "The member balance could not be computed"
 msgstr "Le solde du membre n'a pas pu être calculé"
 
@@ -530,10 +526,6 @@ msgstr "Transferts"
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
 msgstr "Transferts · %{book_name}"
-
-#, elixir-autogen, elixir-format
-msgid "Type"
-msgstr "Type"
 
 #, elixir-autogen, elixir-format
 msgid "User confirmation link is invalid or it has expired."

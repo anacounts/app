@@ -499,10 +499,6 @@ msgid "Suggestions"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Tenant"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "The member balance could not be computed"
 msgstr ""
 
@@ -528,10 +524,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Type"
 msgstr ""
 
 #, elixir-autogen, elixir-format
