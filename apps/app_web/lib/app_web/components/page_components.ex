@@ -14,8 +14,6 @@ defmodule AppWeb.PageComponents do
   import AppWeb.Gettext
   import AppWeb.CoreComponents
 
-  alias Phoenix.LiveView.JS
-
   ## Page header
 
   @doc """
@@ -76,62 +74,6 @@ defmodule AppWeb.PageComponents do
       <%= render_slot(assigns[:menu] || []) %>
     </header>
     """
-  end
-
-  ## Panel group
-
-  @doc """
-  Renders a group of panels, with only one panel visible at a time on smaller screens.
-  On large screens, panels are aligned side by side as long as they fit in the container.
-
-  Panels must have an `id` attribute, and can have an `active` attribute to indicate
-  which panel is currently visible. Only one panel must be active at a time.
-  To switch the active panel, the `:panel` slot is render with a function as argument
-  that, when called with the `id` of the panel to show, will hide the active panel
-  and show the panel with the given `id`.
-
-  ## Examples
-
-      <.panel_group class="mb-4">
-        <:panel :let={show_panel} id="panel-1" active>
-          <button phx-click={show_panel.("panel-2")}>Show panel 2</button>
-        </:panel>
-        <:panel :let={show_panel} id="panel-2">
-          <button phx-click={show_panel.("panel-1")}>Show panel 1</button>
-        </:panel>
-      </.panel_group>
-
-  """
-
-  attr :class, :any, default: nil
-  attr :rest, :global
-
-  slot :panel do
-    attr :id, :string, required: true
-    attr :active, :boolean
-  end
-
-  def panel_group(assigns) do
-    ~H"""
-    <div class={["panel-group", @class]}>
-      <section
-        :for={panel <- @panel}
-        id={panel[:id]}
-        class={["panel-group__panel", panel_group_active_class(panel[:active])]}
-      >
-        <%= render_slot(panel, show_panel_command()) %>
-      </section>
-    </div>
-    """
-  end
-
-  defp panel_group_active_class(true), do: "panel-group__panel--active"
-  defp panel_group_active_class(_), do: nil
-
-  defp show_panel_command do
-    fn panel_id ->
-      JS.dispatch("panel_group:show", detail: panel_id)
-    end
   end
 
   ## Markdown
