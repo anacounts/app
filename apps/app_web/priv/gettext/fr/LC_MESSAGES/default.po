@@ -484,6 +484,10 @@ msgid "Settle up"
 msgstr "Rembourser"
 
 #, elixir-autogen, elixir-format
+msgid "Sharing"
+msgstr "Partage"
+
+#, elixir-autogen, elixir-format
 msgid "Sign in"
 msgstr "Se connecter"
 
