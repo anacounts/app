@@ -59,17 +59,38 @@ defmodule AppWeb.MoneyTransferFormLive do
               type="text"
               label={gettext("Label")}
               field={f[:label]}
+              class="w-full"
               pattern=".{1,255}"
               required
             />
-            <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
             <.input
-              type="select"
-              label={tenant_id_label(f[:type].value)}
-              field={f[:tenant_id]}
-              options={tenant_id_options(@members)}
+              type="money"
+              label={gettext("Amount")}
+              field={f[:amount]}
+              label_class="grow"
+              class="w-full"
               required
             />
+
+            <div class="flex flex-wrap gap-x-4">
+              <.input
+                type="select"
+                label={tenant_id_label(f[:type].value)}
+                field={f[:tenant_id]}
+                options={tenant_id_options(@members)}
+                label_class="flex-auto"
+                class="w-full"
+                required
+              />
+              <.input
+                type="date"
+                label={gettext("Date")}
+                field={f[:date]}
+                label_class="flex-auto"
+                class="w-full"
+                required
+              />
+            </div>
 
             <% means_code =
               case Ecto.Changeset.get_field(@changeset, :balance_params) do
@@ -83,11 +104,10 @@ defmodule AppWeb.MoneyTransferFormLive do
               field={f[:balance_means_code]}
               options={balance_params_options()}
               value={means_code}
+              class="w-full"
               required
             />
             <% # TODO <button>More information</button> %>
-
-            <.input type="date" label={gettext("Date")} field={f[:date]} required />
           </div>
 
           <div class="mx-4 mb-4">
@@ -96,7 +116,7 @@ defmodule AppWeb.MoneyTransferFormLive do
             </.button>
           </div>
         </section>
-        <section id="peers">
+        <section id="peers" class="md:max-h-[calc(100vh-4rem)] md:overflow-auto">
           <.heading level={:section}>
             <%= gettext("Sharing") %>
           </.heading>
