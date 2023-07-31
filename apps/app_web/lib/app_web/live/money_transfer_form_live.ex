@@ -49,121 +49,107 @@ defmodule AppWeb.MoneyTransferFormLive do
         id="money-transfer-form"
         phx-change="validate"
         phx-submit="save"
+        class="flex flex-col md:flex-row md:justify-center"
       >
-        <.panel_group class="md:justify-center">
-          <:panel :let={show_panel} id="details" active>
-            <div class="mx-4 mb-4 md:min-w-[380px]">
-              <.input type="toggle-group" field={f[:type]} options={type_options()} />
+        <section id="details">
+          <div class="mx-4 mb-4 md:min-w-[380px]">
+            <.input type="toggle-group" field={f[:type]} options={type_options()} />
 
-              <.input
-                type="text"
-                label={gettext("Label")}
-                field={f[:label]}
-                pattern=".{1,255}"
-                required
-              />
-              <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
-              <.input
-                type="select"
-                label={tenant_id_label(f[:type].value)}
-                field={f[:tenant_id]}
-                options={tenant_id_options(@members)}
-                required
-              />
+            <.input
+              type="text"
+              label={gettext("Label")}
+              field={f[:label]}
+              pattern=".{1,255}"
+              required
+            />
+            <.input type="money" label={gettext("Amount")} field={f[:amount]} required />
+            <.input
+              type="select"
+              label={tenant_id_label(f[:type].value)}
+              field={f[:tenant_id]}
+              options={tenant_id_options(@members)}
+              required
+            />
 
-              <% means_code =
-                case Ecto.Changeset.get_field(@changeset, :balance_params) do
-                  %{means_code: means_code} -> means_code
-                  nil -> nil
-                end %>
+            <% means_code =
+              case Ecto.Changeset.get_field(@changeset, :balance_params) do
+                %{means_code: means_code} -> means_code
+                nil -> nil
+              end %>
 
-              <.input
-                type="select"
-                label={gettext("How to balance?")}
-                field={f[:balance_means_code]}
-                options={balance_params_options()}
-                value={means_code}
-                required
-              />
-              <% # TODO <button>More information</button> %>
+            <.input
+              type="select"
+              label={gettext("How to balance?")}
+              field={f[:balance_means_code]}
+              options={balance_params_options()}
+              value={means_code}
+              required
+            />
+            <% # TODO <button>More information</button> %>
 
-              <.input type="date" label={gettext("Date")} field={f[:date]} required />
+            <.input type="date" label={gettext("Date")} field={f[:date]} required />
+          </div>
 
-              <a
-                class="flex justify-between items-center h-11 hover:bg-gray-10 md:hidden"
-                phx-click={show_panel.("#peers")}
-              >
-                <%= gettext("Members") %>
-                <.icon name="chevron-right" />
-              </a>
-            </div>
+          <div class="mx-4 mb-4">
+            <.button color={:cta} class="min-w-[5rem]" phx-disable-with={gettext("Saving...")}>
+              <%= gettext("Save") %>
+            </.button>
+          </div>
+        </section>
+        <section id="peers">
+          <.heading level={:section}>
+            <%= gettext("Sharing") %>
+          </.heading>
+          <.list>
+            <% peers = Ecto.Changeset.get_field(@changeset, :peers) %>
 
-            <div class="mx-4 mb-4">
-              <.button color={:cta} phx-disable-with={gettext("Saving...")}>
-                <%= gettext("Save") %>
-              </.button>
-            </div>
-          </:panel>
-          <:panel :let={show_panel} id="peers">
-            <.list>
-              <% peers = Ecto.Changeset.get_field(@changeset, :peers) %>
+            <%= for {member, index} <- Enum.with_index(@members) do %>
+              <% peer = Enum.find(peers, &(&1.member_id == member.id)) %>
 
-              <%= for {member, index} <- Enum.with_index(@members) do %>
-                <% peer = Enum.find(peers, &(&1.member_id == member.id)) %>
+              <.list_item class="py-2">
+                <input
+                  type="hidden"
+                  name={"money_transfer[peers][#{index}][id]"}
+                  value={if peer, do: peer.id, else: nil}
+                />
 
-                <.list_item class="py-2">
+                <input
+                  type="hidden"
+                  name={"money_transfer[peers][#{index}][member_id]"}
+                  value={member.id}
+                />
+
+                <label class="contents" for={"book-form_peers_#{index}_checked"}>
                   <input
                     type="hidden"
-                    name={"money_transfer[peers][#{index}][id]"}
-                    value={if peer, do: peer.id, else: nil}
+                    name={"money_transfer[peers][#{index}][checked]"}
+                    value="false"
                   />
-
                   <input
-                    type="hidden"
-                    name={"money_transfer[peers][#{index}][member_id]"}
-                    value={member.id}
+                    type="checkbox"
+                    id={"book-form_peers_#{index}_checked"}
+                    name={"money_transfer[peers][#{index}][checked]"}
+                    value="true"
+                    checked={peer != nil}
                   />
-
-                  <label class="contents" for={"book-form_peers_#{index}_checked"}>
-                    <input
-                      type="hidden"
-                      name={"money_transfer[peers][#{index}][checked]"}
-                      value="false"
-                    />
-                    <input
-                      type="checkbox"
-                      id={"book-form_peers_#{index}_checked"}
-                      name={"money_transfer[peers][#{index}][checked]"}
-                      value="true"
-                      checked={peer != nil}
-                    />
-                    <.avatar src={Avatars.avatar_url(member)} alt="" />
-                    <div class="grow">
-                      <%= member.display_name %>
-                    </div>
-                    <input
-                      type="number"
-                      class="flex-1 w-full"
-                      id={"book-form_peers_#{index}_weight"}
-                      name={"money_transfer[peers][#{index}][weight]"}
-                      step="0.01"
-                      value={if peer, do: peer.weight, else: 1}
-                      disabled={peer == nil}
-                    />
-                  </label>
-                </.list_item>
-              <% end %>
-            </.list>
-
-            <.fab_container class="md:hidden">
-              <:item>
-                <.fab phx-click={show_panel.("#details")}>
-                  <.icon name="save" alt={gettext("Save")} />
-                </.fab>
-              </:item>
-            </.fab_container>
-          </:panel>
-        </.panel_group>
+                  <.avatar src={Avatars.avatar_url(member)} alt="" />
+                  <div class="grow">
+                    <%= member.display_name %>
+                  </div>
+                  <input
+                    type="number"
+                    class="flex-1 w-full"
+                    id={"book-form_peers_#{index}_weight"}
+                    name={"money_transfer[peers][#{index}][weight]"}
+                    step="0.01"
+                    value={if peer, do: peer.weight, else: 1}
+                    disabled={peer == nil}
+                  />
+                </label>
+              </.list_item>
+            <% end %>
+          </.list>
+        </section>
       </.form>
     </main>
     """

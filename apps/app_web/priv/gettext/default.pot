@@ -483,6 +483,10 @@ msgid "Settle up"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Sharing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Sign in"
 msgstr ""
 
