@@ -144,7 +144,7 @@ defmodule AppWeb.CoreComponents do
 
   attr :src, :string, required: true, doc: "The source of the image"
   attr :alt, :string, required: true, doc: "The alt text for the image"
-  attr :size, :atom, default: nil, values: [nil, :lg], doc: "The size of the avatar"
+  attr :size, :atom, default: :md, values: [:md, :lg], doc: "The size of the avatar"
 
   def avatar(assigns) do
     ~H"""
@@ -152,7 +152,7 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp avatar_size_class(nil), do: nil
+  defp avatar_size_class(:md), do: "avatar--md"
   defp avatar_size_class(:lg), do: "avatar--lg"
 
   ## Button
