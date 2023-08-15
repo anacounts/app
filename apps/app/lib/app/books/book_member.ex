@@ -5,10 +5,12 @@ defmodule App.Books.BookMember do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Books.Book
+  alias App.Books.InvitationToken
   alias App.Books.Role
 
   @type id :: integer()
@@ -17,23 +19,28 @@ defmodule App.Books.BookMember do
           id: id(),
           book_id: Book.id(),
           book: Book.t(),
+          role: Role.t(),
           user_id: User.id() | nil,
           user: User.t() | nil,
-          role: Role.t(),
+          invitation_sent: boolean(),
           deleted_at: NaiveDateTime.t(),
           nickname: String.t(),
           display_name: String.t() | nil,
           email: String.t() | nil,
           balance_config: BalanceConfig.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
-          balance: Money.t() | {:error, reasons :: [String.t()]} | nil
+          balance: Money.t() | {:error, reasons :: [String.t()]} | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
         }
 
   schema "book_members" do
     belongs_to :book, Book
-    belongs_to :user, User
-
     field :role, Ecto.Enum, values: Role.all()
+
+    belongs_to :user, User
+    field :invitation_sent, :boolean, virtual: true
+
     field :deleted_at, :naive_datetime
 
     # When the member is not linked to a user, the display name falls back to the book
@@ -104,5 +111,55 @@ defmodule App.Books.BookMember do
   defp validate_balance_config_id(changeset) do
     changeset
     |> foreign_key_constraint(:balance_config_id)
+  end
+
+  ## Queries
+
+  @doc """
+  Returns an `%Ecto.Query{}` fetching all book members.
+  """
+  def base_query do
+    from __MODULE__, as: :book_member
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:invitation_sent` field of book members.
+  """
+  @spec select_invitation_sent(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_invitation_sent(query) do
+    from [book_member: book_member] in query,
+      select_merge: %{
+        invitation_sent:
+          exists(
+            from invitation_token in InvitationToken,
+              where: invitation_token.book_member_id == parent_as(:book_member).id
+          )
+      }
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:display_name` of book members.
+  """
+  @spec select_display_name(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_display_name(query) do
+    from [book_member: book_member, user: user] in join_user(query),
+      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:email` of book members.
+  """
+  @spec select_email(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_email(query) do
+    from [user: user] in join_user(query),
+      select_merge: %{email: user.email}
+  end
+
+  defp join_user(query) do
+    with_named_binding(query, :user, fn query ->
+      from [book_member: book_member] in query,
+        left_join: user in assoc(book_member, :user),
+        as: :user
+    end)
   end
 end
