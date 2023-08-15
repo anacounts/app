@@ -115,7 +115,7 @@ defmodule AppWeb.BookInvitationsLive do
 
       {:noreply,
        socket
-       |> put_flash(:info, member_added_flash(email))
+       |> put_flash(:info, member_created_flash(email))
        |> assign(changeset: changeset)}
     end
   end
@@ -148,6 +148,6 @@ defmodule AppWeb.BookInvitationsLive do
     Members.deliver_invitation(book_member, sent_to, &url(socket, ~p"/invitation/#{&1}/edit"))
   end
 
-  defp member_added_flash(nil), do: gettext("Member added")
-  defp member_added_flash(_email), do: gettext("Invitation sent")
+  defp member_created_flash(nil), do: gettext("Member created")
+  defp member_created_flash(_email), do: gettext("Invitation sent")
 end

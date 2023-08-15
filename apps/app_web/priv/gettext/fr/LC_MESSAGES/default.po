@@ -304,8 +304,8 @@ msgid "Member"
 msgstr "Membre"
 
 #, elixir-autogen, elixir-format
-msgid "Member added"
-msgstr "Membre ajouté"
+msgid "Member created"
+msgstr "Membre créé"
 
 #, elixir-autogen, elixir-format
 msgid "Members"
