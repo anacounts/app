@@ -304,8 +304,8 @@ msgid "Member"
 msgstr "Membre"
 
 #, elixir-autogen, elixir-format
-msgid "Member added"
-msgstr "Membre ajouté"
+msgid "Member created"
+msgstr "Membre créé"
 
 #, elixir-autogen, elixir-format
 msgid "Members"
@@ -398,10 +398,6 @@ msgstr "Mot de passe mis à jour!"
 #, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Paiement"
-
-#, elixir-autogen, elixir-format
-msgid "Pending members"
-msgstr "Membres invités"
 
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"

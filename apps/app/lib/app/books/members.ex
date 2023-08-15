@@ -31,10 +31,13 @@ defmodule App.Books.Members do
   end
 
   defp members_of_book_query(book) do
-    base_query()
+    from([book_member: book_member] in base_query(),
+      left_join: user in assoc(book_member, :user),
+      where: book_member.book_id == ^book.id,
+      order_by: [asc: coalesce(user.display_name, book_member.nickname)]
+    )
     |> with_display_name_query()
     |> with_email_query()
-    |> where_book_id(book.id)
   end
 
   @doc """
@@ -291,11 +294,6 @@ defmodule App.Books.Members do
   defp with_email_query(query) do
     from [user: user] in join_user(query),
       select_merge: %{email: user.email}
-  end
-
-  defp where_book_id(query, book_id) do
-    from [book_member: book_member] in query,
-      where: book_member.book_id == ^book_id
   end
 
   def where_user_id(query, user_id) do
