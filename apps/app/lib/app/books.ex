@@ -87,9 +87,10 @@ defmodule App.Books do
   # Returns a query that fetches all books a user belongs to.
   @spec books_of_user_query(Auth.User.t()) :: Ecto.Query.t()
   defp books_of_user_query(%User{} = user) do
-    base_query()
-    |> join_members()
-    |> Members.where_user_id(user.id)
+    from [book: book] in Book.base_query(),
+      join: member in BookMember,
+      on: member.book_id == book.id,
+      where: member.user_id == ^user.id
   end
 
   @doc """
@@ -234,22 +235,5 @@ defmodule App.Books do
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
-  end
-
-  ## Queries
-
-  defp base_query do
-    from book in Book,
-      as: :book,
-      where: is_nil(book.deleted_at)
-  end
-
-  defp join_members(query, qual \\ :inner) do
-    with_named_binding(query, :book_member, fn query ->
-      join(query, qual, [book: book], member in BookMember,
-        on: member.book_id == book.id,
-        as: :book_member
-      )
-    end)
   end
 end

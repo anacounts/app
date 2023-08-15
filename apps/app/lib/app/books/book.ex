@@ -5,6 +5,7 @@ defmodule App.Books.Book do
 
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias App.Balance.TransferParams
 
@@ -51,5 +52,14 @@ defmodule App.Books.Book do
   def delete_changeset(book) do
     now = NaiveDateTime.utc_now(:second)
     change(book, deleted_at: now)
+  end
+
+  ## Queries
+
+  @spec base_query() :: Ecto.Query.t()
+  def base_query do
+    from book in __MODULE__,
+      as: :book,
+      where: is_nil(book.deleted_at)
   end
 end

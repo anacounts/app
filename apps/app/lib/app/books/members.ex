@@ -296,11 +296,6 @@ defmodule App.Books.Members do
       select_merge: %{email: user.email}
   end
 
-  def where_user_id(query, user_id) do
-    from [book_member: book_member] in query,
-      where: book_member.user_id == ^user_id
-  end
-
   def join_user(query, qual \\ :left) do
     with_named_binding(query, :user, fn query ->
       join(query, qual, [book_member: book_member], assoc(book_member, :user), as: :user)
