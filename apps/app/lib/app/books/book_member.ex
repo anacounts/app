@@ -5,6 +5,7 @@ defmodule App.Books.BookMember do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
@@ -104,5 +105,40 @@ defmodule App.Books.BookMember do
   defp validate_balance_config_id(changeset) do
     changeset
     |> foreign_key_constraint(:balance_config_id)
+  end
+
+  ## Queries
+
+  @doc """
+  Returns an `%Ecto.Query{}` fetching all book members.
+  """
+  def base_query do
+    from __MODULE__, as: :book_member
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:display_name` of book members.
+  """
+  @spec select_display_name(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_display_name(query) do
+    from [book_member: book_member, user: user] in join_user(query),
+      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:email` of book members.
+  """
+  @spec select_email(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_email(query) do
+    from [user: user] in join_user(query),
+      select_merge: %{email: user.email}
+  end
+
+  defp join_user(query) do
+    with_named_binding(query, :user, fn query ->
+      from [book_member: book_member] in query,
+        left_join: user in assoc(book_member, :user),
+        as: :user
+    end)
   end
 end

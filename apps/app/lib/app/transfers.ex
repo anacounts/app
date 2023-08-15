@@ -102,8 +102,8 @@ defmodule App.Transfers do
   def with_tenant(transfers) do
     Repo.preload(transfers,
       tenant:
-        Members.base_query()
-        |> Members.with_display_name_query()
+        BookMember.base_query()
+        |> BookMember.select_display_name()
     )
   end
 

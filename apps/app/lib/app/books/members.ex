@@ -31,13 +31,13 @@ defmodule App.Books.Members do
   end
 
   defp members_of_book_query(book) do
-    from([book_member: book_member] in base_query(),
+    from([book_member: book_member] in BookMember.base_query(),
       left_join: user in assoc(book_member, :user),
       where: book_member.book_id == ^book.id,
       order_by: [asc: coalesce(user.display_name, book_member.nickname)]
     )
-    |> with_display_name_query()
-    |> with_email_query()
+    |> BookMember.select_display_name()
+    |> BookMember.select_email()
   end
 
   @doc """
@@ -55,8 +55,8 @@ defmodule App.Books.Members do
 
   """
   def get_book_member!(id) do
-    base_query()
-    |> with_display_name_query()
+    BookMember.base_query()
+    |> BookMember.select_display_name()
     |> Repo.get!(id)
   end
 
@@ -248,57 +248,5 @@ defmodule App.Books.Members do
   @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
   def change_book_member(book_member, attrs \\ %{}) do
     BookMember.changeset(book_member, attrs)
-  end
-
-  ## Queries
-
-  @doc """
-  Returns an `%Ecto.Query{}` for fetching all book members.
-
-  Combine with `with_display_name_query/1` to query the display name of the book member
-  along the way.
-
-  ## Examples
-
-      iex> base_query()
-      #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member>
-
-      iex> Repo.all(base_query())
-      [%BookMember{}, ...]
-
-  """
-  def base_query do
-    from BookMember, as: :book_member
-  end
-
-  @doc """
-  Updates an `%Ecto.Query{}` to query the display name of the book members along the way.
-
-  ## Examples
-
-      iex> base_query() |> with_display_name_query()
-      #Ecto.Query<from b0 in App.Books.BookMember, as: :book_member,
-        left_join: u1 in assoc(b0, :user), as: :user,
-        select: merge(b0, %{display_name: coalesce(u1.display_name, b0.nickname)})>
-
-      iex> base_query() |> with_display_name_query() |> Repo.all()
-      [%BookMember{display_name: "John Doe"}, ...]
-
-  """
-  def with_display_name_query(query) do
-    from [book_member: book_member, user: user] in join_user(query),
-      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
-  end
-
-  # Load the `:email` virtual field. Only works if querying BookMember entities.
-  defp with_email_query(query) do
-    from [user: user] in join_user(query),
-      select_merge: %{email: user.email}
-  end
-
-  def join_user(query, qual \\ :left) do
-    with_named_binding(query, :user, fn query ->
-      join(query, qual, [book_member: book_member], assoc(book_member, :user), as: :user)
-    end)
   end
 end
