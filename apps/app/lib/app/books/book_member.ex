@@ -10,6 +10,7 @@ defmodule App.Books.BookMember do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Books.Book
+  alias App.Books.InvitationToken
   alias App.Books.Role
 
   @type id :: integer()
@@ -18,23 +19,28 @@ defmodule App.Books.BookMember do
           id: id(),
           book_id: Book.id(),
           book: Book.t(),
+          role: Role.t(),
           user_id: User.id() | nil,
           user: User.t() | nil,
-          role: Role.t(),
+          invitation_sent: boolean(),
           deleted_at: NaiveDateTime.t(),
           nickname: String.t(),
           display_name: String.t() | nil,
           email: String.t() | nil,
           balance_config: BalanceConfig.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
-          balance: Money.t() | {:error, reasons :: [String.t()]} | nil
+          balance: Money.t() | {:error, reasons :: [String.t()]} | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
         }
 
   schema "book_members" do
     belongs_to :book, Book
-    belongs_to :user, User
-
     field :role, Ecto.Enum, values: Role.all()
+
+    belongs_to :user, User
+    field :invitation_sent, :boolean, virtual: true
+
     field :deleted_at, :naive_datetime
 
     # When the member is not linked to a user, the display name falls back to the book
@@ -114,6 +120,21 @@ defmodule App.Books.BookMember do
   """
   def base_query do
     from __MODULE__, as: :book_member
+  end
+
+  @doc """
+  Updates an `%Ecto.Query{}` to select the `:invitation_sent` field of book members.
+  """
+  @spec select_invitation_sent(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_invitation_sent(query) do
+    from [book_member: book_member] in query,
+      select_merge: %{
+        invitation_sent:
+          exists(
+            from invitation_token in InvitationToken,
+              where: invitation_token.book_member_id == parent_as(:book_member).id
+          )
+      }
   end
 
   @doc """

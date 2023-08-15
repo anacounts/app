@@ -360,6 +360,10 @@ msgid "Nickname"
 msgstr "Nickname"
 
 #, elixir-autogen, elixir-format
+msgid "No user"
+msgstr "No user"
+
+#, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
 msgstr "Not %{user_name}? Disconnect"
 

@@ -125,23 +125,6 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Check if a book member is linked to a user.
-
-  ## Examples
-
-      iex> independent?(book_member)
-      true
-
-      iex> independent?(book_member_with_user)
-      false
-
-  """
-  @spec independent?(BookMember.t()) :: boolean()
-  def independent?(%BookMember{} = book_member) do
-    book_member.user_id == nil
-  end
-
-  @doc """
   Create a new book member within a book.
 
   # Examples

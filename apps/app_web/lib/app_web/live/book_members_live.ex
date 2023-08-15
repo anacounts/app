@@ -6,10 +6,13 @@ defmodule AppWeb.BookMemberLive do
 
   use AppWeb, :live_view
 
+  import Ecto.Query
+  alias App.Repo
+
   alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
-  alias App.Books.Members
+  alias App.Books.BookMember
   alias App.Books.Rights
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -36,8 +39,15 @@ defmodule AppWeb.BookMemberLive do
     book = socket.assigns.book
 
     members =
-      book
-      |> Members.list_members_of_book()
+      from([book_member: book_member] in BookMember.base_query(),
+        left_join: user in assoc(book_member, :user),
+        where: book_member.book_id == ^book.id,
+        order_by: [asc: coalesce(user.display_name, book_member.nickname)]
+      )
+      |> BookMember.select_display_name()
+      |> BookMember.select_email()
+      |> BookMember.select_invitation_sent()
+      |> Repo.all()
       |> Balance.fill_members_balance()
 
     socket =
@@ -77,7 +87,7 @@ defmodule AppWeb.BookMemberLive do
         <div class="flex justify-between">
           <%= format_role(@member.role) %>
           <span>
-            <.member_status member={@member} />
+            <.member_status_text member={@member} />
           </span>
         </div>
       </:description>
@@ -86,13 +96,22 @@ defmodule AppWeb.BookMemberLive do
   end
 
   defp member_avatar(assigns) do
-    ~H"""
-    <%= if Members.independent?(@member) do %>
-      <.icon size={:lg} name="pending" class="mx-1" />
-    <% else %>
-      <.avatar src={Avatars.avatar_url(@member)} alt="" />
-    <% end %>
-    """
+    case member_status(assigns.member) do
+      :joined ->
+        ~H"""
+        <.avatar src={Avatars.avatar_url(@member)} alt="" />
+        """
+
+      :invitation_sent ->
+        ~H"""
+        <.icon size={:lg} name="pending" class="mx-1" />
+        """
+
+      :no_user ->
+        ~H"""
+        <.icon size={:lg} name="person_off" class="mx-1" />
+        """
+    end
   end
 
   defp member_balance(assigns) do
@@ -121,17 +140,33 @@ defmodule AppWeb.BookMemberLive do
   defp format_role(:member), do: gettext("Member")
   defp format_role(:viewer), do: gettext("Viewer")
 
-  defp member_status(assigns) do
-    if Members.independent?(assigns.member) do
-      ~H"""
-      <%= gettext("Invitation sent") %>
-      <.icon name="pending" />
-      """
-    else
-      ~H"""
-      <%= gettext("Joined") %>
-      <.icon name="check" />
-      """
+  defp member_status_text(assigns) do
+    case member_status(assigns.member) do
+      :joined ->
+        ~H"""
+        <%= gettext("Joined") %>
+        <.icon name="check" />
+        """
+
+      :invitation_sent ->
+        ~H"""
+        <%= gettext("Invitation sent") %>
+        <.icon name="pending" />
+        """
+
+      :no_user ->
+        ~H"""
+        <%= gettext("No user") %>
+        <.icon name="person_off" />
+        """
+    end
+  end
+
+  defp member_status(member) do
+    cond do
+      member.user_id != nil -> :joined
+      member.invitation_sent -> :invitation_sent
+      true -> :no_user
     end
   end
 end
