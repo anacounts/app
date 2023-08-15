@@ -148,8 +148,13 @@ defmodule App.Balance do
     %{member | balance: {:error, reasons}}
   end
 
-  # checks if the computed balance of the member has an error
-  defp has_balance_error?(member), do: match?({:error, _reasons}, member.balance)
+  @doc """
+  Checks if the computed balance of the member has an error.
+  """
+  @spec has_balance_error?(BookMember.t()) :: boolean()
+  def has_balance_error?(member) do
+    match?({:error, _reasons}, member.balance)
+  end
 
   @typedoc """
   A type representing a transaction between two members.

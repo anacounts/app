@@ -26,13 +26,7 @@ defmodule AppWeb.BookMemberLive do
         <%= gettext("Invite a new member") %>
       </.tile>
 
-      <.member_tile :for={member <- @linked_members} member={member} />
-
-      <.heading :if={not Enum.empty?(@independent_members)} level={:section} class="mt-6">
-        <%= gettext("Pending members") %>
-      </.heading>
-
-      <.member_tile :for={member <- @independent_members} member={member} />
+      <.member_tile :for={member <- @members} member={member} />
     </div>
     """
   end
@@ -46,14 +40,11 @@ defmodule AppWeb.BookMemberLive do
       |> Members.list_members_of_book()
       |> Balance.fill_members_balance()
 
-    {independent_members, linked_members} = Enum.split_with(members, &Members.independent?/1)
-
     socket =
       assign(socket,
         page_title: book.name,
         layout_heading: gettext("Details"),
-        linked_members: linked_members,
-        independent_members: independent_members
+        members: members
       )
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}
@@ -73,22 +64,14 @@ defmodule AppWeb.BookMemberLive do
   defp member_tile(assigns) do
     ~H"""
     <.tile collapse>
-      <.avatar src={Avatars.avatar_url(@member)} alt="" />
+      <.member_avatar member={@member} />
       <span class="grow font-bold">
         <%= @member.display_name %>
       </span>
-      <%= if has_balance_error?(@member) do %>
-        <span class="font-bold text-gray-60">
-          XX.xx
-        </span>
-      <% else %>
-        <span class={["font-bold", class_for_member_balance(@member.balance)]}>
-          <%= @member.balance %>
-        </span>
-      <% end %>
+      <.member_balance member={@member} />
 
       <:description>
-        <.alert :if={has_balance_error?(@member)} type="error">
+        <.alert :if={Balance.has_balance_error?(@member)} type="error">
           <%= gettext("The member balance could not be computed") %>
         </.alert>
         <div class="flex justify-between">
@@ -102,12 +85,28 @@ defmodule AppWeb.BookMemberLive do
     """
   end
 
-  defp format_role(:creator), do: gettext("Creator")
-  defp format_role(:member), do: gettext("Member")
-  defp format_role(:viewer), do: gettext("Viewer")
+  defp member_avatar(assigns) do
+    ~H"""
+    <%= if Members.independent?(@member) do %>
+      <.icon size={:lg} name="pending" class="mx-1" />
+    <% else %>
+      <.avatar src={Avatars.avatar_url(@member)} alt="" />
+    <% end %>
+    """
+  end
 
-  defp has_balance_error?(member) do
-    match?({:error, _reasons}, member.balance)
+  defp member_balance(assigns) do
+    ~H"""
+    <%= if Balance.has_balance_error?(@member) do %>
+      <span class="font-bold text-gray-60">
+        XX.xx
+      </span>
+    <% else %>
+      <span class={["font-bold", class_for_member_balance(@member.balance)]}>
+        <%= @member.balance %>
+      </span>
+    <% end %>
+    """
   end
 
   defp class_for_member_balance(balance) do
@@ -117,6 +116,10 @@ defmodule AppWeb.BookMemberLive do
       true -> "text-info"
     end
   end
+
+  defp format_role(:creator), do: gettext("Creator")
+  defp format_role(:member), do: gettext("Member")
+  defp format_role(:viewer), do: gettext("Viewer")
 
   defp member_status(assigns) do
     if Members.independent?(assigns.member) do

@@ -400,10 +400,6 @@ msgid "Payment"
 msgstr "Payment"
 
 #, elixir-autogen, elixir-format
-msgid "Pending members"
-msgstr "Pending members"
-
-#, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr "Please enter a new password for your account"
 
