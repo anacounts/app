@@ -40,69 +40,14 @@ defmodule AppWeb.BookMembersLive do
         </.tile>
       </div>
 
-      <.member_tile :for={member <- @members} member={member} />
+      <.tile :for={member <- @members} navigate={~p"/books/#{@book}/members/#{member}"}>
+        <.member_avatar member={member} />
+        <span class="grow font-bold">
+          <%= member.display_name %>
+        </span>
+        <.member_balance member={member} />
+      </.tile>
     </div>
-    """
-  end
-
-  @impl Phoenix.LiveView
-  def mount(_params, _session, socket) do
-    book = socket.assigns.book
-
-    members =
-      from([book_member: book_member] in BookMember.base_query(),
-        left_join: user in assoc(book_member, :user),
-        where: book_member.book_id == ^book.id,
-        order_by: [asc: coalesce(user.display_name, book_member.nickname)]
-      )
-      |> BookMember.select_display_name()
-      |> BookMember.select_email()
-      |> BookMember.select_invitation_sent()
-      |> Repo.all()
-      |> Balance.fill_members_balance()
-
-    socket =
-      assign(socket,
-        page_title: book.name,
-        layout_heading: gettext("Details"),
-        members: members
-      )
-
-    {:ok, socket, layout: {AppWeb.Layouts, :book}}
-  end
-
-  @impl Phoenix.LiveView
-  def handle_event("delete", _params, socket) do
-    # TODO Handle errors (e.g. if the user is not allowed to delete the book)
-    {:ok, _} = Books.delete_book(socket.assigns.book, socket.assigns.current_user)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
-  end
-
-  defp member_tile(assigns) do
-    ~H"""
-    <.tile collapse>
-      <.member_avatar member={@member} />
-      <span class="grow font-bold">
-        <%= @member.display_name %>
-      </span>
-      <.member_balance member={@member} />
-
-      <:description>
-        <.alert :if={Balance.has_balance_error?(@member)} type="error">
-          <%= gettext("The member balance could not be computed") %>
-        </.alert>
-        <div class="flex justify-between">
-          <%= format_role(@member.role) %>
-          <span>
-            <.member_status_text member={@member} />
-          </span>
-        </div>
-      </:description>
-    </.tile>
     """
   end
 
@@ -147,30 +92,41 @@ defmodule AppWeb.BookMembersLive do
     end
   end
 
-  defp format_role(:creator), do: gettext("Creator")
-  defp format_role(:member), do: gettext("Member")
-  defp format_role(:viewer), do: gettext("Viewer")
+  @impl Phoenix.LiveView
+  def mount(_params, _session, socket) do
+    book = socket.assigns.book
 
-  defp member_status_text(assigns) do
-    case member_status(assigns.member) do
-      :joined ->
-        ~H"""
-        <%= gettext("Joined") %>
-        <.icon name="check" />
-        """
+    members =
+      from([book_member: book_member] in BookMember.base_query(),
+        left_join: user in assoc(book_member, :user),
+        where: book_member.book_id == ^book.id,
+        order_by: [asc: coalesce(user.display_name, book_member.nickname)]
+      )
+      |> BookMember.select_display_name()
+      |> BookMember.select_email()
+      |> BookMember.select_invitation_sent()
+      |> Repo.all()
+      |> Balance.fill_members_balance()
 
-      :invitation_sent ->
-        ~H"""
-        <%= gettext("Invitation sent") %>
-        <.icon name="pending" />
-        """
+    socket =
+      assign(socket,
+        page_title: book.name,
+        layout_heading: gettext("Details"),
+        members: members
+      )
 
-      :no_user ->
-        ~H"""
-        <%= gettext("No user") %>
-        <.icon name="person_off" />
-        """
-    end
+    {:ok, socket, layout: {AppWeb.Layouts, :book}}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("delete", _params, socket) do
+    # TODO Handle errors (e.g. if the user is not allowed to delete the book)
+    {:ok, _} = Books.delete_book(socket.assigns.book, socket.assigns.current_user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Book deleted successfully"))
+     |> push_navigate(to: ~p"/books")}
   end
 
   defp member_status(member) do
