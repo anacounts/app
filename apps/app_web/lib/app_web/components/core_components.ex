@@ -575,7 +575,7 @@ defmodule AppWeb.CoreComponents do
     Incompatible with `:collapse`.
     """
 
-  attr :class, :any, default: nil, doc: "Extra classes to add to the tile"
+  attr :summary_class, :any, default: nil, doc: "Extra classes to add to the tile"
 
   attr :rest, :global
 
@@ -596,7 +596,7 @@ defmodule AppWeb.CoreComponents do
   def tile(%{collapse: true} = assigns) do
     ~H"""
     <details class="tile" {@rest}>
-      <summary class={["tile__summary", @class]}>
+      <summary class={["tile__summary", @summary_class]}>
         <%= render_slot(@inner_block) %>
         <.icon class="tile__collapse-icon" name="expand-more" />
       </summary>
@@ -619,7 +619,7 @@ defmodule AppWeb.CoreComponents do
   def tile(%{navigate: _} = assigns) do
     ~H"""
     <.link class="tile tile--clickable" navigate={@navigate} {@rest}>
-      <div class={["tile__summary", @class]}>
+      <div class={["tile__summary", @summary_class]}>
         <%= render_slot(@inner_block) %>
       </div>
     </.link>

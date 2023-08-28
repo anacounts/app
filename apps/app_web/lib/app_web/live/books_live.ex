@@ -21,7 +21,7 @@ defmodule AppWeb.BooksLive do
         <%= message %>
       </.alert>
 
-      <.tile :if={Enum.empty?(@books)} class="text-xl" navigate={~p"/books/new"}>
+      <.tile :if={Enum.empty?(@books)} summary_class="text-xl" navigate={~p"/books/new"}>
         <.icon name="add" />
         <%= gettext("Create your first book") %>
       </.tile>
