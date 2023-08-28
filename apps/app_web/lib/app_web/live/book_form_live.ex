@@ -12,7 +12,7 @@ defmodule AppWeb.BookFormLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header back_to={@back_to}>
+    <.page_header>
       <:title>
         <%= if @live_action == :new,
           do: gettext("New Book"),
@@ -54,7 +54,6 @@ defmodule AppWeb.BookFormLive do
 
     assign(socket,
       page_title: gettext("New Book"),
-      back_to: ~p"/books",
       book: book,
       changeset: Books.change_book(book)
     )
@@ -65,7 +64,6 @@ defmodule AppWeb.BookFormLive do
 
     assign(socket,
       page_title: gettext("Edit Book · %{name}", name: book.name),
-      back_to: ~p"/books/#{book}/transfers",
       book: book,
       changeset: Books.change_book(book)
     )
@@ -86,9 +84,11 @@ defmodule AppWeb.BookFormLive do
   end
 
   defp save_book(socket, :edit, book_params) do
-    case Books.update_book(socket.assigns.book, socket.assigns.current_user, book_params) do
+    %{book: book, current_user: current_user} = socket.assigns
+
+    case Books.update_book(book, current_user, book_params) do
       {:ok, _book} ->
-        {:noreply, push_navigate(socket, to: socket.assigns.back_to)}
+        {:noreply, push_navigate(socket, to: ~p"/books/#{book}/transfers")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

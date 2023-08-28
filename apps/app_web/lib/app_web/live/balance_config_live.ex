@@ -6,7 +6,7 @@ defmodule AppWeb.BalanceConfigLive do
 
   def render(assigns) do
     ~H"""
-    <.page_header back_to={~p"/users/settings"}>
+    <.page_header>
       <:title><%= gettext("Balance Settings") %></:title>
     </.page_header>
 

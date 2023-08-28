@@ -20,7 +20,7 @@ defmodule AppWeb.MoneyTransferFormLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header back_to={~p"/books/#{@book}/transfers"}>
+    <.page_header>
       <:title>
         <%= if @live_action == :new,
           do: gettext("New Transfer"),

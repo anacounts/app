@@ -18,7 +18,7 @@ defmodule AppWeb.BookInvitationsLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header back_to={~p"/books/#{@book}/members"}>
+    <.page_header>
       <:title><%= gettext("Invitations") %></:title>
     </.page_header>
 

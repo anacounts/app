@@ -14,6 +14,8 @@ defmodule AppWeb.PageComponents do
   import AppWeb.Gettext
   import AppWeb.CoreComponents
 
+  alias Phoenix.LiveView.JS
+
   ## Page header
 
   @doc """
@@ -23,7 +25,7 @@ defmodule AppWeb.PageComponents do
 
   ## Examples
 
-      <.page_header back_to="#">
+      <.page_header hide_back>
         <:title>Anacounts</:title>
 
         <:menu>
@@ -59,9 +61,13 @@ defmodule AppWeb.PageComponents do
     <header class="flex items-center gap-2
                    h-14 mb-2 px-4
                    bg-theme text-white shadow">
-      <.link :if={assigns[:back_to]} navigate={@back_to} class="button button--ghost">
+      <.button
+        :if={assigns[:hide_back] != true}
+        color={:ghost}
+        phx-click={JS.dispatch("app:navigate-back")}
+      >
         <.icon name="arrow-back" alt={gettext("Go back")} />
-      </.link>
+      </.button>
 
       <.heading level={:title} class="mr-auto"><%= render_slot(@title) %></.heading>
 

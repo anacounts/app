@@ -1,4 +1,4 @@
-<.page_header back_to={~p"/books"}>
+<.page_header>
   <:title><%= @book.name %></:title>
 
   <:tab_item navigate={~p"/books/#{@book}/members"} active={@socket.view == AppWeb.BookMemberLive}>
