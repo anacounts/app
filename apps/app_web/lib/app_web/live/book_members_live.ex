@@ -1,4 +1,4 @@
-defmodule AppWeb.BookMemberLive do
+defmodule AppWeb.BookMembersLive do
   @moduledoc """
   The book member index live view.
   Displays the members of a book.

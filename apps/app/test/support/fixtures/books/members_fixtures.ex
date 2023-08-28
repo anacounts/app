@@ -8,23 +8,18 @@ defmodule App.Books.MembersFixtures do
 
   alias App.Books.BookMember
   alias App.Books.InvitationToken
-  alias App.Books.Members
 
-  def book_member_attributes(book, attrs \\ %{}) do
+  def book_member_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
-      book_id: book.id,
       role: :member,
-      nickname: "Member of #{book.name}"
+      nickname: "Member #{System.unique_integer()}"
     })
   end
 
   def book_member_fixture(book, attrs \\ %{}) do
-    attrs_map = Enum.into(attrs, %{})
-    virtual_fields = Map.take(attrs_map, BookMember.__schema__(:virtual_fields))
-
-    {:ok, book_member} = Members.create_book_member(book, book_member_attributes(book, attrs_map))
-
-    Map.merge(book_member, virtual_fields)
+    %BookMember{book_id: book.id}
+    |> Map.merge(book_member_attributes(attrs))
+    |> Repo.insert!()
   end
 
   def invitation_token_fixture(book_member, sent_to \\ default_sent_to_email()) do

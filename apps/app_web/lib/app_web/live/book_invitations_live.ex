@@ -54,7 +54,7 @@ defmodule AppWeb.BookInvitationsLive do
     book = socket.assigns.book
 
     book_member = %BookMember{book_id: book.id, role: :member}
-    changeset = Members.change_book_member(book_member)
+    changeset = Members.deprecated_change_book_member(book_member)
 
     socket =
       assign(socket,
@@ -70,7 +70,7 @@ defmodule AppWeb.BookInvitationsLive do
   def handle_event("validate_member", %{"book_member" => book_member_params}, socket) do
     changeset =
       socket.assigns.book_member
-      |> Members.change_book_member(book_member_params)
+      |> Members.deprecated_change_book_member(book_member_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -86,7 +86,7 @@ defmodule AppWeb.BookInvitationsLive do
     with {:ok, book_member} <-
            Members.create_book_member(socket.assigns.book, member_params_with_default),
          {:ok, email} <- maybe_deliver_invitation(socket, book_member, send_to) do
-      changeset = Members.change_book_member(socket.assigns.book_member)
+      changeset = Members.deprecated_change_book_member(socket.assigns.book_member)
 
       {:noreply,
        socket
