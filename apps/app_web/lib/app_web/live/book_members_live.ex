@@ -21,13 +21,24 @@ defmodule AppWeb.BookMembersLive do
   def render(assigns) do
     ~H"""
     <div class="max-w-prose mx-auto">
-      <.tile
-        :if={Rights.can_member_invite_new_member?(@current_member)}
-        navigate={~p"/books/#{@book}/invite"}
-      >
-        <.icon name="person-add" />
-        <%= gettext("Invite a new member") %>
-      </.tile>
+      <div class="grid grid-cols-2">
+        <.tile
+          :if={Rights.can_member_invite_new_member?(@current_member)}
+          navigate={~p"/books/#{@book}/invite"}
+          summary_class="justify-center"
+        >
+          <.icon name="mail" />
+          <%= gettext("Invite people") %>
+        </.tile>
+        <.tile
+          :if={Rights.can_member_invite_new_member?(@current_member)}
+          navigate={~p"/books/#{@book}/members/new"}
+          summary_class="justify-center"
+        >
+          <.icon name="person-add" />
+          <%= gettext("Create manually") %>
+        </.tile>
+      </div>
 
       <.member_tile :for={member <- @members} member={member} />
     </div>

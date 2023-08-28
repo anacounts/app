@@ -17,8 +17,9 @@ defmodule AppWeb.BookMembersLiveTest do
     assert html =~ book.name <> "\n</h1>"
     # the tabs are displayed
     assert html =~ "Members"
-    # there is a link to go to the invitations page
-    assert html =~ ~s{href="#{~p|/books/#{book}/invite|}"}
+    # there are links that go to the invitation and member creation pages
+    assert html =~ ~s(href="#{~p|/books/#{book}/invite|}")
+    assert html =~ ~s(href="#{~p|/books/#{book}/members/new|}")
     # the member is displayed, along with its balance and join status
     # FIXME It's not possible to set the `display_name` in the fixture
     # assert html =~ "Samuel"
