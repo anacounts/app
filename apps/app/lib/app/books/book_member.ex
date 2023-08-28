@@ -63,7 +63,10 @@ defmodule App.Books.BookMember do
 
   ## Changeset
 
-  def changeset(struct, attrs) do
+  # Most of the validations done here are useless, unexpected wrong values should
+  # be caught by the database and make the process crash
+  # TODO use a simpler changeset, validating only what can be changed in interfaces
+  def deprecated_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:user_id, :role, :nickname])
     |> validate_book_id()

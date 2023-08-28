@@ -141,7 +141,7 @@ defmodule App.Books.Members do
   def create_book_member(%Book{} = book, attrs) do
     %BookMember{book_id: book.id}
     # set the member role as default, it can be changed later
-    |> BookMember.changeset(attrs)
+    |> BookMember.deprecated_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -190,7 +190,7 @@ defmodule App.Books.Members do
   def accept_invitation(%BookMember{user_id: nil} = book_member, %User{} = user) do
     {:ok, %{book_member: book_member}} =
       Ecto.Multi.new()
-      |> Ecto.Multi.update(:book_member, BookMember.changeset(book_member, %{user_id: user.id}))
+      |> Ecto.Multi.update(:book_member, BookMember.deprecated_changeset(book_member, %{user_id: user.id}))
       |> link_user_balance_configs_multi(user)
       |> maybe_try_to_delete_balance_config_multi(book_member.balance_config_id)
       |> Ecto.Multi.delete_all(
@@ -230,6 +230,6 @@ defmodule App.Books.Members do
   """
   @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
   def change_book_member(book_member, attrs \\ %{}) do
-    BookMember.changeset(book_member, attrs)
+    BookMember.deprecated_changeset(book_member, attrs)
   end
 end

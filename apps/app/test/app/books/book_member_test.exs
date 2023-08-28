@@ -10,10 +10,10 @@ defmodule App.Books.BookMemberTest do
     %{book: book_fixture()}
   end
 
-  describe "changeset/2" do
+  describe "deprecated_changeset/2" do
     test "does not change the `:book_id`", %{book: book} do
       book_member = book_member_fixture(book)
-      changeset = BookMember.changeset(book_member, %{book_id: 1})
+      changeset = BookMember.deprecated_changeset(book_member, %{book_id: 1})
 
       assert changeset.valid?
       assert changeset.changes == %{}
@@ -21,7 +21,7 @@ defmodule App.Books.BookMemberTest do
 
     test "does not change the `:balance_config_id`", %{book: book} do
       book_member = book_member_fixture(book)
-      changeset = BookMember.changeset(book_member, %{balance_config_id: 1})
+      changeset = BookMember.deprecated_changeset(book_member, %{balance_config_id: 1})
 
       assert changeset.valid?
       assert changeset.changes == %{}
