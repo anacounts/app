@@ -6,9 +6,6 @@ defmodule AppWeb.BookInvitationsLive do
 
   use AppWeb, :live_view
 
-  alias App.Accounts
-  alias App.Accounts.Avatars
-  alias App.Books
   alias App.Books.BookMember
   alias App.Books.Members
 
@@ -48,47 +45,25 @@ defmodule AppWeb.BookInvitationsLive do
           <%= gettext("Create member") %>
         </.button>
       </.form>
-
-      <.heading :if={not Enum.empty?(@invitations_suggestions)} level={:section} class="mt-6">
-        <%= gettext("Suggestions") %>
-      </.heading>
-
-      <ul class="mx-4">
-        <li :for={user <- @invitations_suggestions} class="flex items-center gap-2 my-4">
-          <.avatar src={Avatars.avatar_url(user)} alt="" />
-          <span class="grow font-bold"><%= user.display_name %></span>
-          <.button
-            color={:cta}
-            class="mr-4"
-            phx-click="invite_user"
-            phx-value-id={user.id}
-            phx-disable-with={gettext("Inviting...")}
-          >
-            <%= gettext("Invite") %>
-          </.button>
-        </li>
-      </ul>
     </main>
     """
   end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    %{book: book, current_user: current_user} = socket.assigns
+    book = socket.assigns.book
 
     book_member = %BookMember{book_id: book.id, role: :member}
     changeset = Members.change_book_member(book_member)
-    invitations_suggestions = Books.invitations_suggestions(book, current_user)
 
     socket =
       assign(socket,
         page_title: gettext("Invitations · %{book_name}", book_name: book.name),
         book_member: book_member,
-        changeset: changeset,
-        invitations_suggestions: invitations_suggestions
+        changeset: changeset
       )
 
-    {:ok, socket, temporary_assigns: [invitations_suggestions: []]}
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
@@ -117,25 +92,6 @@ defmodule AppWeb.BookInvitationsLive do
        socket
        |> put_flash(:info, member_created_flash(email))
        |> assign(changeset: changeset)}
-    end
-  end
-
-  def handle_event("invite_user", %{"id" => id}, socket) do
-    book = socket.assigns.book
-    user = Accounts.get_user!(id)
-
-    with {:ok, book_member} <-
-           Members.create_book_member(socket.assigns.book, %{
-             nickname: user.display_name,
-             role: :member
-           }),
-         {:ok, _email} <- deliver_invitation(socket, book_member, user.email) do
-      {:noreply,
-       socket
-       |> assign(
-         invitations_suggestions: Books.invitations_suggestions(book, socket.assigns.current_user)
-       )
-       |> put_flash(:info, gettext("Invitation sent"))}
     end
   end
 
