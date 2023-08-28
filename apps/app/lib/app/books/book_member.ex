@@ -10,7 +10,6 @@ defmodule App.Books.BookMember do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Books.Book
-  alias App.Books.InvitationToken
   alias App.Books.Role
 
   @type id :: integer()
@@ -22,7 +21,6 @@ defmodule App.Books.BookMember do
           role: Role.t(),
           user_id: User.id() | nil,
           user: User.t() | nil,
-          invitation_sent: boolean(),
           deleted_at: NaiveDateTime.t(),
           nickname: String.t(),
           display_name: String.t() | nil,
@@ -39,7 +37,6 @@ defmodule App.Books.BookMember do
     field :role, Ecto.Enum, values: Role.all()
 
     belongs_to :user, User
-    field :invitation_sent, :boolean, virtual: true
 
     field :deleted_at, :naive_datetime
 
@@ -114,21 +111,6 @@ defmodule App.Books.BookMember do
   """
   def base_query do
     from __MODULE__, as: :book_member
-  end
-
-  @doc """
-  Updates an `%Ecto.Query{}` to select the `:invitation_sent` field of book members.
-  """
-  @spec select_invitation_sent(Ecto.Query.t()) :: Ecto.Query.t()
-  def select_invitation_sent(query) do
-    from [book_member: book_member] in query,
-      select_merge: %{
-        invitation_sent:
-          exists(
-            from invitation_token in InvitationToken,
-              where: invitation_token.book_member_id == parent_as(:book_member).id
-          )
-      }
   end
 
   @doc """

@@ -6,13 +6,10 @@ defmodule AppWeb.BookMembersLive do
 
   use AppWeb, :live_view
 
-  import Ecto.Query
-  alias App.Repo
-
   alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
-  alias App.Books.BookMember
+  alias App.Books.Members
   alias App.Books.Rights
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -52,22 +49,19 @@ defmodule AppWeb.BookMembersLive do
   end
 
   defp member_avatar(assigns) do
-    case member_status(assigns.member) do
-      :joined ->
-        ~H"""
-        <.avatar src={Avatars.avatar_url(@member)} alt="" />
-        """
-
-      :invitation_sent ->
-        ~H"""
-        <.icon size={:lg} name="pending" class="mx-1" />
-        """
-
-      :no_user ->
-        ~H"""
-        <.icon size={:lg} name="person_off" class="mx-1" />
-        """
+    if has_user?(assigns.member) do
+      ~H"""
+      <.avatar src={Avatars.avatar_url(@member)} alt="" />
+      """
+    else
+      ~H"""
+      <.icon size={:lg} name="person_off" class="mx-1" />
+      """
     end
+  end
+
+  defp has_user?(book_member) do
+    book_member.user_id != nil
   end
 
   defp member_balance(assigns) do
@@ -97,15 +91,8 @@ defmodule AppWeb.BookMembersLive do
     book = socket.assigns.book
 
     members =
-      from([book_member: book_member] in BookMember.base_query(),
-        left_join: user in assoc(book_member, :user),
-        where: book_member.book_id == ^book.id,
-        order_by: [asc: coalesce(user.display_name, book_member.nickname)]
-      )
-      |> BookMember.select_display_name()
-      |> BookMember.select_email()
-      |> BookMember.select_invitation_sent()
-      |> Repo.all()
+      book
+      |> Members.list_members_of_book()
       |> Balance.fill_members_balance()
 
     socket =
@@ -127,13 +114,5 @@ defmodule AppWeb.BookMembersLive do
      socket
      |> put_flash(:info, gettext("Book deleted successfully"))
      |> push_navigate(to: ~p"/books")}
-  end
-
-  defp member_status(member) do
-    cond do
-      member.user_id != nil -> :joined
-      member.invitation_sent -> :invitation_sent
-      true -> :no_user
-    end
   end
 end

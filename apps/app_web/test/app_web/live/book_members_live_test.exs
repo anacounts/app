@@ -9,7 +9,9 @@ defmodule AppWeb.BookMembersLiveTest do
   setup [:register_and_log_in_user, :book_with_member_context]
 
   test "displays book members", %{conn: conn, book: book} do
-    _member = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
+    _member1 = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
+    _member2 = book_member_fixture(book, nickname: "John")
+    _other_member = book_member_fixture(book_fixture(), nickname: "Eric")
 
     {:ok, _show_live, html} = live(conn, ~p"/books/#{book}/members")
 
@@ -20,7 +22,14 @@ defmodule AppWeb.BookMembersLiveTest do
     # there are links that go to the invitation and member creation pages
     assert html =~ ~s(href="#{~p|/books/#{book}/invite|}")
     assert html =~ ~s(href="#{~p|/books/#{book}/members/new|}")
+    # the members are displayed, along with their status as an icon
     assert html =~ "Samuel"
+    assert html =~ ~s(class="avatar)
+
+    assert html =~ "John"
+    assert html =~ ~s(person_off)
+
+    refute html =~ "Eric"
   end
 
   test "tiles navigate to the member page", %{conn: conn, book: book} do
