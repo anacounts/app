@@ -7,7 +7,6 @@ defmodule App.Books.MembersFixtures do
   alias App.Repo
 
   alias App.Books.BookMember
-  alias App.Books.InvitationToken
 
   def book_member_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -20,13 +19,6 @@ defmodule App.Books.MembersFixtures do
     %BookMember{book_id: book.id}
     |> Map.merge(book_member_attributes(attrs))
     |> Repo.insert!()
-  end
-
-  def invitation_token_fixture(book_member, sent_to \\ default_sent_to_email()) do
-    {hashed_token, invitation_token} =
-      InvitationToken.build_invitation_token(book_member, sent_to)
-
-    {hashed_token, Repo.insert!(invitation_token)}
   end
 
   defp default_sent_to_email, do: "sent_to#{System.unique_integer()}@example.com"
