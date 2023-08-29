@@ -9,8 +9,11 @@ defmodule App.Books do
   alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.BookMember
+  alias App.Books.InvitationToken
   alias App.Books.Members
   alias App.Books.Rights
+
+  ## Database getters
 
   @doc """
   Gets a single book.
@@ -92,6 +95,8 @@ defmodule App.Books do
       on: member.book_id == book.id,
       where: member.user_id == ^user.id
   end
+
+  ## CRUD
 
   @doc """
   Creates a book.
@@ -196,5 +201,30 @@ defmodule App.Books do
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
+  end
+
+  ## Invitations
+
+  @doc """
+  Get the invitation token for a book.
+  """
+  @spec get_book_invitation_token(Book.t()) :: String.t()
+  def get_book_invitation_token(book) do
+    get_book_token(book) || insert_book_token(book)
+  end
+
+  defp get_book_token(book) do
+    invitation_token =
+      book
+      |> InvitationToken.book_tokens_query()
+      |> Repo.one()
+
+    invitation_token && Base.url_encode64(invitation_token.token, padding: false)
+  end
+
+  defp insert_book_token(book) do
+    {encoded_token, invitation_token} = InvitationToken.build_invitation_token(book)
+    Repo.insert!(invitation_token)
+    encoded_token
   end
 end

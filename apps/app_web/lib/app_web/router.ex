@@ -85,7 +85,8 @@ defmodule AppWeb.Router do
       live "/books/:book_id/balance", BookBalanceLive, :show
     end
 
-    resources "/invitation", BookInvitationController, param: "token", only: [:edit, :update]
+    get "/invitations/:token", BookInvitationController, :edit
+    put "/invitations/:token", BookInvitationController, :update
   end
 
   ## Metrics routes

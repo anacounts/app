@@ -9,6 +9,7 @@ defmodule App.BooksFixtures do
   alias App.Repo
 
   alias App.Books.Book
+  alias App.Books.InvitationToken
 
   def book_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -20,5 +21,10 @@ defmodule App.BooksFixtures do
   def book_fixture(attrs \\ %{}) do
     struct!(Book, book_attributes(attrs))
     |> Repo.insert!()
+  end
+
+  def invitation_token_fixture(book) do
+    {encoded_token, invitation_token} = InvitationToken.build_invitation_token(book)
+    {encoded_token, Repo.insert!(invitation_token)}
   end
 end
