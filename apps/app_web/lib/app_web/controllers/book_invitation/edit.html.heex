@@ -1,13 +1,44 @@
 <div class="text-center">
   <p class="text-xl mb-4">
-    <%= gettext("Hi %{user_name}", user_name: @current_user.display_name) %>
+    <%= gettext("Hi %{user_name} 👋", user_name: @current_user.display_name) %>
   </p>
   <p class="mb-2"><%= gettext("You have been invited to join a new book:") %></p>
   <p class="text-3xl font-bold mb-8"><%= @book.name %></p>
 
-  <.button href={~p"/invitation/#{@token}"} method="put" color={:cta} class="w-32">
-    <%= gettext("Join") %>
-  </.button>
+  <.form for={@form} action={~p"/invitations/#{@token}"} method="put">
+    <%= if Enum.empty?(@members) do %>
+      <.input type="hidden" field={@form[:id]} value="new" />
+    <% else %>
+      <p class="mb-2 font-bold"><%= gettext("Who are you?") %></p>
+
+      <ul class="flex flex-col items-start w-fit mx-auto mb-4 divide-y divide-gray-40">
+        <li :for={member <- @members} class="h-12 w-full">
+          <.input
+            type="radio"
+            field={@form[:id]}
+            value={member.id}
+            label={member.display_name}
+            label_class="h-full leading-[3rem] mb-0 px-4 text-left"
+            required
+          />
+        </li>
+        <li class="h-12 w-full">
+          <.input
+            type="radio"
+            field={@form[:id]}
+            value="new"
+            label={gettext("Someone new")}
+            label_class="h-full leading-[3rem] mb-0 px-4 text-left"
+            required
+          />
+        </li>
+      </ul>
+    <% end %>
+
+    <.button color={:cta} class="w-32">
+      <%= gettext("Join") %>
+    </.button>
+  </.form>
 </div>
 
 <div class="mt-8

@@ -254,6 +254,23 @@ defmodule App.BooksTest do
     end
   end
 
+  describe "get_book_by_invitation_token/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "returns the linked book", %{book: book} do
+      {encoded_token, _} = invitation_token_fixture(book)
+
+      assert found = Books.get_book_by_invitation_token(encoded_token)
+      assert found.id == book.id
+    end
+
+    test "returns `nil` if the invitation token doesn't exist" do
+      assert Books.get_book_by_invitation_token("foo") == nil
+    end
+  end
+
   defp book_with_creator_context(_context), do: book_with_member_role(:creator)
 
   defp book_with_member_context(_context), do: book_with_member_role(:member)

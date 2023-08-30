@@ -206,7 +206,7 @@ defmodule App.Books do
   ## Invitations
 
   @doc """
-  Get the invitation token for a book.
+  Get the invitation token of the book, that shall be used to invite users to the book.
   """
   @spec get_book_invitation_token(Book.t()) :: String.t()
   def get_book_invitation_token(book) do
@@ -226,5 +226,17 @@ defmodule App.Books do
     {encoded_token, invitation_token} = InvitationToken.build_invitation_token(book)
     Repo.insert!(invitation_token)
     encoded_token
+  end
+
+  @doc """
+  Get the book linked to an invitation token. Returns `nil` if the token is invalid,
+  not found, or expired.
+  """
+  @spec get_book_by_invitation_token(String.t()) :: Book.t() | nil
+  def get_book_by_invitation_token(invitation_token) do
+    case InvitationToken.verify_invitation_token_query(invitation_token) do
+      {:ok, query} -> Repo.one(query)
+      :error -> nil
+    end
   end
 end

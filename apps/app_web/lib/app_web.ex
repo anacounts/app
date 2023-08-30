@@ -42,6 +42,9 @@ defmodule AppWeb do
         formats: [:html, :json],
         layouts: [html: AppWeb.Layouts]
 
+      # Import Phoenix form helpers
+      import Phoenix.Component, only: [to_form: 2]
+
       import Plug.Conn
       import AppWeb.Gettext
 
@@ -83,6 +86,7 @@ defmodule AppWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
+
       # Core UI components and translation
       import AppWeb.CoreComponents
       import AppWeb.PageComponents

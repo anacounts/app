@@ -20,12 +20,4 @@ defmodule App.Books.MembersFixtures do
     |> Map.merge(book_member_attributes(attrs))
     |> Repo.insert!()
   end
-
-  defp default_sent_to_email, do: "sent_to#{System.unique_integer()}@example.com"
-
-  def extract_invitation_token(fun) do
-    {:ok, captured_email} = fun.(&"[TOKEN]#{&1}[TOKEN]")
-    [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
-    token
-  end
 end

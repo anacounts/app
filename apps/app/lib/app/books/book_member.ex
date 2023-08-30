@@ -66,38 +66,6 @@ defmodule App.Books.BookMember do
     |> validate_nickname()
   end
 
-  # Most of the validations done here are useless, unexpected wrong values should
-  # be caught by the database and make the process crash
-  # TODO use `changeset/2`, and do not use changeset for programatic changes
-  def deprecated_changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:user_id, :role, :nickname])
-    |> validate_book_id()
-    |> validate_user_id()
-    |> validate_role()
-    |> validate_nickname()
-    |> unique_constraint([:book_id, :user_id],
-      message: "user is already a member of this book",
-      error_key: :user_id
-    )
-  end
-
-  defp validate_book_id(changeset) do
-    changeset
-    |> validate_required(:book_id)
-    |> foreign_key_constraint(:book_id)
-  end
-
-  defp validate_user_id(changeset) do
-    changeset
-    |> foreign_key_constraint(:user_id)
-  end
-
-  defp validate_role(changeset) do
-    changeset
-    |> validate_required(:role)
-  end
-
   defp validate_nickname(changeset) do
     changeset
     |> validate_required(:nickname)
