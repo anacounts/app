@@ -101,21 +101,6 @@ defmodule App.Books.BookMember do
     |> validate_length(:nickname, min: 1, max: 255)
   end
 
-  @doc """
-  Changeset for updating the balance config of a book member.
-  """
-  @spec balance_config_changeset(t(), map()) :: Ecto.Changeset.t()
-  def balance_config_changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:balance_config_id])
-    |> validate_balance_config_id()
-  end
-
-  defp validate_balance_config_id(changeset) do
-    changeset
-    |> foreign_key_constraint(:balance_config_id)
-  end
-
   ## Queries
 
   @doc """

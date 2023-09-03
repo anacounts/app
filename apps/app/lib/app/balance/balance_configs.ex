@@ -96,21 +96,12 @@ defmodule App.Balance.BalanceConfigs do
 
   @doc """
   Link a member to the user's balance configuration.
-
-  ## Examples
-
-      iex> link_user_balance_configs_to_member!(user, member)
-      :ok
-
-      iex> link_user_balance_configs_to_member!(user_without_config, member)
-      :ok
-
   """
   @spec link_user_balance_configs_to_member!(User.t(), BookMember.t()) :: :ok
   def link_user_balance_configs_to_member!(user, member) do
-    member
-    |> BookMember.balance_config_changeset(%{balance_config_id: user.balance_config_id})
-    |> Repo.update!()
+    {1, nil} =
+      from(BookMember, where: [id: ^member.id])
+      |> Repo.update_all(set: [balance_config_id: user.balance_config_id])
 
     :ok
   end
