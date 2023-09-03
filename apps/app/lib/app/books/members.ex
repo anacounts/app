@@ -41,26 +41,6 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Gets a single book_member.
-
-  Raises `Ecto.NoResultsError` if the Book member does not exist.
-
-  ## Examples
-
-      iex> get_book_member!(123)
-      %BookMember{}
-
-      iex> get_book_member!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_book_member!(id) do
-    BookMember.base_query()
-    |> BookMember.select_display_name()
-    |> Repo.get!(id)
-  end
-
-  @doc """
   Get the book member entity linking a user to a book.
 
   Returns `nil` if the user is not a member of the book.
