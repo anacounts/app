@@ -173,7 +173,9 @@ defmodule App.Books.MembersTest do
     end
 
     test "links the user to the book member", %{book_member: book_member, user: user} do
-      assert {:ok, book_member} = Members.accept_invitation(book_member, user)
+      :ok = Members.accept_invitation(book_member, user)
+
+      book_member = Repo.reload(book_member)
       assert book_member.user_id == user.id
       assert book_member.balance_config_id == nil
     end
@@ -185,8 +187,10 @@ defmodule App.Books.MembersTest do
       user_balance_config = user_balance_config_fixture(user)
       user = Repo.reload(user)
 
-      assert {:ok, book_member} = Members.accept_invitation(book_member, user)
-      assert Repo.reload(book_member).balance_config_id == user_balance_config.id
+      :ok = Members.accept_invitation(book_member, user)
+
+      book_member = Repo.reload(book_member)
+      assert book_member.balance_config_id == user_balance_config.id
     end
 
     # TODO
@@ -200,7 +204,7 @@ defmodule App.Books.MembersTest do
       member_balance_config = member_balance_config_fixture(book_member)
       book_member = Repo.reload(book_member)
 
-      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
+      :ok = Members.accept_invitation(book_member, user)
 
       refute Repo.get(BalanceConfig, member_balance_config.id)
     end
@@ -219,7 +223,7 @@ defmodule App.Books.MembersTest do
       other_book_member = book_member_fixture(book_fixture())
       member_balance_config_link_fixture(other_book_member, member_balance_config)
 
-      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
+      :ok = Members.accept_invitation(book_member, user)
 
       assert Repo.get(BalanceConfig, member_balance_config.id)
     end
@@ -239,7 +243,7 @@ defmodule App.Books.MembersTest do
           Members.deliver_invitation(book_member, user.email, url)
         end)
 
-      assert {:ok, _book_member} = Members.accept_invitation(book_member, user)
+      :ok = Members.accept_invitation(book_member, user)
 
       {:ok, decoded_token} = Base.url_decode64(token, padding: false)
       refute Repo.get_by(InvitationToken, token: :crypto.hash(:sha256, decoded_token))

@@ -30,7 +30,7 @@ defmodule AppWeb.BookInvitationController do
   def update(conn, _opts) do
     %{book_member: book_member, current_user: current_user} = conn.assigns
 
-    {:ok, _book_member} = Members.accept_invitation(book_member, current_user)
+    Members.accept_invitation(book_member, current_user)
 
     conn
     |> put_flash(:info, gettext("You have been added to the book."))
