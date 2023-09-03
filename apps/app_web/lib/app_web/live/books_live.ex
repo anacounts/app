@@ -28,9 +28,6 @@ defmodule AppWeb.BooksLive do
       <.tile :for={book <- @books} navigate={~p"/books/#{book.id}/transfers"} data-book-id={book.id}>
         <.avatar src={~p"/images/book-default-avatar.png"} alt="" />
         <div class="grow text-lg line-clamp-2"><%= book.name %></div>
-        <.button color={:ghost} class="shrink-0 hover:bg-transparent">
-          <.icon name="chevron-right" alt={gettext("Open")} />
-        </.button>
       </.tile>
 
       <.fab_container>
