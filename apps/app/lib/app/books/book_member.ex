@@ -63,7 +63,10 @@ defmodule App.Books.BookMember do
 
   ## Changeset
 
-  def changeset(struct, attrs) do
+  # Most of the validations done here are useless, unexpected wrong values should
+  # be caught by the database and make the process crash
+  # TODO use a simpler changeset, validating only what can be changed in interfaces
+  def deprecated_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:user_id, :role, :nickname])
     |> validate_book_id()
@@ -96,21 +99,6 @@ defmodule App.Books.BookMember do
     changeset
     |> validate_required(:nickname)
     |> validate_length(:nickname, min: 1, max: 255)
-  end
-
-  @doc """
-  Changeset for updating the balance config of a book member.
-  """
-  @spec balance_config_changeset(t(), map()) :: Ecto.Changeset.t()
-  def balance_config_changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:balance_config_id])
-    |> validate_balance_config_id()
-  end
-
-  defp validate_balance_config_id(changeset) do
-    changeset
-    |> foreign_key_constraint(:balance_config_id)
   end
 
   ## Queries

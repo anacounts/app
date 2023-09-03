@@ -4,6 +4,7 @@ defmodule App.Balance.BalanceConfigsFixtures do
   """
   import App.AccountsFixtures
 
+  import Ecto.Query
   alias App.Repo
 
   alias App.Accounts.User
@@ -46,9 +47,15 @@ defmodule App.Balance.BalanceConfigsFixtures do
           balance_config_attributes(user_fixture(), attrs)
         )
       )
-      |> Ecto.Multi.update(
+      |> Ecto.Multi.update_all(
         :member,
-        &BookMember.balance_config_changeset(member, %{balance_config_id: &1.balance_config.id})
+        fn %{balance_config: balance_config} ->
+          from(BookMember,
+            where: [id: ^member.id],
+            update: [set: [balance_config_id: ^balance_config.id]]
+          )
+        end,
+        []
       )
       |> Repo.transaction()
 
@@ -56,12 +63,11 @@ defmodule App.Balance.BalanceConfigsFixtures do
   end
 
   def member_balance_config_link_fixture(member, balance_config) do
-    {:ok, balance_config} =
-      member
-      |> BookMember.balance_config_changeset(%{balance_config_id: balance_config.id})
-      |> Repo.update()
+    {1, nil} =
+      from(BookMember, where: [id: ^member.id])
+      |> Repo.update_all(set: [balance_config_id: balance_config.id])
 
-    balance_config
+    :ok
   end
 
   def peer_balance_config_link_fixture(peer, balance_config) do
