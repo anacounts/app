@@ -2,3 +2,7 @@ html {
   @apply accent-theme
          bg-background;
 }
+
+[hidden] {
+  @apply hidden;
+}
