@@ -12,10 +12,10 @@ defmodule AppWeb.UserSettingsLive do
     <main>
       <div class="flex items-center gap-4 mx-4 mb-4">
         <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("Your avatar")} size={:lg} />
-        <div>
+        <address class="not-italic">
           <span class="font-bold"><%= @current_user.display_name %></span>
           <div><%= @current_user.email %></div>
-        </div>
+        </address>
       </div>
 
       <.button color={:feature} class="mx-4" href={~p"/users/log_out"} method="delete">

@@ -5,6 +5,7 @@
            p-2
            border border-solid
            rounded-lg
+           text-center
            uppercase
            transition-colors;
   }
