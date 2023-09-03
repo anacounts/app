@@ -31,4 +31,10 @@
     @apply inline-block
            h-auto;
   }
+
+  [type="radio"] {
+    @apply inline-block
+           h-auto
+           mr-2;
+  }
 }
