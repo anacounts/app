@@ -17,7 +17,7 @@ defmodule AppWeb.MoneyTransfersLive do
     <div class="max-w-prose mx-auto">
       <.tile
         :for={transfer <- @money_transfers}
-        class={["font-bold", class_for_transfer_type(transfer.type)]}
+        summary_class={["font-bold", class_for_transfer_type(transfer.type)]}
         collapse
       >
         <.icon name={icon_for_transfer_type(transfer.type)} />

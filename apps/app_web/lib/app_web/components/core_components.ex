@@ -576,6 +576,7 @@ defmodule AppWeb.CoreComponents do
     """
 
   attr :class, :any, default: nil, doc: "Extra classes to add to the tile"
+  attr :summary_class, :any, default: nil, doc: "Extra classes to add to the tile summary"
 
   attr :rest, :global
 
@@ -595,8 +596,8 @@ defmodule AppWeb.CoreComponents do
 
   def tile(%{collapse: true} = assigns) do
     ~H"""
-    <details class="tile" {@rest}>
-      <summary class={["tile__summary", @class]}>
+    <details class={["tile", @class]} {@rest}>
+      <summary class={["tile__summary", @summary_class]}>
         <%= render_slot(@inner_block) %>
         <.icon class="tile__collapse-icon" name="expand-more" />
       </summary>
@@ -618,8 +619,8 @@ defmodule AppWeb.CoreComponents do
 
   def tile(%{navigate: _} = assigns) do
     ~H"""
-    <.link class="tile tile--clickable" navigate={@navigate} {@rest}>
-      <div class={["tile__summary", @class]}>
+    <.link class={["tile tile--clickable", @class]} navigate={@navigate} {@rest}>
+      <div class={["tile__summary", @summary_class]}>
         <%= render_slot(@inner_block) %>
       </div>
     </.link>
