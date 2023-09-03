@@ -737,6 +737,21 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "radio"} = assigns) do
+    # Some attributes aren't handled or are handled improperly because they were
+    # not needed in the original implementation. They can be added as needed.
+    # e.g. `:checked` does not work
+
+    # `:errors` are not displayed since they would be duplicated for each radio button
+
+    ~H"""
+    <label class={@label_class} phx-feedback-for={@name}>
+      <input type="radio" name={@name} value={@value} {@rest} />
+      <%= @label %>
+    </label>
+    """
+  end
+
   def input(%{type: "select"} = assigns) do
     ~H"""
     <label class={@label_class} phx-feedback-for={@name}>
