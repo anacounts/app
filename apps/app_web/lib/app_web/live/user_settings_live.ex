@@ -6,7 +6,7 @@ defmodule AppWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.page_header back_to={~p"/books"}>
+    <.page_header>
       <:title><%= gettext("Settings") %></:title>
     </.page_header>
     <main>
