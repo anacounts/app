@@ -62,7 +62,7 @@ defmodule AppWeb.BookInvitationController do
   defp ensure_user_is_not_member_of_book(conn, _opts) do
     %{book: book, current_user: current_user} = conn.assigns
 
-    if Members.get_membership(book.id, current_user.id) do
+    if Members.get_membership(book, current_user) do
       conn
       |> put_flash(:info, gettext("You are already member of this book"))
       |> redirect(to: ~p"/books/#{book}/transfers")

@@ -20,29 +20,17 @@
     <%= gettext("Balance") %>
   </:tab_item>
 
-  <:menu :if={
-    Rights.can_member_edit_book?(@current_member) or
-      Rights.can_member_delete_book?(@current_member)
-  }>
+  <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>
         <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
       </:toggle>
 
-      <.list_item_link
-        :if={Rights.can_member_edit_book?(@current_member)}
-        navigate={~p"/books/#{@book}/edit"}
-        replace
-      >
+      <.list_item_link navigate={~p"/books/#{@book}/edit"} replace>
         <.icon name="edit" />
         <%= gettext("Edit") %>
       </.list_item_link>
-      <.list_item_link
-        :if={Rights.can_member_delete_book?(@current_member)}
-        id="delete-book"
-        class="text-error"
-        phx-click="delete"
-      >
+      <.list_item_link id="delete-book" class="text-error" phx-click="delete">
         <.icon name="delete" />
         <%= gettext("Delete") %>
       </.list_item_link>

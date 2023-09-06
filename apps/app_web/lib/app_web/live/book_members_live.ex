@@ -10,7 +10,6 @@ defmodule AppWeb.BookMembersLive do
   alias App.Balance
   alias App.Books
   alias App.Books.Members
-  alias App.Books.Rights
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
 
@@ -19,19 +18,11 @@ defmodule AppWeb.BookMembersLive do
     ~H"""
     <div class="max-w-prose mx-auto">
       <div class="grid grid-cols-2">
-        <.tile
-          :if={Rights.can_member_invite_new_member?(@current_member)}
-          navigate={~p"/books/#{@book}/invite"}
-          summary_class="justify-center"
-        >
+        <.tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
           <.icon name="mail" />
           <%= gettext("Invite people") %>
         </.tile>
-        <.tile
-          :if={Rights.can_member_invite_new_member?(@current_member)}
-          navigate={~p"/books/#{@book}/members/new"}
-          summary_class="justify-center"
-        >
+        <.tile navigate={~p"/books/#{@book}/members/new"} summary_class="justify-center">
           <.icon name="person-add" />
           <%= gettext("Create manually") %>
         </.tile>
@@ -107,8 +98,7 @@ defmodule AppWeb.BookMembersLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete", _params, socket) do
-    # TODO Handle errors (e.g. if the user is not allowed to delete the book)
-    {:ok, _} = Books.delete_book(socket.assigns.book, socket.assigns.current_user)
+    {:ok, _} = Books.delete_book(socket.assigns.book)
 
     {:noreply,
      socket

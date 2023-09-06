@@ -6,11 +6,8 @@ defmodule App.Transfers do
   import Ecto.Query
   alias App.Repo
 
-  alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.BookMember
-  alias App.Books.Members
-  alias App.Books.Rights
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
@@ -159,58 +156,25 @@ defmodule App.Transfers do
 
   @doc """
   Updates a money_transfer.
-
-  ## Examples
-
-      iex> update_money_transfer(money_transfer, user, %{field: new_value})
-      {:ok, %MoneyTransfer{}}
-
-      iex> update_money_transfer(money_transfer, user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-      iex> update_money_transfer(money_transfer, not_allowed_user, %{field: new_value})
-      {:error, :unauthorized}
-
   """
-  @spec update_money_transfer(MoneyTransfer.t(), User.t(), map()) ::
-          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def update_money_transfer(%MoneyTransfer{} = money_transfer, %User{} = user, attrs) do
-    if can_handle_transfers?(money_transfer.book_id, user.id) do
-      money_transfer
-      # peers can be updated by the changeset
-      |> Repo.preload(:peers)
-      |> MoneyTransfer.changeset(attrs)
-      |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
-      |> Repo.update()
-    else
-      {:error, :unauthorized}
-    end
+  @spec update_money_transfer(MoneyTransfer.t(), map()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def update_money_transfer(%MoneyTransfer{} = money_transfer, attrs) do
+    money_transfer
+    # peers can be updated by the changeset
+    |> Repo.preload(:peers)
+    |> MoneyTransfer.changeset(attrs)
+    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
+    |> Repo.update()
   end
 
   @doc """
   Deletes a money_transfer.
-
-  ## Examples
-
-      iex> delete_money_transfer(money_transfer)
-      {:ok, %MoneyTransfer{}}
-
-      iex> delete_money_transfer(money_transfer)
-      {:error, %Ecto.Changeset{}}
-
   """
-  def delete_money_transfer(%MoneyTransfer{} = money_transfer, %User{} = user) do
-    if can_handle_transfers?(money_transfer.book_id, user.id) do
-      Repo.delete(money_transfer)
-    else
-      {:error, :unauthorized}
-    end
-  end
-
-  defp can_handle_transfers?(book_id, user_id) do
-    if member = Members.get_membership(book_id, user_id),
-      do: Rights.can_member_handle_money_transfers?(member),
-      else: false
+  @spec delete_money_transfer(MoneyTransfer.t()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def delete_money_transfer(%MoneyTransfer{} = money_transfer) do
+    Repo.delete(money_transfer)
   end
 
   @doc """

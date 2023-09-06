@@ -50,7 +50,7 @@ defmodule App.BooksTest do
     end
 
     test "returns `nil` if the book was deleted", %{book: book, user: user} do
-      assert {:ok, _book} = Books.delete_book(book, user)
+      assert {:ok, _book} = Books.delete_book(book)
       refute Books.get_book_of_user(book.id, user)
     end
   end
@@ -78,7 +78,7 @@ defmodule App.BooksTest do
     end
 
     test "raises if the book was deleted", %{book: book, user: user} do
-      assert {:ok, _book} = Books.delete_book(book, user)
+      assert {:ok, _book} = Books.delete_book(book)
 
       assert_raise Ecto.NoResultsError, fn ->
         Books.get_book_of_user!(book.id, user)
@@ -122,7 +122,7 @@ defmodule App.BooksTest do
       assert book.default_balance_params ==
                struct!(TransferParams, transfer_params_attributes())
 
-      assert member = Members.get_membership(book.id, user.id)
+      assert member = Members.get_membership(book, user)
       assert member.role == :creator
       assert member.balance_config_id == user.balance_config_id
     end
@@ -167,9 +167,9 @@ defmodule App.BooksTest do
   describe "update_book/2" do
     setup :book_with_creator_context
 
-    test "updates the book", %{book: book, user: user} do
+    test "updates the book", %{book: book} do
       assert {:ok, updated} =
-               Books.update_book(book, user, %{
+               Books.update_book(book, %{
                  name: "My awesome new never seen name !",
                  default_balance_params: %{means_code: :weight_by_income}
                })
@@ -182,20 +182,8 @@ defmodule App.BooksTest do
              }
     end
 
-    test "returns error unauthorized if user is not a member of the book", %{book: book} do
-      other_user = user_fixture()
-      assert {:error, :unauthorized} = Books.update_book(book, other_user, %{name: "foo"})
-    end
-
-    test "returns error unauthorized if the user if not allowed to update the book", %{book: book} do
-      other_user = user_fixture()
-      _other_member = book_member_fixture(book, user_id: other_user.id)
-
-      assert {:error, :unauthorized} = Books.update_book(book, other_user, %{name: "foo"})
-    end
-
-    test "returns error changeset with invalid data", %{book: book, user: user} do
-      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, user, @invalid_book_attrs)
+    test "returns error changeset with invalid data", %{book: book} do
+      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, @invalid_book_attrs)
 
       assert got = Books.get_book!(book.id)
       assert got.id == book.id
@@ -205,23 +193,12 @@ defmodule App.BooksTest do
   describe "delete_book/2" do
     setup :book_with_creator_context
 
-    test "deletes the book", %{book: book, user: user} do
-      assert {:ok, deleted} = Books.delete_book(book, user)
+    test "deletes the book", %{book: book} do
+      assert {:ok, deleted} = Books.delete_book(book)
       assert deleted.id == book.id
 
       assert deleted_book = Repo.get(Book, book.id)
       assert deleted_book.deleted_at
-    end
-
-    test "does not delete the book if the user is not a member of the book", %{book: book} do
-      assert {:error, :unauthorized} = Books.delete_book(book, user_fixture())
-    end
-
-    test "does not delete the book if the user is not allowed to", %{book: book} do
-      other_user = user_fixture()
-      _other_member = book_member_fixture(book, user_id: other_user.id)
-
-      assert {:error, :unauthorized} = Books.delete_book(book, other_user)
     end
   end
 

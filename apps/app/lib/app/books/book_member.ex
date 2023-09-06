@@ -10,7 +10,6 @@ defmodule App.Books.BookMember do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Books.Book
-  alias App.Books.Role
 
   @type id :: integer()
 
@@ -18,7 +17,7 @@ defmodule App.Books.BookMember do
           id: id(),
           book_id: Book.id(),
           book: Book.t(),
-          role: Role.t(),
+          role: :creator | :member,
           user_id: User.id() | nil,
           user: User.t() | nil,
           deleted_at: NaiveDateTime.t(),
@@ -34,7 +33,7 @@ defmodule App.Books.BookMember do
 
   schema "book_members" do
     belongs_to :book, Book
-    field :role, Ecto.Enum, values: Role.all()
+    field :role, Ecto.Enum, values: [:creator, :member]
 
     belongs_to :user, User
 
