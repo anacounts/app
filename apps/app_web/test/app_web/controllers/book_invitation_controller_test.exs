@@ -1,5 +1,5 @@
 defmodule AppWeb.BookInvitationControllerTest do
-  use AppWeb.ConnCase
+  use AppWeb.ConnCase, async: true
 
   import App.AccountsFixtures
   import App.BooksFixtures

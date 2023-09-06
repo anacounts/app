@@ -1,5 +1,5 @@
 defmodule AppWeb.PageControllerTest do
-  use AppWeb.ConnCase
+  use AppWeb.ConnCase, async: true
 
   import App.AccountsFixtures
 
