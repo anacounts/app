@@ -102,68 +102,6 @@ defmodule App.BooksTest do
     end
   end
 
-  describe "invitations_suggestions/2" do
-    test "returns the users the user is most in books with, ordered" do
-      book1 = book_fixture()
-      book2 = book_fixture()
-      book3 = book_fixture()
-
-      user = user_fixture()
-      _member = book_member_fixture(book1, user_id: user.id)
-      _member = book_member_fixture(book2, user_id: user.id)
-
-      other_user1 = user_fixture()
-      _member = book_member_fixture(book1, user_id: other_user1.id)
-      _member = book_member_fixture(book2, user_id: other_user1.id)
-      _member = book_member_fixture(book3, user_id: other_user1.id)
-
-      other_user2 = user_fixture()
-      _member = book_member_fixture(book2, user_id: other_user2.id)
-      _member = book_member_fixture(book3, user_id: other_user2.id)
-
-      other_user3 = user_fixture()
-      _member = book_member_fixture(book3, user_id: other_user3.id)
-
-      # pending members aren't suggested and do not interfere
-      _member = book_member_fixture(book1)
-      _member = book_member_fixture(book1)
-      _member = book_member_fixture(book2)
-
-      # `user` is in `book1` with `other_user1`,
-      #          and `book2` with `other_user1` and `other_user2`.
-      # They are most with `other_user1` (2 books), then `other_user2` (1 book),
-      # but never with `other_user3`.
-      # The function therefore returns `other_user1` first, then `other_user2`.
-
-      book = book_fixture()
-      _member = book_member_fixture(book)
-
-      assert Books.invitations_suggestions(book, user) == [other_user1, other_user2]
-    end
-
-    test "does not return user that are already members of the book" do
-      book1 = book_fixture()
-      book2 = book_fixture()
-
-      user = user_fixture()
-      _member = book_member_fixture(book1, user_id: user.id)
-      _member = book_member_fixture(book2, user_id: user.id)
-
-      other_user = user_fixture()
-      _member = book_member_fixture(book1, user_id: other_user.id)
-
-      # pending members aren't suggested and do not interfere
-      _member = book_member_fixture(book1)
-      _member = book_member_fixture(book1)
-      _member = book_member_fixture(book2)
-
-      suggested_user = user_fixture()
-      _member = book_member_fixture(book2, user_id: suggested_user.id)
-
-      assert Books.invitations_suggestions(book1, user) == [suggested_user]
-    end
-  end
-
   describe "create_book/2" do
     setup do
       %{user: user_fixture()}
@@ -294,6 +232,42 @@ defmodule App.BooksTest do
 
     test "returns a book changeset", %{book: book} do
       assert %Ecto.Changeset{} = Books.change_book(book)
+    end
+  end
+
+  describe "get_book_invitation_token/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "creates the invitation token of a book", %{book: book} do
+      assert encoded_token = Books.get_book_invitation_token(book)
+
+      assert found = Books.get_book_by_invitation_token(encoded_token)
+      assert found.id == book.id
+    end
+
+    test "returns the existing invitation if there is one", %{book: book} do
+      {encoded_token, _} = invitation_token_fixture(book)
+
+      assert ^encoded_token = Books.get_book_invitation_token(book)
+    end
+  end
+
+  describe "get_book_by_invitation_token/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "returns the linked book", %{book: book} do
+      {encoded_token, _} = invitation_token_fixture(book)
+
+      assert found = Books.get_book_by_invitation_token(encoded_token)
+      assert found.id == book.id
+    end
+
+    test "returns `nil` if the invitation token doesn't exist" do
+      assert Books.get_book_by_invitation_token("foo") == nil
     end
   end
 

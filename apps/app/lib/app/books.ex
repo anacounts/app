@@ -9,8 +9,11 @@ defmodule App.Books do
   alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.BookMember
+  alias App.Books.InvitationToken
   alias App.Books.Members
   alias App.Books.Rights
+
+  ## Database getters
 
   @doc """
   Gets a single book.
@@ -93,45 +96,7 @@ defmodule App.Books do
       where: member.user_id == ^user.id
   end
 
-  @doc """
-  Returns suggestions of people a user can invite to a book.
-
-  ## Examples
-
-      iex> invitations_suggestions(book, user)
-      [%User{}, ...]
-
-  """
-  @spec invitations_suggestions(Book.t(), User.t()) :: [User.t()]
-  def invitations_suggestions(%Book{} = book, %User{} = user) do
-    invitations_suggestions_query(book, user)
-    |> Repo.all()
-  end
-
-  # Returns a query that fetches the users the given user is most often in books with.
-  # Exludes the users that are already members of the book.
-  @spec invitations_suggestions_query(Book.t(), User.t()) :: Ecto.Query.t()
-  defp invitations_suggestions_query(book, user) do
-    from user_member in BookMember,
-      join: suggested_user_member in BookMember,
-      on: suggested_user_member.id != user_member.id,
-      on: suggested_user_member.book_id == user_member.book_id,
-      join: suggested_user in User,
-      on: suggested_user.id == suggested_user_member.user_id,
-      where: user_member.user_id == ^user.id,
-      where: suggested_user.id not in subquery(user_ids_of_book_query(book)),
-      group_by: suggested_user.id,
-      order_by: [desc: count()],
-      select: suggested_user,
-      limit: 10
-  end
-
-  defp user_ids_of_book_query(book) do
-    from book_member in BookMember,
-      where: book_member.book_id == ^book.id,
-      where: not is_nil(book_member.user_id),
-      select: book_member.user_id
-  end
+  ## CRUD
 
   @doc """
   Creates a book.
@@ -155,6 +120,7 @@ defmodule App.Books do
           role: :creator,
           book_id: book.id,
           user_id: creator.id,
+          nickname: creator.display_name,
           balance_config_id: creator.balance_config_id
         }
       end)
@@ -235,5 +201,42 @@ defmodule App.Books do
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
+  end
+
+  ## Invitations
+
+  @doc """
+  Get the invitation token of the book, that shall be used to invite users to the book.
+  """
+  @spec get_book_invitation_token(Book.t()) :: String.t()
+  def get_book_invitation_token(book) do
+    get_book_token(book) || insert_book_token(book)
+  end
+
+  defp get_book_token(book) do
+    invitation_token =
+      book
+      |> InvitationToken.book_tokens_query()
+      |> Repo.one()
+
+    invitation_token && Base.url_encode64(invitation_token.token, padding: false)
+  end
+
+  defp insert_book_token(book) do
+    {encoded_token, invitation_token} = InvitationToken.build_invitation_token(book)
+    Repo.insert!(invitation_token)
+    encoded_token
+  end
+
+  @doc """
+  Get the book linked to an invitation token. Returns `nil` if the token is invalid,
+  not found, or expired.
+  """
+  @spec get_book_by_invitation_token(String.t()) :: Book.t() | nil
+  def get_book_by_invitation_token(invitation_token) do
+    case InvitationToken.verify_invitation_token_query(invitation_token) do
+      {:ok, query} -> Repo.one(query)
+      :error -> nil
+    end
   end
 end

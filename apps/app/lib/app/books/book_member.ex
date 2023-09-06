@@ -10,7 +10,6 @@ defmodule App.Books.BookMember do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Books.Book
-  alias App.Books.InvitationToken
   alias App.Books.Role
 
   @type id :: integer()
@@ -22,7 +21,6 @@ defmodule App.Books.BookMember do
           role: Role.t(),
           user_id: User.id() | nil,
           user: User.t() | nil,
-          invitation_sent: boolean(),
           deleted_at: NaiveDateTime.t(),
           nickname: String.t(),
           display_name: String.t() | nil,
@@ -39,7 +37,6 @@ defmodule App.Books.BookMember do
     field :role, Ecto.Enum, values: Role.all()
 
     belongs_to :user, User
-    field :invitation_sent, :boolean, virtual: true
 
     field :deleted_at, :naive_datetime
 
@@ -63,36 +60,10 @@ defmodule App.Books.BookMember do
 
   ## Changeset
 
-  # Most of the validations done here are useless, unexpected wrong values should
-  # be caught by the database and make the process crash
-  # TODO use a simpler changeset, validating only what can be changed in interfaces
-  def deprecated_changeset(struct, attrs) do
+  def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:user_id, :role, :nickname])
-    |> validate_book_id()
-    |> validate_user_id()
-    |> validate_role()
+    |> cast(attrs, [:nickname])
     |> validate_nickname()
-    |> unique_constraint([:book_id, :user_id],
-      message: "user is already a member of this book",
-      error_key: :user_id
-    )
-  end
-
-  defp validate_book_id(changeset) do
-    changeset
-    |> validate_required(:book_id)
-    |> foreign_key_constraint(:book_id)
-  end
-
-  defp validate_user_id(changeset) do
-    changeset
-    |> foreign_key_constraint(:user_id)
-  end
-
-  defp validate_role(changeset) do
-    changeset
-    |> validate_required(:role)
   end
 
   defp validate_nickname(changeset) do
@@ -108,21 +79,6 @@ defmodule App.Books.BookMember do
   """
   def base_query do
     from __MODULE__, as: :book_member
-  end
-
-  @doc """
-  Updates an `%Ecto.Query{}` to select the `:invitation_sent` field of book members.
-  """
-  @spec select_invitation_sent(Ecto.Query.t()) :: Ecto.Query.t()
-  def select_invitation_sent(query) do
-    from [book_member: book_member] in query,
-      select_merge: %{
-        invitation_sent:
-          exists(
-            from invitation_token in InvitationToken,
-              where: invitation_token.book_member_id == parent_as(:book_member).id
-          )
-      }
   end
 
   @doc """

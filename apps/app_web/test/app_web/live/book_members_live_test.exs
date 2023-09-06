@@ -9,7 +9,9 @@ defmodule AppWeb.BookMembersLiveTest do
   setup [:register_and_log_in_user, :book_with_member_context]
 
   test "displays book members", %{conn: conn, book: book} do
-    _member = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
+    _member1 = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
+    _member2 = book_member_fixture(book, nickname: "John")
+    _other_member = book_member_fixture(book_fixture(), nickname: "Eric")
 
     {:ok, _show_live, html} = live(conn, ~p"/books/#{book}/members")
 
@@ -17,13 +19,29 @@ defmodule AppWeb.BookMembersLiveTest do
     assert html =~ book.name <> "\n</h1>"
     # the tabs are displayed
     assert html =~ "Members"
-    # there is a link to go to the invitations page
-    assert html =~ ~s{href="#{~p|/books/#{book}/invite|}"}
-    # the member is displayed, along with its balance and join status
-    # FIXME It's not possible to set the `display_name` in the fixture
-    # assert html =~ "Samuel"
-    assert html =~ Money.new(0, :EUR) |> Money.to_string()
-    assert html =~ "Joined"
+    # there are links that go to the invitation and member creation pages
+    assert html =~ ~s(href="#{~p|/books/#{book}/invite|}")
+    assert html =~ ~s(href="#{~p|/books/#{book}/members/new|}")
+    # the members are displayed, along with their status as an icon
+    assert html =~ "Samuel"
+    assert html =~ ~s(class="avatar)
+
+    assert html =~ "John"
+    assert html =~ ~s(person_off)
+
+    refute html =~ "Eric"
+  end
+
+  test "tiles navigate to the member page", %{conn: conn, book: book} do
+    member = book_member_fixture(book)
+
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
+
+    assert {:ok, _live, _html} =
+             live
+             |> element(".tile", member.nickname)
+             |> render_click()
+             |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
   end
 
   test "deletes book", %{conn: conn, book: book} do

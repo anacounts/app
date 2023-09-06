@@ -9,25 +9,51 @@ defmodule App.Books.Members do
   alias App.Accounts.User
   alias App.Balance.BalanceConfig
   alias App.Balance.BalanceConfigs
-  alias App.Books
   alias App.Books.Book
   alias App.Books.BookMember
-  alias App.Books.InvitationToken
-  alias App.Books.MemberNotifier
+
+  @doc """
+  Gets a single book_member.
+
+  Raises `Ecto.NoResultsError` if the book member does not exist.
+  """
+  @spec get_book_member!(BookMember.id()) :: BookMember.t()
+  def get_book_member!(id) do
+    BookMember.base_query()
+    |> BookMember.select_display_name()
+    |> Repo.get!(id)
+  end
 
   @doc """
   Lists all members of a book.
-
-  ## Examples
-
-      iex> list_members_of_book(book)
-      [%BookMember{}, ...]
-
   """
   @spec list_members_of_book(Book.t()) :: [BookMember.t()]
-  def list_members_of_book(%Book{} = book) do
+  def list_members_of_book(book) do
     members_of_book_query(book)
     |> Repo.all()
+  end
+
+  @doc """
+  Lists all members of a book that are not linked to a user.
+  """
+  @spec list_unlinked_members_of_book(Book.t()) :: [BookMember.t()]
+  def list_unlinked_members_of_book(book) do
+    members_of_book_query(book)
+    |> where([book_member: book_member], is_nil(book_member.user_id))
+    |> Repo.all()
+  end
+
+  @doc """
+  Get a single member of a book.
+
+  Raises `Ecto.NoResultsError` if the book member does not exist or
+  is not a member of the book.
+  """
+  @spec get_member_of_book!(BookMember.id(), Book.t()) :: BookMember.t()
+  def get_member_of_book!(id, book) do
+    members_of_book_query(book)
+    |> where([book_member: book_member], book_member.id == ^id)
+    |> Repo.one!()
   end
 
   defp members_of_book_query(book) do
@@ -80,85 +106,59 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Get the book member linked to an invitation token. Returns `nil` if the token is
-  invalid, not found, or if the user email does not match the email the token was
-  sent to.
-
-  ## Examples
-
-      iex> get_book_member_of_invitation_token(token, user)
-      %BookMember{}
-
-      iex> get_book_member_of_invitation_token(invalid_token, user)
-      nil
-
-      iex> get_book_member_of_invitation_token(token, user_the_token_was_not_sent_to)
-      nil
-
-  """
-  @spec get_book_member_by_invitation_token(String.t(), User.t()) :: BookMember.t() | nil
-  def get_book_member_by_invitation_token(token, %User{} = user) do
-    case InvitationToken.verify_invitation_token_query(token, user) do
-      {:ok, query} -> Repo.one(query)
-      :error -> nil
-    end
-  end
-
-  @doc """
   Create a new book member within a book.
-
-  # Examples
-
-        iex> create_book_member(book, %{nickname: "John Doe", role: :member})
-        {:ok, %BookMember{}}
-
-        iex> create_book_member(book, %{nickname: nil, role: :unknown})
-        {:error, %Ecto.Changeset{}}
-
   """
   @spec create_book_member(Book.t(), map()) ::
           {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
   def create_book_member(%Book{} = book, attrs) do
-    %BookMember{book_id: book.id}
-    # set the member role as default, it can be changed later
-    |> BookMember.deprecated_changeset(attrs)
+    %BookMember{
+      book_id: book.id,
+      role: :member
+    }
+    |> BookMember.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Deliver an invitation to a user to join a book as a existing member. This is the most
-  common way to invite a user to a book, which allows to create book members without them
-  being linked to an existing user yet.
-
-  ## Examples
-
-      iex> deliver_invitation(book_member, user, &"/invitation/\#{&1}")
-      {:ok, email}
-
-      iex> deliver_invitation(%{user_id: 1} = book_member, user, &"/invitation/\#{&1}")
-      ** (ArgumentError)
-
+  Update a book member.
   """
-  @spec deliver_invitation(BookMember.t(), String.t(), (String.t() -> String.t())) ::
-          {:ok, Swoosh.Email.t()}
-  def deliver_invitation(%BookMember{user_id: nil} = member, email, sent_invite_url_fun)
-      when is_function(sent_invite_url_fun, 1) do
-    book = Books.get_book!(member.book_id)
-    {hashed_token, invitation_token} = InvitationToken.build_invitation_token(member, email)
-
-    Repo.insert!(invitation_token)
-    MemberNotifier.deliver_invitation(email, book.name, sent_invite_url_fun.(hashed_token))
+  @spec update_book_member(BookMember.t(), map()) ::
+          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
+  def update_book_member(book_member, attrs) do
+    book_member
+    |> BookMember.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
-  Accept an invitation to join a book. The first parameter is the book member that will
-  get updated, the second is the user accepting the invitation.
-
-  This will link the book member to the user. The function raises if the book member is
-  already linked to a user.
+  Return an `%Ecto.Changeset{}` for tracking book member changes.
   """
-  @spec accept_invitation(BookMember.t(), User.t()) :: :ok
-  def accept_invitation(%BookMember{user_id: nil} = book_member, %User{} = user) do
+  @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
+  def change_book_member(book_member, attrs \\ %{}) do
+    BookMember.changeset(book_member, attrs)
+  end
+
+  ## User invitations
+
+  @doc """
+  Create a new book member within a book and link it to a user.
+  """
+  @spec create_book_member_for_user(Book.t(), User.t()) :: BookMember.t()
+  def create_book_member_for_user(book, user) do
+    %BookMember{
+      book_id: book.id,
+      role: :member,
+      user_id: user.id,
+      nickname: user.display_name
+    }
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Link an existing book member to a user.
+  """
+  @spec link_book_member_to_user(BookMember.t(), User.t()) :: BookMember.t()
+  def link_book_member_to_user(book_member, user) do
     {:ok, _results} =
       Ecto.Multi.new()
       |> Ecto.Multi.update_all(
@@ -168,10 +168,6 @@ defmodule App.Books.Members do
       )
       |> link_user_balance_configs_multi(book_member, user)
       |> maybe_try_to_delete_balance_config_multi(book_member.balance_config_id)
-      |> Ecto.Multi.delete_all(
-        :invitation_tokens,
-        InvitationToken.book_member_tokens_query(book_member)
-      )
       |> Repo.transaction()
 
     :ok
@@ -192,19 +188,5 @@ defmodule App.Books.Members do
       BalanceConfigs.try_to_delete_balance_config(balance_config)
       {:ok, nil}
     end)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking book member changes.
-
-  ## Examples
-
-      iex> change_book_member(book_member)
-      %Ecto.Changeset{data: %BookMember{}}
-
-  """
-  @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
-  def change_book_member(book_member, attrs \\ %{}) do
-    BookMember.deprecated_changeset(book_member, attrs)
   end
 end

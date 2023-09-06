@@ -11,6 +11,10 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "%{member_name} in %{book_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr ""
 
@@ -111,6 +115,10 @@ msgid "Contextual menu"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Copied to clipboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Create a new book"
 msgstr ""
 
@@ -119,7 +127,7 @@ msgid "Create an account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Create member"
+msgid "Create manually"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -131,11 +139,11 @@ msgid "Create your first book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Creating account..."
+msgid "Created on %{date}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Creator"
+msgid "Creating account..."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -175,11 +183,19 @@ msgid "Edit"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Edit %{member_name} · %{book_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Edit Book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Edit Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -215,7 +231,7 @@ msgid "Gravatar is a service providing globally unique avatars"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Hi %{user_name}"
+msgid "Hi %{user_name} 👋"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -243,15 +259,7 @@ msgid "Invalid email or password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invitation link is invalid or it has expired."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Invitation sent"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Invitations"
+msgid "Invitation link is invalid or it has expired"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -259,15 +267,11 @@ msgid "Invitations · %{book_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invite"
+msgid "Invite people"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invite a new member"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Inviting..."
+msgid "Invite people to join"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -276,10 +280,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Join %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Joined"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -299,11 +299,11 @@ msgid "Logged out successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member"
+msgid "Member created successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member created"
+msgid "Member updated successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -335,6 +335,10 @@ msgid "New Book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "New Member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "New Reimbursement"
 msgstr ""
 
@@ -356,10 +360,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Nickname"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "No user"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -459,10 +459,6 @@ msgid "Saving..."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Send invitation to email (optional)"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Send password reset instructions"
 msgstr ""
 
@@ -476,6 +472,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Settle up"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Share this link so people can join your book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -495,11 +495,15 @@ msgid "Signing in..."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Suggestions"
+msgid "Someone new"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "The member balance could not be computed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "The member's avatar"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -535,10 +539,6 @@ msgid "User confirmed successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Viewer"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Weight by income"
 msgstr ""
 
@@ -547,7 +547,15 @@ msgid "Welcome back!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "You have been added to the book."
+msgid "Who are you?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You are already member of this book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You have been added to the book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
