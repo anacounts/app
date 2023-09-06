@@ -6,7 +6,6 @@ defmodule AppWeb.MoneyTransfersLive do
 
   use AppWeb, :live_view
 
-  alias App.Books.Rights
   alias App.Transfers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -41,16 +40,12 @@ defmodule AppWeb.MoneyTransfersLive do
         </:description>
 
         <:button
-          :if={
-            transfer.type != :reimbursement and
-              Rights.can_member_handle_money_transfers?(@current_member)
-          }
+          :if={transfer.type != :reimbursement}
           navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
         >
           <%= gettext("Edit") %>
         </:button>
         <:button
-          :if={Rights.can_member_handle_money_transfers?(@current_member)}
           class="text-error"
           data-confirm={gettext("Are you sure you want to delete the transfer?")}
           phx-click="delete"
@@ -62,7 +57,7 @@ defmodule AppWeb.MoneyTransfersLive do
     </div>
 
     <.fab_container class="mb-12 md:mb-0">
-      <:item :if={Rights.can_member_handle_money_transfers?(@current_member)}>
+      <:item>
         <.fab navigate={~p"/books/#{@book}/transfers/new"}>
           <.icon name="add" alt="Add a money transfer" />
         </.fab>
@@ -92,11 +87,11 @@ defmodule AppWeb.MoneyTransfersLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete", %{"id" => money_transfer_id}, socket) do
-    %{book: book, current_user: current_user} = socket.assigns
+    book = socket.assigns.book
 
     money_transfer = Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
 
-    {:ok, _} = Transfers.delete_money_transfer(money_transfer, current_user)
+    {:ok, _} = Transfers.delete_money_transfer(money_transfer)
 
     {:noreply,
      update(socket, :money_transfers, fn money_transfers ->

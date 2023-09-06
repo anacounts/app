@@ -5,7 +5,6 @@ defmodule AppWeb.Layouts do
   use AppWeb, :html
 
   alias App.Accounts.Avatars
-  alias App.Books.Rights
 
   embed_templates "layouts/*"
 end

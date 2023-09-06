@@ -10,8 +10,6 @@ defmodule App.Books do
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
-  alias App.Books.Members
-  alias App.Books.Rights
 
   ## Database getters
 
@@ -133,61 +131,25 @@ defmodule App.Books do
   end
 
   @doc """
-  Updates a book if the user is allowed to do so.
-
-  ## Examples
-
-      iex> update_book(book, user, %{field: new_value})
-      {:ok, %Book{}}
-
-      iex> update_book(book, user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-      iex> update_book(book, not_allowed_user, %{field: bad_value})
-      {:error, :unauthorized}
-
+  Updates a book.
   """
-  @spec update_book(Book.t(), User.t(), map()) ::
-          {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def update_book(book, user, attrs) do
-    with %{} = member <- Members.get_membership(book.id, user.id),
-         true <- Rights.can_member_edit_book?(member) do
-      book
-      |> Book.changeset(attrs)
-      |> Repo.update()
-    else
-      _ -> {:error, :unauthorized}
-    end
+  @spec update_book(Book.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  def update_book(book, attrs) do
+    book
+    |> Book.changeset(attrs)
+    |> Repo.update()
   end
 
   # TODO delete_book should actually delete the book, another function could soft delete it
 
   @doc """
-  Deletes a book if the user is allowed to do so.
-
-  ## Examples
-
-      iex> delete_book(book, user)
-      {:ok, %Book{}}
-
-      iex> delete_book(book, user)
-      {:error, %Ecto.Changeset{}}
-
-      iex> delete_book(book, not_allowed_user)
-      {:error, :unauthorized}
-
+  Deletes a book.
   """
-  @spec delete_book(Book.t(), User.t()) ::
-          {:ok, Book.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
-  def delete_book(%Book{} = book, %User{} = user) do
-    with %{} = member <- Members.get_membership(book.id, user.id),
-         true <- Rights.can_member_delete_book?(member) do
-      book
-      |> Book.delete_changeset()
-      |> Repo.update()
-    else
-      _ -> {:error, :unauthorized}
-    end
+  @spec delete_book(Book.t()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  def delete_book(%Book{} = book) do
+    book
+    |> Book.delete_changeset()
+    |> Repo.update()
   end
 
   @doc """
