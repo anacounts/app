@@ -1,5 +1,5 @@
 defmodule AppWeb.BookMembersLiveTest do
-  use AppWeb.ConnCase
+  use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import App.AccountsFixtures

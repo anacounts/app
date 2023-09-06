@@ -1,5 +1,5 @@
 defmodule App.NotificationsTest do
-  use App.DataCase
+  use App.DataCase, async: true
 
   import App.AccountsFixtures
   import App.NotificationsFixtures
