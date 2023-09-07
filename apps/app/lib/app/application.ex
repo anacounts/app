@@ -7,6 +7,8 @@ defmodule App.Application do
 
   @impl Application
   def start(_type, _args) do
+    LoggerBackends.add(Sentry.LoggerBackend)
+
     children = [
       # Start the Ecto repository
       App.Repo,
