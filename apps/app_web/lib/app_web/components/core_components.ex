@@ -89,46 +89,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  ## Alert
-
-  @doc """
-  Generates an alert. Alerts are used to display temporary messages to the user.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.alert type="info">
-        This is an info
-      </.alert>
-
-      <.alert type="error">
-        This is an error
-      </.alert>
-
-  """
-
-  attr :type, :string, required: true, values: ["info", "error"], doc: "The type of the alert"
-  attr :class, :any, default: nil, doc: "Extra classes to add to the alert"
-  attr :rest, :global
-
-  slot :inner_block
-
-  def alert(assigns) do
-    ~H"""
-    <div class={["alert", alert_type_class(@type), @class]} role="alert" {@rest}>
-      <.icon name={alert_type_icon(@type)} />
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
-  defp alert_type_class("info"), do: "alert--info"
-  defp alert_type_class("error"), do: "alert--error"
-
-  defp alert_type_icon("info"), do: "info"
-  defp alert_type_icon("error"), do: "error"
-
   ## Avatar
 
   @doc """
