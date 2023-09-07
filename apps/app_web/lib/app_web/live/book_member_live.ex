@@ -32,10 +32,6 @@ defmodule AppWeb.BookMemberLive do
         <.member_balance book_member={@book_member} />
       </div>
 
-      <.alert :if={Balance.has_balance_error?(@book_member)} type="error">
-        <%= gettext("The member balance could not be computed") %>
-      </.alert>
-
       <div class="mx-4 mb-4">
         <.icon name="calendar-month" />
         <time datetime={@book_member.inserted_at}>
