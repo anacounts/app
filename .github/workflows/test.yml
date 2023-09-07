@@ -1,0 +1,55 @@
+name: Test
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Validate code
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup test environment
+        uses: ./.github/workflows/composite/test-setup
+      - name: Run code validation
+        uses: ./.github/workflows/composite/test-code
+
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: anacounts_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup test environment
+        uses: ./.github/workflows/composite/test-setup
+      - name: Run unit tests
+        uses: ./.github/workflows/composite/test-unit
+
+  dockerfile:
+    name: Validate Dockerfile
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Dockerfile
+        uses: ./.github/workflows/composite/test-dockerfile

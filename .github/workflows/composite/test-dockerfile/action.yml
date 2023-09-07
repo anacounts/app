@@ -1,0 +1,15 @@
+name: Test Dockerfile
+
+runs:
+  using: "composite"
+  steps:
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          Dockerfile:
+            - 'Dockerfile'
+    - name: Build Dockerfile
+      shell: bash
+      if: steps.changes.outputs.Dockerfile == 'true'
+      run: docker build .
