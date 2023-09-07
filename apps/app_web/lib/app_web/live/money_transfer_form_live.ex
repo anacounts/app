@@ -107,7 +107,6 @@ defmodule AppWeb.MoneyTransferFormLive do
               class="w-full"
               required
             />
-            <% # TODO <button>More information</button> %>
           </div>
 
           <div class="mx-4 mb-4">
