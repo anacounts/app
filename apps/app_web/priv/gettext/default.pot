@@ -47,6 +47,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Back to the app"
 msgstr ""
 
@@ -219,6 +223,10 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
 
@@ -228,6 +236,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -244,6 +256,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -364,10 +380,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -499,7 +511,11 @@ msgid "Someone new"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The member balance could not be computed"
+msgid "Something went wrong!"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Success!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -536,6 +552,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "User confirmed successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
 msgstr ""
 
 #, elixir-autogen, elixir-format

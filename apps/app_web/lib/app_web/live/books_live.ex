@@ -12,15 +12,6 @@ defmodule AppWeb.BooksLive do
   def render(assigns) do
     ~H"""
     <main class="max-w-prose mx-auto">
-      <.alert
-        :for={{type, message} <- @flash}
-        type={type}
-        phx-click="lv:clear-flash"
-        phx-value-key={type}
-      >
-        <%= message %>
-      </.alert>
-
       <.tile :if={Enum.empty?(@books)} summary_class="text-xl" navigate={~p"/books/new"}>
         <.icon name="add" />
         <%= gettext("Create your first book") %>

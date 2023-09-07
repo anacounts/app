@@ -48,6 +48,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr "Êtes-vous certain de vouloir supprimer le transfert ?"
 
 #, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Tentative de reconnexion"
+
+#, elixir-autogen, elixir-format
 msgid "Back to the app"
 msgstr "Retourner à l'application"
 
@@ -220,6 +224,10 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr "Entrez votre adresse email et nous vous enverrons les instructions de réinitialisation de mot de passe par email."
 
 #, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr "Erreur !"
+
+#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
@@ -230,6 +238,10 @@ msgstr "Revenir en arrière"
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars"
 msgstr "Gravatar est un service qui fourni un avatar unique selon l'adresse email"
+
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Patientez pendant que nous nous remettons sur les rails"
 
 #, elixir-autogen, elixir-format
 msgid "Hi %{user_name} 👋"
@@ -246,6 +258,10 @@ msgstr "Comment équilibrer ?"
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Si votre adresse email est dans notre système et n'a pas encore été confirmé, vous allez recevoir un email contenant les instructions."
+
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr "Si votre adresse email est dans notre système, vous allez recevoir les instructions pour réinitialiser votre mot de passe."
 
 #, elixir-autogen, elixir-format
 msgid "Income"
@@ -366,10 +382,6 @@ msgstr "Surnom"
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
 msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
-
-#, elixir-autogen, elixir-format
-msgid "Oops, something went wrong! Please check the errors below."
-msgstr "Une erreur est survenue. Veuillez vérifier les erreurs dans le formulaire."
 
 #, elixir-autogen, elixir-format
 msgid "Or continue to"
@@ -500,8 +512,12 @@ msgid "Someone new"
 msgstr "Quelqu'un d'autre"
 
 #, elixir-autogen, elixir-format
-msgid "The member balance could not be computed"
-msgstr "Le solde du membre n'a pas pu être calculé"
+msgid "Something went wrong!"
+msgstr "Une erreur est survenue !"
+
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr "C'est un succès !"
 
 #, elixir-autogen, elixir-format
 msgid "The member's avatar"
@@ -538,6 +554,10 @@ msgstr "Le lien de confirmation est invalide ou a expiré."
 #, elixir-autogen, elixir-format
 msgid "User confirmed successfully."
 msgstr "Utilisateur confirmé."
+
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Nous ne trouvons pas internet"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"

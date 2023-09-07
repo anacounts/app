@@ -16,21 +16,23 @@ defmodule AppWeb.BookInvitationsLive do
       <:title><%= @book.name %></:title>
     </.page_header>
 
-    <main class="max-w-prose mx-auto text-center mt-32">
-      <span class="font-bold"><%= gettext("Invite people to join") %></span>
-      <.input
-        type="text"
-        name="invitation_url"
-        value={@invitation_url}
-        label_class="mb-0"
-        class="inline w-80 text-center"
-        readonly
-        phx-click={JS.dispatch("app:copy-to-clipboard", detail: %{field: "value"})}
-      />
-      <.alert type="info" class="w-80 mx-auto" id="copied-to-clipboard" hidden>
+    <main class="max-w-prose mx-auto mt-32">
+      <div class="text-center">
+        <span class="font-bold"><%= gettext("Invite people to join") %></span>
+        <.input
+          type="text"
+          name="invitation_url"
+          value={@invitation_url}
+          label_class="mb-0"
+          class="inline w-80 text-center"
+          readonly
+          phx-click={JS.dispatch("app:copy-to-clipboard") |> show("#copied-to-clipboard")}
+        />
+        <%= gettext("Share this link so people can join your book") %>
+      </div>
+      <.flash kind={:info} title={gettext("Success!")} id="copied-to-clipboard" hidden>
         <%= gettext("Copied to clipboard") %>
-      </.alert>
-      <%= gettext("Share this link so people can join your book") %>
+      </.flash>
     </main>
     """
   end

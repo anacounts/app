@@ -16,10 +16,6 @@ defmodule AppWeb.UserRegistrationLive do
       action={~p"/users/log_in?_action=registered"}
       method="post"
     >
-      <.alert :if={@check_errors} type="error">
-        <%= gettext("Oops, something went wrong! Please check the errors below.") %>
-      </.alert>
-
       <.input
         field={@form[:email]}
         type="email"
@@ -65,7 +61,7 @@ defmodule AppWeb.UserRegistrationLive do
 
     socket =
       socket
-      |> assign(trigger_submit: false, check_errors: false)
+      |> assign(trigger_submit: false)
       |> assign(page_title: gettext("Create an account"))
       |> assign_form(changeset)
 
@@ -86,7 +82,7 @@ defmodule AppWeb.UserRegistrationLive do
         {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
 
       {:error, changeset} ->
-        {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}
+        {:noreply, socket |> assign_form(changeset)}
     end
   end
 
@@ -97,11 +93,6 @@ defmodule AppWeb.UserRegistrationLive do
 
   defp assign_form(socket, changeset) do
     form = to_form(changeset, as: "user")
-
-    if changeset.valid? do
-      assign(socket, form: form, check_errors: false)
-    else
-      assign(socket, form: form)
-    end
+    assign(socket, form: form)
   end
 end

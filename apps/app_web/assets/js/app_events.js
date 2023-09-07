@@ -4,15 +4,8 @@ document.addEventListener("app:navigate-back", function (event) {
 });
 
 document.addEventListener("app:copy-to-clipboard", async function (event) {
-  const {
-    dispatcher,
-    field = "textContent",
-    selector = "#copied-to-clipboard",
-  } = event.detail;
+  const {dispatcher, field = "value"} = event.detail;
 
   const copied = dispatcher[field];
   await navigator.clipboard.writeText(copied);
-
-  const target = document.querySelector(selector);
-  if (target) target.hidden = false;
 });

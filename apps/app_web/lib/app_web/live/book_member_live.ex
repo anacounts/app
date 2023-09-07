@@ -20,10 +20,6 @@ defmodule AppWeb.BookMemberLive do
     </.page_header>
 
     <main class="max-w-prose mx-auto">
-      <.alert :for={{type, message} when type in ["error", "info"] <- @flash} type={type}>
-        <%= message %>
-      </.alert>
-
       <div class="flex items-center gap-4 mx-4 mb-4">
         <.member_avatar book_member={@book_member} />
         <address class="not-italic">
@@ -35,10 +31,6 @@ defmodule AppWeb.BookMemberLive do
         </address>
         <.member_balance book_member={@book_member} />
       </div>
-
-      <.alert :if={Balance.has_balance_error?(@book_member)} type="error">
-        <%= gettext("The member balance could not be computed") %>
-      </.alert>
 
       <div class="mx-4 mb-4">
         <.icon name="calendar-month" />

@@ -89,46 +89,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  ## Alert
-
-  @doc """
-  Generates an alert. Alerts are used to display temporary messages to the user.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.alert type="info">
-        This is an info
-      </.alert>
-
-      <.alert type="error">
-        This is an error
-      </.alert>
-
-  """
-
-  attr :type, :string, required: true, values: ["info", "error"], doc: "The type of the alert"
-  attr :class, :any, default: nil, doc: "Extra classes to add to the alert"
-  attr :rest, :global
-
-  slot :inner_block
-
-  def alert(assigns) do
-    ~H"""
-    <div class={["alert", alert_type_class(@type), @class]} role="alert" {@rest}>
-      <.icon name={alert_type_icon(@type)} />
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
-  defp alert_type_class("info"), do: "alert--info"
-  defp alert_type_class("error"), do: "alert--error"
-
-  defp alert_type_icon("info"), do: "info"
-  defp alert_type_icon("error"), do: "error"
-
   ## Avatar
 
   @doc """
@@ -320,6 +280,89 @@ defmodule AppWeb.CoreComponents do
     <.link class="fab" {@rest}>
       <%= render_slot(@inner_block) %>
     </.link>
+    """
+  end
+
+  @doc """
+  Renders flash notices.
+
+  ## Examples
+
+      <.flash kind={:info} flash={@flash} />
+      <.flash kind={:info} phx-mounted={show("#flash")}>Welcome Back!</.flash>
+  """
+  attr :id, :string, doc: "the optional id of flash container"
+  attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
+  attr :title, :string, default: nil
+  attr :kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup"
+  attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
+
+  slot :inner_block, doc: "the optional inner block that renders the flash message"
+
+  def flash(assigns) do
+    assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
+
+    ~H"""
+    <div
+      :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
+      id={@id}
+      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
+      role="alert"
+      class={["flash", @kind == :info && "flash--info", @kind == :error && "flash--error"]}
+      {@rest}
+    >
+      <p :if={@title} class="flash__title">
+        <.icon :if={@kind == :info} name="info" class="flash__icon" />
+        <.icon :if={@kind == :error} name="error" class="flash__icon" />
+        <%= @title %>
+      </p>
+      <p class="flash__body"><%= msg %></p>
+      <button type="button" class="group flash__close-button" aria-label={gettext("Close")}>
+        <.icon name="close" class="flash__close-icon" />
+      </button>
+    </div>
+    """
+  end
+
+  @doc """
+  Shows the flash group with standard titles and content.
+
+  ## Examples
+
+      <.flash_group flash={@flash} />
+  """
+  attr :flash, :map, required: true, doc: "the map of flash messages"
+  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+
+  def flash_group(assigns) do
+    ~H"""
+    <div id={@id}>
+      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
+      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash
+        id="client-error"
+        kind={:error}
+        title={gettext("We can't find the internet")}
+        phx-disconnected={show(".phx-client-error #client-error")}
+        phx-connected={hide("#client-error")}
+        hidden
+      >
+        <%= gettext("Attempting to reconnect") %>
+        <.icon name="autorenew" class="ml-1 h-4 w-4 animate-spin" />
+      </.flash>
+
+      <.flash
+        id="server-error"
+        kind={:error}
+        title={gettext("Something went wrong!")}
+        phx-disconnected={show(".phx-server-error #server-error")}
+        phx-connected={hide("#server-error")}
+        hidden
+      >
+        <%= gettext("Hang in there while we get back on track") %>
+        <.icon name="autorenew" class="ml-1 h-4 w-4 animate-spin" />
+      </.flash>
+    </div>
     """
   end
 
@@ -860,6 +903,29 @@ defmodule AppWeb.CoreComponents do
       <%= render_slot(@inner_block) %>
     </p>
     """
+  end
+
+  ## JS Commands
+
+  def show(js \\ %JS{}, selector) do
+    JS.show(js,
+      to: selector,
+      transition:
+        {"transition-all transform ease-out duration-300",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+         "opacity-100 translate-y-0 sm:scale-100"}
+    )
+  end
+
+  def hide(js \\ %JS{}, selector) do
+    JS.hide(js,
+      to: selector,
+      time: 200,
+      transition:
+        {"transition-all transform ease-in duration-200",
+         "opacity-100 translate-y-0 sm:scale-100",
+         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
+    )
   end
 
   @doc """

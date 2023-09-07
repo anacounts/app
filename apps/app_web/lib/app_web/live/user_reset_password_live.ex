@@ -12,10 +12,6 @@ defmodule AppWeb.UserResetPasswordLive do
       phx-submit="reset_password"
       phx-change="validate"
     >
-      <.alert :if={@form.errors != []} type="error">
-        <%= gettext("Oops, something went wrong! Please check the errors below.") %>
-      </.alert>
-
       <p><%= gettext("Please enter a new password for your account") %></p>
       <p class="mb-4 font-bold"><%= @user.email %></p>
 
