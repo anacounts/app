@@ -21,13 +21,12 @@ defmodule AppWeb.BookAccessTest do
   describe "on_mount: ensure_book!" do
     test "assigns the book found in parameters", %{socket: socket, user: user} do
       book = book_fixture()
-      member = book_member_fixture(book, user_id: user.id, role: :creator)
+      _member = book_member_fixture(book, user_id: user.id, role: :creator)
 
       {:cont, updated_socket} =
         BookAccess.on_mount(:ensure_book!, %{"book_id" => book.id}, nil, socket)
 
       assert updated_socket.assigns.book.id == book.id
-      assert updated_socket.assigns.current_member.id == member.id
     end
 
     # FIXME ensure_book! does not check for access
@@ -50,18 +49,16 @@ defmodule AppWeb.BookAccessTest do
   describe "on_mount: ensure_book_member!" do
     setup %{socket: socket} do
       book = book_fixture()
-      member = book_member_fixture(book)
 
       socket =
         socket
         |> Phoenix.Component.assign(:book, book)
-        |> Phoenix.Component.assign(:current_member, member)
 
-      %{socket: socket}
+      %{socket: socket, book: book}
     end
 
-    test "assigns the book member found in parameters", %{socket: socket} do
-      book_member = socket.assigns.current_member
+    test "assigns the book member found in parameters", %{socket: socket, book: book} do
+      book_member = book_member_fixture(book)
 
       {:cont, updated_socket} =
         BookAccess.on_mount(

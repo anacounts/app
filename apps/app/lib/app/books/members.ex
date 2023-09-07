@@ -77,25 +77,6 @@ defmodule App.Books.Members do
   end
 
   @doc """
-  Get the book member entity linking a user to a book.
-
-  Raises `Ecto.NoResultsError` if the user is not a member of the book.
-
-  ## Examples
-
-      iex> get_book_member_of_user!(book.id, user.id)
-      %BookMember{}
-
-      iex> get_book_member_of_user!(book.id, non_member_user.id)
-      ** (Ecto.NoResultsError)
-
-  """
-  @spec get_membership!(Book.t(), User.t()) :: BookMember.t() | nil
-  def get_membership!(%Book{} = book, %User{} = user) do
-    Repo.get_by!(BookMember, book_id: book.id, user_id: user.id)
-  end
-
-  @doc """
   Create a new book member within a book.
   """
   @spec create_book_member(Book.t(), map()) ::
