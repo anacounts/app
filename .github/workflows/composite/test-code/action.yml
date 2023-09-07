@@ -1,0 +1,24 @@
+name: Validate code
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check unused dependencies
+      shell: bash
+      run: mix deps.unlock --check-unused
+
+    - name: Check compilation
+      shell: bash
+      run: mix compile --warnings-as-errors
+
+    - name: Check formatting
+      shell: bash
+      run: mix format --check-formatted
+
+    - name: Run Credo
+      shell: bash
+      run: mix credo --strict
+
+    - name: Check gettext files are up-to-date
+      shell: bash
+      run: mix gettext.extract --check-up-to-date
