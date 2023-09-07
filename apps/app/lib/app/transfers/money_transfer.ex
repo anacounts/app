@@ -36,7 +36,7 @@ defmodule App.Transfers.MoneyTransfer do
     field :label, :string
     field :amount, Money.Ecto.Composite.Type
     field :type, Ecto.Enum, values: @transfer_types
-    field :date, :date
+    field :date, :date, read_after_writes: true
 
     belongs_to :book, Book
     belongs_to :tenant, BookMember

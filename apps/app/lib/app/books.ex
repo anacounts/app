@@ -140,8 +140,6 @@ defmodule App.Books do
     |> Repo.update()
   end
 
-  # TODO delete_book should actually delete the book, another function could soft delete it
-
   @doc """
   Deletes a book.
   """
