@@ -47,7 +47,10 @@ defmodule App.MixProject do
       {:finch, "~> 0.14"},
       {:decimal, "~> 2.1"},
       # TODO Move to ex_money (migration is gonna be hard)
-      {:money, "~> 1.12"}
+      {:money, "~> 1.12"},
+
+      # Tools
+      {:logger_backends, "~> 1.0"}
     ]
   end
 
