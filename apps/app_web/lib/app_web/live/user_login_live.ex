@@ -22,10 +22,10 @@ defmodule AppWeb.UserLoginLive do
         autocomplete="current-password"
       />
 
-      <div class="flex justify-between">
+      <div class="sm:flex justify-between">
         <.input field={@form[:remember_me]} type="checkbox" label={gettext("Keep me logged in")} />
 
-        <.link navigate={~p"/users/reset_password"} class="text-action">
+        <.link navigate={~p"/users/reset_password"} class="inline-block mb-2 text-action">
           <%= gettext("Forgot your password?") %>
         </.link>
       </div>

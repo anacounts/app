@@ -10,8 +10,6 @@ defmodule AppWeb.BalanceConfigLive do
       <:title><%= gettext("Balance Settings") %></:title>
     </.page_header>
 
-    <.alert :for={{type, message} <- @flash} type={type}><%= message %></.alert>
-
     <.form for={@form} id="balance_config_form" phx-change="validate" phx-submit="save" class="mx-4">
       <.input
         field={@form[:annual_income]}

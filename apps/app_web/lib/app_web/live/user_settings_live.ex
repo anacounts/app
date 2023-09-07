@@ -22,10 +22,6 @@ defmodule AppWeb.UserSettingsLive do
         <%= gettext("Disconnect") %>
       </.button>
 
-      <.alert :for={{type, message} <- @flash} type={type} class="mx-4">
-        <%= message %>
-      </.alert>
-
       <div class="list__item">
         <.link navigate={~p"/users/settings/balance"} class="contents">
           <div class="grow font-bold uppercase">

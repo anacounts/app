@@ -20,10 +20,6 @@ defmodule AppWeb.BookMemberLive do
     </.page_header>
 
     <main class="max-w-prose mx-auto">
-      <.alert :for={{type, message} when type in ["error", "info"] <- @flash} type={type}>
-        <%= message %>
-      </.alert>
-
       <div class="flex items-center gap-4 mx-4 mb-4">
         <.member_avatar book_member={@book_member} />
         <address class="not-italic">

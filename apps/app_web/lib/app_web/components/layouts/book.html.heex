@@ -1,3 +1,5 @@
+<.flash_group flash={@flash} />
+
 <.page_header>
   <:title><%= @book.name %></:title>
 
@@ -39,14 +41,5 @@
 </.page_header>
 
 <main class="mb-12 md:mb-0">
-  <.alert
-    :for={{type, message} <- @flash}
-    type={type}
-    phx-click="lv:clear-flash"
-    phx-value-key={type}
-  >
-    <%= message %>
-  </.alert>
-
   <%= @inner_content %>
 </main>
