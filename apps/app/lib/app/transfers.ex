@@ -106,26 +106,15 @@ defmodule App.Transfers do
 
   @doc """
   Creates a money_transfer.
-
-  ## Examples
-
-      iex> create_money_transfer(book, %{field: value})
-      {:ok, %MoneyTransfer{}}
-
-      iex> create_money_transfer(book, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
+  @spec create_money_transfer(Book.t(), map()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def create_money_transfer(%Book{} = book, attrs \\ %{}) do
     %MoneyTransfer{book_id: book.id}
     |> MoneyTransfer.changeset(attrs)
     |> MoneyTransfer.with_peers(&Peer.create_money_transfer_changeset/2)
     |> link_balance_config_to_peers_changeset()
-    # The `date` field default behaviour cannot be handled by Ecto
-    # and is therefore handled by the database.
-    # Make the database return its value.
-    # TODO Use `:read_after_writes`
-    |> Repo.insert(returning: [:date])
+    |> Repo.insert()
   end
 
   defp link_balance_config_to_peers_changeset(changeset) do
