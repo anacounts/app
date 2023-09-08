@@ -43,6 +43,9 @@ module.exports = {
       current: "currentColor",
     },
     extend: {
+      width: {
+        prose: "65ch",
+      },
       fontFamily: {
         sans: ["Lato", ...defaultTheme.fontFamily.sans],
       },

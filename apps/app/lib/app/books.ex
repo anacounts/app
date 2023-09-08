@@ -73,15 +73,17 @@ defmodule App.Books do
   @doc """
   Get all books a specific user belongs to.
 
-  ## Examples
+  The result may be filtered by passing a map of filters.
 
-      iex> get_books_of_user(user)
-      [%Book{}, ...]
+  ## Filters
 
+  - `:sort_by` - the field to sort by, one of :alphabetically or :last_created
+  - `:owned_by` - the ownership of the book, one of :anyone, :me or :others
   """
-  @spec list_books_of_user(User.t()) :: [Book.t()]
-  def list_books_of_user(%User{} = user) do
+  @spec list_books_of_user(User.t(), map()) :: [Book.t()]
+  def list_books_of_user(%User{} = user, filters \\ %{}) do
     books_of_user_query(user)
+    |> filter_books_query(filters)
     |> Repo.all()
   end
 
@@ -90,9 +92,54 @@ defmodule App.Books do
   defp books_of_user_query(%User{} = user) do
     from [book: book] in Book.base_query(),
       join: member in BookMember,
+      as: :current_member,
       on: member.book_id == book.id,
       where: member.user_id == ^user.id
   end
+
+  ## Filters
+
+  @filters_default %{
+    sort_by: :last_created,
+    owned_by: :anyone
+  }
+  @filters_types %{
+    sort_by:
+      Ecto.ParameterizedType.init(Ecto.Enum,
+        values: [:last_created, :first_created, :alphabetically]
+      ),
+    owned_by: Ecto.ParameterizedType.init(Ecto.Enum, values: [:anyone, :me, :others])
+  }
+
+  defp filter_books_query(query, raw_filters) do
+    filters =
+      {@filters_default, @filters_types}
+      |> Ecto.Changeset.cast(raw_filters, Map.keys(@filters_types))
+      |> Ecto.Changeset.apply_changes()
+
+    query
+    |> sort_books_by(filters[:sort_by])
+    |> filter_books_by_ownership(filters[:owned_by])
+  end
+
+  # `:sort_by`
+  defp sort_books_by(query, :last_created),
+    do: from([book: book] in query, order_by: [desc: book.inserted_at])
+
+  defp sort_books_by(query, :first_created),
+    do: from([book: book] in query, order_by: [asc: book.inserted_at])
+
+  defp sort_books_by(query, :alphabetically),
+    do: from([book: book] in query, order_by: [asc: book.name])
+
+  # filter `:owned_by`
+  defp filter_books_by_ownership(query, :anyone), do: query
+
+  defp filter_books_by_ownership(query, :me),
+    do: from([current_member: current_member] in query, where: current_member.role == :creator)
+
+  defp filter_books_by_ownership(query, :others),
+    do: from([current_member: current_member] in query, where: current_member.role != :creator)
 
   ## CRUD
 
