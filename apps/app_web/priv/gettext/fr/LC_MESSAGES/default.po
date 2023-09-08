@@ -28,6 +28,10 @@ msgid "Account created successfully!"
 msgstr "Votre compte a été créé avec succès!"
 
 #, elixir-autogen, elixir-format
+msgid "Alphabetically"
+msgstr "Order alphabétique"
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
@@ -228,6 +232,14 @@ msgid "Error!"
 msgstr "Erreur !"
 
 #, elixir-autogen, elixir-format
+msgid "Filter by"
+msgstr "Filtrer par"
+
+#, elixir-autogen, elixir-format
+msgid "First created"
+msgstr "Premier créé"
+
+#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
@@ -308,6 +320,10 @@ msgid "Label"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
+msgid "Last created"
+msgstr "Dernier créé"
+
+#, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
 
@@ -384,8 +400,20 @@ msgid "Not %{user_name}? Disconnect"
 msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
 
 #, elixir-autogen, elixir-format
+msgid "Not owned by me"
+msgstr "Ne m'appartenant pas"
+
+#, elixir-autogen, elixir-format
 msgid "Or continue to"
 msgstr "Ou aller vers"
+
+#, elixir-autogen, elixir-format
+msgid "Owned by anyone"
+msgstr "Tous"
+
+#, elixir-autogen, elixir-format
+msgid "Owned by me"
+msgstr "M'appartenant"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -514,6 +542,10 @@ msgstr "Quelqu'un d'autre"
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Une erreur est survenue !"
+
+#, elixir-autogen, elixir-format
+msgid "Sort by"
+msgstr "Trier par"
 
 #, elixir-autogen, elixir-format
 msgid "Success!"
