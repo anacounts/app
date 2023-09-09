@@ -74,14 +74,16 @@ defmodule App.Books do
 
   @filters_default %{
     sort_by: :last_created,
-    owned_by: :anyone
+    owned_by: :anyone,
+    close_state: :open
   }
   @filters_types %{
     sort_by:
       Ecto.ParameterizedType.init(Ecto.Enum,
         values: [:last_created, :first_created, :alphabetically]
       ),
-    owned_by: Ecto.ParameterizedType.init(Ecto.Enum, values: [:anyone, :me, :others])
+    owned_by: Ecto.ParameterizedType.init(Ecto.Enum, values: [:anyone, :me, :others]),
+    close_state: Ecto.ParameterizedType.init(Ecto.Enum, values: [:any, :open, :closed])
   }
 
   defp filter_books_query(query, raw_filters) do
@@ -93,6 +95,7 @@ defmodule App.Books do
     query
     |> sort_books_by(filters[:sort_by])
     |> filter_books_by_ownership(filters[:owned_by])
+    |> filter_books_by_close_state(filters[:close_state])
   end
 
   # `:sort_by`
@@ -113,6 +116,16 @@ defmodule App.Books do
 
   defp filter_books_by_ownership(query, :others),
     do: from([current_member: current_member] in query, where: current_member.role != :creator)
+
+  # filter `:close_state`
+
+  defp filter_books_by_close_state(query, :any), do: query
+
+  defp filter_books_by_close_state(query, :open),
+    do: from([book: book] in query, where: is_nil(book.closed_at))
+
+  defp filter_books_by_close_state(query, :closed),
+    do: from([book: book] in query, where: not is_nil(book.closed_at))
 
   ## CRUD
 
@@ -166,6 +179,36 @@ defmodule App.Books do
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)
+  end
+
+  ## Close / Reopen
+
+  @doc """
+  Closes a book.
+  """
+  @spec close_book!(Book.t()) :: Book.t()
+  def close_book!(%{closed_at: nil} = book) do
+    book
+    |> Book.close_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Re-opens a book after it has been closed.
+  """
+  @spec reopen_book!(Book.t()) :: Book.t()
+  def reopen_book!(%{closed_at: closed_at} = book) when closed_at != nil do
+    book
+    |> Book.reopen_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Checks if a book is closed.
+  """
+  @spec closed?(Book.t()) :: boolean()
+  def closed?(book) do
+    book.closed_at != nil
   end
 
   ## Invitations

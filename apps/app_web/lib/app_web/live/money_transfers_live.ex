@@ -9,7 +9,11 @@ defmodule AppWeb.MoneyTransfersLive do
   alias App.Books
   alias App.Transfers
 
+  alias AppWeb.BooksHelpers
+
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -57,7 +61,7 @@ defmodule AppWeb.MoneyTransfersLive do
       </.tile>
     </div>
 
-    <.fab_container class="mb-12 md:mb-0">
+    <.fab_container :if={not Books.closed?(@book)} class="mb-12 md:mb-0">
       <:item>
         <.fab navigate={~p"/books/#{@book}/transfers/new"}>
           <.icon name="add" alt="Add a money transfer" />
@@ -101,12 +105,15 @@ defmodule AppWeb.MoneyTransfersLive do
   end
 
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
+    BooksHelpers.handle_delete_book(socket)
+  end
 
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+  def handle_event("close-book", _params, socket) do
+    BooksHelpers.handle_close_book(socket)
+  end
+
+  def handle_event("reopen-book", _params, socket) do
+    BooksHelpers.handle_reopen_book(socket)
   end
 
   defp class_for_transfer_type(:payment), do: "text-error"

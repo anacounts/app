@@ -9,15 +9,18 @@ defmodule AppWeb.BookMembersLive do
   alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
-  alias App.Books.Members
+
+  alias AppWeb.BooksHelpers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <div class="max-w-prose mx-auto">
-      <div class="grid grid-cols-2">
+      <div :if={not Books.closed?(@book)} class="grid grid-cols-2">
         <.tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
           <.icon name="mail" />
           <%= gettext("Invite people") %>
@@ -28,7 +31,7 @@ defmodule AppWeb.BookMembersLive do
         </.tile>
       </div>
 
-      <.tile :for={member <- @members} navigate={~p"/books/#{@book}/members/#{member}"}>
+      <.tile :for={member <- @book_members} navigate={~p"/books/#{@book}/members/#{member}"}>
         <.member_avatar member={member} />
         <span class="grow font-bold">
           <%= member.display_name %>
@@ -81,16 +84,10 @@ defmodule AppWeb.BookMembersLive do
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    members =
-      book
-      |> Members.list_members_of_book()
-      |> Balance.fill_members_balance()
-
     socket =
       assign(socket,
         page_title: book.name,
-        layout_heading: gettext("Details"),
-        members: members
+        layout_heading: gettext("Details")
       )
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}
@@ -98,11 +95,14 @@ defmodule AppWeb.BookMembersLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
+    BooksHelpers.handle_delete_book(socket)
+  end
 
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+  def handle_event("close-book", _params, socket) do
+    BooksHelpers.handle_close_book(socket)
+  end
+
+  def handle_event("reopen-book", _params, socket) do
+    BooksHelpers.handle_reopen_book(socket)
   end
 end

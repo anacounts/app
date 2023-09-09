@@ -7,6 +7,7 @@ defmodule AppWeb.BookMemberLive do
 
   alias App.Accounts.Avatars
   alias App.Balance
+  alias App.Books
   alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -39,7 +40,7 @@ defmodule AppWeb.BookMemberLive do
         </time>
       </div>
 
-      <div class="flex gap-4 mx-4">
+      <div :if={not Books.closed?(@book)} class="flex gap-4 mx-4">
         <.button
           color={:feature}
           class="min-w-[5rem]"

@@ -76,8 +76,16 @@ msgid "Balance settings updated"
 msgstr "Paramètres de solde mis à jour"
 
 #, elixir-autogen, elixir-format
+msgid "Book closed successfully"
+msgstr "Livret clôturé"
+
+#, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
 msgstr "Livret supprimé"
+
+#, elixir-autogen, elixir-format
+msgid "Book reopened successfully"
+msgstr "Livret réouvert"
 
 #, elixir-autogen, elixir-format
 msgid "Cancel"
@@ -106,6 +114,10 @@ msgstr "Changement..."
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Fermer"
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
+msgstr "Clôt"
 
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
@@ -408,6 +420,14 @@ msgid "Not owned by me"
 msgstr "Ne m'appartenant pas"
 
 #, elixir-autogen, elixir-format
+msgid "Open"
+msgstr "Ouvert"
+
+#, elixir-autogen, elixir-format
+msgid "Open and closed"
+msgstr "Ouvert et clôt"
+
+#, elixir-autogen, elixir-format
 msgid "Or continue to"
 msgstr "Ou aller vers"
 
@@ -474,6 +494,10 @@ msgstr "Remboursement créé"
 #, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr "Remboursement de %{debtor_name} à %{creditor_name}"
+
+#, elixir-autogen, elixir-format
+msgid "Reopen"
+msgstr "Réouvrir"
 
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
@@ -556,6 +580,10 @@ msgid "Success!"
 msgstr "C'est un succès !"
 
 #, elixir-autogen, elixir-format
+msgid "The book is not balanced. Are you sure you want to close it?"
+msgstr "Le livret n'est pas équilibré. Êtes-vous certain de vouloir le fermer ?"
+
+#, elixir-autogen, elixir-format
 msgid "The member's avatar"
 msgstr "L'avatar du membre"
 
@@ -566,6 +594,10 @@ msgstr "Les transactions sont déjà équilibrée !"
 #, elixir-autogen, elixir-format
 msgid "This invitation is irrelevant?"
 msgstr "Pas concerné par l'invitation ?"
+
+#, elixir-autogen, elixir-format
+msgid "This page is not accessible while the book is closed"
+msgstr "Cette page n'est pas accessible tant que le livret est clôt"
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."

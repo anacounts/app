@@ -3,11 +3,13 @@ defmodule AppWeb.BookBalanceLive do
 
   alias App.Balance
   alias App.Books
-  alias App.Books.Members
 
+  alias AppWeb.BooksHelpers
   alias AppWeb.ReimbursementModalComponent
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -39,6 +41,7 @@ defmodule AppWeb.BookBalanceLive do
               </div>
               <%= transaction.amount %>
               <.button
+                :if={not Books.closed?(@book)}
                 color={:cta}
                 phx-click="select-transaction"
                 phx-value-transaction-id={transaction.id}
@@ -77,11 +80,7 @@ defmodule AppWeb.BookBalanceLive do
   end
 
   defp assign_transactions(socket) do
-    members =
-      Members.list_members_of_book(socket.assigns.book)
-      |> Balance.fill_members_balance()
-
-    case Balance.transactions(members) do
+    case Balance.transactions(socket.assigns.book_members) do
       {:ok, transactions} ->
         assign(socket, transactions_error?: false, transactions: transactions)
 
@@ -92,12 +91,15 @@ defmodule AppWeb.BookBalanceLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
+    BooksHelpers.handle_delete_book(socket)
+  end
 
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+  def handle_event("close-book", _params, socket) do
+    BooksHelpers.handle_close_book(socket)
+  end
+
+  def handle_event("reopen-book", _params, socket) do
+    BooksHelpers.handle_reopen_book(socket)
   end
 
   def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do

@@ -76,8 +76,16 @@ msgid "Balance settings updated"
 msgstr "Balance settings updated"
 
 #, elixir-autogen, elixir-format
+msgid "Book closed successfully"
+msgstr "Book closed successfully"
+
+#, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
 msgstr "Book deleted successfully"
+
+#, elixir-autogen, elixir-format
+msgid "Book reopened successfully"
+msgstr "Book reopened successfully"
 
 #, elixir-autogen, elixir-format
 msgid "Cancel"
@@ -106,6 +114,10 @@ msgstr "Changing..."
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Close"
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
@@ -408,6 +420,14 @@ msgid "Not owned by me"
 msgstr "Not owned by me"
 
 #, elixir-autogen, elixir-format
+msgid "Open"
+msgstr "Open"
+
+#, elixir-autogen, elixir-format
+msgid "Open and closed"
+msgstr "Open and closed"
+
+#, elixir-autogen, elixir-format
 msgid "Or continue to"
 msgstr "Or continue to"
 
@@ -474,6 +494,10 @@ msgstr "Reimbursement created successfully"
 #, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr "Reimbursement from %{debtor_name} to %{creditor_name}"
+
+#, elixir-autogen, elixir-format
+msgid "Reopen"
+msgstr "Reopen"
 
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
@@ -556,6 +580,10 @@ msgid "Success!"
 msgstr "Success!"
 
 #, elixir-autogen, elixir-format
+msgid "The book is not balanced. Are you sure you want to close it?"
+msgstr "The book is not balanced. Are you sure you want to close it?"
+
+#, elixir-autogen, elixir-format
 msgid "The member's avatar"
 msgstr "The member's avatar"
 
@@ -566,6 +594,10 @@ msgstr "The transactions are balanced already!"
 #, elixir-autogen, elixir-format
 msgid "This invitation is irrelevant?"
 msgstr "This invitation is irrelevant?"
+
+#, elixir-autogen, elixir-format
+msgid "This page is not accessible while the book is closed"
+msgstr "This page is not accessible while the book is closed"
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."

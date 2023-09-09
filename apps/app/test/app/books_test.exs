@@ -178,6 +178,28 @@ defmodule App.BooksTest do
              |> Books.list_books_of_user(%{owned_by: :others})
              |> Enum.map(& &1.id) == [book2.id]
     end
+
+    test "filters closed books", %{user: user} do
+      book1 = book_fixture(closed_at: nil)
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{close_state: :closed})
+             |> Enum.map(& &1.id) == [book2.id]
+    end
+
+    test "filters open books", %{user: user} do
+      book1 = book_fixture(closed_at: nil)
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{close_state: :open})
+             |> Enum.map(& &1.id) == [book1.id]
+    end
   end
 
   ## CRUD
@@ -289,6 +311,60 @@ defmodule App.BooksTest do
 
     test "returns a book changeset", %{book: book} do
       assert %Ecto.Changeset{} = Books.change_book(book)
+    end
+  end
+
+  ## Close / Reopen
+
+  describe "close_book!/1" do
+    test "closes the book" do
+      book = book_fixture(closed_at: nil)
+
+      closed = Books.close_book!(book)
+      assert closed.id == book.id
+
+      assert closed_book = Repo.get(Book, book.id)
+      assert closed_book.closed_at
+    end
+
+    test "crashes if the book is already closed" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+
+      assert_raise FunctionClauseError, fn ->
+        Books.close_book!(book)
+      end
+    end
+  end
+
+  describe "reopen_book!/1" do
+    test "re-opens the book" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+
+      reopened = Books.reopen_book!(book)
+      assert reopened.id == book.id
+
+      assert reopened_book = Repo.get(Book, book.id)
+      refute reopened_book.closed_at
+    end
+
+    test "crashes if the book is not closed" do
+      book = book_fixture(closed_at: nil)
+
+      assert_raise FunctionClauseError, fn ->
+        Books.reopen_book!(book)
+      end
+    end
+  end
+
+  describe "closed?/1" do
+    test "returns `false` if the book is not closed" do
+      book = book_fixture(closed_at: nil)
+      refute Books.closed?(book)
+    end
+
+    test "returns `true` if the book is closed" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      assert Books.closed?(book)
     end
   end
 

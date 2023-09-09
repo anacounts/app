@@ -1,4 +1,5 @@
 @layer components {
+  /* TODO refactor to make it disable-able */
   .toggle-group {
     @apply flex
            h-11

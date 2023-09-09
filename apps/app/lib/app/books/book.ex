@@ -13,6 +13,7 @@ defmodule App.Books.Book do
   @type t :: %__MODULE__{
           id: id(),
           name: String.t(),
+          closed_at: NaiveDateTime.t(),
           deleted_at: NaiveDateTime.t(),
           default_balance_params: TransferParams.t(),
           inserted_at: NaiveDateTime.t(),
@@ -21,6 +22,7 @@ defmodule App.Books.Book do
 
   schema "books" do
     field :name, :string
+    field :closed_at, :naive_datetime
     field :deleted_at, :naive_datetime
 
     # balance
@@ -47,6 +49,23 @@ defmodule App.Books.Book do
   defp validate_default_balance_params(changeset) do
     changeset
     |> validate_required(:default_balance_params)
+  end
+
+  @doc """
+  Returns a changeset to close a book.
+  """
+  @spec close_changeset(t()) :: Ecto.Changeset.t()
+  def close_changeset(book) do
+    now = NaiveDateTime.utc_now(:second)
+    change(book, closed_at: now)
+  end
+
+  @doc """
+  Returns a changeset to re-open a book.
+  """
+  @spec reopen_changeset(t()) :: Ecto.Changeset.t()
+  def reopen_changeset(book) do
+    change(book, closed_at: nil)
   end
 
   @doc """

@@ -36,6 +36,7 @@ defmodule AppWeb.BooksLive do
 
         <:section icon="filter_alt" title={gettext("Filter by")}>
           <.filter_options field={@filters[:owned_by]} options={owned_by_options()} />
+          <.filter_options field={@filters[:close_state]} options={close_state_options()} />
         </:section>
       </.filters>
 
@@ -58,7 +59,8 @@ defmodule AppWeb.BooksLive do
       to_form(
         %{
           "sort_by" => "last_created",
-          "owned_by" => "anyone"
+          "owned_by" => "anyone",
+          "close_state" => "open"
         },
         as: :filters
       )
@@ -99,6 +101,14 @@ defmodule AppWeb.BooksLive do
       {gettext("Owned by anyone"), "anyone"},
       {gettext("Owned by me"), "me"},
       {gettext("Not owned by me"), "others"}
+    ]
+  end
+
+  defp close_state_options do
+    [
+      {gettext("Open and closed"), "any"},
+      {gettext("Open"), "open"},
+      {gettext("Closed"), "closed"}
     ]
   end
 end

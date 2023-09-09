@@ -6,14 +6,27 @@ defmodule AppWeb.BookMembersLiveTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
+  alias App.Repo
+
+  alias App.Books
+
   setup [:register_and_log_in_user, :book_with_member_context]
+
+  test "members tab is highlighted", %{conn: conn, book: book} do
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
+
+    assert [class] =
+             Floki.attribute(html, ~s(.tabs__link[href="#{~p"/books/#{book}/members"}"]), "class")
+
+    assert String.contains?(class, "tabs__link--active")
+  end
 
   test "displays book members", %{conn: conn, book: book} do
     _member1 = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
     _member2 = book_member_fixture(book, nickname: "John")
     _other_member = book_member_fixture(book_fixture(), nickname: "Eric")
 
-    {:ok, _show_live, html} = live(conn, ~p"/books/#{book}/members")
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
 
     # the book name is the main title
     assert html =~ book.name <> "\n</h1>"
@@ -42,6 +55,32 @@ defmodule AppWeb.BookMembersLiveTest do
              |> element(".tile", member.nickname)
              |> render_click()
              |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
+  end
+
+  test "closes book", %{conn: conn, book: book} do
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
+
+    assert html =
+             live
+             |> element("#close-book", "Close")
+             |> render_click()
+
+    assert html =~ "Book closed successfully"
+    assert book |> Repo.reload() |> Books.closed?()
+  end
+
+  test "reopens book", %{conn: conn, book: book} do
+    book = Books.close_book!(book)
+
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
+
+    assert html =
+             live
+             |> element("#reopen-book", "Reopen")
+             |> render_click()
+
+    assert html =~ "Book reopened successfully"
+    refute book |> Repo.reload() |> Books.closed?()
   end
 
   test "deletes book", %{conn: conn, book: book} do

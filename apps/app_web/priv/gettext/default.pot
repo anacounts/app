@@ -75,7 +75,15 @@ msgid "Balance settings updated"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Book closed successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Book deleted successfully"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Book reopened successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -104,6 +112,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Close"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -407,6 +419,14 @@ msgid "Not owned by me"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Open"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Open and closed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Or continue to"
 msgstr ""
 
@@ -472,6 +492,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Reopen"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -555,6 +579,10 @@ msgid "Success!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "The book is not balanced. Are you sure you want to close it?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "The member's avatar"
 msgstr ""
 
@@ -564,6 +592,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "This invitation is irrelevant?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This page is not accessible while the book is closed"
 msgstr ""
 
 #, elixir-autogen, elixir-format

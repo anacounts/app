@@ -3,6 +3,9 @@ defmodule AppWeb.BookAccessTest do
 
   import App.BooksFixtures
   import App.Books.MembersFixtures
+  import App.TransfersFixtures
+
+  alias App.Balance
 
   alias AppWeb.BookAccess
 
@@ -43,6 +46,57 @@ defmodule AppWeb.BookAccessTest do
       assert_raise Ecto.NoResultsError, fn ->
         BookAccess.on_mount(:ensure_book!, %{"book_id" => 0}, nil, socket)
       end
+    end
+  end
+
+  describe "on_mount: assign_book_members" do
+    test "assigns the book members of the book assign", %{socket: socket} do
+      book = book_fixture()
+      member = book_member_fixture(book)
+
+      socket = Phoenix.Component.assign(socket, :book, book)
+
+      {:cont, updated_socket} =
+        BookAccess.on_mount(:assign_book_members, nil, nil, socket)
+
+      assert Enum.map(updated_socket.assigns.book_members, & &1.id) == [member.id]
+    end
+  end
+
+  describe "on_mount: assign_book_unbalanced" do
+    test "assigns book_unbalanced? == true if the book isn't balanced", %{socket: socket} do
+      book = book_fixture()
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      _transfer =
+        money_transfer_fixture(book,
+          amount: Money.new(1000, :EUR),
+          tenant_id: member1.id,
+          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+        )
+
+      members = Balance.fill_members_balance([member1, member2])
+      socket = Phoenix.Component.assign(socket, book: book, book_members: members)
+
+      {:cont, updated_socket} =
+        BookAccess.on_mount(:assign_book_unbalanced, nil, nil, socket)
+
+      assert updated_socket.assigns.book_unbalanced?
+    end
+
+    test "assigns book_unbalanced? == false if the book is balanced", %{socket: socket} do
+      book = book_fixture()
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      members = Balance.fill_members_balance([member1, member2])
+      socket = Phoenix.Component.assign(socket, book: book, book_members: members)
+
+      {:cont, updated_socket} =
+        BookAccess.on_mount(:assign_book_unbalanced, nil, nil, socket)
+
+      refute updated_socket.assigns.book_unbalanced?
     end
   end
 
