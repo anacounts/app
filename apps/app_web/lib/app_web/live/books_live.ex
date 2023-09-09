@@ -13,7 +13,7 @@ defmodule AppWeb.BooksLive do
     ~H"""
     <main class="flex justify-center mx-auto">
       <div class="grow basis-3/4 max-w-prose">
-        <div class="md:hidden text-right">
+        <div class="md:hidden mx-2 text-right">
           <.button color={:ghost} phx-click={show_dialog("#filters")}>
             <.icon name="tune" />
           </.button>
