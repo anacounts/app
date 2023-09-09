@@ -52,6 +52,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr "Are you sure you want to delete the transfer?"
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete this book?"
+msgstr "Are you sure you want to delete this book?"
+
+#, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Attempting to reconnect"
 
