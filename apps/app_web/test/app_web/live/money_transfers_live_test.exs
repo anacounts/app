@@ -61,6 +61,19 @@ defmodule AppWeb.MoneyTransfersLiveTest do
     refute html =~ money_transfer.label
   end
 
+  test "deletes book", %{conn: conn, book: book} do
+    {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/transfers")
+
+    assert {:ok, _, html} =
+             show_live
+             |> element("#delete-book", "Delete")
+             |> render_click()
+             |> follow_redirect(conn, ~p"/books")
+
+    assert html =~ "Book deleted successfully"
+    refute html =~ book.name
+  end
+
   # Depends on :register_and_log_in_user
   defp book_with_member_context(%{user: user} = context) do
     book = book_fixture()

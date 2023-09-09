@@ -2,6 +2,7 @@ defmodule AppWeb.BookBalanceLive do
   use AppWeb, :live_view
 
   alias App.Balance
+  alias App.Books
   alias App.Books.Members
 
   alias AppWeb.ReimbursementModalComponent
@@ -90,6 +91,15 @@ defmodule AppWeb.BookBalanceLive do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("delete-book", _params, socket) do
+    Books.delete_book!(socket.assigns.book)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Book deleted successfully"))
+     |> push_navigate(to: ~p"/books")}
+  end
+
   def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do
     transaction = Enum.find(socket.assigns.transactions, &(&1.id == transaction_id))
 
