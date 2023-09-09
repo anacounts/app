@@ -8,6 +8,19 @@ defmodule AppWeb.MoneyTransfersLiveTest do
 
   setup [:register_and_log_in_user, :book_with_member_context]
 
+  test "transfers tab is highlighted", %{conn: conn, book: book} do
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/transfers")
+
+    assert [class] =
+             Floki.attribute(
+               html,
+               ~s(.tabs__link[href="#{~p"/books/#{book}/transfers"}"]),
+               "class"
+             )
+
+    assert String.contains?(class, "tabs__link--active")
+  end
+
   test "lists book money transfers", %{conn: conn, book: book, member: member} do
     money_transfer = money_transfer_fixture(book, tenant_id: member.id)
 

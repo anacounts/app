@@ -8,12 +8,21 @@ defmodule AppWeb.BookMembersLiveTest do
 
   setup [:register_and_log_in_user, :book_with_member_context]
 
+  test "members tab is highlighted", %{conn: conn, book: book} do
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
+
+    assert [class] =
+             Floki.attribute(html, ~s(.tabs__link[href="#{~p"/books/#{book}/members"}"]), "class")
+
+    assert String.contains?(class, "tabs__link--active")
+  end
+
   test "displays book members", %{conn: conn, book: book} do
     _member1 = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
     _member2 = book_member_fixture(book, nickname: "John")
     _other_member = book_member_fixture(book_fixture(), nickname: "Eric")
 
-    {:ok, _show_live, html} = live(conn, ~p"/books/#{book}/members")
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
 
     # the book name is the main title
     assert html =~ book.name <> "\n</h1>"

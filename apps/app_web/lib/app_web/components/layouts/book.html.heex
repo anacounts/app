@@ -3,7 +3,10 @@
 <.page_header>
   <:title><%= @book.name %></:title>
 
-  <:tab_item navigate={~p"/books/#{@book}/members"} active={@socket.view == AppWeb.BookMemberLive}>
+  <:tab_item
+    navigate={~p"/books/#{@book}/members"}
+    active={@socket.view == AppWeb.BookMembersLive}
+  >
     <.icon name="group" size={:md} />
     <%= gettext("Members") %>
   </:tab_item>

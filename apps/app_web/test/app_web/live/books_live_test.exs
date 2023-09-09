@@ -35,9 +35,7 @@ defmodule AppWeb.BooksLiveTest do
       |> form("#filters form", filters: %{sort_by: "first_created", owned_by: "me"})
       |> render_change()
 
-    assert html
-           |> Floki.parse_fragment!()
-           |> Floki.attribute("[data-book-id]", "data-book-id") ==
+    assert Floki.attribute(html, "[data-book-id]", "data-book-id") ==
              Enum.map([book1, book3], &to_string(&1.id))
 
     html =
@@ -45,9 +43,7 @@ defmodule AppWeb.BooksLiveTest do
       |> form("#filters form", filters: %{sort_by: "alphabetically", owned_by: "anyone"})
       |> render_change()
 
-    assert html
-           |> Floki.parse_fragment!()
-           |> Floki.attribute("[data-book-id]", "data-book-id") ==
+    assert Floki.attribute(html, "[data-book-id]", "data-book-id") ==
              Enum.map([book2, book1, book3], &to_string(&1.id))
   end
 

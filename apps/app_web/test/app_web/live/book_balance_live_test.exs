@@ -25,6 +25,15 @@ defmodule AppWeb.BookBalanceLiveTest do
     })
   end
 
+  test "balance tab is highlighted", %{conn: conn, book: book} do
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
+
+    assert [class] =
+             Floki.attribute(html, ~s(.tabs__link[href="#{~p"/books/#{book}/balance"}"]), "class")
+
+    assert String.contains?(class, "tabs__link--active")
+  end
+
   test "deletes book", %{conn: conn, book: book} do
     {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/balance")
 
