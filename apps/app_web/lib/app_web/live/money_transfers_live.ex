@@ -107,6 +107,14 @@ defmodule AppWeb.MoneyTransfersLive do
     BooksHelpers.handle_delete_book(socket)
   end
 
+  def handle_event("close-book", _params, socket) do
+    BooksHelpers.handle_close_book(socket)
+  end
+
+  def handle_event("reopen-book", _params, socket) do
+    BooksHelpers.handle_reopen_book(socket)
+  end
+
   defp class_for_transfer_type(:payment), do: "text-error"
   defp class_for_transfer_type(:income), do: "text-info"
   defp class_for_transfer_type(:reimbursement), do: nil

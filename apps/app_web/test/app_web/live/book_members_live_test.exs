@@ -6,6 +6,10 @@ defmodule AppWeb.BookMembersLiveTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
+  alias App.Repo
+
+  alias App.Books
+
   setup [:register_and_log_in_user, :book_with_member_context]
 
   test "members tab is highlighted", %{conn: conn, book: book} do
@@ -51,6 +55,32 @@ defmodule AppWeb.BookMembersLiveTest do
              |> element(".tile", member.nickname)
              |> render_click()
              |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
+  end
+
+  test "closes book", %{conn: conn, book: book} do
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
+
+    assert html =
+             live
+             |> element("#close-book", "Close")
+             |> render_click()
+
+    assert html =~ "Book closed successfully"
+    assert book |> Repo.reload() |> Books.closed?()
+  end
+
+  test "reopens book", %{conn: conn, book: book} do
+    book = Books.close_book!(book)
+
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
+
+    assert html =
+             live
+             |> element("#reopen-book", "Reopen")
+             |> render_click()
+
+    assert html =~ "Book reopened successfully"
+    refute book |> Repo.reload() |> Books.closed?()
   end
 
   test "deletes book", %{conn: conn, book: book} do

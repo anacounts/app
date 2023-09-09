@@ -92,6 +92,14 @@ defmodule AppWeb.BookBalanceLive do
     BooksHelpers.handle_delete_book(socket)
   end
 
+  def handle_event("close-book", _params, socket) do
+    BooksHelpers.handle_close_book(socket)
+  end
+
+  def handle_event("reopen-book", _params, socket) do
+    BooksHelpers.handle_reopen_book(socket)
+  end
+
   def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do
     transaction = Enum.find(socket.assigns.transactions, &(&1.id == transaction_id))
 

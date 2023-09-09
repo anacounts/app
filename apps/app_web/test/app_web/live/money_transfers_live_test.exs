@@ -6,6 +6,10 @@ defmodule AppWeb.MoneyTransfersLiveTest do
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
+  alias App.Repo
+
+  alias App.Books
+
   setup [:register_and_log_in_user, :book_with_member_context]
 
   test "transfers tab is highlighted", %{conn: conn, book: book} do
@@ -85,6 +89,32 @@ defmodule AppWeb.MoneyTransfersLiveTest do
 
     assert html =~ "Book deleted successfully"
     refute html =~ book.name
+  end
+
+  test "closes book", %{conn: conn, book: book} do
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/transfers")
+
+    assert html =
+             live
+             |> element("#close-book", "Close")
+             |> render_click()
+
+    assert html =~ "Book closed successfully"
+    assert book |> Repo.reload() |> Books.closed?()
+  end
+
+  test "reopens book", %{conn: conn, book: book} do
+    book = Books.close_book!(book)
+
+    {:ok, live, _html} = live(conn, ~p"/books/#{book}/transfers")
+
+    assert html =
+             live
+             |> element("#reopen-book", "Reopen")
+             |> render_click()
+
+    assert html =~ "Book reopened successfully"
+    refute book |> Repo.reload() |> Books.closed?()
   end
 
   # Depends on :register_and_log_in_user
