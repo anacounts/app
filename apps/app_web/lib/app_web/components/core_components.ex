@@ -928,6 +928,14 @@ defmodule AppWeb.CoreComponents do
     )
   end
 
+  def show_dialog(js \\ %JS{}, selector) do
+    JS.dispatch(js, "app:open-dialog", to: selector)
+  end
+
+  def hide_dialog(js \\ %JS{}, selector) do
+    JS.dispatch(js, "app:close-dialog", to: selector)
+  end
+
   @doc """
   Translates an error message using gettext.
   """

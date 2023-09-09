@@ -43,8 +43,30 @@ module.exports = {
       current: "currentColor",
     },
     extend: {
+      width: {
+        prose: "65ch",
+      },
       fontFamily: {
         sans: ["Lato", ...defaultTheme.fontFamily.sans],
+      },
+      animation: {
+        "fade-in": "fade-in 150ms ease-in forwards",
+        "backdrop-fade-in": "backdrop-fade-in 150ms ease-in forwards",
+        "slide-in": "slide-in 150ms ease forwards",
+      },
+      keyframes: {
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "backdrop-fade-in": {
+          from: { "backgroud-color": "transparent" },
+          to: { "background-color": "rgba(0, 0, 0, 0.6)" },
+        },
+        "slide-in": {
+          from: { translate: "0 1rem" },
+          to: { translate: "0 0" },
+        },
       },
     },
   },

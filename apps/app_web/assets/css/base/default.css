@@ -1,8 +1,10 @@
-html {
-  @apply accent-theme
-         bg-background;
-}
+@layer base {
+  html {
+    @apply accent-theme
+           bg-background;
+  }
 
-[hidden] {
-  @apply hidden;
+  [hidden] {
+    @apply hidden;
+  }
 }

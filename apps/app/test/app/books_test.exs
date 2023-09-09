@@ -87,18 +87,94 @@ defmodule App.BooksTest do
   end
 
   describe "list_books_of_user/1" do
-    setup :book_with_member_context
+    setup do
+      %{user: user_fixture()}
+    end
 
-    test "returns all user books", %{book: book, user: user} do
-      member_of_book = book_fixture()
-      _book_membership = book_member_fixture(member_of_book, user_id: user.id)
+    test "returns all user books", %{user: user} do
+      book1 = book_fixture()
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture()
+      _member2 = book_member_fixture(book2, user_id: user.id)
 
       _not_member_of_book = book_fixture()
 
-      user_books = Books.list_books_of_user(user)
-      assert [book1, book2] = Enum.sort_by(user_books, & &1.id)
-      assert book1.id == book.id
-      assert book2.id == member_of_book.id
+      assert user
+             |> Books.list_books_of_user()
+             |> Enum.sort_by(& &1.id)
+             |> Enum.map(& &1.id) == [book1.id, book2.id]
+    end
+
+    test "sorts by first created", %{user: user} do
+      book1 = book_fixture(inserted_at: ~N[2020-01-02 00:00:00Z])
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(inserted_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{sort_by: :first_created})
+             |> Enum.map(& &1.id) == [book2.id, book1.id]
+    end
+
+    test "sorts by last created", %{user: user} do
+      book1 = book_fixture(inserted_at: ~N[2020-01-02 00:00:00Z])
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(inserted_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{sort_by: :last_created})
+             |> Enum.map(& &1.id) == [book1.id, book2.id]
+    end
+
+    test "sorts alphabetically", %{user: user} do
+      book1 = book_fixture(name: "Z")
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(name: "A")
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{sort_by: :alphabetically})
+             |> Enum.map(& &1.id) == [book2.id, book1.id]
+    end
+
+    test "filters by owned by anyone", %{user: user} do
+      book1 = book_fixture()
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture()
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      _not_member_of_book = book_fixture()
+
+      assert user
+             |> Books.list_books_of_user(%{owned_by: :anyone})
+             |> Enum.map(& &1.id) == [book1.id, book2.id]
+    end
+
+    test "filters by owned by me", %{user: user} do
+      book1 = book_fixture()
+      _member1 = book_member_fixture(book1, user_id: user.id, role: :creator)
+      book2 = book_fixture()
+      _member2 = book_member_fixture(book2, user_id: user.id, role: :member)
+
+      _not_member_of_book = book_fixture()
+
+      assert user
+             |> Books.list_books_of_user(%{owned_by: :me})
+             |> Enum.map(& &1.id) == [book1.id]
+    end
+
+    test "filters by owned by others", %{user: user} do
+      book1 = book_fixture()
+      _member1 = book_member_fixture(book1, user_id: user.id, role: :creator)
+      book2 = book_fixture()
+      _member2 = book_member_fixture(book2, user_id: user.id, role: :member)
+
+      _not_member_of_book = book_fixture()
+
+      assert user
+             |> Books.list_books_of_user(%{owned_by: :others})
+             |> Enum.map(& &1.id) == [book2.id]
     end
   end
 
@@ -248,14 +324,10 @@ defmodule App.BooksTest do
     end
   end
 
-  defp book_with_creator_context(_context), do: book_with_member_role(:creator)
-
-  defp book_with_member_context(_context), do: book_with_member_role(:member)
-
-  defp book_with_member_role(role) do
+  defp book_with_creator_context(_context) do
     book = book_fixture()
     user = user_fixture()
-    member = book_member_fixture(book, user_id: user.id, role: role)
+    member = book_member_fixture(book, user_id: user.id, role: :creator)
 
     %{
       book: book,
