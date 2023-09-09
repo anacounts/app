@@ -292,6 +292,60 @@ defmodule App.BooksTest do
     end
   end
 
+  ## Close / Reopen
+
+  describe "close_book!/1" do
+    test "closes the book" do
+      book = book_fixture(closed_at: nil)
+
+      closed = Books.close_book!(book)
+      assert closed.id == book.id
+
+      assert closed_book = Repo.get(Book, book.id)
+      assert closed_book.closed_at
+    end
+
+    test "crashes if the book is already closed" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+
+      assert_raise FunctionClauseError, fn ->
+        Books.close_book!(book)
+      end
+    end
+  end
+
+  describe "reopen_book!/1" do
+    test "re-opens the book" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+
+      reopened = Books.reopen_book!(book)
+      assert reopened.id == book.id
+
+      assert reopened_book = Repo.get(Book, book.id)
+      refute reopened_book.closed_at
+    end
+
+    test "crashes if the book is not closed" do
+      book = book_fixture(closed_at: nil)
+
+      assert_raise FunctionClauseError, fn ->
+        Books.reopen_book!(book)
+      end
+    end
+  end
+
+  describe "closed?/1" do
+    test "returns `false` if the book is not closed" do
+      book = book_fixture(closed_at: nil)
+      refute Books.closed?(book)
+    end
+
+    test "returns `true` if the book is closed" do
+      book = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      assert Books.closed?(book)
+    end
+  end
+
   ## Invitations
 
   describe "get_book_invitation_token/1" do

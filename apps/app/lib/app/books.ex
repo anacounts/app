@@ -168,6 +168,36 @@ defmodule App.Books do
     Book.changeset(book, attrs)
   end
 
+  ## Close / Reopen
+
+  @doc """
+  Closes a book.
+  """
+  @spec close_book!(Book.t()) :: Book.t()
+  def close_book!(%{closed_at: nil} = book) do
+    book
+    |> Book.close_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Re-opens a book after it has been closed.
+  """
+  @spec reopen_book!(Book.t()) :: Book.t()
+  def reopen_book!(%{closed_at: closed_at} = book) when closed_at != nil do
+    book
+    |> Book.reopen_changeset()
+    |> Repo.update!()
+  end
+
+  @doc """
+  Checks if a book is closed.
+  """
+  @spec closed?(Book.t()) :: boolean()
+  def closed?(book) do
+    book.closed_at != nil
+  end
+
   ## Invitations
 
   @doc """
