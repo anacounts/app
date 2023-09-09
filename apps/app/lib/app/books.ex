@@ -17,15 +17,6 @@ defmodule App.Books do
   Gets a single book.
 
   Raises `Ecto.NoResultsError` if the Book does not exist.
-
-  ## Examples
-
-      iex> get_book!(123)
-      %Book{}
-
-      iex> get_book!(456)
-      ** (Ecto.NoResultsError)
-
   """
   @spec get_book!(Book.id()) :: Book.t()
   def get_book!(id), do: Repo.get!(Book, id)
@@ -34,15 +25,6 @@ defmodule App.Books do
   Gets a single book if it belongs to the user.
 
   Returns `nil` if the book does not exist or does not belong to the user.
-
-  ## Examples
-
-      iex> get_book_for_user!(123, user)
-      %Book{}
-
-      iex> get_book_for_user!(456, user)
-      nil
-
   """
   @spec get_book_of_user(Book.id(), User.t()) :: Book.t() | nil
   def get_book_of_user(id, %User{} = user) do
@@ -54,15 +36,6 @@ defmodule App.Books do
   Gets a single book if it belongs to the user.
 
   Raises `Ecto.NoResultsError` if the book does not exist or does not belong to the user.
-
-  ## Examples
-
-      iex> get_book_for_user!(123, user)
-      %Book{}
-
-      iex> get_book_for_user!(456, user)
-      ** (Ecto.NoResultsError)
-
   """
   @spec get_book_of_user!(Book.id(), User.t()) :: Book.t() | nil
   def get_book_of_user!(id, %User{} = user) do
@@ -145,15 +118,6 @@ defmodule App.Books do
 
   @doc """
   Creates a book.
-
-  ## Examples
-
-      iex> create_book(%{field: value}, user_creator)
-      {:ok, %Book{}}
-
-      iex> create_book(%{field: bad_value}, user_creator)
-      {:error, %Ecto.Changeset{}}
-
   """
   @spec create_book(map(), User.t()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
   def create_book(attrs, %User{} = creator) do
@@ -199,12 +163,6 @@ defmodule App.Books do
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking book changes.
-
-  ## Examples
-
-      iex> change_book(book)
-      %Ecto.Changeset{data: %Book{}}
-
   """
   def change_book(%Book{} = book, attrs \\ %{}) do
     Book.changeset(book, attrs)

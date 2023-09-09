@@ -16,6 +16,8 @@ defmodule App.BooksTest do
 
   @invalid_book_attrs %{name: nil, default_balance_params: %{}}
 
+  ## Database getters
+
   describe "get_book!/1" do
     setup do
       %{book: book_fixture()}
@@ -86,7 +88,7 @@ defmodule App.BooksTest do
     end
   end
 
-  describe "list_books_of_user/1" do
+  describe "list_books_of_user/2" do
     setup do
       %{user: user_fixture()}
     end
@@ -177,6 +179,8 @@ defmodule App.BooksTest do
              |> Enum.map(& &1.id) == [book2.id]
     end
   end
+
+  ## CRUD
 
   describe "create_book/2" do
     setup do
@@ -287,6 +291,8 @@ defmodule App.BooksTest do
       assert %Ecto.Changeset{} = Books.change_book(book)
     end
   end
+
+  ## Invitations
 
   describe "get_book_invitation_token/1" do
     setup do
