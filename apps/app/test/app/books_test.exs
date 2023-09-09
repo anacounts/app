@@ -178,6 +178,28 @@ defmodule App.BooksTest do
              |> Books.list_books_of_user(%{owned_by: :others})
              |> Enum.map(& &1.id) == [book2.id]
     end
+
+    test "filters closed books", %{user: user} do
+      book1 = book_fixture(closed_at: nil)
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{close_state: :closed})
+             |> Enum.map(& &1.id) == [book2.id]
+    end
+
+    test "filters open books", %{user: user} do
+      book1 = book_fixture(closed_at: nil)
+      _member1 = book_member_fixture(book1, user_id: user.id)
+      book2 = book_fixture(closed_at: ~N[2020-01-01 00:00:00Z])
+      _member2 = book_member_fixture(book2, user_id: user.id)
+
+      assert user
+             |> Books.list_books_of_user(%{close_state: :open})
+             |> Enum.map(& &1.id) == [book1.id]
+    end
   end
 
   ## CRUD
