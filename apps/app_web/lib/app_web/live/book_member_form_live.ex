@@ -9,6 +9,7 @@ defmodule AppWeb.BookMemberFormLive do
   alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :ensure_open_book!}
 
   @impl Phoenix.LiveView
   def render(assigns) do

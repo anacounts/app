@@ -9,6 +9,8 @@ defmodule AppWeb.BookFormLive do
   alias App.Books
   alias App.Books.Book
 
+  alias AppWeb.BooksHelpers
+
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
@@ -62,11 +64,15 @@ defmodule AppWeb.BookFormLive do
   defp mount_action(socket, :edit, %{"book_id" => book_id}) do
     book = Books.get_book_of_user!(book_id, socket.assigns.current_user)
 
-    assign(socket,
-      page_title: gettext("Edit Book · %{name}", name: book.name),
-      book: book,
-      changeset: Books.change_book(book)
-    )
+    if Books.closed?(book) do
+      BooksHelpers.closed_book_redirect(socket)
+    else
+      assign(socket,
+        page_title: gettext("Edit Book · %{name}", name: book.name),
+        book: book,
+        changeset: Books.change_book(book)
+      )
+    end
   end
 
   @impl Phoenix.LiveView

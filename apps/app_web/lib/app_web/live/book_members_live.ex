@@ -8,6 +8,7 @@ defmodule AppWeb.BookMembersLive do
 
   alias App.Accounts.Avatars
   alias App.Balance
+  alias App.Books
 
   alias AppWeb.BooksHelpers
 
@@ -19,7 +20,7 @@ defmodule AppWeb.BookMembersLive do
   def render(assigns) do
     ~H"""
     <div class="max-w-prose mx-auto">
-      <div class="grid grid-cols-2">
+      <div :if={not Books.closed?(@book)} class="grid grid-cols-2">
         <.tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
           <.icon name="mail" />
           <%= gettext("Invite people") %>

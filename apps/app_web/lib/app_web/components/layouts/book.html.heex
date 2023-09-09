@@ -31,7 +31,7 @@
         <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
       </:toggle>
 
-      <.list_item_link navigate={~p"/books/#{@book}/edit"} replace>
+      <.list_item_link :if={not Books.closed?(@book)} navigate={~p"/books/#{@book}/edit"} replace>
         <.icon name="edit" />
         <%= gettext("Edit") %>
       </.list_item_link>

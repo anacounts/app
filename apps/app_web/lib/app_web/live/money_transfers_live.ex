@@ -6,6 +6,7 @@ defmodule AppWeb.MoneyTransfersLive do
 
   use AppWeb, :live_view
 
+  alias App.Books
   alias App.Transfers
 
   alias AppWeb.BooksHelpers
@@ -60,7 +61,7 @@ defmodule AppWeb.MoneyTransfersLive do
       </.tile>
     </div>
 
-    <.fab_container class="mb-12 md:mb-0">
+    <.fab_container :if={not Books.closed?(@book)} class="mb-12 md:mb-0">
       <:item>
         <.fab navigate={~p"/books/#{@book}/transfers/new"}>
           <.icon name="add" alt="Add a money transfer" />

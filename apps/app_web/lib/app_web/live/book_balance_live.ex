@@ -2,6 +2,7 @@ defmodule AppWeb.BookBalanceLive do
   use AppWeb, :live_view
 
   alias App.Balance
+  alias App.Books
 
   alias AppWeb.BooksHelpers
   alias AppWeb.ReimbursementModalComponent
@@ -40,6 +41,7 @@ defmodule AppWeb.BookBalanceLive do
               </div>
               <%= transaction.amount %>
               <.button
+                :if={not Books.closed?(@book)}
                 color={:cta}
                 phx-click="select-transaction"
                 phx-value-transaction-id={transaction.id}

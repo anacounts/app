@@ -10,11 +10,6 @@
            transition-colors;
   }
 
-  .button:disabled {
-    @apply bg-gray-50
-           border-gray-50;
-  }
-
   /* ## Call to action */
 
   .button--cta {
@@ -30,6 +25,11 @@
     @apply bg-theme-darker;
   }
 
+  .button--cta:disabled {
+    @apply bg-gray-50
+           border-gray-50;
+  }
+
   /* ## Feature */
 
   .button--feature {
@@ -43,6 +43,12 @@
 
   .button--feature:focus {
     @apply bg-gray-20;
+  }
+
+  .button--feature:disabled {
+    @apply text-gray-70
+           bg-gray-20
+           border-gray-40;
   }
 
   /* ## Ghost */
