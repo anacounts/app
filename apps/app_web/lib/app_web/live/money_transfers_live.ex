@@ -6,6 +6,7 @@ defmodule AppWeb.MoneyTransfersLive do
 
   use AppWeb, :live_view
 
+  alias App.Books
   alias App.Transfers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -97,6 +98,15 @@ defmodule AppWeb.MoneyTransfersLive do
      update(socket, :money_transfers, fn money_transfers ->
        Enum.reject(money_transfers, &(&1.id == money_transfer.id))
      end)}
+  end
+
+  def handle_event("delete-book", _params, socket) do
+    Books.delete_book!(socket.assigns.book)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Book deleted successfully"))
+     |> push_navigate(to: ~p"/books")}
   end
 
   defp class_for_transfer_type(:payment), do: "text-error"

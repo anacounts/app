@@ -52,6 +52,10 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr "Êtes-vous certain de vouloir supprimer le transfert ?"
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete this book?"
+msgstr "Êtes-vous certain de vouloir supprimer ce livret ?"
+
+#, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Tentative de reconnexion"
 
@@ -197,11 +201,11 @@ msgstr "Modifier %{member_name} · %{book_name}"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book"
-msgstr "Modifier un livre"
+msgstr "Modifier un livret"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
-msgstr "Editer un livre · %{name}"
+msgstr "Editer un livret · %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Member"
@@ -605,15 +609,15 @@ msgstr "Qui êtes-vous ?"
 
 #, elixir-autogen, elixir-format
 msgid "You are already member of this book"
-msgstr "Vous êtes déjà membre de ce livre"
+msgstr "Vous êtes déjà membre de ce livret"
 
 #, elixir-autogen, elixir-format
 msgid "You have been added to the book"
-msgstr "Vous avez été ajouté au livre"
+msgstr "Vous avez été ajouté au livret"
 
 #, elixir-autogen, elixir-format
 msgid "You have been invited to join a new book:"
-msgstr "Vous avez été invité à rejoindre un livre:"
+msgstr "Vous avez été invité à rejoindre un livret:"
 
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."

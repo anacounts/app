@@ -25,6 +25,19 @@ defmodule AppWeb.BookBalanceLiveTest do
     })
   end
 
+  test "deletes book", %{conn: conn, book: book} do
+    {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/balance")
+
+    assert {:ok, _, html} =
+             show_live
+             |> element("#delete-book", "Delete")
+             |> render_click()
+             |> follow_redirect(conn, ~p"/books")
+
+    assert html =~ "Book deleted successfully"
+    refute html =~ book.name
+  end
+
   describe "reimbursement modal" do
     # Open the modal
     setup %{conn: conn, book: book} = context do
