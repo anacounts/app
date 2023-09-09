@@ -49,6 +49,10 @@ defmodule App.Books.Book do
     |> validate_required(:default_balance_params)
   end
 
+  @doc """
+  Returns a changeset to soft-delete a book.
+  """
+  @spec delete_changeset(t()) :: Ecto.Changeset.t()
   def delete_changeset(book) do
     now = NaiveDateTime.utc_now(:second)
     change(book, deleted_at: now)

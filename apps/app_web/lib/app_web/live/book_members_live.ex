@@ -98,7 +98,7 @@ defmodule AppWeb.BookMembersLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete", _params, socket) do
-    {:ok, _} = Books.delete_book(socket.assigns.book)
+    Books.delete_book!(socket.assigns.book)
 
     {:noreply,
      socket
