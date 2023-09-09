@@ -9,9 +9,10 @@ defmodule AppWeb.BookMembersLive do
   alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
-  alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -28,7 +29,7 @@ defmodule AppWeb.BookMembersLive do
         </.tile>
       </div>
 
-      <.tile :for={member <- @members} navigate={~p"/books/#{@book}/members/#{member}"}>
+      <.tile :for={member <- @book_members} navigate={~p"/books/#{@book}/members/#{member}"}>
         <.member_avatar member={member} />
         <span class="grow font-bold">
           <%= member.display_name %>
@@ -81,16 +82,10 @@ defmodule AppWeb.BookMembersLive do
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    members =
-      book
-      |> Members.list_members_of_book()
-      |> Balance.fill_members_balance()
-
     socket =
       assign(socket,
         page_title: book.name,
-        layout_heading: gettext("Details"),
-        members: members
+        layout_heading: gettext("Details")
       )
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}

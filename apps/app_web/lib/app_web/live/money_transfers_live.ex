@@ -10,6 +10,8 @@ defmodule AppWeb.MoneyTransfersLive do
   alias App.Transfers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do

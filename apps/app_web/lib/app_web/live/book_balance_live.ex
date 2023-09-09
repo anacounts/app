@@ -3,11 +3,12 @@ defmodule AppWeb.BookBalanceLive do
 
   alias App.Balance
   alias App.Books
-  alias App.Books.Members
 
   alias AppWeb.ReimbursementModalComponent
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
+  on_mount {AppWeb.BookAccess, :assign_book_members}
+  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -77,11 +78,7 @@ defmodule AppWeb.BookBalanceLive do
   end
 
   defp assign_transactions(socket) do
-    members =
-      Members.list_members_of_book(socket.assigns.book)
-      |> Balance.fill_members_balance()
-
-    case Balance.transactions(members) do
+    case Balance.transactions(socket.assigns.book_members) do
       {:ok, transactions} ->
         assign(socket, transactions_error?: false, transactions: transactions)
 

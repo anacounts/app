@@ -156,6 +156,16 @@ defmodule App.Balance do
     match?({:error, _reasons}, member.balance)
   end
 
+  @doc """
+  Checks if the computed balance of members does not have errors and is zero.
+  """
+  @spec unbalanced?([BookMember.t()]) :: boolean()
+  def unbalanced?(members) do
+    Enum.any?(members, fn member ->
+      has_balance_error?(member) or not Money.zero?(member.balance)
+    end)
+  end
+
   @typedoc """
   A type representing a transaction between two members.
   This is used to display required operations to balance money between members.
