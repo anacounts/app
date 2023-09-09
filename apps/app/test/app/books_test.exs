@@ -50,7 +50,7 @@ defmodule App.BooksTest do
     end
 
     test "returns `nil` if the book was deleted", %{book: book, user: user} do
-      assert {:ok, _book} = Books.delete_book(book)
+      Books.delete_book!(book)
       refute Books.get_book_of_user(book.id, user)
     end
   end
@@ -78,7 +78,7 @@ defmodule App.BooksTest do
     end
 
     test "raises if the book was deleted", %{book: book, user: user} do
-      assert {:ok, _book} = Books.delete_book(book)
+      Books.delete_book!(book)
 
       assert_raise Ecto.NoResultsError, fn ->
         Books.get_book_of_user!(book.id, user)
@@ -266,11 +266,11 @@ defmodule App.BooksTest do
     end
   end
 
-  describe "delete_book/2" do
+  describe "delete_book!/2" do
     setup :book_with_creator_context
 
     test "deletes the book", %{book: book} do
-      assert {:ok, deleted} = Books.delete_book(book)
+      deleted = Books.delete_book!(book)
       assert deleted.id == book.id
 
       assert deleted_book = Repo.get(Book, book.id)
