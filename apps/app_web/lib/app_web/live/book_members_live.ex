@@ -8,7 +8,8 @@ defmodule AppWeb.BookMembersLive do
 
   alias App.Accounts.Avatars
   alias App.Balance
-  alias App.Books
+
+  alias AppWeb.BooksHelpers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
   on_mount {AppWeb.BookAccess, :assign_book_members}
@@ -93,11 +94,6 @@ defmodule AppWeb.BookMembersLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+    BooksHelpers.handle_delete_book(socket)
   end
 end

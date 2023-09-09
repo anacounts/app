@@ -2,8 +2,8 @@ defmodule AppWeb.BookBalanceLive do
   use AppWeb, :live_view
 
   alias App.Balance
-  alias App.Books
 
+  alias AppWeb.BooksHelpers
   alias AppWeb.ReimbursementModalComponent
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -89,12 +89,7 @@ defmodule AppWeb.BookBalanceLive do
 
   @impl Phoenix.LiveView
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+    BooksHelpers.handle_delete_book(socket)
   end
 
   def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do

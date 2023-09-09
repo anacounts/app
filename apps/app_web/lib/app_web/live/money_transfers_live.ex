@@ -6,8 +6,9 @@ defmodule AppWeb.MoneyTransfersLive do
 
   use AppWeb, :live_view
 
-  alias App.Books
   alias App.Transfers
+
+  alias AppWeb.BooksHelpers
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
   on_mount {AppWeb.BookAccess, :assign_book_members}
@@ -103,12 +104,7 @@ defmodule AppWeb.MoneyTransfersLive do
   end
 
   def handle_event("delete-book", _params, socket) do
-    Books.delete_book!(socket.assigns.book)
-
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Book deleted successfully"))
-     |> push_navigate(to: ~p"/books")}
+    BooksHelpers.handle_delete_book(socket)
   end
 
   defp class_for_transfer_type(:payment), do: "text-error"
