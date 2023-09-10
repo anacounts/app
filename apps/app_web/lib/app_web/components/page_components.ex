@@ -160,7 +160,8 @@ defmodule AppWeb.PageComponents do
   """
   def page_header(assigns) do
     ~H"""
-    <header class="flex items-center gap-2
+    <header class="sticky top-0
+                   flex items-center gap-2
                    h-14 mb-2 px-4
                    bg-theme text-white shadow">
       <.button
