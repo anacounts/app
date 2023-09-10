@@ -373,17 +373,13 @@ defmodule AppWeb.CoreComponents do
 
   ## Examples
 
-      <.heading level={:title}>
-        Title
-      </.heading>
-
       <.heading level={:section}>
         Section title
       </.heading>
 
   """
 
-  attr :level, :atom, required: true, values: [:title, :section], doc: "The level of the heading"
+  attr :level, :atom, required: true, values: [:section], doc: "The level of the heading"
   attr :class, :any, default: nil, doc: "Extra classes to add to the heading"
   attr :rest, :global
 
@@ -401,10 +397,8 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp heading_level_tag(:title), do: "h1"
   defp heading_level_tag(:section), do: "h2"
 
-  defp heading_level_class(:title), do: "heading--title"
   defp heading_level_class(:section), do: "heading--section"
 
   ## Icon
@@ -507,7 +501,7 @@ defmodule AppWeb.CoreComponents do
 
       <.modal id="modal">
         <:header>
-          <.heading level={:title}>Modal title</.heading>
+          <h1>Modal title</h1>
         </:header>
 
         <p>Modal body</p>
