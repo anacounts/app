@@ -65,8 +65,12 @@ defmodule AppWeb.BookAccess do
   end
 
   defp mount_book!(socket, %{"book_id" => book_id}) do
-    Phoenix.Component.assign_new(socket, :book, fn ->
+    socket
+    |> Phoenix.Component.assign_new(:book, fn ->
       Books.get_book_of_user!(book_id, socket.assigns.current_user)
+    end)
+    |> Phoenix.Component.assign_new(:current_member, fn %{book: book, current_user: current_user} ->
+      Members.get_membership(book, current_user)
     end)
   end
 
