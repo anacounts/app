@@ -12,6 +12,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
+msgid "%{count} transfer"
+msgid_plural "%{count} transfers"
+msgstr[0] "%{count} transfer"
+msgstr[1] "%{count} transfers"
+
+#, elixir-autogen, elixir-format
 msgid "%{member_name} in %{book_name}"
 msgstr "%{member_name} in %{book_name}"
 
@@ -296,6 +302,10 @@ msgid "Income"
 msgstr "Income"
 
 #, elixir-autogen, elixir-format
+msgid "Incomes"
+msgstr "Incomes"
+
+#, elixir-autogen, elixir-format
 msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 
@@ -462,6 +472,10 @@ msgstr "Password updated successfully!"
 #, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Payment"
+
+#, elixir-autogen, elixir-format
+msgid "Payments"
+msgstr "Payments"
 
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
@@ -658,6 +672,14 @@ msgstr "You must log in to access this page."
 #, elixir-autogen, elixir-format
 msgid "Your avatar"
 msgstr "Your avatar"
+
+#, elixir-autogen, elixir-format
+msgid "Your incomes"
+msgstr "Your incomes"
+
+#, elixir-autogen, elixir-format
+msgid "Your payments"
+msgstr "Your payments"
 
 #, elixir-autogen, elixir-format
 msgid "gives"

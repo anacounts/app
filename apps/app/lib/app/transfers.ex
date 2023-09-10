@@ -185,15 +185,6 @@ defmodule App.Transfers do
 
   @doc """
   Retrieves the amount of money a money transfer costs or provides.
-
-  ## Examples
-
-      iex> amount(%MoneyTransfer{amount: 100, type: :payment})
-      100
-
-      iex> amount(%MoneyTransfer{amount: 100, type: :income})
-      -100
-
   """
   @spec amount(MoneyTransfer.t()) :: Money.t()
   def amount(money_transfer)

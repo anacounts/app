@@ -11,6 +11,12 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "%{count} transfer"
+msgid_plural "%{count} transfers"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
 msgid "%{member_name} in %{book_name}"
 msgstr ""
 
@@ -295,6 +301,10 @@ msgid "Income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Incomes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr ""
 
@@ -460,6 +470,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Payment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Payments"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -656,6 +670,14 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Your avatar"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your incomes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your payments"
 msgstr ""
 
 #, elixir-autogen, elixir-format
