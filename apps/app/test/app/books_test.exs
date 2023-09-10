@@ -18,21 +18,6 @@ defmodule App.BooksTest do
 
   ## Database getters
 
-  describe "get_book!/1" do
-    setup do
-      %{book: book_fixture()}
-    end
-
-    test "returns the book with given id", %{book: book} do
-      assert got = Books.get_book!(book.id)
-      assert got.id == book.id
-    end
-
-    test "raises if book does not exist" do
-      assert_raise Ecto.NoResultsError, fn -> Books.get_book!(-1) end
-    end
-  end
-
   describe "get_book_of_user/2" do
     setup :book_with_creator_context
 
@@ -286,9 +271,6 @@ defmodule App.BooksTest do
 
     test "returns error changeset with invalid data", %{book: book} do
       assert {:error, %Ecto.Changeset{}} = Books.update_book(book, @invalid_book_attrs)
-
-      assert got = Books.get_book!(book.id)
-      assert got.id == book.id
     end
   end
 
