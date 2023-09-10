@@ -32,15 +32,13 @@ defmodule AppWeb.BookAccessTest do
       assert updated_socket.assigns.book.id == book.id
     end
 
-    # FIXME ensure_book! does not check for access
-    # test "raises if the user does not have access to the book", %{socket: socket} do
-    #   book = book_fixture()
+    test "raises if the user does not have access to the book", %{socket: socket} do
+      book = book_fixture()
 
-    #   assert_raise Ecto.NoResultsError, fn ->
-    #     BookAccess.on_mount(:ensure_book!, %{"book_id" => book.id}, nil, socket)
-    #     |> dbg()
-    #   end
-    # end
+      assert_raise Ecto.NoResultsError, fn ->
+        BookAccess.on_mount(:ensure_book!, %{"book_id" => book.id}, nil, socket)
+      end
+    end
 
     test "raises if the book is not found", %{socket: socket} do
       assert_raise Ecto.NoResultsError, fn ->
