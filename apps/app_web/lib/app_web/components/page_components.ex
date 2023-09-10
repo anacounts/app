@@ -171,7 +171,9 @@ defmodule AppWeb.PageComponents do
         <.icon name="arrow-back" alt={gettext("Go back")} />
       </.button>
 
-      <.heading level={:title} class="mr-auto"><%= render_slot(@title) %></.heading>
+      <b class="mr-auto text-xl md:text-2xl font-normal uppercase">
+        <%= render_slot(@title) %>
+      </b>
 
       <.tabs :if={not is_nil(assigns[:tab_item]) and not Enum.empty?(@tab_item)}>
         <:item :for={tab_item <- @tab_item} {assigns_to_attributes(tab_item)}>
