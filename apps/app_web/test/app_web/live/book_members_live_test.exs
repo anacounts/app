@@ -29,7 +29,7 @@ defmodule AppWeb.BookMembersLiveTest do
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
 
     # the book name is the main title
-    assert html =~ book.name <> "\n</h1>"
+    assert html =~ book.name <> "\n  </b>"
     # the tabs are displayed
     assert html =~ "Members"
     # there are links that go to the invitation and member creation pages

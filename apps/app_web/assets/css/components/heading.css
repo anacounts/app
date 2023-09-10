@@ -3,11 +3,6 @@
     @apply truncate;
   }
 
-  .heading--title {
-    @apply uppercase;
-    font-size: clamp(1.25rem, -1rem + 8.333vw, 1.5rem);
-  }
-
   .heading--section {
     @apply mx-4
            font-bold uppercase;
