@@ -19,8 +19,9 @@ defmodule AppWeb.MoneyTransfersLive do
   def render(assigns) do
     ~H"""
     <div class="md:flex md:justify-center">
+      <% # Transfers summary %>
       <% # `details/summary` cannot be forced open on desktop, use the checkbox hack instead %>
-      <div class="md:w-80 mx-2 mb-4 p-2 border-b md:border-none border-gray-40">
+      <div id="transfers-summary" class="md:w-80 mx-2 mb-4 p-2 border-b md:border-none border-gray-40">
         <label
           for="details-hack"
           class="mb-0 text-xl text-center list-none cursor-pointer md:cursor-default"
@@ -48,7 +49,14 @@ defmodule AppWeb.MoneyTransfersLive do
         </div>
       </div>
 
-      <div class="grow basis-3/4 max-w-prose">
+      <% # Transfers list %>
+      <div id="transfers-list" class="grow basis-3/4 max-w-prose">
+        <div class="md:hidden mx-2 text-right">
+          <.button color={:ghost} phx-click={show_dialog("#filters")}>
+            <.icon name="tune" />
+          </.button>
+        </div>
+
         <.tile
           :for={transfer <- @money_transfers}
           summary_class={["font-bold", class_for_transfer_type(transfer.type)]}
@@ -90,6 +98,17 @@ defmodule AppWeb.MoneyTransfersLive do
           </:button>
         </.tile>
       </div>
+
+      <% # Filters %>
+      <.filters id="filters" phx-change="filter">
+        <:section icon="arrow_downward" title={gettext("Sort by")}>
+          <.filter_options field={@filters[:sort_by]} options={sort_by_options()} />
+        </:section>
+
+        <:section icon="filter_alt" title={gettext("Filter by")}>
+          <.filter_options field={@filters[:tenanted_by]} options={tenanted_by_options()} />
+        </:section>
+      </.filters>
     </div>
 
     <.fab_container :if={not Books.closed?(@book)} class="mb-12 md:mb-0">
@@ -135,15 +154,25 @@ defmodule AppWeb.MoneyTransfersLive do
       |> Transfers.list_transfers_of_book()
       |> Transfers.with_tenant()
 
+    filters =
+      to_form(
+        %{
+          "sort_by" => "most_recent",
+          "tenanted_by" => "anyone"
+        },
+        as: :filters
+      )
+
     socket =
       assign(socket,
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
         layout_heading: gettext("Transfers"),
-        money_transfers: money_transfers
+        money_transfers: money_transfers,
+        filters: filters
       )
       |> assign_amounts_summaries()
 
-    {:ok, socket, layout: {AppWeb.Layouts, :book}}
+    {:ok, socket, layout: {AppWeb.Layouts, :book}, temporary_assigns: [filters: nil]}
   end
 
   defp assign_amounts_summaries(socket) do
@@ -167,6 +196,23 @@ defmodule AppWeb.MoneyTransfersLive do
     }
   end
 
+  defp sort_by_options do
+    [
+      {gettext("Most recent"), "most_recent"},
+      {gettext("Oldest"), "oldest"},
+      {gettext("Last created"), "last_created"},
+      {gettext("First created"), "first_created"}
+    ]
+  end
+
+  defp tenanted_by_options do
+    [
+      {gettext("Paid by anyone"), "anyone"},
+      {gettext("Paid by me"), "me"},
+      {gettext("Paid by others"), "others"}
+    ]
+  end
+
   @impl Phoenix.LiveView
   def handle_event("delete", %{"id" => money_transfer_id}, socket) do
     book = socket.assigns.book
@@ -181,6 +227,30 @@ defmodule AppWeb.MoneyTransfersLive do
         Enum.reject(money_transfers, &(&1.id == money_transfer.id))
       end)
       |> assign_amounts_summaries()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("filter", %{"filters" => filters}, socket) do
+    %{book: book, current_member: current_member} = socket.assigns
+
+    context_filters =
+      Map.update(filters, "tenanted_by", :anyone, fn
+        "anyone" -> :anyone
+        "me" -> current_member.id
+        "others" -> {:not, current_member.id}
+      end)
+
+    money_transfers =
+      book
+      |> Transfers.list_transfers_of_book(context_filters)
+      |> Transfers.with_tenant()
+
+    socket =
+      assign(socket,
+        money_transfers: money_transfers,
+        filters: to_form(filters, as: :filters)
+      )
 
     {:noreply, socket}
   end

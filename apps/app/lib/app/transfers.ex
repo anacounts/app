@@ -11,7 +11,7 @@ defmodule App.Transfers do
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
-  ## Money transfer
+  ## Database getters
 
   @doc """
   Gets a single money_transfer.
@@ -30,11 +30,20 @@ defmodule App.Transfers do
 
   @doc """
   Find all money transfers of a book.
+
+  The result may be filtered by passing a map of filters.
+
+  ## Filters
+
+  - `:sort_by` - the field to sort by, one of :most_recent, :oldest, :last_created or
+    :first_created
+  - `:tenanted_by` - the tenancy of the transfer, one of :anyone, a member id or
+    `{:not, member_id}`
   """
-  @spec list_transfers_of_book(Book.t()) :: [MoneyTransfer.t()]
-  def list_transfers_of_book(%Book{} = book) do
+  @spec list_transfers_of_book(Book.t(), map()) :: [MoneyTransfer.t()]
+  def list_transfers_of_book(%Book{} = book, filters \\ %{}) do
     MoneyTransfer.transfers_of_book_query(book)
-    |> order_by(desc: :date)
+    |> filter_money_transfers_query(filters)
     |> Repo.all()
   end
 
@@ -53,18 +62,63 @@ defmodule App.Transfers do
     |> Repo.all()
   end
 
-  @doc """
-  Preloads the tenant of one or a list of money transfers.
-  Includes the display name of the tenant.
-  """
-  @spec with_tenant([MoneyTransfer.t()]) :: [MoneyTransfer.t()]
-  def with_tenant(transfers) do
-    Repo.preload(transfers,
-      tenant:
-        BookMember.base_query()
-        |> BookMember.select_display_name()
-    )
+  ## Filters
+
+  @filters_default %{
+    sort_by: :most_recent,
+    tenanted_by: :anyone
+  }
+  @filters_types %{
+    sort_by:
+      Ecto.ParameterizedType.init(Ecto.Enum,
+        values: [:most_recent, :oldest, :last_created, :first_created]
+      ),
+    # Values are `:anyone`, `member_id` or `{:not, member_id}`
+    tenanted_by: :any
+  }
+
+  defp filter_money_transfers_query(query, raw_filters) do
+    filters =
+      {@filters_default, @filters_types}
+      |> Ecto.Changeset.cast(raw_filters, Map.keys(@filters_types))
+      |> Ecto.Changeset.apply_changes()
+
+    query
+    |> sort_money_transfers_by(filters[:sort_by])
+    |> filter_money_transfers_by_tenancy(filters[:tenanted_by])
   end
+
+  defp sort_money_transfers_by(query, :most_recent),
+    do: from([money_transfer: money_transfer] in query, order_by: [desc: money_transfer.date])
+
+  defp sort_money_transfers_by(query, :oldest),
+    do: from([money_transfer: money_transfer] in query, order_by: [asc: money_transfer.date])
+
+  defp sort_money_transfers_by(query, :last_created),
+    do:
+      from([money_transfer: money_transfer] in query,
+        order_by: [desc: money_transfer.inserted_at]
+      )
+
+  defp sort_money_transfers_by(query, :first_created),
+    do:
+      from([money_transfer: money_transfer] in query, order_by: [asc: money_transfer.inserted_at])
+
+  defp filter_money_transfers_by_tenancy(query, :anyone), do: query
+
+  defp filter_money_transfers_by_tenancy(query, {:not, member_id}),
+    do:
+      from([money_transfer: money_transfer] in query,
+        where: money_transfer.tenant_id != ^member_id
+      )
+
+  defp filter_money_transfers_by_tenancy(query, member_id),
+    do:
+      from([money_transfer: money_transfer] in query,
+        where: money_transfer.tenant_id == ^member_id
+      )
+
+  ## Amount summary
 
   @typep amount_summary :: %{
            type: MoneyTransfer.type(),
@@ -121,6 +175,23 @@ defmodule App.Transfers do
       end)
     end)
   end
+
+  ## Preloads
+
+  @doc """
+  Preloads the tenant of one or a list of money transfers.
+  Includes the display name of the tenant.
+  """
+  @spec with_tenant([MoneyTransfer.t()]) :: [MoneyTransfer.t()]
+  def with_tenant(transfers) do
+    Repo.preload(transfers,
+      tenant:
+        BookMember.base_query()
+        |> BookMember.select_display_name()
+    )
+  end
+
+  ## CRUD
 
   @doc """
   Creates a money_transfer.
@@ -192,6 +263,8 @@ defmodule App.Transfers do
     |> MoneyTransfer.changeset(attrs)
     |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
   end
+
+  ## Status/fields
 
   # TODO Rework, a :payment should have a negative amount since it appears as negative to the user
 
