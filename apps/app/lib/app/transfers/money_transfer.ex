@@ -7,6 +7,7 @@ defmodule App.Transfers.MoneyTransfer do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Ecto.Query
 
   alias App.Balance.TransferParams
   alias App.Books.Book
@@ -103,5 +104,21 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_balance_params(changeset) do
     changeset
     |> validate_required(:balance_params)
+  end
+
+  ## Queries
+
+  # create a simple query with named binding
+  defp base_query do
+    from __MODULE__, as: :money_transfer
+  end
+
+  @doc """
+  Get all money transfers within a book.
+  """
+  @spec transfers_of_book_query(Book.t()) :: Ecto.Query.t()
+  def transfers_of_book_query(book) do
+    from [money_transfer: money_transfer] in base_query(),
+      where: money_transfer.book_id == ^book.id
   end
 end

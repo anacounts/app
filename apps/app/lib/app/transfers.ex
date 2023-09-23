@@ -17,15 +17,6 @@ defmodule App.Transfers do
   Gets a single money_transfer.
 
   Raises `Ecto.NoResultsError` if the Money transfer does not exist.
-
-  ## Examples
-
-      iex> get_money_transfer!(123)
-      %MoneyTransfer{}
-
-      iex> get_money_transfer!(-1)
-      ** (Ecto.NoResultsError)
-
   """
   def get_money_transfer!(id), do: Repo.get!(MoneyTransfer, id)
 
@@ -33,67 +24,38 @@ defmodule App.Transfers do
   Gets a single money_transfer, if they belong to a book.
 
   Raises `Ecto.NoResultsError` if the Money transfer does not exist.
-
-  ## Examples
-
-      iex> get_money_transfer_of_book!(123)
-      %MoneyTransfer{}
-
-      iex> get_money_transfer_of_book!(-1)
-      ** (Ecto.NoResultsError)
   """
   def get_money_transfer_of_book!(id, book_id),
     do: Repo.get_by!(MoneyTransfer, id: id, book_id: book_id)
 
   @doc """
   Find all money transfers of a book.
-
-  ## Examples
-
-      iex> list_transfers_of_book(book)
-      [%MoneyTransfer{}, ...]
-
   """
   @spec list_transfers_of_book(Book.t()) :: [MoneyTransfer.t()]
   def list_transfers_of_book(%Book{} = book) do
-    base_query()
-    |> where_book_id(book.id)
+    MoneyTransfer.transfers_of_book_query(book)
     |> order_by(desc: :date)
     |> Repo.all()
   end
 
   @doc """
   Find all money transfers related to book members.
-
-  ## Examples
-
-      iex> list_transfers_of_members([member1, member2])
-      [%MoneyTransfer{}, ...]
-
   """
   @spec list_transfers_of_members([BookMember.t()]) :: [MoneyTransfer.t()]
   def list_transfers_of_members(members) do
     members_id = Enum.map(members, fn %BookMember{} = member -> member.id end)
 
-    base_query()
-    |> join_peers()
-    |> where([peer: peer], peer.member_id in ^members_id)
-    |> distinct(true)
+    from(money_transfer in MoneyTransfer,
+      join: peer in assoc(money_transfer, :peers),
+      where: peer.member_id in ^members_id,
+      distinct: true
+    )
     |> Repo.all()
   end
 
   @doc """
   Preloads the tenant of one or a list of money transfers.
   Includes the display name of the tenant.
-
-  ## Examples
-
-      iex> with_tenant(money_transfer)
-      %MoneyTransfer{tenant: %BookMember{}}
-
-      iex> with_tenant([money_transfer_1, money_transfer_2])
-      [%MoneyTransfer{tenant: %BookMember{}}, %MoneyTransfer{tenant: %BookMember{}}]
-
   """
   @spec with_tenant([MoneyTransfer.t()]) :: [MoneyTransfer.t()]
   def with_tenant(transfers) do
@@ -168,12 +130,6 @@ defmodule App.Transfers do
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking money_transfer changes.
-
-  ## Examples
-
-      iex> change_money_transfer(money_transfer)
-      %Ecto.Changeset{data: %MoneyTransfer{}}
-
   """
   def change_money_transfer(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
     money_transfer
@@ -190,21 +146,4 @@ defmodule App.Transfers do
   def amount(money_transfer)
   def amount(%MoneyTransfer{type: :payment} = money_transfer), do: money_transfer.amount
   def amount(%MoneyTransfer{} = money_transfer), do: Money.neg(money_transfer.amount)
-
-  ## Queries
-
-  defp base_query do
-    from MoneyTransfer, as: :money_transfer
-  end
-
-  defp join_peers(query, qual \\ :inner) do
-    with_named_binding(query, :peer, fn query ->
-      join(query, qual, [money_transfer: transfer], peer in assoc(transfer, :peers), as: :peer)
-    end)
-  end
-
-  defp where_book_id(query, book_id) do
-    from [money_transfer: money_transfer] in query,
-      where: money_transfer.book_id == ^book_id
-  end
 end
