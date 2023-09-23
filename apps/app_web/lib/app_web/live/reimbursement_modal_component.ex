@@ -156,27 +156,20 @@ defmodule AppWeb.ReimbursementModalComponent do
 
   defp money_transfer_params(params) do
     {amount, params} = Map.pop(params, "amount")
-    {currency, params} = Map.pop(params, "currency", "EUR")
 
     %{
       type: :reimbursement,
       balance_params: %{means_code: :divide_equally},
       label: params["label"],
-      amount: parse_money_or_nil(amount, currency),
+      amount: parse_money_or_nil(amount),
       date: params["date"],
       tenant_id: params["creditor_id"],
       peers: [%{member_id: params["debtor_id"]}]
     }
   end
 
-  defp parse_money_or_nil(amount, currency) do
-    with true <- amount != nil and currency != nil,
-         {:ok, money} <- Money.parse(amount, currency) do
-      money
-    else
-      _ -> nil
-    end
-  end
+  defp parse_money_or_nil(""), do: nil
+  defp parse_money_or_nil(amount), do: Money.new!(:EUR, amount)
 
   defp to_reimbursement_form(changeset) do
     changeset

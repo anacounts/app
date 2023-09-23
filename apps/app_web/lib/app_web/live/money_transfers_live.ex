@@ -25,7 +25,7 @@ defmodule AppWeb.MoneyTransfersLive do
           for="details-hack"
           class="mb-0 text-xl text-center list-none cursor-pointer md:cursor-default"
         >
-          <span class={class_for_amount(@total_amount)}><%= Money.to_string(@total_amount) %></span>
+          <span class={class_for_amount(@total_amount)}><%= Money.to_string!(@total_amount) %></span>
           / <%= ngettext(
             "%{count} transfer",
             "%{count} transfers",
@@ -80,7 +80,7 @@ defmodule AppWeb.MoneyTransfersLive do
         >
           <.icon name={icon_for_transfer_type(transfer.type)} />
           <span class="grow"><%= transfer.label %></span>
-          <%= Money.to_string(transfer.amount) %>
+          <%= Money.to_string!(transfer.amount) %>
 
           <:description>
             <div class="flex justify-between mb-3">
@@ -167,8 +167,8 @@ defmodule AppWeb.MoneyTransfersLive do
   defp total_amount(money_transfers) do
     money_transfers
     |> Stream.map(&Transfers.amount/1)
-    |> Enum.reduce(Money.new(0, :EUR), &Money.add/2)
-    |> Money.neg()
+    |> Enum.reduce(Money.new!(:EUR, 0), &Money.add!/2)
+    |> Money.mult!(-1)
   end
 
   defp total_amount_by(money_transfers, filter_fn) do

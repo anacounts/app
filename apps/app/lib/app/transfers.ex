@@ -145,5 +145,5 @@ defmodule App.Transfers do
   @spec amount(MoneyTransfer.t()) :: Money.t()
   def amount(money_transfer)
   def amount(%MoneyTransfer{type: :payment} = money_transfer), do: money_transfer.amount
-  def amount(%MoneyTransfer{} = money_transfer), do: Money.neg(money_transfer.amount)
+  def amount(%MoneyTransfer{} = money_transfer), do: Money.mult!(money_transfer.amount, -1)
 end
