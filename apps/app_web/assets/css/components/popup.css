@@ -1,0 +1,46 @@
+@layer components {
+  .popup {
+    @apply flex-col gap-8
+           max-w-full h-full max-h-full
+           p-8 m-0
+           border-none;
+  }
+
+  .popup[open] {
+    @apply flex;
+  }
+
+  .popup::backdrop {
+    @apply bg-black/70;
+  }
+
+  .popup__header {
+    @apply max-w-prose;
+  }
+
+  .popup__dismiss {
+    @apply absolute top-1 right-1
+           text-black;
+  }
+
+  .popup__dismiss:hover {
+    @apply text-black bg-gray-10;
+  }
+
+  .popup__body {
+    @apply flex-auto overflow-auto;
+  }
+
+  .popup__footer {
+    @apply text-end;
+  }
+
+  @screen md {
+    .popup {
+      @apply h-fit
+             max-h-[90%]
+             m-auto
+             rounded-md;
+    }
+  }
+}
