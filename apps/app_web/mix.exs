@@ -40,24 +40,39 @@ defmodule AppWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Phoenix and server tooling
       {:phoenix, "~> 1.7.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_live_view, "~> 0.19"},
-      {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.7"},
+      {:plug_cowboy, "~> 2.6"},
+
+      # Front tooling
       {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
+
+      # Internationalization
       {:gettext, "~> 0.22"},
-      {:app, in_umbrella: true},
-      {:sentry, "~> 8.0"},
-      {:finch, "~> 0.14"},
+      {:ex_cldr, "~> 2.37"},
+      {:ex_cldr_plugs, "~> 1.3"},
+
+      # Tools
+      {:floki, ">= 0.30.0", only: :test},
       {:jason, "~> 1.4"},
       {:earmark, "~> 1.4"},
-      {:plug_cowboy, "~> 2.6"}
+
+      # Error reporting
+      {:sentry, "~> 8.0"},
+      {:finch, "~> 0.14"},
+
+      # Telemetry
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"},
+
+      # Umbrella
+      {:app, in_umbrella: true}
     ]
   end
 

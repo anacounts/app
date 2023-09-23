@@ -57,6 +57,8 @@ defmodule AppWeb do
       use Phoenix.LiveView,
         layout: {AppWeb.Layouts, :app}
 
+      on_mount AppWeb.Locale
+
       unquote(html_helpers())
     end
   end

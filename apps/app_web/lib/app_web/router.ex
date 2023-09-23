@@ -6,12 +6,20 @@ defmodule AppWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
+
+    plug Cldr.Plug.PutLocale,
+      apps: [:cldr, :gettext],
+      from: [:accept_language],
+      gettext: AppWeb.Gettext,
+      cldr: AppWeb.Cldr
+
+    plug Cldr.Plug.PutSession
+
     plug :fetch_live_flash
     plug :put_root_layout, {AppWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
-    plug AppWeb.Locale
   end
 
   pipeline :api do
