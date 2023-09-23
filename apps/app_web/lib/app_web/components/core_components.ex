@@ -145,7 +145,9 @@ defmodule AppWeb.CoreComponents do
     doc: "The color of the button"
 
   attr :class, :any, default: nil, doc: "Extra classes to add to the button"
-  attr :rest, :global, include: @link_attrs
+
+  attr :rest, :global,
+    include: @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget)
 
   slot :inner_block
 
@@ -483,78 +485,46 @@ defmodule AppWeb.CoreComponents do
   end
 
   @doc """
-  Generates a modal element.
-
-  ## Attributes
-
-  - id (required): The id of the modal
-  - size: The size of the modal. Defaults to "md"
-  - open: Whether the modal is open by default or not. Defaults to false
-
-  ## Slots
-
-  - header: The header of the modal
-  - inner_block: The body of the modal
-  - footer: The footer of the modal
+  Generates a popup element.
 
   ## Example
 
-      <.modal id="modal">
-        <:header>
-          <h1>Modal title</h1>
-        </:header>
+      <.popup id="popup">
+        <:title>Popup title</:title>
 
-        <p>Modal body</p>
-
-        <:footer>
-          <.button color={:ghost}>Cancel</.button>
-          <.button color="primary">Save</.button>
-        </:footer>
-      </.modal>
+        <p>Popup body</p>
+      </.popup>
 
   """
 
-  attr :id, :string, required: true, doc: "The id of the modal"
-  attr :size, :atom, default: :md, values: [:md, :xl], doc: "The size of the modal"
-  attr :dismiss, :boolean, default: true, doc: "Whether the modal contain a dismiss button"
-  attr :open, :boolean, default: false, doc: "Whether the modal is open by default or not"
+  attr :id, :string, required: true, doc: "The id of the popup"
+  attr :class, :any, default: nil, doc: "Classes to apply to the popup dialog element"
+  attr :rest, :global, include: ~w(open)
 
-  slot :header
-  slot :inner_block
+  slot :label, required: true
+  slot :title, required: true
+  slot :inner_block, required: true
   slot :footer
 
-  def modal(assigns) do
+  def popup(assigns) do
     ~H"""
-    <.focus_wrap id={@id} class={["modal", modal_size_class(@size), modal_open_class(@open)]}>
-      <section class="modal__dialog" role="dialog">
-        <header :if={@header || @dismiss} class="modal__header">
-          <%= render_slot(@header) %>
-          <.button
-            :if={@dismiss}
-            color={:ghost}
-            class="modal__dismiss"
-            phx-click={JS.remove_class("modal--open", to: "##{@id}")}
-            aria-label={gettext("Close")}
-          >
-            <.icon name="close" />
-          </.button>
-        </header>
-        <div class="modal__body">
-          <%= render_slot(@inner_block) %>
-        </div>
-        <footer class="modal__footer">
-          <%= render_slot(@footer) %>
-        </footer>
-      </section>
-    </.focus_wrap>
+    <dialog id={@id} class={["popup", @class]} {@rest}>
+      <header class="popup__header">
+        <p class="label"><%= render_slot(@label) %></p>
+        <h1 class="text-3xl font-bold"><%= render_slot(@title) %></h1>
+        <.button color={:ghost} class="popup__dismiss" phx-click={hide_dialog("##{@id}")}>
+          <.icon name="close" />
+        </.button>
+      </header>
+      <div class="popup__body">
+        <%= render_slot(@inner_block) %>
+      </div>
+      <footer class="popup__footer">
+        <%= render_slot(@footer) %>
+      </footer>
+    </dialog>
     """
   end
-
-  defp modal_size_class(:md), do: "modal--md"
-  defp modal_size_class(:xl), do: "modal--xl"
-
-  defp modal_open_class(true), do: "modal--open"
-  defp modal_open_class(false), do: nil
 
   ## Tile
 

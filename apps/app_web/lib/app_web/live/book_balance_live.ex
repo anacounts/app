@@ -43,7 +43,7 @@ defmodule AppWeb.BookBalanceLive do
               <.button
                 :if={not Books.closed?(@book)}
                 color={:cta}
-                phx-click="select-transaction"
+                phx-click={JS.push("select-transaction") |> show_dialog("#reimbursement-modal")}
                 phx-value-transaction-id={transaction.id}
               >
                 <%= gettext("Settle up") %>
@@ -106,9 +106,5 @@ defmodule AppWeb.BookBalanceLive do
     transaction = Enum.find(socket.assigns.transactions, &(&1.id == transaction_id))
 
     {:noreply, assign(socket, current_transaction: transaction)}
-  end
-
-  def handle_event("reimbursement-modal/close", _params, socket) do
-    {:noreply, assign(socket, current_transaction: nil)}
   end
 end
