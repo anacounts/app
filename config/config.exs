@@ -66,6 +66,13 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# ## Internationalization
+#
+# Configure your application's default locale and more.
+
+config :gettext, :default_locale, "en"
+config :ex_cldr, default_backend: AppWeb.Cldr, default_locale: "en"
+
 # ## Error reporting
 #
 # Configure errors to be reported to Sentry. Requires to call `plug Sentry.PlugContext`
