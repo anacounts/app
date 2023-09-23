@@ -14,29 +14,17 @@ defmodule AppWeb.ReimbursementModalComponent do
   def render(assigns) do
     ~H"""
     <div class="contents">
-      <.form
-        for={@form}
-        id="reimbursement-form"
-        phx-change="validate"
-        phx-submit="submit"
-        phx-target={@myself}
-      >
-        <.modal id={@id} open={@open} dismiss={false}>
-          <:header>
-            <.icon name="arrow-forward" />
-            <%= gettext("New Reimbursement") %>
+      <.popup id={@id} open={@open}>
+        <:label><%= gettext("Balance") %></:label>
+        <:title><%= gettext("New reimbursement") %></:title>
 
-            <.button
-              color={:ghost}
-              type="button"
-              class="modal__dismiss"
-              phx-click="reimbursement-modal/close"
-              aria-label={gettext("Close")}
-            >
-              <.icon name="close" />
-            </.button>
-          </:header>
-
+        <.form
+          for={@form}
+          id="reimbursement-form"
+          phx-change="validate"
+          phx-submit="submit"
+          phx-target={@myself}
+        >
           <div class="grid grid-cols-2 gap-x-4">
             <.input
               field={@form[:label]}
@@ -73,17 +61,17 @@ defmodule AppWeb.ReimbursementModalComponent do
             />
             <.input field={@form[:date]} type="date" label={gettext("Date")} class="w-full" required />
           </div>
+        </.form>
 
-          <:footer>
-            <.button color={:feature} type="button" phx-click="reimbursement-modal/close">
-              <%= gettext("Cancel") %>
-            </.button>
-            <.button color={:cta}>
-              <%= gettext("Save") %>
-            </.button>
-          </:footer>
-        </.modal>
-      </.form>
+        <:footer>
+          <.button color={:ghost} type="button" phx-click={hide_dialog("##{@id}")}>
+            <%= gettext("Cancel") %>
+          </.button>
+          <.button color={:cta} form="reimbursement-form">
+            <%= gettext("Save") %>
+          </.button>
+        </:footer>
+      </.popup>
     </div>
     """
   end

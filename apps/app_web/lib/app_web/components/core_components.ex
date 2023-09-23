@@ -499,7 +499,7 @@ defmodule AppWeb.CoreComponents do
 
   attr :id, :string, required: true, doc: "The id of the popup"
   attr :class, :any, default: nil, doc: "Classes to apply to the popup dialog element"
-  attr :rest, :global
+  attr :rest, :global, include: ~w(open)
 
   slot :label, required: true
   slot :title, required: true

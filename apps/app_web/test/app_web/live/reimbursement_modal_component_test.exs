@@ -24,7 +24,7 @@ defmodule AppWeb.ReimbursementModalComponentTest do
         }
       })
 
-    assert html =~ "New Reimbursement"
+    assert html =~ "New reimbursement"
     assert html =~ "value=\"Reimbursement from Member 1 to Member 2\""
     assert html =~ "value=\"#{member1.id}\""
     assert html =~ "value=\"#{member2.id}\""
