@@ -397,10 +397,6 @@ msgid "New Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New Reimbursement"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "New Transfer"
 msgstr ""
 
@@ -414,6 +410,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "New reimbursement"
 msgstr ""
 
 #, elixir-autogen, elixir-format
