@@ -15,17 +15,17 @@ defmodule App.TransfersTest do
   alias App.Transfers
   alias App.Transfers.Peer
 
-  describe "find_transfers_of_book/1" do
+  describe "list_transfers_of_book/1" do
     setup :book_with_member_context
 
-    test "find all transfers in book", %{book: book, member: member} do
+    test "lists all transfers in book", %{book: book, member: member} do
       transfer = money_transfer_fixture(book, tenant_id: member.id)
 
       assert [found_transfer] = Transfers.list_transfers_of_book(book)
       assert found_transfer.id == transfer.id
     end
 
-    test "finds transfers ordered by descending date", %{book: book, member: member} do
+    test "lists transfers ordered by descending date", %{book: book, member: member} do
       transfer_after = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-02])
 
       transfer_before = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-01])
@@ -33,6 +33,30 @@ defmodule App.TransfersTest do
       assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book)
       assert found_transfer1.id == transfer_after.id
       assert found_transfer2.id == transfer_before.id
+    end
+  end
+
+  describe "list_transfers_of_members/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "lists all transfers linked to members", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      transfer1 =
+        money_transfer_fixture(book, tenant_id: member1.id, peers: [%{member_id: member2.id}])
+
+      transfer2 =
+        money_transfer_fixture(book,
+          tenant_id: member2.id,
+          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+        )
+
+      assert Transfers.list_transfers_of_members([member1, member2])
+             |> Enum.map(& &1.id)
+             |> Enum.sort() == [transfer1.id, transfer2.id]
     end
   end
 
