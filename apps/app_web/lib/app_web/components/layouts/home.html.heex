@@ -7,13 +7,6 @@
   </:title>
 
   <:menu>
-    <.live_component
-      module={AppWeb.NotificationMenu}
-      id="notification_viewer"
-      user={@current_user}
-    />
-  </:menu>
-  <:menu>
     <.dropdown id="contextual-menu">
       <:toggle>
         <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("Profile")} />
