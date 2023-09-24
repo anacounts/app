@@ -14,15 +14,12 @@ defmodule App.Transfers.MoneyTransfer do
   alias App.Books.BookMember
   alias App.Transfers.Peer
 
-  # the types
-  @transfer_types [:payment, :income, :reimbursement]
-
   @type id :: integer()
   @type t :: %__MODULE__{
           id: id(),
           label: String.t(),
           amount: Money.t(),
-          type: :payment | :income | :reimbursement,
+          type: type(),
           date: Date.t(),
           book: Book.t(),
           tenant: BookMember.t(),
@@ -32,6 +29,11 @@ defmodule App.Transfers.MoneyTransfer do
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
+
+  # TODO rename transfer.type to transfer.kind
+
+  @type type :: :payment | :income | :reimbursement
+  @transfer_types [:payment, :income, :reimbursement]
 
   schema "money_transfers" do
     field :label, :string
