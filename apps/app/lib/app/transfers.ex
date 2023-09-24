@@ -66,6 +66,62 @@ defmodule App.Transfers do
     )
   end
 
+  @typep amount_summary :: %{
+           type: MoneyTransfer.type(),
+           amount: Money.t(),
+           count: non_neg_integer()
+         }
+
+  @doc """
+  Returns the total amount of money transfers linked to a book, grouped by type.
+
+  The `:reimbursement` type is not included. If a book has no money transfers of a type,
+  the amount for this type will be `Money.zero(:EUR)` and the count is `0`.
+  """
+  @spec amounts_summary_for_book(Book.t()) :: %{MoneyTransfer.type() => amount_summary()}
+  def amounts_summary_for_book(book) do
+    amounts_summary_query()
+    |> where([money_transfer: money_transfer], money_transfer.book_id == ^book.id)
+    |> Repo.all()
+    |> Map.new(&{&1.type, &1})
+    |> fill_grouped_amounts_missing_types()
+  end
+
+  @doc """
+  Returns the total amount of money transfers tenanted by a member, grouped by type.
+
+  The `:reimbursement` type is not included. If a book has no money transfers of a type,
+  the amount for this type will be `Money.zero(:EUR)` and the count is `0`.
+  """
+  @spec amounts_summary_for_tenant(BookMember.t()) :: %{MoneyTransfer.type() => amount_summary()}
+  def amounts_summary_for_tenant(member) do
+    amounts_summary_query()
+    |> where([money_transfer: money_transfer], money_transfer.tenant_id == ^member.id)
+    |> Repo.all()
+    |> Map.new(&{&1.type, &1})
+    |> fill_grouped_amounts_missing_types()
+  end
+
+  defp amounts_summary_query do
+    from money_transfer in MoneyTransfer,
+      as: :money_transfer,
+      where: money_transfer.type != :reimbursement,
+      select: %{
+        type: money_transfer.type,
+        amount: sum(money_transfer.amount),
+        count: count(money_transfer.id)
+      },
+      group_by: money_transfer.type
+  end
+
+  defp fill_grouped_amounts_missing_types(grouped_amounts) do
+    Enum.reduce([:payment, :income], grouped_amounts, fn type, amounts ->
+      Map.put_new_lazy(amounts, type, fn ->
+        %{type: type, amount: Money.zero(:EUR), count: 0}
+      end)
+    end)
+  end
+
   @doc """
   Creates a money_transfer.
   """
