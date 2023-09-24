@@ -25,49 +25,25 @@ defmodule AppWeb.MoneyTransfersLive do
           for="details-hack"
           class="mb-0 text-xl text-center list-none cursor-pointer md:cursor-default"
         >
-          <span class={class_for_amount(@total_amount)}><%= Money.to_string!(@total_amount) %></span>
-          / <%= ngettext(
-            "%{count} transfer",
-            "%{count} transfers",
-            Enum.count(@money_transfers, &(&1.type != :reimbursement))
-          ) %>
+          <.transfer_amount
+            amount_class={class_for_amount(@total_summary.amount)}
+            amount={@total_summary}
+          />
         </label>
 
         <input id="details-hack" type="checkbox" class="peer hidden" />
 
         <div class="hidden md:block peer-checked:block mt-4">
-          <.transfer_amount
-            title={gettext("Payments")}
-            amount_class="text-error"
-            money_transfers={Enum.filter(@money_transfers, &(&1.type == :payment))}
+          <.amounts_summary
+            amounts_summary={@amounts_summary}
+            payments_title={gettext("Payments")}
+            incomes_title={gettext("Incomes")}
           />
-          <.transfer_amount
-            title={gettext("Incomes")}
-            amount_class="text-info"
-            money_transfers={Enum.filter(@money_transfers, &(&1.type == :income))}
-          />
-
           <hr class="my-2 border-gray-30" />
-
-          <.transfer_amount
-            title={gettext("Your payments")}
-            amount_class="text-error"
-            money_transfers={
-              Enum.filter(
-                @money_transfers,
-                &(&1.type == :payment and &1.tenant_id == @current_member.id)
-              )
-            }
-          />
-          <.transfer_amount
-            title={gettext("Your incomes")}
-            amount_class="text-info"
-            money_transfers={
-              Enum.filter(
-                @money_transfers,
-                &(&1.type == :income and &1.tenant_id == @current_member.id)
-              )
-            }
+          <.amounts_summary
+            amounts_summary={@your_amounts_summary}
+            payments_title={gettext("Your payments")}
+            incomes_title={gettext("Your incomes")}
           />
         </div>
       </div>
@@ -126,21 +102,27 @@ defmodule AppWeb.MoneyTransfersLive do
     """
   end
 
-  attr :title, :string, required: true
-  attr :money_transfers, :list
+  attr :amounts_summary, :map, required: true
+  attr :payments_title, :string, required: true
+  attr :incomes_title, :string, required: true
 
-  attr :class, :any, default: nil
+  defp amounts_summary(assigns) do
+    ~H"""
+    <div><%= @payments_title %></div>
+    <.transfer_amount amount_class="text-error" amount={@amounts_summary[:payment]} />
+
+    <div><%= @incomes_title %></div>
+    <.transfer_amount amount_class="text-info" amount={@amounts_summary[:income]} />
+    """
+  end
+
   attr :amount_class, :any, default: nil
+  attr :amount, :map, required: true
 
   defp transfer_amount(assigns) do
     ~H"""
-    <div><%= @title %></div>
-    <span class={["text-lg", @amount_class]}><%= total_amount(@money_transfers) %></span>
-    / <%= ngettext(
-      "%{count} transfer",
-      "%{count} transfers",
-      Enum.count(@money_transfers)
-    ) %>
+    <span class={["text-lg", @amount_class]}><%= Money.to_string!(@amount.amount) %></span>
+    / <%= ngettext("%{count} transfer", "%{count} transfers", @amount.count) %>
     """
   end
 
@@ -157,24 +139,32 @@ defmodule AppWeb.MoneyTransfersLive do
       assign(socket,
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
         layout_heading: gettext("Transfers"),
-        money_transfers: money_transfers,
-        total_amount: total_amount_by(money_transfers, &(&1.type != :reimbursement))
+        money_transfers: money_transfers
       )
+      |> assign_amounts_summaries()
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}
   end
 
-  defp total_amount(money_transfers) do
-    money_transfers
-    |> Stream.map(&Transfers.amount/1)
-    |> Enum.reduce(Money.new!(:EUR, 0), &Money.add!/2)
-    |> Money.mult!(-1)
+  defp assign_amounts_summaries(socket) do
+    %{book: book, current_member: current_member} = socket.assigns
+
+    amounts_summary = Transfers.amounts_summary_for_book(book)
+    your_amounts_summary = Transfers.amounts_summary_for_tenant(current_member)
+    total_summary = total_summary(amounts_summary)
+
+    assign(socket,
+      total_summary: total_summary,
+      amounts_summary: amounts_summary,
+      your_amounts_summary: your_amounts_summary
+    )
   end
 
-  defp total_amount_by(money_transfers, filter_fn) do
-    money_transfers
-    |> Stream.filter(filter_fn)
-    |> total_amount()
+  defp total_summary(%{income: total_incomes, payment: total_payments}) do
+    %{
+      amount: Money.sub!(total_incomes.amount, total_payments.amount),
+      count: total_incomes.count + total_payments.count
+    }
   end
 
   @impl Phoenix.LiveView
@@ -190,9 +180,7 @@ defmodule AppWeb.MoneyTransfersLive do
       |> update(:money_transfers, fn money_transfers ->
         Enum.reject(money_transfers, &(&1.id == money_transfer.id))
       end)
-      |> update(:total_amount, fn _current, %{money_transfers: money_transfers} ->
-        total_amount_by(money_transfers, &(&1.type != :reimbursement))
-      end)
+      |> assign_amounts_summaries()
 
     {:noreply, socket}
   end
