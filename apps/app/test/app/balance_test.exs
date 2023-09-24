@@ -124,23 +124,22 @@ defmodule App.BalanceTest do
       assert Money.equal?(member3.balance, Money.new!(:EUR, -1))
     end
 
-    # FIXME correctly divide non round amounts
-    # test "correctly divide non round amounts", %{book: book} do
-    #   member1 = book_member_fixture(book, user_id: user_fixture().id)
-    #   member2 = book_member_fixture(book, user_id: user_fixture().id)
+    test "correctly divide non round amounts", %{book: book} do
+      member1 = book_member_fixture(book, user_id: user_fixture().id)
+      member2 = book_member_fixture(book, user_id: user_fixture().id)
 
-    #   transfer =
-    #     money_transfer_fixture(book,
-    #       tenant_id: member1.id,
-    #       amount: Money.new!(:EUR, 3),
-    #       peers: [%{member_id: member1.id}, %{member_id: member2.id}]
-    #     )
+      _transfer =
+        money_transfer_fixture(book,
+          tenant_id: member1.id,
+          amount: Money.new!(:EUR, "0.03"),
+          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+        )
 
-    #   assert Balance.fill_members_balance([member1, member2]) == [
-    #            %{member1 | balance: Money.new!(:EUR, 1)},
-    #            %{member2 | balance: Money.new!(:EUR, -2)}
-    #          ]
-    # end
+      assert Balance.fill_members_balance([member1, member2]) == [
+               %{member1 | balance: Money.new!(:EUR, "0.02")},
+               %{member2 | balance: Money.new!(:EUR, "-0.02")}
+             ]
+    end
 
     test "weight transfer amount using peers income #1", %{book: book} do
       member1 = book_member_fixture(book)
