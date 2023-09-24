@@ -24,6 +24,7 @@ defmodule App.Balance do
     members
     |> reset_members_balance()
     |> adjust_balance_from_transfers(transfers)
+    |> round_members_balance()
   end
 
   defp load_peers_and_total_weight(transfers) when is_list(transfers) do
@@ -146,6 +147,14 @@ defmodule App.Balance do
       end
 
     %{member | balance: {:error, reasons}}
+  end
+
+  defp round_members_balance(members) do
+    Enum.map(members, fn member ->
+      if has_balance_error?(member),
+        do: member,
+        else: %{member | balance: Money.round(member.balance)}
+    end)
   end
 
   @doc """
