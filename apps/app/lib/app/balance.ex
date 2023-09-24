@@ -24,6 +24,7 @@ defmodule App.Balance do
     members
     |> reset_members_balance()
     |> adjust_balance_from_transfers(transfers)
+    |> round_members_balance()
   end
 
   defp load_peers_and_total_weight(transfers) when is_list(transfers) do
@@ -78,7 +79,7 @@ defmodule App.Balance do
   end
 
   defp reset_members_balance(members) do
-    Enum.map(members, fn member -> %{member | balance: Money.new(0, :EUR)} end)
+    Enum.map(members, fn member -> %{member | balance: Money.new!(:EUR, 0)} end)
   end
 
   defp adjust_balance_from_transfers(members, []), do: members
@@ -104,7 +105,7 @@ defmodule App.Balance do
   defp adjust_balance_from_peers(members, transfer, [peer | other_peers]) do
     relative_weight = Decimal.div(peer.total_weight, transfer.total_peer_weight)
     transfer_amount = Transfers.amount(transfer)
-    adjustment_amount = Money.multiply(transfer_amount, relative_weight)
+    adjustment_amount = Money.mult!(transfer_amount, relative_weight)
 
     member_id = peer.member_id
     tenant_id = transfer.tenant_id
@@ -116,10 +117,10 @@ defmodule App.Balance do
         member
 
       %{id: ^member_id} = member ->
-        %{member | balance: Money.subtract(member.balance, adjustment_amount)}
+        %{member | balance: Money.sub!(member.balance, adjustment_amount)}
 
       %{id: ^tenant_id} = member ->
-        %{member | balance: Money.add(member.balance, adjustment_amount)}
+        %{member | balance: Money.add!(member.balance, adjustment_amount)}
 
       member ->
         member
@@ -146,6 +147,14 @@ defmodule App.Balance do
       end
 
     %{member | balance: {:error, reasons}}
+  end
+
+  defp round_members_balance(members) do
+    Enum.map(members, fn member ->
+      if has_balance_error?(member),
+        do: member,
+        else: %{member | balance: Money.round(member.balance)}
+    end)
   end
 
   @doc """
@@ -192,7 +201,7 @@ defmodule App.Balance do
       {:ok, []}
 
       iex> transactions([member1, member2])
-      {:ok, [%{amount: Money.new(10, :EUR), from: member1, to: member2}]}
+      {:ok, [%{amount: Money.new!(:EUR, 10), from: member1, to: member2}]}
 
       iex> transactions([member_with_error_in_balance, member2])
       :error
@@ -222,9 +231,9 @@ defmodule App.Balance do
          [creditor | _other_creditors] = all_creditors,
          transactions
        ) do
-    debt = Money.neg(debtor.balance)
+    debt = Money.mult!(debtor.balance, -1)
 
-    Money.cmp(creditor.balance, debt)
+    Money.compare!(creditor.balance, debt)
     |> add_transaction_from_cmp(all_debtors, all_creditors, transactions)
   end
 
@@ -234,7 +243,7 @@ defmodule App.Balance do
          [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.neg(debtor.balance)
+    debt = Money.mult!(debtor.balance, -1)
     new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
@@ -250,12 +259,12 @@ defmodule App.Balance do
          [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.neg(debtor.balance)
+    debt = Money.mult!(debtor.balance, -1)
     new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
       other_debtors,
-      [%{creditor | balance: Money.subtract(creditor.balance, debt)} | other_creditors],
+      [%{creditor | balance: Money.sub!(creditor.balance, debt)} | other_creditors],
       [new_transaction | transactions]
     )
   end
@@ -269,7 +278,7 @@ defmodule App.Balance do
     new_transaction = transaction_for(debtor, creditor, creditor.balance)
 
     make_transactions(
-      [%{debtor | balance: Money.add(debtor.balance, creditor.balance)} | other_debtors],
+      [%{debtor | balance: Money.add!(debtor.balance, creditor.balance)} | other_debtors],
       other_creditors,
       [new_transaction | transactions]
     )

@@ -785,9 +785,9 @@ defmodule AppWeb.CoreComponents do
   def input(%{type: "money"} = assigns) do
     assigns =
       assign_new(assigns, :normalized_value, fn ->
-        # XXX When supporting other currencies, the "/ 100" and "step" attribute
-        # must be based on currency
-        if assigns.value, do: assigns.value.amount / 100, else: nil
+        # XXX When supporting other currencies, the rounding must be done based on the
+        # currency's precision.
+        if assigns.value, do: Decimal.round(assigns.value.amount, 2)
       end)
 
     ~H"""

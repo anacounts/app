@@ -20,7 +20,7 @@ defmodule AppWeb.ReimbursementModalComponentTest do
           id: "transaction-id",
           from: member1,
           to: member2,
-          amount: Money.new(1000, :EUR)
+          amount: Money.new!(:EUR, 10)
         }
       })
 
@@ -28,7 +28,7 @@ defmodule AppWeb.ReimbursementModalComponentTest do
     assert html =~ "value=\"Reimbursement from Member 1 to Member 2\""
     assert html =~ "value=\"#{member1.id}\""
     assert html =~ "value=\"#{member2.id}\""
-    assert html =~ "value=\"10.0\""
+    assert html =~ "value=\"10.00\""
   end
 
   # Depends on :register_and_log_in_user

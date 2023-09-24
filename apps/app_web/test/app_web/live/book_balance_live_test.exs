@@ -22,7 +22,7 @@ defmodule AppWeb.BookBalanceLiveTest do
         money_transfer_fixture(book,
           tenant_id: member1.id,
           peers: [%{member_id: member1.id}, %{member_id: member2.id}],
-          amount: Money.new(1000, :EUR)
+          amount: Money.new!(:EUR, 10)
         ),
       peer_member1: member1,
       peer_member2: member2
@@ -111,7 +111,7 @@ defmodule AppWeb.BookBalanceLiveTest do
       assert select_value(modal_document, "#reimbursement_debtor_id") ==
                to_string(member2.id)
 
-      assert input_value(modal_document, "#reimbursement_amount") == "5.0"
+      assert input_value(modal_document, "#reimbursement_amount") == "5.00"
     end
 
     test "saves new money transfer", %{

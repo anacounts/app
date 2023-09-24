@@ -70,7 +70,7 @@ defmodule AppWeb.BookAccessTest do
 
       _transfer =
         money_transfer_fixture(book,
-          amount: Money.new(1000, :EUR),
+          amount: Money.new!(:EUR, 1000),
           tenant_id: member1.id,
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
         )

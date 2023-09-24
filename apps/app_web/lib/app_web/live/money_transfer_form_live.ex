@@ -262,9 +262,8 @@ defmodule AppWeb.MoneyTransferFormLive do
   defp normalize_params(params) do
     # amount
     {amount, params} = Map.pop(params, "amount")
-    {currency, params} = Map.pop(params, "currency", "EUR")
 
-    params = Map.put(params, "amount", parse_money_or_nil(amount, currency))
+    params = Map.put(params, "amount", parse_money_or_nil(amount))
 
     # balance params
     {balance_means_code, params} = Map.pop(params, "balance_means_code")
@@ -278,12 +277,8 @@ defmodule AppWeb.MoneyTransferFormLive do
     end)
   end
 
-  defp parse_money_or_nil(amount, currency) do
-    case Money.parse(amount, currency) do
-      {:ok, money} -> money
-      :error -> nil
-    end
-  end
+  defp parse_money_or_nil(""), do: nil
+  defp parse_money_or_nil(amount), do: Money.new!(:EUR, amount)
 
   defp save_money_transfer(socket, :new, money_transfer_params) do
     case Transfers.create_money_transfer(socket.assigns.book, money_transfer_params) do

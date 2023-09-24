@@ -46,8 +46,8 @@ defmodule App.MixProject do
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.14"},
       {:decimal, "~> 2.1"},
-      # TODO Move to ex_money (migration is gonna be hard)
-      {:money, "~> 1.12"},
+      {:ex_money, "~> 5.15"},
+      {:ex_money_sql, "~> 1.9"},
 
       # Tools
       {:logger_backends, "~> 1.0"}

@@ -70,14 +70,14 @@ defmodule App.TransfersTest do
                  money_transfer_attributes(
                    tenant_id: member.id,
                    label: "A label",
-                   amount: Money.new(1799, :EUR),
+                   amount: Money.new!(:EUR, 1799),
                    type: :payment,
                    date: ~D[2022-06-23]
                  )
                )
 
       assert transfer.label == "A label"
-      assert transfer.amount == Money.new(1799, :EUR)
+      assert transfer.amount == Money.new!(:EUR, 1799)
       assert transfer.type == :payment
       assert transfer.date == ~D[2022-06-23]
       assert transfer.balance_params == struct!(TransferParams, transfer_params_attributes())
@@ -176,7 +176,7 @@ defmodule App.TransfersTest do
       assert {:ok, updated} =
                Transfers.update_money_transfer(money_transfer, %{
                  label: "my very own label !",
-                 amount: Money.new(299, :EUR),
+                 amount: Money.new!(:EUR, 299),
                  type: :income,
                  date: ~D[2020-06-29],
                  balance_params: transfer_params_attributes(),
@@ -184,7 +184,7 @@ defmodule App.TransfersTest do
                })
 
       assert updated.label == "my very own label !"
-      assert updated.amount == Money.new(299, :EUR)
+      assert updated.amount == Money.new!(:EUR, 299)
       assert updated.type == :income
       assert updated.date == ~D[2020-06-29]
 
