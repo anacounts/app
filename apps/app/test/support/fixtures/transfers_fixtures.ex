@@ -6,7 +6,9 @@ defmodule App.TransfersFixtures do
   import App.BalanceFixtures
 
   alias App.Books.Book
+  alias App.Repo
   alias App.Transfers
+  alias App.Transfers.MoneyTransfer
 
   def money_transfer_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -19,8 +21,14 @@ defmodule App.TransfersFixtures do
     })
   end
 
-  def money_transfer_fixture(%Book{} = book, attrs \\ %{}) do
+  def deprecated_money_transfer_fixture(%Book{} = book, attrs \\ %{}) do
     {:ok, transfer} = Transfers.create_money_transfer(book, money_transfer_attributes(attrs))
     transfer
+  end
+
+  def money_transfer_fixture(book, attrs \\ %{}) do
+    %MoneyTransfer{book_id: book.id}
+    |> Map.merge(money_transfer_attributes(attrs))
+    |> Repo.insert!()
   end
 end

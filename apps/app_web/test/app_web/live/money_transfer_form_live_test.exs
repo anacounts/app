@@ -80,7 +80,10 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
     member = book_member_fixture(book)
 
     money_transfer =
-      money_transfer_fixture(book, tenant_id: member.id, peers: [%{member_id: member.id}])
+      deprecated_money_transfer_fixture(book,
+        tenant_id: member.id,
+        peers: [%{member_id: member.id}]
+      )
 
     {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
