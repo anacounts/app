@@ -27,7 +27,7 @@ defmodule AppWeb.BookMemberLiveTest do
     member1 = book_member_fixture(book)
     member2 = book_member_fixture(book)
 
-    money_transfer_fixture(book,
+    deprecated_money_transfer_fixture(book,
       amount: Money.new!(:EUR, 2),
       tenant_id: member1.id,
       peers: [%{member_id: member1.id}, %{member_id: member2.id}]

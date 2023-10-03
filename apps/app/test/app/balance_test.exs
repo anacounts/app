@@ -19,7 +19,7 @@ defmodule App.BalanceTest do
       member2 = book_member_fixture(book, user_id: user_fixture().id)
 
       _money_transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 10),
           tenant_id: member1.id,
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
@@ -37,7 +37,7 @@ defmodule App.BalanceTest do
       member4 = book_member_fixture(book, user_id: user_fixture().id)
 
       _transfer1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 400),
           tenant_id: member1.id,
           peers: [
@@ -49,7 +49,7 @@ defmodule App.BalanceTest do
         )
 
       _transfer2 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 400),
           tenant_id: member2.id,
           peers: [
@@ -75,7 +75,7 @@ defmodule App.BalanceTest do
       member3 = book_member_fixture(book, user_id: user_fixture().id)
 
       _transfer1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
           tenant_id: member1.id,
           peers: [
@@ -86,7 +86,7 @@ defmodule App.BalanceTest do
         )
 
       _transfer2 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
           tenant_id: member2.id,
           peers: [
@@ -108,7 +108,7 @@ defmodule App.BalanceTest do
       member3 = book_member_fixture(book, user_id: user_fixture().id)
 
       _transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new!(:EUR, 6),
           peers: [
@@ -129,7 +129,7 @@ defmodule App.BalanceTest do
       member2 = book_member_fixture(book, user_id: user_fixture().id)
 
       _transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           amount: Money.new!(:EUR, "0.03"),
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
@@ -149,7 +149,7 @@ defmodule App.BalanceTest do
       _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
       _transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           balance_params: %{means_code: :weight_by_income},
           amount: Money.new!(:EUR, 30),
@@ -176,7 +176,7 @@ defmodule App.BalanceTest do
       _balance_config4 = member_balance_config_fixture(member4, annual_income: 3)
 
       _transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           balance_params: %{means_code: :weight_by_income},
           amount: Money.new!(:EUR, 9),
@@ -208,7 +208,7 @@ defmodule App.BalanceTest do
       _balance_config3 = member_balance_config_fixture(member3, annual_income: 3)
 
       _transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           balance_params: %{means_code: :weight_by_income},
           amount: Money.new!(:EUR, 100),
@@ -236,7 +236,7 @@ defmodule App.BalanceTest do
       _balance_config3 = member_balance_config_fixture(member3, annual_income: 1)
 
       _transfer1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           balance_params: %{means_code: :weight_by_income},
           amount: Money.new!(:EUR, 30),
@@ -244,7 +244,7 @@ defmodule App.BalanceTest do
         )
 
       _transfer2 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           balance_params: %{means_code: :weight_by_income},
           amount: Money.new!(:EUR, 40),
@@ -263,7 +263,7 @@ defmodule App.BalanceTest do
       member3 = book_member_fixture(book, user_id: user_fixture().id)
 
       _transfer1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
           tenant_id: member1.id,
           peers: [
@@ -274,7 +274,7 @@ defmodule App.BalanceTest do
         )
 
       _reimbursement1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 100),
           type: :reimbursement,
           tenant_id: member1.id,
@@ -282,7 +282,7 @@ defmodule App.BalanceTest do
         )
 
       _reimbursement1 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           amount: Money.new!(:EUR, 100),
           type: :reimbursement,
           tenant_id: member1.id,

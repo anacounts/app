@@ -19,7 +19,7 @@ defmodule AppWeb.BookBalanceLiveTest do
 
     Map.merge(context, %{
       money_transfer:
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member1.id,
           peers: [%{member_id: member1.id}, %{member_id: member2.id}],
           amount: Money.new!(:EUR, 10)

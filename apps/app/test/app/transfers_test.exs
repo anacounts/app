@@ -25,14 +25,76 @@ defmodule App.TransfersTest do
       assert found_transfer.id == transfer.id
     end
 
-    test "lists transfers ordered by descending date", %{book: book, member: member} do
-      transfer_after = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-02])
+    test "sorts by most recent", %{book: book, member: member} do
+      transfer1 = money_transfer_fixture(book, date: ~D[2020-06-29], tenant_id: member.id)
+      transfer2 = money_transfer_fixture(book, date: ~D[2020-06-30], tenant_id: member.id)
 
-      transfer_before = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-01-01])
+      assert Transfers.list_transfers_of_book(book, %{sort_by: :most_recent})
+             |> Enum.map(& &1.id) == [transfer2.id, transfer1.id]
+    end
 
-      assert [found_transfer1, found_transfer2] = Transfers.list_transfers_of_book(book)
-      assert found_transfer1.id == transfer_after.id
-      assert found_transfer2.id == transfer_before.id
+    test "sorts by oldest", %{book: book, member: member} do
+      transfer1 = money_transfer_fixture(book, date: ~D[2020-06-29], tenant_id: member.id)
+      transfer2 = money_transfer_fixture(book, date: ~D[2020-06-30], tenant_id: member.id)
+
+      assert Transfers.list_transfers_of_book(book, %{sort_by: :oldest})
+             |> Enum.map(& &1.id) == [transfer1.id, transfer2.id]
+    end
+
+    test "sorts by last created", %{book: book, member: member} do
+      transfer1 =
+        money_transfer_fixture(book, inserted_at: ~N[2020-06-29 12:00:00], tenant_id: member.id)
+
+      transfer2 =
+        money_transfer_fixture(book, inserted_at: ~N[2020-06-30 12:00:00], tenant_id: member.id)
+
+      assert Transfers.list_transfers_of_book(book, %{sort_by: :last_created})
+             |> Enum.map(& &1.id) == [transfer2.id, transfer1.id]
+    end
+
+    test "sorts by first created", %{book: book, member: member} do
+      transfer1 =
+        money_transfer_fixture(book, inserted_at: ~N[2020-06-29 12:00:00], tenant_id: member.id)
+
+      transfer2 =
+        money_transfer_fixture(book, inserted_at: ~N[2020-06-30 12:00:00], tenant_id: member.id)
+
+      assert Transfers.list_transfers_of_book(book, %{sort_by: :first_created})
+             |> Enum.map(& &1.id) == [transfer1.id, transfer2.id]
+    end
+
+    test "filters by tenanted by anyone", %{book: book} do
+      member1 = book_member_fixture(book)
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id)
+
+      member2 = book_member_fixture(book)
+      transfer2 = money_transfer_fixture(book, tenant_id: member2.id)
+
+      assert Transfers.list_transfers_of_book(book, %{tenanted_by: :anyone})
+             |> Enum.map(& &1.id)
+             |> Enum.sort() == [transfer1.id, transfer2.id]
+    end
+
+    test "filters by tenanted by member", %{book: book} do
+      member1 = book_member_fixture(book)
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id)
+
+      member2 = book_member_fixture(book)
+      _transfer2 = money_transfer_fixture(book, tenant_id: member2.id)
+
+      assert Transfers.list_transfers_of_book(book, %{tenanted_by: member1.id})
+             |> Enum.map(& &1.id) == [transfer1.id]
+    end
+
+    test "filters by tenanted by not member", %{book: book} do
+      member1 = book_member_fixture(book)
+      _transfer1 = money_transfer_fixture(book, tenant_id: member1.id)
+
+      member2 = book_member_fixture(book)
+      transfer2 = money_transfer_fixture(book, tenant_id: member2.id)
+
+      assert Transfers.list_transfers_of_book(book, %{tenanted_by: {:not, member1.id}})
+             |> Enum.map(& &1.id) == [transfer2.id]
     end
   end
 
@@ -46,10 +108,13 @@ defmodule App.TransfersTest do
       member2 = book_member_fixture(book)
 
       transfer1 =
-        money_transfer_fixture(book, tenant_id: member1.id, peers: [%{member_id: member2.id}])
+        deprecated_money_transfer_fixture(book,
+          tenant_id: member1.id,
+          peers: [%{member_id: member2.id}]
+        )
 
       transfer2 =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member2.id,
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
         )
@@ -208,7 +273,7 @@ defmodule App.TransfersTest do
 
     test "updates existing peers", %{book: book, member: member} do
       money_transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id, weight: Decimal.new(2)}]
         )
@@ -228,7 +293,7 @@ defmodule App.TransfersTest do
 
     test "cannot update member_id of existing peer", %{book: book, member: member} do
       money_transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )
@@ -250,7 +315,7 @@ defmodule App.TransfersTest do
 
     test "deletes peers", %{book: book, member: member} do
       money_transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )
@@ -289,7 +354,7 @@ defmodule App.TransfersTest do
 
     test "deleted related peers", %{book: book, member: member} do
       money_transfer =
-        money_transfer_fixture(book,
+        deprecated_money_transfer_fixture(book,
           tenant_id: member.id,
           peers: [%{member_id: member.id}]
         )

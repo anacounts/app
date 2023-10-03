@@ -44,6 +44,7 @@ defmodule App.Books do
 
   - `:sort_by` - the field to sort by, one of :alphabetically or :last_created
   - `:owned_by` - the ownership of the book, one of :anyone, :me or :others
+  - `:close_state` - the close state of the book, one of :any, :open or :closed
   """
   @spec list_books_of_user(User.t(), map()) :: [Book.t()]
   def list_books_of_user(%User{} = user, filters \\ %{}) do

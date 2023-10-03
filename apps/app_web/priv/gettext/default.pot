@@ -377,6 +377,10 @@ msgid "Money transfer updated successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Most recent"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "My books"
 msgstr ""
 
@@ -429,6 +433,10 @@ msgid "Not owned by me"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Oldest"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Open"
 msgstr ""
 
@@ -454,6 +462,18 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Paid by %{name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Paid by anyone"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Paid by me"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Paid by others"
 msgstr ""
 
 #, elixir-autogen, elixir-format
