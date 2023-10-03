@@ -378,6 +378,10 @@ msgid "Money transfer updated successfully"
 msgstr "Transfert d'argent modifié"
 
 #, elixir-autogen, elixir-format
+msgid "Most recent"
+msgstr "Plus récent"
+
+#, elixir-autogen, elixir-format
 msgid "My books"
 msgstr "Mes livrets"
 
@@ -430,6 +434,10 @@ msgid "Not owned by me"
 msgstr "Ne m'appartenant pas"
 
 #, elixir-autogen, elixir-format
+msgid "Oldest"
+msgstr "Plus ancien"
+
+#, elixir-autogen, elixir-format
 msgid "Open"
 msgstr "Ouvert"
 
@@ -456,6 +464,18 @@ msgstr "Payé par"
 #, elixir-autogen, elixir-format
 msgid "Paid by %{name}"
 msgstr "Payé par %{name}"
+
+#, elixir-autogen, elixir-format
+msgid "Paid by anyone"
+msgstr "Tous"
+
+#, elixir-autogen, elixir-format
+msgid "Paid by me"
+msgstr "Que j'ai payé"
+
+#, elixir-autogen, elixir-format
+msgid "Paid by others"
+msgstr "Payé par quelqu'un d'autre"
 
 #, elixir-autogen, elixir-format
 msgid "Password"
