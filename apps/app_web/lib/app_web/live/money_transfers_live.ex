@@ -50,7 +50,7 @@ defmodule AppWeb.MoneyTransfersLive do
       </div>
 
       <% # Transfers list %>
-      <div id="transfers-list" class="grow basis-3/4 max-w-prose">
+      <div id="transfers-list" class="grow basis-3/4 max-w-prose mx-auto">
         <div class="md:hidden mx-2 text-right">
           <.button color={:ghost} phx-click={show_dialog("#filters")}>
             <.icon name="tune" />
