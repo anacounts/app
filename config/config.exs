@@ -75,18 +75,12 @@ config :ex_cldr, default_backend: AppWeb.Cldr, default_locale: "en"
 
 # ## Error reporting
 #
-# Configure errors to be reported to Sentry. Requires to call `plug Sentry.PlugContext`
+# Configure the Sentry SDK. Requires to call `plug Sentry.PlugContext`
 # in the Endpoint.
-# According to the Sentry documentation, the `:dsn` is "safe to keep public because they
-# only allow submission of new events and related event data; they do not allow read
-# access to any information".
 #
 # See the documentation of `:sentry` for more information.
 
 config :sentry,
-  dsn: "https://001afba5be1f4c968de015c2fc051cd9@o1240316.ingest.sentry.io/6392357",
-  environment_name: Mix.env(),
-  included_environments: [:prod],
   client: Sentry.FinchClient,
   enable_source_code_context: true,
   root_source_code_path: File.cwd!()

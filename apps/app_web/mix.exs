@@ -63,7 +63,7 @@ defmodule AppWeb.MixProject do
       {:jason, "~> 1.4"},
 
       # Error reporting
-      {:sentry, "~> 8.0"},
+      {:sentry, "~> 10.0"},
       {:finch, "~> 0.17"},
 
       # Telemetry
