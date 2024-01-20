@@ -50,7 +50,7 @@ defmodule AppWeb.MixProject do
       {:plug_cowboy, "~> 2.6"},
 
       # Front tooling
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
 
       # Internationalization
