@@ -42,7 +42,7 @@ defmodule App.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:cloak_ecto, "~> 1.2.0"},
       {:jason, "~> 1.4"},
-      {:swoosh, "~> 1.11"},
+      {:swoosh, "~> 1.13"},
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.17"},
       {:decimal, "~> 2.1"},
