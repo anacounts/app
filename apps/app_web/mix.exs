@@ -41,12 +41,12 @@ defmodule AppWeb.MixProject do
   defp deps do
     [
       # Phoenix and server tooling
-      {:phoenix, "~> 1.7.0"},
+      {:phoenix, "~> 1.7"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
-      {:phoenix_live_view, "~> 0.19"},
-      {:phoenix_live_dashboard, "~> 0.7"},
+      {:phoenix_live_view, "~> 0.20"},
+      {:phoenix_live_dashboard, "~> 0.8"},
       {:plug_cowboy, "~> 2.6"},
 
       # Front tooling
