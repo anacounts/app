@@ -54,7 +54,7 @@ defmodule AppWeb.MixProject do
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
 
       # Internationalization
-      {:gettext, "~> 0.22"},
+      {:gettext, "~> 0.24"},
       {:ex_cldr, "~> 2.37"},
       {:ex_cldr_plugs, "~> 1.3"},
 
