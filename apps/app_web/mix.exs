@@ -59,7 +59,7 @@ defmodule AppWeb.MixProject do
       {:ex_cldr_plugs, "~> 1.3"},
 
       # Tools
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.35.0", only: :test},
       {:jason, "~> 1.4"},
 
       # Error reporting
