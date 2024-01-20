@@ -61,7 +61,6 @@ defmodule AppWeb.MixProject do
       # Tools
       {:floki, ">= 0.30.0", only: :test},
       {:jason, "~> 1.4"},
-      {:earmark, "~> 1.4"},
 
       # Error reporting
       {:sentry, "~> 8.0"},

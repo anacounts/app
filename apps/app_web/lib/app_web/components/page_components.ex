@@ -9,8 +9,6 @@ defmodule AppWeb.PageComponents do
 
   use Phoenix.Component
 
-  import Phoenix.HTML, only: [raw: 1]
-
   import AppWeb.Gettext
   import AppWeb.CoreComponents
 
