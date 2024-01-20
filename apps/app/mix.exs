@@ -44,7 +44,7 @@ defmodule App.MixProject do
       {:jason, "~> 1.4"},
       {:swoosh, "~> 1.11"},
       {:gen_smtp, "~> 1.2"},
-      {:finch, "~> 0.14"},
+      {:finch, "~> 0.17"},
       {:decimal, "~> 2.1"},
       {:ex_money, "~> 5.15"},
       {:ex_money_sql, "~> 1.9"},
