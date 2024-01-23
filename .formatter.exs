@@ -1,5 +1,5 @@
 [
   plugins: [Phoenix.LiveView.HTMLFormatter],
-  inputs: ["mix.exs", "config/*.exs"],
+  inputs: ["*.exs", "config/*.exs"],
   subdirectories: ["apps/*"]
 ]
