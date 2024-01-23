@@ -41,31 +41,30 @@ defmodule AppWeb.MixProject do
   defp deps do
     [
       # Phoenix and server tooling
-      {:phoenix, "~> 1.7.0"},
+      {:phoenix, "~> 1.7"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
-      {:phoenix_live_view, "~> 0.19"},
-      {:phoenix_live_dashboard, "~> 0.7"},
+      {:phoenix_live_view, "~> 0.20"},
+      {:phoenix_live_dashboard, "~> 0.8"},
       {:plug_cowboy, "~> 2.6"},
 
       # Front tooling
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
 
       # Internationalization
-      {:gettext, "~> 0.22"},
+      {:gettext, "~> 0.24"},
       {:ex_cldr, "~> 2.37"},
       {:ex_cldr_plugs, "~> 1.3"},
 
       # Tools
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.35.0", only: :test},
       {:jason, "~> 1.4"},
-      {:earmark, "~> 1.4"},
 
       # Error reporting
-      {:sentry, "~> 8.0"},
-      {:finch, "~> 0.14"},
+      {:sentry, "~> 10.0"},
+      {:finch, "~> 0.17"},
 
       # Telemetry
       {:telemetry_metrics, "~> 0.6"},

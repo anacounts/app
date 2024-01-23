@@ -46,7 +46,7 @@
       # If you want to enforce a style guide and need a more traditional linting
       # experience, you can change `strict` to `true` below:
       #
-      strict: false,
+      strict: true,
       #
       # To modify the timeout for parsing files, change this value:
       #
@@ -149,6 +149,8 @@
           {Credo.Check.Refactor.MapJoin, []},
           {Credo.Check.Refactor.MapMap, []},
           {Credo.Check.Refactor.MatchInCondition, []},
+          # FIXME gradually fix modules and lower `:max_deps` to 10, the default value
+          {Credo.Check.Refactor.ModuleDependencies, [max_deps: 32]},
           {Credo.Check.Refactor.NegatedConditionsInUnless, []},
           {Credo.Check.Refactor.NegatedConditionsWithElse, []},
           {Credo.Check.Refactor.NegatedIsNil, []},
@@ -189,11 +191,6 @@
           {Credo.Check.Warning.WrongTestFileExtension, []}
         ],
         disabled: [
-          #
-          # Checks to be enabled
-          #
-          {Credo.Check.Refactor.ModuleDependencies, []},
-
           #
           # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
 
