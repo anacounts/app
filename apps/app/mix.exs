@@ -47,10 +47,7 @@ defmodule App.MixProject do
       {:finch, "~> 0.17"},
       {:decimal, "~> 2.1"},
       {:ex_money, "~> 5.15"},
-      {:ex_money_sql, "~> 1.9"},
-
-      # Tools
-      {:logger_backends, "~> 1.0"}
+      {:ex_money_sql, "~> 1.9"}
     ]
   end
 
