@@ -96,6 +96,87 @@ defmodule App.TransfersTest do
       assert Transfers.list_transfers_of_book(book, filters: %{tenanted_by: {:not, member1.id}})
              |> Enum.map(& &1.id) == [transfer2.id]
     end
+
+    test "paginates results", %{book: book, member: member} do
+      transfer1 = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-06-29])
+      transfer2 = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-06-30])
+
+      assert Transfers.list_transfers_of_book(book, offset: 0, limit: 1)
+             |> Enum.map(& &1.id) == [transfer2.id]
+
+      assert Transfers.list_transfers_of_book(book, offset: 1, limit: 1)
+             |> Enum.map(& &1.id) == [transfer1.id]
+
+      assert Transfers.list_transfers_of_book(book, offset: 0, limit: 25)
+             |> Enum.map(& &1.id) == [transfer2.id, transfer1.id]
+    end
+
+    test "paginated results are filtered and consistent", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id, date: ~D[2020-06-29])
+      _transfer2 = money_transfer_fixture(book, tenant_id: member1.id, date: ~D[2020-06-30])
+      transfer3 = money_transfer_fixture(book, tenant_id: member2.id, date: ~D[2020-06-28])
+
+      assert Transfers.list_transfers_of_book(book,
+               filters: %{tenanted_by: member2.id},
+               offset: 0,
+               limit: 25
+             )
+             |> Enum.map(& &1.id) == [transfer3.id]
+
+      assert Transfers.list_transfers_of_book(book,
+               filters: %{tenanted_by: {:not, member2.id}},
+               offset: 1,
+               limit: 25
+             )
+             |> Enum.map(& &1.id) == [transfer1.id]
+    end
+
+    test "paginated results are sorted and consistent", %{book: book, member: member} do
+      transfer1 =
+        money_transfer_fixture(book,
+          tenant_id: member.id,
+          date: ~D[2020-06-29],
+          inserted_at: ~N[2020-06-29 12:00:00]
+        )
+
+      transfer2 =
+        money_transfer_fixture(book,
+          tenant_id: member.id,
+          date: ~D[2020-06-30],
+          inserted_at: ~N[2020-06-30 12:00:00]
+        )
+
+      transfer3 =
+        money_transfer_fixture(book,
+          tenant_id: member.id,
+          date: ~D[2020-06-28],
+          inserted_at: ~N[2020-06-28 12:00:00]
+        )
+
+      assert Transfers.list_transfers_of_book(book,
+               filters: %{sort_by: :most_recent},
+               offset: 0,
+               limit: 25
+             )
+             |> Enum.map(& &1.id) == [transfer2.id, transfer1.id, transfer3.id]
+
+      assert Transfers.list_transfers_of_book(book,
+               filters: %{sort_by: :oldest},
+               offset: 2,
+               limit: 25
+             )
+             |> Enum.map(& &1.id) == [transfer2.id]
+
+      assert Transfers.list_transfers_of_book(book,
+               filters: %{sort_by: :last_created},
+               offset: 1,
+               limit: 25
+             )
+             |> Enum.map(& &1.id) == [transfer1.id, transfer3.id]
+    end
   end
 
   describe "list_transfers_of_members/1" do

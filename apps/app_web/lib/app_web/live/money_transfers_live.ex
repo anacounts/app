@@ -57,7 +57,16 @@ defmodule AppWeb.MoneyTransfersLive do
           </.button>
         </div>
 
-        <div id="money-transfers" phx-update="stream">
+        <div
+          id="money-transfers"
+          phx-update="stream"
+          phx-viewport-top={@page > 1 && "prev-page"}
+          phx-viewport-bottom={!@end_of_timeline? && "next-page"}
+          class={[
+            if(@end_of_timeline?, do: "pb-10", else: "pb-[200vh]"),
+            if(@page == 1, do: "pt-10", else: "pt-[calc(200vh)]")
+          ]}
+        >
           <.tile
             :for={{id, transfer} <- @streams.money_transfers}
             id={id}
@@ -148,14 +157,36 @@ defmodule AppWeb.MoneyTransfersLive do
     """
   end
 
+  defp class_for_transfer_type(:payment), do: "text-error"
+  defp class_for_transfer_type(:income), do: "text-info"
+  defp class_for_transfer_type(:reimbursement), do: nil
+
+  defp class_for_amount(amount) do
+    cond do
+      Money.negative?(amount) -> "text-error"
+      Money.positive?(amount) -> "text-info"
+      true -> nil
+    end
+  end
+
+  defp icon_for_transfer_type(:payment), do: "remove"
+  defp icon_for_transfer_type(:income), do: "add"
+  defp icon_for_transfer_type(:reimbursement), do: "arrow-forward"
+
+  defp tenant_label_for_transfer_type(:payment, name), do: gettext("Paid by %{name}", name: name)
+
+  defp tenant_label_for_transfer_type(:income, name),
+    do: gettext("Received by %{name}", name: name)
+
+  defp tenant_label_for_transfer_type(:reimbursement, name),
+    do: gettext("Reimbursed to %{name}", name: name)
+
+  defp format_code(:divide_equally), do: gettext("Divide equally")
+  defp format_code(:weight_by_income), do: gettext("Weight by income")
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     book = socket.assigns.book
-
-    money_transfers =
-      book
-      |> Transfers.list_transfers_of_book()
-      |> Transfers.with_tenant()
 
     filters =
       to_form(
@@ -167,15 +198,47 @@ defmodule AppWeb.MoneyTransfersLive do
       )
 
     socket =
-      assign(socket,
+      socket
+      |> assign(
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
         layout_heading: gettext("Transfers"),
-        filters: filters
+        filters: filters,
+        # pagination
+        page: 1,
+        per_page: 25
       )
-      |> stream(:money_transfers, money_transfers)
+      |> paginate_money_transfers(1)
       |> assign_amounts_summaries()
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}, temporary_assigns: [filters: nil]}
+  end
+
+  defp paginate_money_transfers(socket, new_page) when new_page >= 1 do
+    %{book: book, per_page: per_page, page: cur_page} = socket.assigns
+
+    money_transfers =
+      book
+      |> Transfers.list_transfers_of_book(offset: (new_page - 1) * per_page, limit: per_page)
+      |> Transfers.with_tenant()
+
+    {money_transfers, at, limit} =
+      if new_page >= cur_page do
+        {money_transfers, -1, per_page * 3 * -1}
+      else
+        {Enum.reverse(money_transfers), 0, per_page * 3}
+      end
+
+    assign_paginated_transfers(socket, money_transfers, new_page, at, limit, opts)
+  end
+
+  defp assign_paginated_transfers(socket, money_transfers, new_page, at, limit, opts) do
+    if Enum.empty?(money_transfers) do
+      assign(socket, end_of_timeline?: at == -1)
+    else
+      socket
+      |> assign(end_of_timeline?: false, page: new_page)
+      |> stream(:money_transfers, money_transfers, at: at, limit: limit)
+    end
   end
 
   defp assign_amounts_summaries(socket) do
@@ -217,6 +280,40 @@ defmodule AppWeb.MoneyTransfersLive do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("next-page", _params, socket) do
+    {:noreply, paginate_money_transfers(socket, socket.assigns.page + 1)}
+  end
+
+  def handle_event("prev-page", %{"_overran" => true}, socket) do
+    {:noreply, paginate_money_transfers(socket, 1)}
+  end
+
+  def handle_event("prev-page", _params, socket) do
+    if socket.assigns.page > 1 do
+      {:noreply, paginate_money_transfers(socket, socket.assigns.page - 1)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("filter", %{"filters" => filters}, socket) do
+    %{current_member: current_member} = socket.assigns
+
+    context_filters =
+      Map.update(filters, "tenanted_by", :anyone, fn
+        "anyone" -> :anyone
+        "me" -> current_member.id
+        "others" -> {:not, current_member.id}
+      end)
+
+    socket =
+      socket
+      |> assign(filters: to_form(filters, as: :filters))
+      |> paginate_money_transfers(1)
+
+    {:noreply, socket}
+  end
+
   def handle_event("delete", %{"id" => money_transfer_id}, socket) do
     book = socket.assigns.book
 
@@ -232,29 +329,6 @@ defmodule AppWeb.MoneyTransfersLive do
     {:noreply, socket}
   end
 
-  def handle_event("filter", %{"filters" => filters}, socket) do
-    %{book: book, current_member: current_member} = socket.assigns
-
-    context_filters =
-      Map.update(filters, "tenanted_by", :anyone, fn
-        "anyone" -> :anyone
-        "me" -> current_member.id
-        "others" -> {:not, current_member.id}
-      end)
-
-    money_transfers =
-      book
-      |> Transfers.list_transfers_of_book(filters: context_filters)
-      |> Transfers.with_tenant()
-
-    socket =
-      socket
-      |> assign(filters: to_form(filters, as: :filters))
-      |> stream(:money_transfers, money_transfers, reset: true)
-
-    {:noreply, socket}
-  end
-
   def handle_event("delete-book", _params, socket) do
     BooksHelpers.handle_delete_book(socket)
   end
@@ -266,31 +340,4 @@ defmodule AppWeb.MoneyTransfersLive do
   def handle_event("reopen-book", _params, socket) do
     BooksHelpers.handle_reopen_book(socket)
   end
-
-  defp class_for_transfer_type(:payment), do: "text-error"
-  defp class_for_transfer_type(:income), do: "text-info"
-  defp class_for_transfer_type(:reimbursement), do: nil
-
-  defp class_for_amount(amount) do
-    cond do
-      Money.negative?(amount) -> "text-error"
-      Money.positive?(amount) -> "text-info"
-      true -> nil
-    end
-  end
-
-  defp icon_for_transfer_type(:payment), do: "remove"
-  defp icon_for_transfer_type(:income), do: "add"
-  defp icon_for_transfer_type(:reimbursement), do: "arrow-forward"
-
-  defp tenant_label_for_transfer_type(:payment, name), do: gettext("Paid by %{name}", name: name)
-
-  defp tenant_label_for_transfer_type(:income, name),
-    do: gettext("Received by %{name}", name: name)
-
-  defp tenant_label_for_transfer_type(:reimbursement, name),
-    do: gettext("Reimbursed to %{name}", name: name)
-
-  defp format_code(:divide_equally), do: gettext("Divide equally")
-  defp format_code(:weight_by_income), do: gettext("Weight by income")
 end
