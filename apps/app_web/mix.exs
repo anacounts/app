@@ -70,6 +70,9 @@ defmodule AppWeb.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
 
+      # Code analysis
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+
       # Umbrella
       {:app, in_umbrella: true}
     ]

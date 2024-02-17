@@ -54,7 +54,7 @@ defmodule App.Books do
   end
 
   # Returns a query that fetches all books a user belongs to.
-  @spec books_of_user_query(Auth.User.t()) :: Ecto.Query.t()
+  @spec books_of_user_query(User.t()) :: Ecto.Query.t()
   defp books_of_user_query(%User{} = user) do
     from [book: book] in Book.base_query(),
       join: member in BookMember,

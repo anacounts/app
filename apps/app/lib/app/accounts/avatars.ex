@@ -5,6 +5,11 @@ defmodule App.Accounts.Avatars do
   Uses Gravatar as the default avatar provider.
   """
 
+  @type entity() :: %{
+          :email => binary(),
+          optional(atom()) => any()
+        }
+
   @doc """
   Get the avatar URL for an entity. Currently, only entities with an `:email`
   field are supported.
@@ -15,7 +20,7 @@ defmodule App.Accounts.Avatars do
       "https://www.gravatar.com/avatar/7671d949664fc1fbce03b4ee41c509a4"
 
   """
-  @spec avatar_url(%{email: binary()}) :: String.t()
+  @spec avatar_url(entity()) :: String.t()
   def avatar_url(%{email: email}) do
     gravatar_email_url(email)
   end

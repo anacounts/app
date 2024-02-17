@@ -47,7 +47,10 @@ defmodule App.MixProject do
       {:finch, "~> 0.17"},
       {:decimal, "~> 2.1"},
       {:ex_money, "~> 5.15"},
-      {:ex_money_sql, "~> 1.9"}
+      {:ex_money_sql, "~> 1.9"},
+
+      # Code analysis
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
