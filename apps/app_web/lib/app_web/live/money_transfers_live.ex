@@ -197,8 +197,6 @@ defmodule AppWeb.MoneyTransfersLive do
       socket
       |> assign(
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
-        # TODO remove
-        layout_heading: gettext("Transfers"),
         # filters
         filters: filters,
         filters_form: filters_form,

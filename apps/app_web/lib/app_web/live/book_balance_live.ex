@@ -71,7 +71,6 @@ defmodule AppWeb.BookBalanceLive do
       socket
       |> assign(
         page_title: "Balance · #{book.name}",
-        layout_heading: gettext("Balance"),
         current_transaction: nil
       )
       |> assign_transactions()
