@@ -57,46 +57,49 @@ defmodule AppWeb.MoneyTransfersLive do
           </.button>
         </div>
 
-        <.tile
-          :for={transfer <- @money_transfers}
-          summary_class={["font-bold", class_for_transfer_type(transfer.type)]}
-          collapse
-        >
-          <.icon name={icon_for_transfer_type(transfer.type)} />
-          <span class="grow"><%= transfer.label %></span>
-          <%= Money.to_string!(transfer.amount) %>
-
-          <:description>
-            <div class="flex justify-between mb-3">
-              <div class="font-bold">
-                <%= tenant_label_for_transfer_type(transfer.type, transfer.tenant.display_name) %>
-              </div>
-              <div>
-                <time datetime={to_string(transfer.date)}><%= format_date(transfer.date) %></time>
-                <.icon name="calendar-month" />
-              </div>
-            </div>
-            <div :if={transfer.type != :reimbursement} class="text-right">
-              <%= format_code(transfer.balance_params.means_code) %>
-              <.icon name="swap-horiz" />
-            </div>
-          </:description>
-
-          <:button
-            :if={transfer.type != :reimbursement}
-            navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
+        <div id="money-transfers" phx-update="stream">
+          <.tile
+            :for={{id, transfer} <- @streams.money_transfers}
+            id={id}
+            summary_class={["font-bold", class_for_transfer_type(transfer.type)]}
+            collapse
           >
-            <%= gettext("Edit") %>
-          </:button>
-          <:button
-            class="text-error"
-            data-confirm={gettext("Are you sure you want to delete the transfer?")}
-            phx-click="delete"
-            phx-value-id={transfer.id}
-          >
-            <%= gettext("Delete") %>
-          </:button>
-        </.tile>
+            <.icon name={icon_for_transfer_type(transfer.type)} />
+            <span class="grow"><%= transfer.label %></span>
+            <%= Money.to_string!(transfer.amount) %>
+
+            <:description>
+              <div class="flex justify-between mb-3">
+                <div class="font-bold">
+                  <%= tenant_label_for_transfer_type(transfer.type, transfer.tenant.display_name) %>
+                </div>
+                <div>
+                  <time datetime={to_string(transfer.date)}><%= format_date(transfer.date) %></time>
+                  <.icon name="calendar-month" />
+                </div>
+              </div>
+              <div :if={transfer.type != :reimbursement} class="text-right">
+                <%= format_code(transfer.balance_params.means_code) %>
+                <.icon name="swap-horiz" />
+              </div>
+            </:description>
+
+            <:button
+              :if={transfer.type != :reimbursement}
+              navigate={~p"/books/#{@book}/transfers/#{transfer.id}/edit"}
+            >
+              <%= gettext("Edit") %>
+            </:button>
+            <:button
+              class="text-error"
+              data-confirm={gettext("Are you sure you want to delete the transfer?")}
+              phx-click="delete"
+              phx-value-id={transfer.id}
+            >
+              <%= gettext("Delete") %>
+            </:button>
+          </.tile>
+        </div>
       </div>
 
       <% # Filters %>
@@ -167,9 +170,9 @@ defmodule AppWeb.MoneyTransfersLive do
       assign(socket,
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
         layout_heading: gettext("Transfers"),
-        money_transfers: money_transfers,
         filters: filters
       )
+      |> stream(:money_transfers, money_transfers)
       |> assign_amounts_summaries()
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}, temporary_assigns: [filters: nil]}
@@ -223,9 +226,7 @@ defmodule AppWeb.MoneyTransfersLive do
 
     socket =
       socket
-      |> update(:money_transfers, fn money_transfers ->
-        Enum.reject(money_transfers, &(&1.id == money_transfer.id))
-      end)
+      |> stream_delete(:money_transfers, money_transfer)
       |> assign_amounts_summaries()
 
     {:noreply, socket}
@@ -247,10 +248,9 @@ defmodule AppWeb.MoneyTransfersLive do
       |> Transfers.with_tenant()
 
     socket =
-      assign(socket,
-        money_transfers: money_transfers,
-        filters: to_form(filters, as: :filters)
-      )
+      socket
+      |> assign(filters: to_form(filters, as: :filters))
+      |> stream(:money_transfers, money_transfers, reset: true)
 
     {:noreply, socket}
   end
