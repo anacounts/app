@@ -31,7 +31,13 @@ defmodule App.Transfers do
   @doc """
   Find all money transfers of a book.
 
-  The result may be filtered by passing a map of filters.
+  The result may be filtered by passing a options.
+
+  ## Options
+
+  - `:filters` - a map of filters to apply to the query. See the `Filters` section below.
+  - `:offset` - the offset of the query
+  - `:limit` - the limit of the query
 
   ## Filters
 
@@ -40,10 +46,15 @@ defmodule App.Transfers do
   - `:tenanted_by` - the tenancy of the transfer, one of :anyone, a member id or
     `{:not, member_id}`
   """
-  @spec list_transfers_of_book(Book.t(), map()) :: [MoneyTransfer.t()]
-  def list_transfers_of_book(%Book{} = book, filters \\ %{}) do
+  @spec list_transfers_of_book(Book.t(), Keyword.t()) :: [MoneyTransfer.t()]
+  def list_transfers_of_book(%Book{} = book, opts \\ []) do
+    filters = Keyword.get(opts, :filters, %{})
+    offset = Keyword.get(opts, :offset, 0)
+    limit = Keyword.get(opts, :limit, 25)
+
     MoneyTransfer.transfers_of_book_query(book)
     |> filter_money_transfers_query(filters)
+    |> paginate_query(offset, limit)
     |> Repo.all()
   end
 
@@ -117,6 +128,14 @@ defmodule App.Transfers do
       from([money_transfer: money_transfer] in query,
         where: money_transfer.tenant_id == ^member_id
       )
+
+  ## Pagination
+
+  defp paginate_query(query, offset, limit) do
+    query
+    |> limit(^limit)
+    |> offset(^offset)
+  end
 
   ## Amount summary
 

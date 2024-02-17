@@ -84,11 +84,7 @@ defmodule AppWeb.BookMembersLive do
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    socket =
-      assign(socket,
-        page_title: book.name,
-        layout_heading: gettext("Details")
-      )
+    socket = assign(socket, page_title: book.name)
 
     {:ok, socket, layout: {AppWeb.Layouts, :book}}
   end

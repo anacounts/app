@@ -189,10 +189,6 @@ msgid "Delete"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Details"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Disconnect"
 msgstr ""
 
