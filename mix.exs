@@ -15,6 +15,14 @@ defmodule Anacounts.Umbrella.MixProject do
             app_web: :permanent
           ]
         ]
+      ],
+      dialyzer: [
+        list_unused_filters: true,
+        # Put the project-level PLT in the priv/ directory
+        # (instead of the default _build/ location)
+        # for the CI to be able to cache it between builds
+        plt_local_path: "priv/plts/project.plt",
+        plt_core_path: "priv/plts/core.plt"
       ]
     ]
   end
@@ -35,7 +43,10 @@ defmodule Anacounts.Umbrella.MixProject do
     [
       # Required to run "mix format" on ~H/.heex files from the umbrella root
       {:phoenix_live_view, ">= 0.0.0"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+
+      # Code analysis
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
