@@ -5,6 +5,7 @@ defmodule App.Balance do
 
   alias App.Repo
 
+  alias App.Books.BookMember
   alias App.Transfers
 
   @doc """

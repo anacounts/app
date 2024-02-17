@@ -13,7 +13,7 @@ defmodule App.Books.Book do
   @type t :: %__MODULE__{
           id: id(),
           name: String.t(),
-          closed_at: NaiveDateTime.t(),
+          closed_at: NaiveDateTime.t() | nil,
           deleted_at: NaiveDateTime.t(),
           default_balance_params: TransferParams.t(),
           inserted_at: NaiveDateTime.t(),

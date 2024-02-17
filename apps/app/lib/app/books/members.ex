@@ -128,7 +128,7 @@ defmodule App.Books.Members do
   @doc """
   Link an existing book member to a user.
   """
-  @spec link_book_member_to_user(BookMember.t(), User.t()) :: BookMember.t()
+  @spec link_book_member_to_user(BookMember.t(), User.t()) :: :ok
   def link_book_member_to_user(book_member, user) do
     {:ok, _results} =
       Ecto.Multi.new()
