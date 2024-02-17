@@ -244,7 +244,7 @@ defmodule AppWeb.MoneyTransfersLive do
 
     money_transfers =
       book
-      |> Transfers.list_transfers_of_book(context_filters)
+      |> Transfers.list_transfers_of_book(filters: context_filters)
       |> Transfers.with_tenant()
 
     socket =
