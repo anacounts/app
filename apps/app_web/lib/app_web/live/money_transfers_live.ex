@@ -114,11 +114,11 @@ defmodule AppWeb.MoneyTransfersLive do
       <% # Filters %>
       <.filters id="filters" phx-change="filter">
         <:section icon="arrow_downward" title={gettext("Sort by")}>
-          <.filter_options field={@filters[:sort_by]} options={sort_by_options()} />
+          <.filter_options field={@filters_form[:sort_by]} options={sort_by_options()} />
         </:section>
 
         <:section icon="filter_alt" title={gettext("Filter by")}>
-          <.filter_options field={@filters[:tenanted_by]} options={tenanted_by_options()} />
+          <.filter_options field={@filters_form[:tenanted_by]} options={tenanted_by_options()} />
         </:section>
       </.filters>
     </div>
@@ -184,25 +184,24 @@ defmodule AppWeb.MoneyTransfersLive do
   defp format_code(:divide_equally), do: gettext("Divide equally")
   defp format_code(:weight_by_income), do: gettext("Weight by income")
 
+  @default_filters %{"sort_by" => "most_recent", "tenanted_by" => "anyone"}
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    filters =
-      to_form(
-        %{
-          "sort_by" => "most_recent",
-          "tenanted_by" => "anyone"
-        },
-        as: :filters
-      )
+    filters_form = to_form(@default_filters, as: :filters)
+    filters = filters_for_context(socket, @default_filters)
 
     socket =
       socket
       |> assign(
         page_title: gettext("Transfers · %{book_name}", book_name: book.name),
+        # TODO remove
         layout_heading: gettext("Transfers"),
+        # filters
         filters: filters,
+        filters_form: filters_form,
         # pagination
         page: 1,
         per_page: 25
@@ -210,35 +209,52 @@ defmodule AppWeb.MoneyTransfersLive do
       |> paginate_money_transfers(1)
       |> assign_amounts_summaries()
 
-    {:ok, socket, layout: {AppWeb.Layouts, :book}, temporary_assigns: [filters: nil]}
+    {:ok, socket, layout: {AppWeb.Layouts, :book}, temporary_assigns: [filters_form: nil]}
+  end
+
+  defp reset_money_transfers(socket) do
+    %{book: book, per_page: per_page, filters: filters} = socket.assigns
+
+    money_transfers = list_transfers(book, 1, per_page, filters)
+
+    socket
+    |> assign(end_of_timeline?: Enum.empty?(money_transfers), page: 1)
+    |> stream(:money_transfers, money_transfers, reset: true)
   end
 
   defp paginate_money_transfers(socket, new_page) when new_page >= 1 do
-    %{book: book, per_page: per_page, page: cur_page} = socket.assigns
+    %{book: book, per_page: per_page, page: cur_page, filters: filters} = socket.assigns
 
-    money_transfers =
-      book
-      |> Transfers.list_transfers_of_book(offset: (new_page - 1) * per_page, limit: per_page)
-      |> Transfers.with_tenant()
+    money_transfers = list_transfers(book, new_page, per_page, filters)
+    superior_page? = new_page >= cur_page
 
     {money_transfers, at, limit} =
-      if new_page >= cur_page do
+      if superior_page? do
         {money_transfers, -1, per_page * 3 * -1}
       else
         {Enum.reverse(money_transfers), 0, per_page * 3}
       end
 
-    assign_paginated_transfers(socket, money_transfers, new_page, at, limit, opts)
-  end
-
-  defp assign_paginated_transfers(socket, money_transfers, new_page, at, limit, opts) do
     if Enum.empty?(money_transfers) do
-      assign(socket, end_of_timeline?: at == -1)
+      socket
+      |> assign(end_of_timeline?: superior_page?)
+      # ensure the stream is at least initialized
+      |> stream(:money_transfers, [])
     else
       socket
       |> assign(end_of_timeline?: false, page: new_page)
       |> stream(:money_transfers, money_transfers, at: at, limit: limit)
     end
+  end
+
+  defp list_transfers(book, page, per_page, filters) do
+    book
+    |> Transfers.list_transfers_of_book(
+      offset: (page - 1) * per_page,
+      limit: per_page,
+      filters: filters
+    )
+    |> Transfers.with_tenant()
   end
 
   defp assign_amounts_summaries(socket) do
@@ -297,19 +313,12 @@ defmodule AppWeb.MoneyTransfersLive do
   end
 
   def handle_event("filter", %{"filters" => filters}, socket) do
-    %{current_member: current_member} = socket.assigns
-
-    context_filters =
-      Map.update(filters, "tenanted_by", :anyone, fn
-        "anyone" -> :anyone
-        "me" -> current_member.id
-        "others" -> {:not, current_member.id}
-      end)
+    context_filters = filters_for_context(socket, filters)
 
     socket =
       socket
-      |> assign(filters: to_form(filters, as: :filters))
-      |> paginate_money_transfers(1)
+      |> assign(filters: context_filters, filters_form: to_form(filters, as: :filters))
+      |> reset_money_transfers()
 
     {:noreply, socket}
   end
@@ -339,5 +348,15 @@ defmodule AppWeb.MoneyTransfersLive do
 
   def handle_event("reopen-book", _params, socket) do
     BooksHelpers.handle_reopen_book(socket)
+  end
+
+  defp filters_for_context(socket, filters) do
+    current_member = socket.assigns.current_member
+
+    Map.update(filters, "tenanted_by", :anyone, fn
+      "anyone" -> :anyone
+      "me" -> current_member.id
+      "others" -> {:not, current_member.id}
+    end)
   end
 end
