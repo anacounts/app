@@ -160,6 +160,7 @@
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.RejectReject, []},
           {Credo.Check.Refactor.UnlessWithElse, []},
+          {Credo.Check.Refactor.UtcNowTruncate, []},
           {Credo.Check.Refactor.WithClauses, []},
 
           #
@@ -192,7 +193,7 @@
         ],
         disabled: [
           #
-          # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
+          # Checks scheduled for next check update (opt-in for now)
 
           #
           # Controversial and experimental checks (opt-in, just move the check to `:enabled`
