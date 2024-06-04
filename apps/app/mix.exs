@@ -36,18 +36,25 @@ defmodule App.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      ## Authentication
       {:bcrypt_elixir, "~> 3.1"},
+
+      ## Business
+      {:decimal, "~> 2.1"},
       {:phoenix_pubsub, "~> 2.1"},
+
+      ## Database
       {:ecto_sql, "~> 3.9"},
       {:postgrex, ">= 0.0.0"},
-      {:cloak_ecto, "~> 1.2.0"},
+      {:cloak_ecto, "~> 1.3.0"},
       {:jason, "~> 1.4"},
-      {:swoosh, "~> 1.13"},
-      {:gen_smtp, "~> 1.2"},
-      {:finch, "~> 0.17"},
-      {:decimal, "~> 2.1"},
       {:ex_money, "~> 5.15"},
       {:ex_money_sql, "~> 1.9"},
+
+      # Emails
+      {:swoosh, "~> 1.13"},
+      {:gen_smtp, "~> 1.2"},
+      {:finch, "~> 0.18"},
 
       # Code analysis
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
