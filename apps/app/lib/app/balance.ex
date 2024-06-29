@@ -8,6 +8,8 @@ defmodule App.Balance do
   alias App.Books.BookMember
   alias App.Transfers
 
+  @type error_reasons :: [String.t()]
+
   @doc """
   Compute the `:balance` field of book members.
 
@@ -166,6 +168,14 @@ defmodule App.Balance do
     match?({:error, _reasons}, member.balance)
   end
 
+  @spec member_balance_error_reasons(BookMember.t()) :: error_reasons() | nil
+  defp member_balance_error_reasons(member) do
+    case member.balance do
+      {:error, reasons} -> reasons
+      _ -> nil
+    end
+  end
+
   @doc """
   Checks if the computed balance of members does not have errors and is zero.
   """
@@ -205,13 +215,15 @@ defmodule App.Balance do
       {:ok, [%{amount: Money.new!(:EUR, 10), from: member1, to: member2}]}
 
       iex> transactions([member_with_error_in_balance, member2])
-      :error
+      {:error, ["reason1", "reason2"]}
 
   """
-  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | :error
+  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, error_reasons()}
   def transactions(members) do
-    if Enum.any?(members, &has_balance_error?/1) do
-      :error
+    error_reasons = Enum.find_value(members, &member_balance_error_reasons/1)
+
+    if error_reasons do
+      {:error, error_reasons}
     else
       {debtors, creditors} =
         members

@@ -8,6 +8,7 @@ defmodule App.Books.BookMember do
   import Ecto.Query
 
   alias App.Accounts.User
+  alias App.Balance
   alias App.Balance.BalanceConfig
   alias App.Books.Book
 
@@ -26,7 +27,7 @@ defmodule App.Books.BookMember do
           email: String.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
           balance_config: BalanceConfig.t() | Ecto.Association.NotLoaded.t() | nil,
-          balance: Money.t() | {:error, reasons :: [String.t()]} | nil,
+          balance: Money.t() | {:error, Balance.error_reasons()} | nil,
           inserted_at: NaiveDateTime.t() | nil,
           updated_at: NaiveDateTime.t() | nil
         }

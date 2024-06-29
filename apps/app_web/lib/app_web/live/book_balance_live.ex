@@ -19,9 +19,20 @@ defmodule AppWeb.BookBalanceLive do
         <%= gettext("How to balance?") %>
       </.heading>
       <.list>
-        <%= if @transactions_error? do %>
+        <%= if @transactions_errors != nil do %>
           <.list_item>
-            <%= gettext("An error occured while balancing the transactions") %>
+            <div>
+              <%= ngettext(
+                "An error occured while balancing the transactions:",
+                "Errors occured while balancing the transactions:",
+                Enum.count(@transactions_errors)
+              ) %>
+              <ul class="mt-2 ms-2">
+                <li :for={reason <- @transactions_errors}>
+                  <%= reason %>
+                </li>
+              </ul>
+            </div>
           </.list_item>
         <% else %>
           <%= if Enum.empty?(@transactions) do %>
@@ -81,10 +92,10 @@ defmodule AppWeb.BookBalanceLive do
   defp assign_transactions(socket) do
     case Balance.transactions(socket.assigns.book_members) do
       {:ok, transactions} ->
-        assign(socket, transactions_error?: false, transactions: transactions)
+        assign(socket, transactions_errors: nil, transactions: transactions)
 
-      :error ->
-        assign(socket, transactions_error?: true)
+      {:error, reasons} ->
+        assign(socket, transactions_errors: reasons)
     end
   end
 

@@ -381,10 +381,10 @@ defmodule App.BalanceTest do
       member2 =
         book_member_fixture(book,
           user_id: user_fixture().id,
-          balance: {:error, "could not compute balance"}
+          balance: {:error, ["could not compute balance"]}
         )
 
-      assert Balance.transactions([member1, member2]) == :error
+      assert Balance.transactions([member1, member2]) == {:error, ["could not compute balance"]}
     end
 
     defp transactions_equal?(transactions1, transactions2) do
