@@ -21,8 +21,10 @@ defmodule App.Balance do
   """
   def fill_members_balance(members) do
     transfers =
-      Transfers.list_transfers_of_members(members)
-      |> load_peers_and_total_weight()
+      members
+      |> Transfers.list_transfers_of_members()
+      |> preload_peers()
+      |> compute_total_peer_weight()
 
     members
     |> reset_members_balance()
@@ -30,10 +32,14 @@ defmodule App.Balance do
     |> round_members_balance()
   end
 
-  defp load_peers_and_total_weight(transfers) when is_list(transfers) do
+  defp preload_peers(transfers) when is_list(transfers) do
+    Repo.preload(transfers, :peers)
+  end
+
+  defp compute_total_peer_weight(transfers) when is_list(transfers) do
     transfers
     |> Enum.group_by(& &1.balance_params.means_code)
-    |> Enum.flat_map(&load_peers/1)
+    |> Enum.flat_map(&compute_peers_total_weight/1)
     |> Enum.map(fn
       {:ok, transfer} ->
         total_peer_weight =
@@ -46,15 +52,14 @@ defmodule App.Balance do
     end)
   end
 
-  defp load_peers({:divide_equally, transfers}) do
-    transfers = Repo.preload(transfers, :peers)
-
+  defp compute_peers_total_weight({:divide_equally, transfers}) do
     Enum.map(transfers, fn transfer ->
       {:ok, %{transfer | peers: peers_with_total_weight(transfer.peers, & &1.weight)}}
     end)
   end
 
-  defp load_peers({:weight_by_income, transfers}) do
+  defp compute_peers_total_weight({:weight_by_income, transfers}) do
+    # Peers are already preloaded, but we need their balance config
     transfers = Repo.preload(transfers, peers: [:balance_config])
 
     Enum.map(transfers, fn transfer ->
