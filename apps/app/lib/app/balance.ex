@@ -23,7 +23,7 @@ defmodule App.Balance do
     transfers =
       members
       |> Transfers.list_transfers_of_members()
-      |> preload_peers()
+      |> preload_peers(members)
       |> compute_total_peer_weight()
 
     members
@@ -32,8 +32,24 @@ defmodule App.Balance do
     |> round_members_balance()
   end
 
-  defp preload_peers(transfers) when is_list(transfers) do
-    Repo.preload(transfers, :peers)
+  # Preload peers of transfers and fill their `:member` field.
+  # The member of the peer can be used to create more precise
+  # errors if the computation of the balance is not possible.
+  defp preload_peers(transfers, members) when is_list(transfers) do
+    members_by_id = Map.new(members, &{&1.id, &1})
+
+    transfers
+    |> Repo.preload(:peers)
+    |> Enum.map(&fill_peers_members(&1, members_by_id))
+  end
+
+  defp fill_peers_members(transfer, members_by_id) do
+    Map.update!(transfer, :peers, fn peers ->
+      Enum.map(peers, fn peer ->
+        member = Map.fetch!(members_by_id, peer.member_id)
+        %{peer | member: member}
+      end)
+    end)
   end
 
   defp compute_total_peer_weight(transfers) when is_list(transfers) do
