@@ -68,13 +68,19 @@ defmodule App.Balance do
     end)
   end
 
-  defp compute_peers_total_weight({:divide_equally, transfers}) do
+  defp compute_peers_total_weight({:divide_equally, transfers}),
+    do: compute_divide_equally_peers_total_weight(transfers)
+
+  defp compute_peers_total_weight({:weight_by_income, transfers}),
+    do: compute_weight_by_income_peers_total_weight(transfers)
+
+  defp compute_divide_equally_peers_total_weight(transfers) do
     Enum.map(transfers, fn transfer ->
       {:ok, %{transfer | peers: peers_with_total_weight(transfer.peers, & &1.weight)}}
     end)
   end
 
-  defp compute_peers_total_weight({:weight_by_income, transfers}) do
+  defp compute_weight_by_income_peers_total_weight(transfers) do
     # Peers are already preloaded, but we need their balance config
     transfers = Repo.preload(transfers, peers: [:balance_config])
 
@@ -84,26 +90,31 @@ defmodule App.Balance do
           peer.balance_config == nil or peer.balance_config.annual_income == nil
         end)
 
-      if peers_without_annual_income == [] do
-        peers =
-          peers_with_total_weight(
-            transfer.peers,
-            &Decimal.mult(&1.weight, &1.balance_config.annual_income)
-          )
-
-        {:ok, %{transfer | peers: peers}}
-      else
-        error_reasons =
-          Enum.map(peers_without_annual_income, fn peer ->
-            %{
-              message: "#{peer.member.display_name} did not set their annual income",
-              uniq_hash: "no_income_#{peer.member_id}"
-            }
-          end)
-
-        {:error, error_reasons, transfer}
-      end
+      maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
     end)
+  end
+
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
+
+  defp maybe_set_weight_by_income_total_weight(transfer, []) do
+    transfer =
+      update_in(transfer.peers, fn peers ->
+        peers_with_total_weight(peers, &Decimal.mult(&1.weight, &1.balance_config.annual_income))
+      end)
+
+    {:ok, transfer}
+  end
+
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income) do
+    error_reasons =
+      Enum.map(peers_without_annual_income, fn peer ->
+        %{
+          message: "#{peer.member.display_name} did not set their annual income",
+          uniq_hash: "income_not_set_#{peer.member_id}"
+        }
+      end)
+
+    {:error, error_reasons, transfer}
   end
 
   defp peers_with_total_weight(peers, weight_fun) do

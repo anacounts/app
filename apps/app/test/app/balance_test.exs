@@ -258,7 +258,7 @@ defmodule App.BalanceTest do
                 [
                   %{
                     message: "member1 did not set their annual income",
-                    uniq_hash: "no_income_#{member1.id}"
+                    uniq_hash: "income_not_set_#{member1.id}"
                   }
                 ]}
 
@@ -267,7 +267,7 @@ defmodule App.BalanceTest do
                 [
                   %{
                     message: "member1 did not set their annual income",
-                    uniq_hash: "no_income_#{member1.id}"
+                    uniq_hash: "income_not_set_#{member1.id}"
                   }
                 ]}
 
