@@ -252,8 +252,25 @@ defmodule App.BalanceTest do
         )
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
-      assert member1.balance == {:error, ["member1 did not set their annual income"]}
-      assert member2.balance == {:error, ["member1 did not set their annual income"]}
+
+      assert member1.balance ==
+               {:error,
+                [
+                  %{
+                    message: "member1 did not set their annual income",
+                    uniq_hash: "no_income_#{member1.id}"
+                  }
+                ]}
+
+      assert member2.balance ==
+               {:error,
+                [
+                  %{
+                    message: "member1 did not set their annual income",
+                    uniq_hash: "no_income_#{member1.id}"
+                  }
+                ]}
+
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end
 

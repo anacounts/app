@@ -8,7 +8,7 @@ defmodule App.Balance do
   alias App.Books.BookMember
   alias App.Transfers
 
-  @type error_reasons :: [String.t()]
+  @type error_reasons :: [%{message: String.t(), uniq_hash: String.t()}]
 
   @doc """
   Compute the `:balance` field of book members.
@@ -95,7 +95,10 @@ defmodule App.Balance do
       else
         error_reasons =
           Enum.map(peers_without_annual_income, fn peer ->
-            "#{peer.member.display_name} did not set their annual income"
+            %{
+              message: "#{peer.member.display_name} did not set their annual income",
+              uniq_hash: "no_income_#{peer.member_id}"
+            }
           end)
 
         {:error, error_reasons, transfer}
@@ -171,7 +174,7 @@ defmodule App.Balance do
   defp add_balance_errors(member, new_reasons) do
     reasons =
       case member.balance do
-        {:error, old_reasons} -> new_reasons ++ old_reasons
+        {:error, old_reasons} -> Enum.uniq_by(new_reasons ++ old_reasons, & &1.uniq_hash)
         _ -> new_reasons
       end
 

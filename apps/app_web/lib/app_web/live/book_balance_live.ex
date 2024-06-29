@@ -29,7 +29,7 @@ defmodule AppWeb.BookBalanceLive do
               ) %>
               <ul class="mt-2 ms-2">
                 <li :for={reason <- @transactions_errors}>
-                  <%= reason %>
+                  <%= reason.message %>
                 </li>
               </ul>
             </div>
