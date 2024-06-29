@@ -46,8 +46,10 @@ msgid "Amount"
 msgstr "Montant"
 
 #, elixir-autogen, elixir-format
-msgid "An error occured while balancing the transactions"
-msgstr "Une erreur est survenue en équilibrant les transactions"
+msgid "An error occured while balancing the transactions:"
+msgid_plural "Errors occured while balancing the transactions:"
+msgstr[0] "Une erreur est survenue pendant l'équilibrage des transactions :"
+msgstr[1] "Des erreurs sont survenues pendant l'équilibrage des transactions :"
 
 #, elixir-autogen, elixir-format
 msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."

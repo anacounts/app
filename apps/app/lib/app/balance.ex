@@ -8,6 +8,8 @@ defmodule App.Balance do
   alias App.Books.BookMember
   alias App.Transfers
 
+  @type error_reasons :: [%{message: String.t(), uniq_hash: String.t()}]
+
   @doc """
   Compute the `:balance` field of book members.
 
@@ -19,8 +21,10 @@ defmodule App.Balance do
   """
   def fill_members_balance(members) do
     transfers =
-      Transfers.list_transfers_of_members(members)
-      |> load_peers_and_total_weight()
+      members
+      |> Transfers.list_transfers_of_members()
+      |> preload_peers(members)
+      |> compute_total_peer_weight()
 
     members
     |> reset_members_balance()
@@ -28,10 +32,30 @@ defmodule App.Balance do
     |> round_members_balance()
   end
 
-  defp load_peers_and_total_weight(transfers) when is_list(transfers) do
+  # Preload peers of transfers and fill their `:member` field.
+  # The member of the peer can be used to create more precise
+  # errors if the computation of the balance is not possible.
+  defp preload_peers(transfers, members) when is_list(transfers) do
+    members_by_id = Map.new(members, &{&1.id, &1})
+
+    transfers
+    |> Repo.preload(:peers)
+    |> Enum.map(&fill_peers_members(&1, members_by_id))
+  end
+
+  defp fill_peers_members(transfer, members_by_id) do
+    Map.update!(transfer, :peers, fn peers ->
+      Enum.map(peers, fn peer ->
+        member = Map.fetch!(members_by_id, peer.member_id)
+        %{peer | member: member}
+      end)
+    end)
+  end
+
+  defp compute_total_peer_weight(transfers) when is_list(transfers) do
     transfers
     |> Enum.group_by(& &1.balance_params.means_code)
-    |> Enum.flat_map(&load_peers/1)
+    |> Enum.flat_map(&compute_peers_total_weight/1)
     |> Enum.map(fn
       {:ok, transfer} ->
         total_peer_weight =
@@ -39,40 +63,58 @@ defmodule App.Balance do
 
         {:ok, %{transfer | total_peer_weight: total_peer_weight}}
 
-      {:error, _reason, _transfer} = error ->
+      {:error, _reasons, _transfer} = error ->
         error
     end)
   end
 
-  defp load_peers({:divide_equally, transfers}) do
-    transfers = Repo.preload(transfers, :peers)
+  defp compute_peers_total_weight({:divide_equally, transfers}),
+    do: compute_divide_equally_peers_total_weight(transfers)
 
+  defp compute_peers_total_weight({:weight_by_income, transfers}),
+    do: compute_weight_by_income_peers_total_weight(transfers)
+
+  defp compute_divide_equally_peers_total_weight(transfers) do
     Enum.map(transfers, fn transfer ->
       {:ok, %{transfer | peers: peers_with_total_weight(transfer.peers, & &1.weight)}}
     end)
   end
 
-  defp load_peers({:weight_by_income, transfers}) do
+  defp compute_weight_by_income_peers_total_weight(transfers) do
+    # Peers are already preloaded, but we need their balance config
     transfers = Repo.preload(transfers, peers: [:balance_config])
 
     Enum.map(transfers, fn transfer ->
-      all_annual_incomes_set? =
-        Enum.all?(transfer.peers, fn peer ->
-          peer.balance_config != nil and peer.balance_config.annual_income != nil
+      peers_without_annual_income =
+        Enum.filter(transfer.peers, fn peer ->
+          peer.balance_config == nil or peer.balance_config.annual_income == nil
         end)
 
-      if all_annual_incomes_set? do
-        peers =
-          peers_with_total_weight(
-            transfer.peers,
-            &Decimal.mult(&1.weight, &1.balance_config.annual_income)
-          )
-
-        {:ok, %{transfer | peers: peers}}
-      else
-        {:error, "some members did not set their annual income", transfer}
-      end
+      maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
     end)
+  end
+
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
+
+  defp maybe_set_weight_by_income_total_weight(transfer, []) do
+    transfer =
+      update_in(transfer.peers, fn peers ->
+        peers_with_total_weight(peers, &Decimal.mult(&1.weight, &1.balance_config.annual_income))
+      end)
+
+    {:ok, transfer}
+  end
+
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income) do
+    error_reasons =
+      Enum.map(peers_without_annual_income, fn peer ->
+        %{
+          message: "#{peer.member.display_name} did not set their annual income",
+          uniq_hash: "income_not_set_#{peer.member_id}"
+        }
+      end)
+
+    {:error, error_reasons, transfer}
   end
 
   defp peers_with_total_weight(peers, weight_fun) do
@@ -91,9 +133,9 @@ defmodule App.Balance do
     |> adjust_balance_from_transfers(other_transfers)
   end
 
-  defp adjust_balance_from_transfers(members, [{:error, reason, transfer} | other_transfers]) do
+  defp adjust_balance_from_transfers(members, [{:error, reasons, transfer} | other_transfers]) do
     members
-    |> add_balance_error_on_members_in_transfer(reason, transfer)
+    |> add_balance_errors_on_members_in_transfer(reasons, transfer)
     |> adjust_balance_from_transfers(other_transfers)
   end
 
@@ -129,22 +171,22 @@ defmodule App.Balance do
     |> adjust_balance_from_peers(transfer, other_peers)
   end
 
-  defp add_balance_error_on_members_in_transfer(members, reason, transfer) do
-    Enum.map(members, fn member ->
-      transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
+  defp add_balance_errors_on_members_in_transfer(members, reasons, transfer) do
+    transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
 
+    Enum.map(members, fn member ->
       if member.id in transfer_members_ids,
-        do: add_balance_error(member, reason),
+        do: add_balance_errors(member, reasons),
         else: member
     end)
   end
 
-  # add a reason to the balance error list, or initialize the list
-  defp add_balance_error(member, reason) do
+  # add reasons to the balance error reason list, or initialize the list
+  defp add_balance_errors(member, new_reasons) do
     reasons =
       case member.balance do
-        {:error, reasons} -> [reason | reasons]
-        _ -> [reason]
+        {:error, old_reasons} -> Enum.uniq_by(new_reasons ++ old_reasons, & &1.uniq_hash)
+        _ -> new_reasons
       end
 
     %{member | balance: {:error, reasons}}
@@ -164,6 +206,14 @@ defmodule App.Balance do
   @spec has_balance_error?(BookMember.t()) :: boolean()
   def has_balance_error?(member) do
     match?({:error, _reasons}, member.balance)
+  end
+
+  @spec member_balance_error_reasons(BookMember.t()) :: error_reasons() | nil
+  defp member_balance_error_reasons(member) do
+    case member.balance do
+      {:error, reasons} -> reasons
+      _ -> nil
+    end
   end
 
   @doc """
@@ -205,13 +255,15 @@ defmodule App.Balance do
       {:ok, [%{amount: Money.new!(:EUR, 10), from: member1, to: member2}]}
 
       iex> transactions([member_with_error_in_balance, member2])
-      :error
+      {:error, ["reason1", "reason2"]}
 
   """
-  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | :error
+  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, error_reasons()}
   def transactions(members) do
-    if Enum.any?(members, &has_balance_error?/1) do
-      :error
+    error_reasons = Enum.find_value(members, &member_balance_error_reasons/1)
+
+    if error_reasons do
+      {:error, error_reasons}
     else
       {debtors, creditors} =
         members

@@ -226,7 +226,7 @@ defmodule App.BalanceTest do
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
-      member1 = book_member_fixture(book)
+      member1 = book_member_fixture(book, display_name: "member1")
       _balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
 
       member2 = book_member_fixture(book)
@@ -252,8 +252,25 @@ defmodule App.BalanceTest do
         )
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
-      assert member1.balance == {:error, ["some members did not set their annual income"]}
-      assert member2.balance == {:error, ["some members did not set their annual income"]}
+
+      assert member1.balance ==
+               {:error,
+                [
+                  %{
+                    message: "member1 did not set their annual income",
+                    uniq_hash: "income_not_set_#{member1.id}"
+                  }
+                ]}
+
+      assert member2.balance ==
+               {:error,
+                [
+                  %{
+                    message: "member1 did not set their annual income",
+                    uniq_hash: "income_not_set_#{member1.id}"
+                  }
+                ]}
+
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end
 
@@ -381,10 +398,10 @@ defmodule App.BalanceTest do
       member2 =
         book_member_fixture(book,
           user_id: user_fixture().id,
-          balance: {:error, "could not compute balance"}
+          balance: {:error, ["could not compute balance"]}
         )
 
-      assert Balance.transactions([member1, member2]) == :error
+      assert Balance.transactions([member1, member2]) == {:error, ["could not compute balance"]}
     end
 
     defp transactions_equal?(transactions1, transactions2) do
