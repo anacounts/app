@@ -226,7 +226,7 @@ defmodule App.BalanceTest do
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
-      member1 = book_member_fixture(book)
+      member1 = book_member_fixture(book, display_name: "member1")
       _balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
 
       member2 = book_member_fixture(book)
@@ -252,8 +252,8 @@ defmodule App.BalanceTest do
         )
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
-      assert member1.balance == {:error, ["some members did not set their annual income"]}
-      assert member2.balance == {:error, ["some members did not set their annual income"]}
+      assert member1.balance == {:error, ["member1 did not set their annual income"]}
+      assert member2.balance == {:error, ["member1 did not set their annual income"]}
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end
 

@@ -79,12 +79,12 @@ defmodule App.Balance do
     transfers = Repo.preload(transfers, peers: [:balance_config])
 
     Enum.map(transfers, fn transfer ->
-      all_annual_incomes_set? =
-        Enum.all?(transfer.peers, fn peer ->
-          peer.balance_config != nil and peer.balance_config.annual_income != nil
+      peers_without_annual_income =
+        Enum.filter(transfer.peers, fn peer ->
+          peer.balance_config == nil or peer.balance_config.annual_income == nil
         end)
 
-      if all_annual_incomes_set? do
+      if peers_without_annual_income == [] do
         peers =
           peers_with_total_weight(
             transfer.peers,
@@ -93,7 +93,12 @@ defmodule App.Balance do
 
         {:ok, %{transfer | peers: peers}}
       else
-        {:error, ["some members did not set their annual income"], transfer}
+        error_reasons =
+          Enum.map(peers_without_annual_income, fn peer ->
+            "#{peer.member.display_name} did not set their annual income"
+          end)
+
+        {:error, error_reasons, transfer}
       end
     end)
   end
