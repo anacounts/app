@@ -161,9 +161,9 @@ defmodule App.Balance do
   end
 
   defp add_balance_errors_on_members_in_transfer(members, reasons, transfer) do
-    Enum.map(members, fn member ->
-      transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
+    transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
 
+    Enum.map(members, fn member ->
       if member.id in transfer_members_ids,
         do: add_balance_errors(member, reasons),
         else: member
