@@ -63,7 +63,7 @@ defmodule App.Balance do
 
         {:ok, %{transfer | total_peer_weight: total_peer_weight}}
 
-      {:error, _reason, _transfer} = error ->
+      {:error, _reasons, _transfer} = error ->
         error
     end)
   end
@@ -93,7 +93,7 @@ defmodule App.Balance do
 
         {:ok, %{transfer | peers: peers}}
       else
-        {:error, "some members did not set their annual income", transfer}
+        {:error, ["some members did not set their annual income"], transfer}
       end
     end)
   end
@@ -114,9 +114,9 @@ defmodule App.Balance do
     |> adjust_balance_from_transfers(other_transfers)
   end
 
-  defp adjust_balance_from_transfers(members, [{:error, reason, transfer} | other_transfers]) do
+  defp adjust_balance_from_transfers(members, [{:error, reasons, transfer} | other_transfers]) do
     members
-    |> add_balance_error_on_members_in_transfer(reason, transfer)
+    |> add_balance_errors_on_members_in_transfer(reasons, transfer)
     |> adjust_balance_from_transfers(other_transfers)
   end
 
@@ -152,22 +152,22 @@ defmodule App.Balance do
     |> adjust_balance_from_peers(transfer, other_peers)
   end
 
-  defp add_balance_error_on_members_in_transfer(members, reason, transfer) do
+  defp add_balance_errors_on_members_in_transfer(members, reasons, transfer) do
     Enum.map(members, fn member ->
       transfer_members_ids = [transfer.tenant_id | Enum.map(transfer.peers, & &1.member_id)]
 
       if member.id in transfer_members_ids,
-        do: add_balance_error(member, reason),
+        do: add_balance_errors(member, reasons),
         else: member
     end)
   end
 
-  # add a reason to the balance error list, or initialize the list
-  defp add_balance_error(member, reason) do
+  # add reasons to the balance error reason list, or initialize the list
+  defp add_balance_errors(member, new_reasons) do
     reasons =
       case member.balance do
-        {:error, reasons} -> [reason | reasons]
-        _ -> [reason]
+        {:error, old_reasons} -> new_reasons ++ old_reasons
+        _ -> new_reasons
       end
 
     %{member | balance: {:error, reasons}}
