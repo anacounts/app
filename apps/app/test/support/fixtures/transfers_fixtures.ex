@@ -9,6 +9,7 @@ defmodule App.TransfersFixtures do
   alias App.Repo
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
+  alias App.Transfers.Peer
 
   def money_transfer_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -29,6 +30,18 @@ defmodule App.TransfersFixtures do
   def money_transfer_fixture(book, attrs \\ %{}) do
     %MoneyTransfer{book_id: book.id}
     |> Map.merge(money_transfer_attributes(attrs))
+    |> Repo.insert!()
+  end
+
+  def peer_attributes(attrs \\ %{}) do
+    Enum.into(attrs, %{
+      weight: Decimal.new(1)
+    })
+  end
+
+  def peer_fixture(attrs \\ %{}) do
+    %Peer{}
+    |> Map.merge(peer_attributes(attrs))
     |> Repo.insert!()
   end
 end

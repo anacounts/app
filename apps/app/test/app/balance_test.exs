@@ -123,6 +123,28 @@ defmodule App.BalanceTest do
       assert Money.equal?(member3.balance, Money.new!(:EUR, -1))
     end
 
+    test "balances correctly when using high weight", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
+
+      transfer = money_transfer_fixture(book, tenant_id: member1.id, amount: Money.new!(:EUR, 10))
+
+      _peer1 =
+        peer_fixture(member_id: member1.id, transfer_id: transfer.id, weight: Decimal.new(10))
+
+      _peer2 =
+        peer_fixture(member_id: member2.id, transfer_id: transfer.id, weight: Decimal.new(10))
+
+      _peer3 =
+        peer_fixture(member_id: member3.id, transfer_id: transfer.id, weight: Decimal.new(10))
+
+      [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
+      assert Money.equal?(member1.balance, Money.new!(:EUR, "6.67"))
+      assert Money.equal?(member2.balance, Money.new!(:EUR, "-3.33"))
+      assert Money.equal?(member3.balance, Money.new!(:EUR, "-3.34"))
+    end
+
     test "correctly divide non round amounts", %{book: book} do
       member1 = book_member_fixture(book)
       member2 = book_member_fixture(book)
