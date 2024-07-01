@@ -24,7 +24,7 @@ defmodule App.Transfers.MoneyTransfer do
           book: Book.t(),
           tenant: BookMember.t(),
           balance_params: TransferParams.t(),
-          peers: Peer.t(),
+          peers: [Peer.t()],
           total_peer_weight: Decimal.t(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()

@@ -1,7 +1,6 @@
 defmodule App.BalanceTest do
   use App.DataCase, async: true
 
-  import App.AccountsFixtures
   import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
@@ -15,8 +14,8 @@ defmodule App.BalanceTest do
     end
 
     test "balances transfers correctly", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
 
       _money_transfer =
         deprecated_money_transfer_fixture(book,
@@ -31,10 +30,10 @@ defmodule App.BalanceTest do
     end
 
     test "balances multiple transfers correctly #1", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
-      member3 = book_member_fixture(book, user_id: user_fixture().id)
-      member4 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
+      member4 = book_member_fixture(book)
 
       _transfer1 =
         deprecated_money_transfer_fixture(book,
@@ -70,9 +69,9 @@ defmodule App.BalanceTest do
     end
 
     test "balances multiple transfers correctly #2", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
-      member3 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
 
       _transfer1 =
         deprecated_money_transfer_fixture(book,
@@ -103,9 +102,9 @@ defmodule App.BalanceTest do
     end
 
     test "takes peer weight into account", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
-      member3 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
 
       _transfer =
         deprecated_money_transfer_fixture(book,
@@ -125,8 +124,8 @@ defmodule App.BalanceTest do
     end
 
     test "correctly divide non round amounts", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
 
       _transfer =
         deprecated_money_transfer_fixture(book,
@@ -136,8 +135,8 @@ defmodule App.BalanceTest do
         )
 
       assert Balance.fill_members_balance([member1, member2]) == [
-               %{member1 | balance: Money.new!(:EUR, "0.02")},
-               %{member2 | balance: Money.new!(:EUR, "-0.02")}
+               %{member1 | balance: Money.new!(:EUR, "0.01")},
+               %{member2 | balance: Money.new!(:EUR, "-0.01")}
              ]
     end
 
@@ -221,8 +220,8 @@ defmodule App.BalanceTest do
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, "92.86"))
-      assert Money.equal?(member2.balance, Money.new!(:EUR, "-28.57"))
-      assert Money.equal?(member3.balance, Money.new!(:EUR, "-64.29"))
+      assert Money.equal?(member2.balance, Money.new!(:EUR, "-28.56"))
+      assert Money.equal?(member3.balance, Money.new!(:EUR, "-64.30"))
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
@@ -275,9 +274,9 @@ defmodule App.BalanceTest do
     end
 
     test "does not crash if the book is correctly balanced", %{book: book} do
-      member1 = book_member_fixture(book, user_id: user_fixture().id)
-      member2 = book_member_fixture(book, user_id: user_fixture().id)
-      member3 = book_member_fixture(book, user_id: user_fixture().id)
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
 
       _transfer1 =
         deprecated_money_transfer_fixture(book,
@@ -319,14 +318,9 @@ defmodule App.BalanceTest do
     end
 
     test "creates transactions to balance members money #1", %{book: book} do
-      member1 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, 10))
-
-      member2 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, -10))
-
-      member3 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, 0))
+      member1 = book_member_fixture(book, balance: Money.new!(:EUR, 10))
+      member2 = book_member_fixture(book, balance: Money.new!(:EUR, -10))
+      member3 = book_member_fixture(book, balance: Money.new!(:EUR, 0))
 
       assert {:ok, transactions} = Balance.transactions([member1, member2, member3])
 
@@ -341,20 +335,11 @@ defmodule App.BalanceTest do
     end
 
     test "creates transactions to balance members money #2", %{book: book} do
-      member1 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, 120))
-
-      member2 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, 33))
-
-      member3 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, -12))
-
-      member4 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, -121))
-
-      member5 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, -20))
+      member1 = book_member_fixture(book, balance: Money.new!(:EUR, 120))
+      member2 = book_member_fixture(book, balance: Money.new!(:EUR, 33))
+      member3 = book_member_fixture(book, balance: Money.new!(:EUR, -12))
+      member4 = book_member_fixture(book, balance: Money.new!(:EUR, -121))
+      member5 = book_member_fixture(book, balance: Money.new!(:EUR, -20))
 
       assert {:ok, transactions} =
                Balance.transactions([member1, member2, member3, member4, member5])
@@ -392,14 +377,8 @@ defmodule App.BalanceTest do
     end
 
     test "returns :error when the balance of a member is corrupted", %{book: book} do
-      member1 =
-        book_member_fixture(book, user_id: user_fixture().id, balance: Money.new!(:EUR, 10))
-
-      member2 =
-        book_member_fixture(book,
-          user_id: user_fixture().id,
-          balance: {:error, ["could not compute balance"]}
-        )
+      member1 = book_member_fixture(book, balance: Money.new!(:EUR, 10))
+      member2 = book_member_fixture(book, balance: {:error, ["could not compute balance"]})
 
       assert Balance.transactions([member1, member2]) == {:error, ["could not compute balance"]}
     end

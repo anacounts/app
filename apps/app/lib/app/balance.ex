@@ -29,7 +29,6 @@ defmodule App.Balance do
     members
     |> reset_members_balance()
     |> adjust_balance_from_transfers(transfers)
-    |> round_members_balance()
   end
 
   # Preload peers of transfers and fill their `:member` field.
@@ -58,13 +57,27 @@ defmodule App.Balance do
     |> Enum.flat_map(&compute_peers_total_weight/1)
     |> Enum.map(fn
       {:ok, transfer} ->
-        total_peer_weight =
-          Enum.reduce(transfer.peers, Decimal.new(0), &Decimal.add(&2, &1.total_weight))
+        peers = normalize_peers_total_weight(transfer.peers)
+        total_peer_weight = Enum.reduce(peers, Decimal.new(0), &Decimal.add(&2, &1.total_weight))
 
-        {:ok, %{transfer | total_peer_weight: total_peer_weight}}
+        {:ok, %{transfer | peers: peers, total_peer_weight: total_peer_weight}}
 
       {:error, _reasons, _transfer} = error ->
         error
+    end)
+  end
+
+  defp normalize_peers_total_weight(peers) do
+    # The weight and total weight need to be integers for the algorithm to work,
+    # find the max scale (= number of digits after the decimal point) of all peers
+    # and multiply all weights by 10^max_scale to convert them to integers.
+    max_scale = peers |> Stream.map(&Decimal.scale(&1.total_weight)) |> Enum.max()
+
+    Enum.map(peers, fn peer ->
+      # Fiddling with Decimal internals. The value of a decimal is `:sign * :coef * 10 ^ :exp`
+      # so adding x to the exponent is equivalent to multiplying by 10^x.
+      int_total_weight = Map.update!(peer.total_weight, :exp, &(&1 + max_scale))
+      %{peer | total_weight: int_total_weight}
     end)
   end
 
@@ -128,8 +141,11 @@ defmodule App.Balance do
   defp adjust_balance_from_transfers(members, []), do: members
 
   defp adjust_balance_from_transfers(members, [{:ok, transfer} | other_transfers]) do
+    transfer_amount = Transfers.amount(transfer)
+    amounts = Money.split(transfer_amount, Decimal.to_integer(transfer.total_peer_weight))
+
     members
-    |> adjust_balance_from_peers(transfer, transfer.peers)
+    |> adjust_balance_from_peers(transfer, transfer.peers, amounts)
     |> adjust_balance_from_transfers(other_transfers)
   end
 
@@ -139,16 +155,19 @@ defmodule App.Balance do
     |> adjust_balance_from_transfers(other_transfers)
   end
 
-  defp adjust_balance_from_peers(members, _transfer, []), do: members
+  defp adjust_balance_from_peers(members, _transfer, [], _amounts), do: members
 
-  defp adjust_balance_from_peers(members, %{tenant_id: id} = transfer, [%{member_id: id} | peers]) do
-    adjust_balance_from_peers(members, transfer, peers)
+  defp adjust_balance_from_peers(
+         members,
+         %{tenant_id: id} = transfer,
+         [%{member_id: id} | peers],
+         amounts
+       ) do
+    adjust_balance_from_peers(members, transfer, peers, amounts)
   end
 
-  defp adjust_balance_from_peers(members, transfer, [peer | other_peers]) do
-    relative_weight = Decimal.div(peer.total_weight, transfer.total_peer_weight)
-    transfer_amount = Transfers.amount(transfer)
-    adjustment_amount = Money.mult!(transfer_amount, relative_weight)
+  defp adjust_balance_from_peers(members, transfer, [peer | other_peers], amounts) do
+    adjustment_amount = adjustment_amount(peer, other_peers, amounts)
 
     member_id = peer.member_id
     tenant_id = transfer.tenant_id
@@ -168,7 +187,18 @@ defmodule App.Balance do
       member ->
         member
     end)
-    |> adjust_balance_from_peers(transfer, other_peers)
+    |> adjust_balance_from_peers(transfer, other_peers, amounts)
+  end
+
+  # Add the remaining amount to the last peer
+  defp adjustment_amount(peer, [], {split_amount, remaining_amount}) do
+    split_amount
+    |> Money.mult!(peer.total_weight)
+    |> Money.add!(remaining_amount)
+  end
+
+  defp adjustment_amount(peer, _other_peers, {split_amount, _remaining_amount}) do
+    Money.mult!(split_amount, peer.total_weight)
   end
 
   defp add_balance_errors_on_members_in_transfer(members, reasons, transfer) do
@@ -190,14 +220,6 @@ defmodule App.Balance do
       end
 
     %{member | balance: {:error, reasons}}
-  end
-
-  defp round_members_balance(members) do
-    Enum.map(members, fn member ->
-      if has_balance_error?(member),
-        do: member,
-        else: %{member | balance: Money.round(member.balance)}
-    end)
   end
 
   @doc """
