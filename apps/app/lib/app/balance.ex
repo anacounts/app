@@ -58,7 +58,7 @@ defmodule App.Balance do
     |> Enum.map(fn
       {:ok, transfer} ->
         peers = normalize_peers_total_weight(transfer.peers)
-        total_peer_weight = peers |> Enum.map(& &1.total_weight) |> Enum.sum()
+        total_peer_weight = Enum.reduce(peers, Decimal.new(0), &Decimal.add(&2, &1.total_weight))
 
         {:ok, %{transfer | peers: peers, total_peer_weight: total_peer_weight}}
 
@@ -77,7 +77,7 @@ defmodule App.Balance do
       # Fiddling with Decimal internals. The value of a decimal is `:sign * :coef * 10 ^ :exp`
       # so adding x to the exponent is equivalent to multiplying by 10^x.
       int_total_weight = Map.update!(peer.total_weight, :exp, &(&1 + max_scale))
-      %{peer | total_weight: Decimal.to_integer(int_total_weight)}
+      %{peer | total_weight: int_total_weight}
     end)
   end
 
@@ -142,7 +142,7 @@ defmodule App.Balance do
 
   defp adjust_balance_from_transfers(members, [{:ok, transfer} | other_transfers]) do
     transfer_amount = Transfers.amount(transfer)
-    amounts = Money.split(transfer_amount, transfer.total_peer_weight)
+    amounts = Money.split(transfer_amount, Decimal.to_integer(transfer.total_peer_weight))
 
     members
     |> adjust_balance_from_peers(transfer, transfer.peers, amounts)
