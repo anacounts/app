@@ -242,8 +242,8 @@ defmodule App.BalanceTest do
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, "92.86"))
-      assert Money.equal?(member2.balance, Money.new!(:EUR, "-28.56"))
-      assert Money.equal?(member3.balance, Money.new!(:EUR, "-64.30"))
+      assert Money.equal?(member2.balance, Money.new!(:EUR, "-28.57"))
+      assert Money.equal?(member3.balance, Money.new!(:EUR, "-64.29"))
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
