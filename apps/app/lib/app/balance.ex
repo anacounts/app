@@ -3,10 +3,13 @@ defmodule App.Balance do
   Context to compute book members' balance and the transactions to adjust it.
   """
 
+  import Ecto.Query
+
   alias App.Repo
 
   alias App.Books.BookMember
   alias App.Transfers
+  alias App.Transfers.Peer
 
   @type error_reasons :: [%{message: String.t(), uniq_hash: String.t()}]
 
@@ -38,7 +41,10 @@ defmodule App.Balance do
     members_by_id = Map.new(members, &{&1.id, &1})
 
     transfers
-    |> Repo.preload(:peers)
+    # Ensure the peers are always returned in the same order,
+    # a different order would result in a different repartition
+    # of the transfers amount.
+    |> Repo.preload(peers: order_by(Peer, asc: :id))
     |> Enum.map(&fill_peers_members(&1, members_by_id))
   end
 
@@ -142,10 +148,12 @@ defmodule App.Balance do
 
   defp adjust_balance_from_transfers(members, [{:ok, transfer} | other_transfers]) do
     transfer_amount = Transfers.amount(transfer)
-    amounts = Money.split(transfer_amount, Decimal.to_integer(transfer.total_peer_weight))
+
+    {_dividend, remaining} =
+      amounts = Money.split(transfer_amount, Decimal.to_integer(transfer.total_peer_weight))
 
     members
-    |> adjust_balance_from_peers(transfer, transfer.peers, amounts)
+    |> adjust_balance_from_peers(transfer, transfer.peers, amounts, remaining)
     |> adjust_balance_from_transfers(other_transfers)
   end
 
@@ -155,25 +163,54 @@ defmodule App.Balance do
     |> adjust_balance_from_transfers(other_transfers)
   end
 
-  defp adjust_balance_from_peers(members, _transfer, [], _amounts), do: members
+  defp adjust_balance_from_peers(members, _transfer, [], _amounts, remaining) do
+    unless Money.zero?(remaining) do
+      raise "Something went wrong, remaining amount is #{Money.to_string!(remaining)}"
+    end
+
+    members
+  end
 
   defp adjust_balance_from_peers(
          members,
          %{tenant_id: id} = transfer,
-         [%{member_id: id} | peers],
-         amounts
+         [%{member_id: id} = peer | other_peers],
+         amounts,
+         remaining
        ) do
-    adjust_balance_from_peers(members, transfer, peers, amounts)
+    {_remaining_taken, remaining} =
+      remaining_taken(transfer, peer, other_peers, amounts, remaining)
+
+    adjust_balance_from_peers(members, transfer, other_peers, amounts, remaining)
   end
 
-  defp adjust_balance_from_peers(members, transfer, [peer | other_peers], amounts) do
-    adjustment_amount = adjustment_amount(peer, other_peers, amounts)
+  defp adjust_balance_from_peers(
+         members,
+         transfer,
+         [peer | other_peers],
+         {dividend, _} = amounts,
+         remaining
+       ) do
+    {remaining_taken, remaining} =
+      remaining_taken(transfer, peer, other_peers, amounts, remaining)
 
+    adjustment_amount =
+      dividend
+      |> Money.mult!(peer.total_weight)
+      |> Money.add!(remaining_taken)
+
+    {adjustment_amount, remaining}
+
+    members
+    |> adjust_balance_with_amount(transfer, peer, adjustment_amount)
+    |> adjust_balance_from_peers(transfer, other_peers, amounts, remaining)
+  end
+
+  defp adjust_balance_with_amount(members, transfer, peer, adjustment_amount) do
     member_id = peer.member_id
     tenant_id = transfer.tenant_id
 
-    members
-    |> Enum.map(fn
+    Enum.map(members, fn
       # If a member's balance has already been corrupted, it cannot be computed correctly
       %{balance: {:error, _}} = member ->
         member
@@ -187,18 +224,24 @@ defmodule App.Balance do
       member ->
         member
     end)
-    |> adjust_balance_from_peers(transfer, other_peers, amounts)
   end
 
-  # Add the remaining amount to the last peer
-  defp adjustment_amount(peer, [], {split_amount, remaining_amount}) do
-    split_amount
-    |> Money.mult!(peer.total_weight)
-    |> Money.add!(remaining_amount)
-  end
+  defp remaining_taken(transfer, peer, other_peers, {_, original_remaining}, remaining) do
+    # If there are still other peers, take a part of the original split
+    # remaining amount.
+    # If there are no other peers, take all that's remaining from the split.
+    remaining_taken =
+      case other_peers do
+        [_ | _] ->
+          ratio = Decimal.div(peer.total_weight, transfer.total_peer_weight)
+          original_remaining |> Money.mult!(ratio) |> Money.round()
 
-  defp adjustment_amount(peer, _other_peers, {split_amount, _remaining_amount}) do
-    Money.mult!(split_amount, peer.total_weight)
+        [] ->
+          remaining
+      end
+
+    remaining = Money.sub!(remaining, remaining_taken)
+    {remaining_taken, remaining}
   end
 
   defp add_balance_errors_on_members_in_transfer(members, reasons, transfer) do
