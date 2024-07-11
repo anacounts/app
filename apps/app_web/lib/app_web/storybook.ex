@@ -9,5 +9,6 @@ defmodule AppWeb.Storybook do
     # assets path are remote path, not local file-system paths
     css_path: "/assets/app.css",
     js_path: "/assets/storybook.js",
-    sandbox_class: "app-web"
+    sandbox_class: "app-web",
+    title: "Anacounts Storybook"
 end

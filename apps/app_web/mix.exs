@@ -75,6 +75,7 @@ defmodule AppWeb.MixProject do
 
       # Dev tools
       {:phoenix_storybook, "~> 0.6.3", only: [:dev]},
+      {:heroicons, "~> 0.5.5", only: [:dev]},
 
       # Umbrella
       {:app, in_umbrella: true}
