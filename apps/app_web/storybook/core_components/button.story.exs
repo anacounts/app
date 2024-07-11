@@ -6,22 +6,39 @@ defmodule Storybook.CoreComponents.Button do
   def variations do
     [
       %Variation{
-        id: :default,
-        slots: ["Button"]
-      },
-      %Variation{
-        id: :custom_class,
+        id: :most_common,
+        description: "Default button",
         attributes: %{
-          class: "rounded-full bg-indigo-500 hover:bg-indigo-600"
+          color: :feature
         },
-        slots: ["Disabled"]
+        slots: ["Feature button"]
       },
-      %Variation{
-        id: :disabled,
-        attributes: %{
-          disabled: true
-        },
-        slots: ["Disabled"]
+      %VariationGroup{
+        id: :colors,
+        description: "Button colors",
+        variations: [
+          %Variation{
+            id: :cta,
+            attributes: %{
+              color: :cta
+            },
+            slots: ["Call to action"]
+          },
+          %Variation{
+            id: :feature,
+            attributes: %{
+              color: :feature
+            },
+            slots: ["Feature button"]
+          },
+          %Variation{
+            id: :ghost,
+            attributes: %{
+              color: :ghost
+            },
+            slots: ["Ghost button"]
+          }
+        ]
       }
     ]
   end
