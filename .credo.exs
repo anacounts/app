@@ -150,7 +150,7 @@
           {Credo.Check.Refactor.MapMap, []},
           {Credo.Check.Refactor.MatchInCondition, []},
           # FIXME gradually fix modules and lower `:max_deps` to 10, the default value
-          {Credo.Check.Refactor.ModuleDependencies, [max_deps: 32]},
+          {Credo.Check.Refactor.ModuleDependencies, [max_deps: 19]},
           {Credo.Check.Refactor.NegatedConditionsInUnless, []},
           {Credo.Check.Refactor.NegatedConditionsWithElse, []},
           {Credo.Check.Refactor.NegatedIsNil, []},

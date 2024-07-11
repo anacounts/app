@@ -73,6 +73,9 @@ defmodule AppWeb.MixProject do
       # Code analysis
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
 
+      # Dev tools
+      {:phoenix_storybook, "~> 0.6.3", only: [:dev]},
+
       # Umbrella
       {:app, in_umbrella: true}
     ]

@@ -94,4 +94,7 @@ module.exports = {
       ])
     ),
   ],
+
+  // Instruction required for `:phoenix_storybook`
+  important: ".app-web",
 };
