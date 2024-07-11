@@ -118,25 +118,22 @@ defmodule AppWeb.CoreComponents do
   ## Button
 
   @doc """
-  Generates a button.
+  Buttons are used to trigger actions or navigate.
 
-  [INSERT LVATTRDOCS]
+  Buttons are rendered as `<button>` elements by default. If any of the link attributes
+  (`navigate`, `patch`, `href`) are present, the button will be rendered using the
+  `link/1` component of Phoenix.
 
-  ## Examples
+  ## Colors
 
-      <.button color={:cta} type="submit">
-        Submit
-      </.button>
+  Buttons have three colors, `:cta`, `:feature`, and `:ghost`.
 
-      <.button color={:feature}>
-        Go to index
-      </.button>
+  CTA (short for Call to Action) buttons are used for the primary action in a view.
+  They draw the user's attention and are used to guide the user to an significant step,
+  whether it is to submit a form, create a new entry, close a popup, etc. There cannot
+  be more than one CTA button on the screen at a time.
 
-      <.button color={:ghost}>
-        <.icon name="add" />
-        Add
-      </.button>
-
+  Feature and Ghost buttons are used for secondary actions.
   """
 
   attr :color, :atom,
@@ -144,7 +141,7 @@ defmodule AppWeb.CoreComponents do
     values: [:cta, :feature, :ghost],
     doc: "The color of the button"
 
-  attr :class, :any, default: nil, doc: "Extra classes to add to the button"
+  attr :class, :any, default: nil, doc: "Extend component classes"
 
   attr :rest, :global,
     include: @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget)

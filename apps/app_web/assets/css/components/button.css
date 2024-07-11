@@ -6,6 +6,7 @@
            border border-solid
            rounded-lg
            text-center
+           font-sans
            uppercase
            transition-colors;
   }
