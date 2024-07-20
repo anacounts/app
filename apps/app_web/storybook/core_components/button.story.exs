@@ -74,6 +74,39 @@ defmodule Storybook.CoreComponents.Button do
             slots: ["Label"]
           }
         ]
+      },
+      %VariationGroup{
+        id: :icons,
+        variations: [
+          %Variation{
+            id: :icon_start,
+            attributes: %{
+              color: :feature
+            },
+            slots: [~s|<.icon name="person-add" /> Label|]
+          },
+          %Variation{
+            id: :icon_end,
+            attributes: %{
+              color: :feature
+            },
+            slots: [~s|Label <.icon name="arrow_downward" />|]
+          },
+          %Variation{
+            id: :icon_both,
+            attributes: %{
+              color: :feature
+            },
+            slots: [~s|<.icon name="person-add" /> Label <.icon name="arrow_downward" />|]
+          },
+          %Variation{
+            id: :icon_only,
+            attributes: %{
+              color: :feature
+            },
+            slots: [~s|<.icon name="person-add" />|]
+          },
+        ]
       }
     ]
   end
