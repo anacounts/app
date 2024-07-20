@@ -7,130 +7,112 @@ defmodule Storybook.CoreComponents.Button do
 
   def variations do
     [
-      %Variation{
-        id: :default,
-        attributes: %{
-          color: :feature
-        },
-        slots: ["Label"]
-      },
+      variation(id: :default),
       %VariationGroup{
         id: :cta,
         description: "Call to action (color)",
         variations: [
-          %Variation{
+          variation(
             id: :cta_default,
-            attributes: %{
-              color: :cta
-            },
-            slots: ["Label"]
-          },
-          %Variation{
+            attributes: %{color: :cta}
+          ),
+          variation(
             id: :cta_disabled,
-            attributes: %{
-              color: :cta,
-              disabled: true
-            },
-            slots: ["Label"]
-          }
+            attributes: %{color: :cta, disabled: true}
+          )
         ]
       },
       %VariationGroup{
         id: :feature,
         description: "Feature (color)",
         variations: [
-          %Variation{
+          variation(
             id: :feature_default,
-            attributes: %{
-              color: :feature
-            },
-            slots: ["Label"]
-          },
-          %Variation{
+            attributes: %{color: :feature}
+          ),
+          variation(
             id: :feature_disabled,
-            attributes: %{
-              color: :feature,
-              disabled: true,
-            },
-            slots: ["Label"]
-          }
+            attributes: %{color: :feature, disabled: true}
+          )
         ]
       },
       %VariationGroup{
         id: :ghost,
         description: "Ghost (color)",
         variations: [
-          %Variation{
+          variation(
             id: :ghost_default,
-            attributes: %{
-              color: :ghost
-            },
-            slots: ["Label"]
-          },
-          %Variation{
+            attributes: %{color: :ghost}
+          ),
+          variation(
             id: :ghost_disabled,
-            attributes: %{
-              color: :ghost,
-              disabled: true
-            },
-            slots: ["Label"]
-          }
+            attributes: %{color: :ghost, disabled: true}
+          )
         ]
       },
       %VariationGroup{
         id: :icons,
         variations: [
-          %Variation{
+          variation(
             id: :icon_start,
-            attributes: %{
-              color: :feature
-            },
             slots: [~s|<.icon name="person-add" /> Label|]
-          },
-          %Variation{
+          ),
+          variation(
             id: :icon_end,
-            attributes: %{
-              color: :feature
-            },
             slots: [~s|Label <.icon name="arrow_downward" />|]
-          },
-          %Variation{
+          ),
+          variation(
             id: :icon_both,
-            attributes: %{
-              color: :feature
-            },
             slots: [~s|<.icon name="person-add" /> Label <.icon name="arrow_downward" />|]
-          },
-          %Variation{
+          ),
+          variation(
             id: :icon_only,
-            attributes: %{
-              color: :feature
-            },
             slots: [~s|<.icon name="person-add" />|]
-          },
+          )
         ]
       },
       %VariationGroup{
         id: :multiline,
         variations: [
-          %Variation{
+          variation(
             id: :two_lines,
             attributes: %{
-              color: :feature,
               style: "width: 10rem;"
             },
             slots: ["This label spans two lines"]
-          },
-          %Variation{
+          ),
+          variation(
             id: :overflowing,
             attributes: %{
-              color: :feature,
               style: "width: 10rem;"
             },
-            slots: [~s|<span class="line-clamp-2">This very long label spans more lines yet</span>|]
-          }
+            slots: [
+              ~s|<span class="line-clamp-2">This very long label spans more lines yet</span>|
+            ]
+          )
         ]
       }
     ]
+  end
+
+  defp variation(opts) do
+    id = Keyword.fetch!(opts, :id)
+    description = Keyword.get(opts, :description)
+
+    attributes =
+      opts
+      |> Keyword.get(:attributes, %{})
+      |> Enum.into(%{
+        color: :feature
+      })
+
+    slots = Keyword.get(opts, :slots, ["Label"])
+
+    %Variation{
+      id: id,
+      description: description,
+      attributes: attributes,
+      slots: slots
+    }
   end
 end
