@@ -55,18 +55,22 @@ defmodule Storybook.CoreComponents.Button do
         variations: [
           variation(
             id: :icon_start,
+            attributes: %{style: nil},
             slots: [~s|<.icon name="person-add" /> Label|]
           ),
           variation(
             id: :icon_end,
+            attributes: %{style: nil},
             slots: [~s|Label <.icon name="arrow_downward" />|]
           ),
           variation(
             id: :icon_both,
+            attributes: %{style: nil},
             slots: [~s|<.icon name="person-add" /> Label <.icon name="arrow_downward" />|]
           ),
           variation(
             id: :icon_only,
+            attributes: %{style: nil},
             slots: [~s|<.icon name="person-add" />|]
           )
         ]
@@ -76,16 +80,10 @@ defmodule Storybook.CoreComponents.Button do
         variations: [
           variation(
             id: :two_lines,
-            attributes: %{
-              style: "width: 10rem;"
-            },
             slots: ["This label spans two lines"]
           ),
           variation(
             id: :overflowing,
-            attributes: %{
-              style: "width: 10rem;"
-            },
             slots: [
               ~s|<span class="line-clamp-2">This very long label spans more lines yet</span>|
             ]
@@ -103,7 +101,8 @@ defmodule Storybook.CoreComponents.Button do
       opts
       |> Keyword.get(:attributes, %{})
       |> Enum.into(%{
-        color: :feature
+        color: :feature,
+        style: "width: 10rem;"
       })
 
     slots = Keyword.get(opts, :slots, ["Label"])
