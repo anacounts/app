@@ -44,7 +44,7 @@ defmodule AppWeb.UserLoginLive do
       </span>
     </div>
 
-    <.button color={:feature} class="block w-fit mx-auto" navigate={~p"/users/register"}>
+    <.button color={:feature} class="flex w-fit mx-auto" navigate={~p"/users/register"}>
       <.icon name="mail" />
       <%= gettext("Create one here") %>
     </.button>
