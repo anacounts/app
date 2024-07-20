@@ -10,6 +10,18 @@ module.exports = {
     colors: {
       // Theme colors
       theme: {
+        50: "#ffede8",
+        100: "#ffcab9",
+        200: "#ffa78b",
+        300: "#ff845d",
+        400: "#ff602e",
+        500: "#ff3d00",
+        600: "#d13200",
+        700: "#a22700",
+        800: "#741c00",
+        900: "#461100",
+        950: "#170600",
+        // TODO deprecated shades, to be removed
         darker: "#cc3000",
         DEFAULT: "#ff3d00",
         lighter: "#ff501a",
@@ -22,6 +34,18 @@ module.exports = {
       // Gray colors
       white: "#ffffff",
       gray: {
+        50: "#f3f3f4",
+        100: "#dadcde",
+        200: "#c1c5c9",
+        300: "#a9aeb3",
+        400: "#90979d",
+        500: "#778088",
+        600: "#62686f",
+        700: "#4c5156",
+        800: "#363a3e",
+        900: "#212325",
+        950: "#0b0c0c",
+        // TODO deprecated shades, to be removed
         5: "#f8f9fa",
         10: "#f1f3f4",
         20: "#e9ecef",
@@ -43,8 +67,14 @@ module.exports = {
       current: "currentColor",
     },
     extend: {
+      height: {
+        md: "2.5rem",
+      },
       width: {
         prose: "65ch",
+      },
+      borderRadius: {
+        std: "0.5rem",
       },
       fontFamily: {
         sans: ["Lato", ...defaultTheme.fontFamily.sans],

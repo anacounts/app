@@ -1,75 +1,75 @@
 @layer components {
-  /* FIXME use fixed height instead of padding to size component */
   .button {
-    @apply inline-block
-           p-2
-           border border-solid
-           rounded-lg
-           text-center
-           font-sans
-           uppercase
-           transition-colors;
+    @apply shrink-0
+           inline-flex justify-center items-center gap-2
+           h-md
+           px-4
+           border rounded-std
+           outline outline-1 outline-transparent outline-offset-0
+           leading-none
+           font-bold font-sans
+           transition-all;
   }
 
   /* ## Call to action */
 
   .button--cta {
-    @apply text-theme-contrast
-           bg-theme;
+    @apply bg-theme-500
+           border-theme-500
+           text-white;
   }
 
   .button--cta:hover {
-    @apply bg-theme-lighter;
+    @apply bg-theme-600
+           border-theme-600;
   }
 
-  .button--cta:focus {
-    @apply bg-theme-darker;
+  .button--cta:active {
+    @apply bg-theme-700
+           border-theme-700;
+  }
+
+  .button--cta:focus-visible {
+    @apply border-theme-800
+           outline-theme-800;
   }
 
   .button--cta:disabled {
-    @apply bg-gray-50
-           border-gray-50;
+    @apply bg-gray-500
+           border-gray-500;
   }
 
-  /* ## Feature */
+  /* ## Feature & Ghost */
 
   .button--feature {
     @apply bg-white
-           border-gray-50;
+           border-gray-500;
   }
 
-  .button--feature:hover {
-    @apply bg-gray-10;
+  .button--ghost {
+    @apply border-transparent;
   }
 
-  .button--feature:focus {
-    @apply bg-gray-20;
+  .button--feature:hover,
+  .button--ghost:hover {
+    @apply bg-gray-500/10;
   }
 
-  .button--feature:disabled {
+  .button--feature:active,
+  .button--ghost:active {
+    @apply bg-gray-500/20;
+  }
+
+  .button--feature:disabled,
+  .button--ghost:disabled {
     @apply text-gray-70
            bg-gray-20
            border-gray-40;
   }
 
-  /* ## Ghost */
-
-  .button--ghost {
-    @apply bg-transparent
-           border-transparent;
-  }
-
-  .button--ghost:hover {
-    @apply bg-black/5;
-  }
-
-  .button--ghost:focus {
-    @apply bg-black/10;
-  }
-
-  .button--ghost:disabled {
-    @apply bg-transparent
-           border-transparent
-           text-gray-50;
+  .button--feature:focus-visible,
+  .button--ghost:focus-visible {
+    @apply border-gray-800
+           outline outline-gray-800;
   }
 }
