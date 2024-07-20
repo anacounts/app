@@ -1,13 +1,11 @@
 @layer components {
-  /* FIXME use fixed height instead of padding to size component */
   .button {
-    @apply inline-block
-           p-2
-           border border-solid
-           rounded-lg
-           text-center
-           font-sans
-           uppercase
+    @apply shrink-0
+           inline-flex justify-center items-center gap-2
+           h-md
+           px-4
+           border rounded-std
+           font-bold font-sans
            transition-colors;
   }
 

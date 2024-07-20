@@ -6,37 +6,72 @@ defmodule Storybook.CoreComponents.Button do
   def variations do
     [
       %Variation{
-        id: :most_common,
-        description: "Default button",
+        id: :default,
         attributes: %{
           color: :feature
         },
-        slots: ["Feature button"]
+        slots: ["Label"]
       },
       %VariationGroup{
-        id: :colors,
-        description: "Button colors",
+        id: :cta,
+        description: "Call to action (color)",
         variations: [
           %Variation{
-            id: :cta,
+            id: :cta_default,
             attributes: %{
               color: :cta
             },
-            slots: ["Call to action"]
+            slots: ["Label"]
           },
           %Variation{
-            id: :feature,
+            id: :cta_disabled,
+            attributes: %{
+              color: :cta,
+              disabled: true
+            },
+            slots: ["Label"]
+          }
+        ]
+      },
+      %VariationGroup{
+        id: :feature,
+        description: "Feature (color)",
+        variations: [
+          %Variation{
+            id: :feature_default,
             attributes: %{
               color: :feature
             },
-            slots: ["Feature button"]
+            slots: ["Label"]
           },
           %Variation{
-            id: :ghost,
+            id: :feature_disabled,
+            attributes: %{
+              color: :feature,
+              disabled: true,
+            },
+            slots: ["Label"]
+          }
+        ]
+      },
+      %VariationGroup{
+        id: :ghost,
+        description: "Ghost (color)",
+        variations: [
+          %Variation{
+            id: :ghost_default,
             attributes: %{
               color: :ghost
             },
-            slots: ["Ghost button"]
+            slots: ["Label"]
+          },
+          %Variation{
+            id: :ghost_disabled,
+            attributes: %{
+              color: :ghost,
+              disabled: true
+            },
+            slots: ["Label"]
           }
         ]
       }
