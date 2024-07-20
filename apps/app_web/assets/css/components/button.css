@@ -5,28 +5,37 @@
            h-md
            px-4
            border rounded-std
+           outline outline-1 outline-transparent outline-offset-0
            font-bold font-sans
-           transition-colors;
+           transition-all;
   }
 
   /* ## Call to action */
 
   .button--cta {
-    @apply text-theme-contrast
-           bg-theme;
+    @apply bg-theme-500
+           border-theme-500
+           text-white;
   }
 
   .button--cta:hover {
-    @apply bg-theme-lighter;
+    @apply bg-theme-600
+           border-theme-600;
   }
 
-  .button--cta:focus {
-    @apply bg-theme-darker;
+  .button--cta:active {
+    @apply bg-theme-700
+           border-theme-700;
+  }
+
+  .button--cta:focus-visible {
+    @apply border-theme-800
+           outline-theme-800;
   }
 
   .button--cta:disabled {
-    @apply bg-gray-50
-           border-gray-50;
+    @apply bg-gray-500
+           border-gray-500;
   }
 
   /* ## Feature */
