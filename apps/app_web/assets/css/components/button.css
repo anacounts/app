@@ -6,6 +6,7 @@
            px-4
            border rounded-std
            outline outline-1 outline-transparent outline-offset-0
+           leading-none
            font-bold font-sans
            transition-all;
   }

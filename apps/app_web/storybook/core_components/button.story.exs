@@ -3,6 +3,8 @@ defmodule Storybook.CoreComponents.Button do
 
   def function, do: &AppWeb.CoreComponents.button/1
 
+  def imports, do: [{AppWeb.CoreComponents, icon: 1}]
+
   def variations do
     [
       %Variation{
@@ -106,6 +108,27 @@ defmodule Storybook.CoreComponents.Button do
             },
             slots: [~s|<.icon name="person-add" />|]
           },
+        ]
+      },
+      %VariationGroup{
+        id: :multiline,
+        variations: [
+          %Variation{
+            id: :two_lines,
+            attributes: %{
+              color: :feature,
+              style: "width: 10rem;"
+            },
+            slots: ["This label spans two lines"]
+          },
+          %Variation{
+            id: :overflowing,
+            attributes: %{
+              color: :feature,
+              style: "width: 10rem;"
+            },
+            slots: [~s|<span class="line-clamp-2">This very long label spans more lines yet</span>|]
+          }
         ]
       }
     ]
