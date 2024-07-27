@@ -56,22 +56,22 @@ defmodule Storybook.CoreComponents.Button do
           variation(
             id: :icon_start,
             attributes: %{style: nil},
-            slots: [~s|<.icon name="person-add" /> Label|]
+            slots: [~s|<.icon name={:user_plus} /> Label|]
           ),
           variation(
             id: :icon_end,
             attributes: %{style: nil},
-            slots: [~s|Label <.icon name="arrow_downward" />|]
+            slots: [~s|Label <.icon name={:chevron_down} />|]
           ),
           variation(
             id: :icon_both,
             attributes: %{style: nil},
-            slots: [~s|<.icon name="person-add" /> Label <.icon name="arrow_downward" />|]
+            slots: [~s|<.icon name={:user_plus} /> Label <.icon name={:chevron_down} />|]
           ),
           variation(
             id: :icon_only,
             attributes: %{style: nil},
-            slots: [~s|<.icon name="person-add" />|]
+            slots: [~s|<.icon name={:user_plus} />|]
           )
         ]
       },

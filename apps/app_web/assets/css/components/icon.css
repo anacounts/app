@@ -5,6 +5,7 @@
            w-6 h-6;
   }
 
+  /* TODO deprecated, remove */
   .icon--md {
     @apply w-7 h-7;
   }
