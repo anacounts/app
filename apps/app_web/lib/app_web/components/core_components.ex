@@ -402,23 +402,29 @@ defmodule AppWeb.CoreComponents do
   ## Icon
 
   @doc """
-  Generates an icon.
+  Icons may be used in a variety of contexts to provide visual cues and enhance the user
+  experience.
 
-  [INSERT LVATTRDOCS]
+  See them used in other components, like "Button".
 
-  ## Examples
+  ## Icon sets
 
-      <.icon name="home" />
-
+  The icon component is currently works with two icon sets:
+  - the `:heroicons` library, which should be the default choice as of now,
+  - and custom icons found in `assets/icons/`, which are bundled into a
+    single sprite. These icons are deprecated and should be replaced by
+    `:heroicons` icons.
   """
 
   attr :name, :string, required: true, doc: "The name of the icon"
   attr :alt, :string, default: nil, doc: "The alt text of the icon"
-  attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
   attr :rest, :global
 
-  def icon(assigns) do
+  # TODO deprecated, remove
+  attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
+
+  def icon(%{name: name} = assigns) when is_binary(name) do
     ~H"""
     <svg
       class={["icon", icon_size_class(@size), @class]}
@@ -433,6 +439,28 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  def icon(assigns) do
+    ~H"""
+    <.heroicon name={@name} aria-label={@alt} class={["icon icon--hero", @class]} {@rest} />
+    """
+  end
+
+  # Copied from Github's heroicons_elixir issue #21.
+  # https://github.com/mveytsman/heroicons_elixir/issues/21#issuecomment-1288551770
+  attr :name, :atom, required: true
+  attr :outline, :boolean, default: true
+  attr :solid, :boolean, default: false
+  attr :mini, :boolean, default: false
+
+  attr :rest, :global,
+    doc: "the arbitrary HTML attributes for the svg container",
+    include: ~w(fill stroke stroke-width)
+
+  def heroicon(assigns) do
+    apply(Heroicons, assigns.name, [assigns])
+  end
+
+  # TODO deprecated, remove
   defp icon_size_class(nil), do: nil
   defp icon_size_class(:md), do: "icon--md"
   defp icon_size_class(:lg), do: "icon--lg"
