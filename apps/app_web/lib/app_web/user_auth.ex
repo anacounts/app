@@ -4,7 +4,7 @@ defmodule AppWeb.UserAuth do
   """
   use AppWeb, :verified_routes
 
-  import AppWeb.Gettext
+  use AppWeb, :gettext
   import Plug.Conn
   import Phoenix.Controller
 

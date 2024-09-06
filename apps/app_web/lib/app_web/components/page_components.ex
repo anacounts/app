@@ -9,7 +9,7 @@ defmodule AppWeb.PageComponents do
 
   use Phoenix.Component
 
-  import AppWeb.Gettext
+  use AppWeb, :gettext
   import AppWeb.CoreComponents
 
   alias Phoenix.LiveView.JS

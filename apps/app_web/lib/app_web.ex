@@ -46,7 +46,7 @@ defmodule AppWeb do
       import Phoenix.Component, only: [to_form: 2]
 
       import Plug.Conn
-      import AppWeb.Gettext
+      unquote(gettext())
 
       unquote(verified_routes())
     end
@@ -92,7 +92,7 @@ defmodule AppWeb do
       # Core UI components and translation
       import AppWeb.CoreComponents
       import AppWeb.PageComponents
-      import AppWeb.Gettext
+      unquote(gettext())
 
       # Import shared functions
       import AppWeb.DateFormatHelpers
@@ -102,6 +102,12 @@ defmodule AppWeb do
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
+    end
+  end
+
+  def gettext do
+    quote do
+      use Gettext, backend: AppWeb.Gettext
     end
   end
 

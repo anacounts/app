@@ -10,7 +10,7 @@ defmodule AppWeb.CoreComponents do
   use Phoenix.Component
   use AppWeb, :verified_routes
 
-  import AppWeb.Gettext
+  use AppWeb, :gettext
 
   alias Phoenix.LiveView.JS
 
