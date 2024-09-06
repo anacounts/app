@@ -1,4 +1,9 @@
 defmodule AppWeb do
+  # There is no reason to worry about module dependencies
+  # in this file, the dependencies are actually only ingected
+  # into the modules that use this module.
+  # credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
+
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
