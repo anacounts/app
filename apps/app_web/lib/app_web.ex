@@ -1,4 +1,9 @@
 defmodule AppWeb do
+  # There is no reason to worry about module dependencies
+  # in this file, the dependencies are actually only ingected
+  # into the modules that use this module.
+  # credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
+
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
@@ -46,7 +51,7 @@ defmodule AppWeb do
       import Phoenix.Component, only: [to_form: 2]
 
       import Plug.Conn
-      import AppWeb.Gettext
+      unquote(gettext())
 
       unquote(verified_routes())
     end
@@ -92,7 +97,7 @@ defmodule AppWeb do
       # Core UI components and translation
       import AppWeb.CoreComponents
       import AppWeb.PageComponents
-      import AppWeb.Gettext
+      unquote(gettext())
 
       # Import shared functions
       import AppWeb.DateFormatHelpers
@@ -102,6 +107,12 @@ defmodule AppWeb do
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
+    end
+  end
+
+  def gettext do
+    quote do
+      use Gettext, backend: AppWeb.Gettext
     end
   end
 

@@ -4,7 +4,7 @@ defmodule AppWeb.BooksHelpers do
   """
   use AppWeb, :verified_routes
 
-  import AppWeb.Gettext
+  use AppWeb, :gettext
   import Phoenix.Component, only: [assign: 3]
   import Phoenix.LiveView, only: [put_flash: 3, push_navigate: 2]
 
