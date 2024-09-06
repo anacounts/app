@@ -6,7 +6,7 @@ defmodule AppWeb.BooksHelpers do
 
   import AppWeb.Gettext
   import Phoenix.Component, only: [assign: 3]
-  import Phoenix.LiveView, only: [put_flash: 3, push_navigate: 2, push_redirect: 2]
+  import Phoenix.LiveView, only: [put_flash: 3, push_navigate: 2]
 
   alias App.Books
 
@@ -17,7 +17,7 @@ defmodule AppWeb.BooksHelpers do
   def closed_book_redirect(socket) do
     socket
     |> put_flash(:error, gettext("This page is not accessible while the book is closed"))
-    |> push_redirect(to: ~p"/books/#{socket.assigns.book}/members")
+    |> push_navigate(to: ~p"/books/#{socket.assigns.book}/members")
   end
 
   @doc """
