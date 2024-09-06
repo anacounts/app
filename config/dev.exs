@@ -71,7 +71,8 @@ config :app_web, AppWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/app_web/(controllers|live|components)/.*(ex|heex)$",
       ~r"storybook/.*(exs)$"
-    ]
+    ],
+    web_console_logger: true
   ]
 
 # Enable dev routes for dashboard and mailbox
