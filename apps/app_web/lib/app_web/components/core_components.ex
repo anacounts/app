@@ -169,6 +169,103 @@ defmodule AppWeb.CoreComponents do
   defp avatar_size_class(:hero), do: "avatar--hero"
   defp avatar_size_class(deprecated) when deprecated in [:sm, :lg], do: nil
 
+  ## breadcrumb
+
+  @doc """
+  Breadcrumbs are a navigation aid that helps users understand where they are in the
+  application and allow them to navigate back to a higher level in the hierarchy.
+
+  Breadcrumbs are placed at the top of the page. They should not contain more than
+  two items. If there are more than two items, replace the excess by
+  the `breadcrumb_ellipsis/1` component.
+
+  This component should be used in conjunction with the `breadcrumb_home/1` and
+  `breadcrumb_item/1` components.
+  """
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
+  def breadcrumb(assigns) do
+    assigns = prepend_class(assigns, "breadcrumb")
+
+    ~H"""
+    <nav {@rest}>
+      <%= render_slot(@inner_block) %>
+    </nav>
+    """
+  end
+
+  @doc """
+  The breadcrumb home item is a special breadcrumb item representing the home of the
+  navigation hierarchy.
+
+  It should be the first item in the breadcrumb list. Although it is not marked as
+  required, the component should always contain any of a `href`, a `navigate`, or a
+  `patch` attribute.
+
+  This component should be used within the `breadcrumb/1` component.
+  """
+  attr :alt, :string, required: true
+
+  attr :rest, :global, include: @link_attrs
+
+  def breadcrumb_home(assigns) do
+    ~H"""
+    <.link {@rest}>
+      <.icon name={:home} alt={@alt} />
+    </.link>
+    """
+  end
+
+  @doc """
+  A breadcrumb item is an item representing a step in the navigation hierarchy in a
+  breadcrumb component.
+
+  The item component contains the chevron preceding it.
+
+  If it is not the last item of the list, the component should always contain a
+  `navigate` attribute linking to the corresponding page.
+
+  This component should be used within the `breadcrumb/1` component.
+  """
+  attr :navigate, :string
+
+  slot :inner_block, required: true
+
+  def breadcrumb_item(%{navigate: _} = assigns) do
+    ~H"""
+    <.icon name={:chevron_right} />
+    <.link class="breadcrumb__item">
+      <%= render_slot(@inner_block) %>
+    </.link>
+    """
+  end
+
+  def breadcrumb_item(assigns) do
+    ~H"""
+    <.icon name={:chevron_right} />
+    <span class="breadcrumb__item breadcrumb__item--active">
+      <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
+  @doc """
+  The breadcrumb ellipsis is a special item it used when there are too many items in a
+  breadcrumb component.
+
+  It is used as the second item of the list, right after the home item.
+
+  This component should be used within the `breadcrumb/1` component.
+  """
+  def breadcrumb_ellipsis(assigns) do
+    ~H"""
+    <.icon name={:chevron_right} />
+    <span class="breadcrumb__item breadcrumb__item--ellipsis">…</span>
+    """
+  end
+
   ## Button
 
   @doc """
