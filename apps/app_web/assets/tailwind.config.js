@@ -80,7 +80,9 @@ module.exports = {
         transparent: "transparent",
         current: "currentColor",
       },
-      height: {
+      spacing: {
+        xs: "1.5rem",
+        sm: "2rem",
         md: "2.5rem",
       },
       width: {
