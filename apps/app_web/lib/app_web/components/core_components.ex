@@ -43,6 +43,26 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  # prepend a class in `[:rest, :class]`
+  defp prepend_class(assigns, class) do
+    update(assigns, :rest, fn rest -> Map.update(rest, :class, class, &[class, &1]) end)
+  end
+
+  ## Anchor
+
+  @doc """
+  An anchor is a stylized link that is used to navigate to a different page.
+  """
+  attr :rest, :global, include: @link_attrs
+
+  slot :inner_block, required: true
+
+  def anchor(assigns) do
+    assigns = prepend_class(assigns, "anchor")
+
+    link(assigns)
+  end
+
   ## Accordion
 
   @doc """
