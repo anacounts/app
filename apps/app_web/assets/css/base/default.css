@@ -1,6 +1,7 @@
 @layer base {
   html {
     @apply accent-theme
+           text-theme-950
            bg-background;
   }
 
