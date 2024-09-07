@@ -289,6 +289,7 @@ defmodule AppWeb.CoreComponents do
   attr :kind, :atom,
     # TODO(v2,end) make `:kind` attribute required
     # required: true,
+    default: :secondary,
     values: [:primary, :secondary, :ghost]
 
   attr :navigate, :string, doc: "A URL to navigate to when clicking the button"
