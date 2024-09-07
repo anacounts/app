@@ -48,6 +48,38 @@ defmodule AppWeb.CoreComponents do
     update(assigns, :rest, fn rest -> Map.update(rest, :class, class, &[class, &1]) end)
   end
 
+  ## Alert
+
+  @doc """
+  An alert is a message that attracts the user's attention to important information.
+
+  Alerts should be top-level components, placed directly within the body of the page.
+  They should take the full width of the screen and should be placed at the beginning
+  of the page so that they are visible to the user as soon as the page loads.
+  """
+  attr :kind, :atom, values: [:warning, :error]
+
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
+  def alert(assigns) do
+    assigns = prepend_class(assigns, ["alert", alert_kind_class(assigns.kind)])
+
+    ~H"""
+    <div {@rest}>
+      <%= alert_icon(assigns) %>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  defp alert_kind_class(:warning), do: "alert--warning"
+  defp alert_kind_class(:error), do: "alert--error"
+
+  defp alert_icon(%{kind: :warning} = assigns), do: ~H"<.icon name={:exclamation_triangle} />"
+  defp alert_icon(%{kind: :error} = assigns), do: ~H"<.icon name={:exclamation_circle} />"
+
   ## Anchor
 
   @doc """
@@ -436,7 +468,7 @@ defmodule AppWeb.CoreComponents do
     `:heroicons` icons.
   """
 
-  attr :name, :string, required: true, doc: "The name of the icon"
+  attr :name, :any, required: true, doc: "The name of the icon"
   attr :alt, :string, default: nil, doc: "The alt text of the icon"
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
   attr :rest, :global
