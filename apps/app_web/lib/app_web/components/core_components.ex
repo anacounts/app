@@ -144,28 +144,30 @@ defmodule AppWeb.CoreComponents do
   ## Avatar
 
   @doc """
-  Generates an avatar.
+  An avatar is a visual representation of a user or entity.
 
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.avatar src="https://avatars0.githubusercontent.com/u/1234?s=460&v=4" alt="GitHub avatar" />
-
+  Avatar must always be accompanied by an `alt` attribute to provide a meaningful
+  description of the image for screen readers.
   """
 
-  attr :src, :string, required: true, doc: "The source of the image"
-  attr :alt, :string, required: true, doc: "The alt text for the image"
-  attr :size, :atom, default: :md, values: [:md, :lg], doc: "The size of the avatar"
+  attr :src, :string, required: true
+  attr :alt, :string, required: true
+  # TODO(v2,end) remove `:md` and `:lg` values
+  attr :size, :atom, default: :sm, values: [:sm, :hero, :md, :lg]
+
+  attr :rest, :global
 
   def avatar(assigns) do
+    assigns = prepend_class(assigns, ["avatar", avatar_size_class(assigns.size)])
+
     ~H"""
-    <img class={["avatar", avatar_size_class(@size)]} src={@src} alt={@alt} />
+    <img src={@src} alt={@alt} {@rest} />
     """
   end
 
-  defp avatar_size_class(:md), do: "avatar--md"
-  defp avatar_size_class(:lg), do: "avatar--lg"
+  defp avatar_size_class(:sm), do: "avatar--sm"
+  defp avatar_size_class(:hero), do: "avatar--hero"
+  defp avatar_size_class(deprecated) when deprecated in [:sm, :lg], do: nil
 
   ## Button
 
