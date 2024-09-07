@@ -1,0 +1,29 @@
+@layer components {
+  .breadcrumb {
+    @apply flex items-center
+           h-xs;
+  }
+
+  .breadcrumb__item {
+    @apply max-w-40 truncate;
+  }
+
+  .breadcrumb__item:hover {
+    @apply underline;
+  }
+
+  .breadcrumb__item--active {
+    @apply text-theme-500;
+  }
+
+  .breadcrumb__item--ellipsis:hover,
+  .breadcrumb__item--active:hover {
+    @apply no-underline;
+  }
+
+  @screen lg {
+    .breadcrumb__item {
+      @apply max-w-80;
+    }
+  }
+}
