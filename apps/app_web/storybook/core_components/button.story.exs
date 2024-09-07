@@ -9,44 +9,41 @@ defmodule Storybook.CoreComponents.Button do
     [
       variation(id: :default),
       %VariationGroup{
-        id: :cta,
-        description: "Call to action (color)",
+        id: :primary,
         variations: [
           variation(
-            id: :cta_default,
-            attributes: %{color: :cta}
+            id: :primary_default,
+            attributes: %{kind: :primary}
           ),
           variation(
-            id: :cta_disabled,
-            attributes: %{color: :cta, disabled: true}
+            id: :primary_disabled,
+            attributes: %{kind: :primary, disabled: true}
           )
         ]
       },
       %VariationGroup{
-        id: :feature,
-        description: "Feature (color)",
+        id: :secondary,
         variations: [
           variation(
-            id: :feature_default,
-            attributes: %{color: :feature}
+            id: :secondary_default,
+            attributes: %{kind: :secondary}
           ),
           variation(
-            id: :feature_disabled,
-            attributes: %{color: :feature, disabled: true}
+            id: :secondary_disabled,
+            attributes: %{kind: :secondary, disabled: true}
           )
         ]
       },
       %VariationGroup{
         id: :ghost,
-        description: "Ghost (color)",
         variations: [
           variation(
             id: :ghost_default,
-            attributes: %{color: :ghost}
+            attributes: %{kind: :ghost}
           ),
           variation(
             id: :ghost_disabled,
-            attributes: %{color: :ghost, disabled: true}
+            attributes: %{kind: :ghost, disabled: true}
           )
         ]
       },
@@ -62,19 +59,13 @@ defmodule Storybook.CoreComponents.Button do
             id: :icon_end,
             attributes: %{style: nil},
             slots: [~s|Label <.icon name={:chevron_down} />|]
-          ),
-          variation(
-            id: :icon_both,
-            attributes: %{style: nil},
-            slots: [~s|<.icon name={:user_plus} /> Label <.icon name={:chevron_down} />|]
-          ),
-          variation(
-            id: :icon_only,
-            attributes: %{style: nil},
-            slots: [~s|<.icon name={:user_plus} />|]
           )
         ]
       },
+      variation(
+        id: :navigation,
+        attributes: %{navigate: "#"}
+      ),
       %VariationGroup{
         id: :multiline,
         variations: [
@@ -101,7 +92,7 @@ defmodule Storybook.CoreComponents.Button do
       opts
       |> Keyword.get(:attributes, %{})
       |> Enum.into(%{
-        color: :feature,
+        kind: :secondary,
         style: "width: 10rem;"
       })
 

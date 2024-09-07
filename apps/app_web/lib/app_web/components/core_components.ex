@@ -271,45 +271,59 @@ defmodule AppWeb.CoreComponents do
   @doc """
   Buttons are used to trigger actions or navigate.
 
-  Buttons are rendered as `<button>` elements by default. If any of the link attributes
-  (`navigate`, `patch`, `href`) are present, the button will be rendered using the
-  `link/1` component of Phoenix.
+  Buttons are rendered as `<button>` elements by default. If the `:navigate` attribute
+  is given, the button will be rendered using the `link/1` component of Phoenix.
 
-  ## Colors
+  ## Kinds
 
-  Buttons have three colors, `:cta`, `:feature`, and `:ghost`.
+  Buttons have three kinds, `:primary`, `:secondary`, and `:ghost`.
 
-  CTA (short for Call to Action) buttons are used for the primary action in a view.
-  They draw the user's attention and are used to guide the user to an significant step,
-  whether it is to submit a form, create a new entry, close a popup, etc. There cannot
-  be more than one CTA button on the screen at a time.
+  Primary buttons are sometimes called "Call to action", and are used for the primary
+  action in a view. They draw the user's attention and are used to guide the user to a
+  significant step, whether it is to submit a form, create a new entry, close a popup,
+  etc. There cannot be more than one CTA button on the screen at a time.
 
   Feature and Ghost buttons are used for secondary actions.
   """
 
-  attr :color, :atom,
-    required: true,
-    values: [:cta, :feature, :ghost],
-    doc: "The color of the button"
+  attr :kind, :atom,
+    # TODO(v2,end) make `:kind` attribute required
+    # required: true,
+    values: [:primary, :secondary, :ghost]
 
-  attr :class, :any, default: nil, doc: "Extend component classes"
+  attr :navigate, :string, doc: "A URL to navigate to when clicking the button"
+
+  # TODO(v2,end) remove `:color` attribute
+  attr :color, :atom, values: [:cta, :feature, :ghost]
 
   attr :rest, :global,
     include: @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget)
 
-  slot :inner_block
+  slot :inner_block, required: true
+
+  def button(%{navigate: _} = assigns) do
+    assigns = prepend_button_classes(assigns)
+
+    link(assigns)
+  end
 
   def button(assigns) do
+    assigns = prepend_button_classes(assigns)
+
     ~H"""
-    <.link_or_button class={["button", button_color_class(@color), @class]} {@rest}>
+    <button {@rest}>
       <%= render_slot(@inner_block) %>
-    </.link_or_button>
+    </button>
     """
   end
 
-  defp button_color_class(:cta), do: "button--cta"
-  defp button_color_class(:feature), do: "button--feature"
-  defp button_color_class(:ghost), do: "button--ghost"
+  defp prepend_button_classes(assigns) do
+    prepend_class(assigns, ["button", button_kind_class(assigns.kind)])
+  end
+
+  defp button_kind_class(:primary), do: "button--primary"
+  defp button_kind_class(:secondary), do: "button--secondary"
+  defp button_kind_class(:ghost), do: "button--ghost"
 
   ## Dropdown
 
