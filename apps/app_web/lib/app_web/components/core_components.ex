@@ -97,6 +97,8 @@ defmodule AppWeb.CoreComponents do
 
   ## Accordion
 
+  # TODO(v2,end) drop `accordion/1` component
+
   @doc """
   Generates an accordion.
 
@@ -326,7 +328,100 @@ defmodule AppWeb.CoreComponents do
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
 
+  ## Card
+
+  @doc """
+  Cards are simple containers. They consist of white boxes with rounded corners,
+  containing a title and a body. In most cases, the body is a simple short text,
+  but more complex content can be added.
+  """
+  attr :color, :atom,
+    values: [:secondary, :green, :red, :neutral],
+    default: :secondary,
+    doc: """
+    The color of the card is used when displaying the balance of members, conveying the
+    idea of positive, negative, and undefined balances.
+    """
+
+  attr :rest, :global
+
+  slot :title, required: true
+  slot :inner_block, required: true
+
+  def card(assigns) do
+    assigns = prepend_card_classes(assigns)
+
+    ~H"""
+    <div {@rest}>
+      <div class="card__title">
+        <%= render_slot(@title) %>
+      </div>
+      <div class="card__body">
+        <%= render_slot(@inner_block) %>
+      </div>
+    </div>
+    """
+  end
+
+  @doc """
+  Card buttons are a specialized version of the card component that contains act as
+  a button or link and only contain an icon and label.
+
+  Unlike traditional cards, card buttons do not have a title slot since the title is
+  the main content of the component.
+
+  Card buttons cannot be used to display balance, so they cannot be green, red, or
+  neutral. They can however be primary or secondary. The same usage rules as the button
+  component apply.
+  """
+  attr :icon, :atom
+  attr :color, :atom, values: [:primary, :secondary], default: :secondary
+
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
+  def card_button(assigns) do
+    assigns = prepend_card_classes(assigns, "card--button")
+
+    ~H"""
+    <div {@rest}>
+      <.icon name={@icon} />
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  defp prepend_card_classes(assigns, extra_classes \\ nil) do
+    prepend_class(assigns, ["card", card_color_class(assigns.color), extra_classes])
+  end
+
+  defp card_color_class(:primary), do: "card--primary"
+  defp card_color_class(:secondary), do: "card--secondary"
+  defp card_color_class(:green), do: "card--green"
+  defp card_color_class(:red), do: "card--red"
+  defp card_color_class(:neutral), do: "card--neutral"
+
+  ## Card grid
+
+  @doc """
+  Card grid are used to display a collection of cards in a grid layout.
+
+  The grid contains two columns of equal width.
+  """
+  slot :inner_block, required: true
+
+  def card_grid(assigns) do
+    ~H"""
+    <div class="card-grid">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   ## Dropdown
+
+  # TODO(v2,end) drop `dropdown/1` component
 
   @doc """
   Generates a dropdown.
@@ -389,6 +484,8 @@ defmodule AppWeb.CoreComponents do
 
   ## FAB
 
+  # TODO(v2,end) drop `fab_container/1` and `fab/1` components
+
   @doc """
   Generates a floating action button container.
   The container will place the buttons at the bottom right of the screen.
@@ -446,6 +543,8 @@ defmodule AppWeb.CoreComponents do
     </.link>
     """
   end
+
+  # TODO(v2,end) drop `flash/1` and `flash_group/1` components
 
   @doc """
   Renders flash notices.
@@ -530,6 +629,8 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  # TODO(v2,end) drop `heading/1` component
+
   @doc """
   Generates a heading element.
 
@@ -587,9 +688,12 @@ defmodule AppWeb.CoreComponents do
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
   attr :rest, :global
 
-  # TODO deprecated, remove
+  # TODO (v2,end) deprecated, remove
   attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
 
+  # TODO (v2,end) drop binary name support
+  # this also means deleting the apps/app_web/assets/icons/ directory
+  # and removing the `sprite.generate` mix alias.
   def icon(%{name: name} = assigns) when is_binary(name) do
     ~H"""
     <svg
@@ -673,6 +777,8 @@ defmodule AppWeb.CoreComponents do
     </li>
     """
   end
+
+  # TODO(v2,end) drop `popup/1` component
 
   @doc """
   Generates a popup element.
@@ -825,6 +931,8 @@ defmodule AppWeb.CoreComponents do
   end
 
   ## Tabs
+
+  # TODO(v2,end) drop `tabs/1` component
 
   @doc """
   Generates a tab menu.
@@ -1060,6 +1168,8 @@ defmodule AppWeb.CoreComponents do
   end
 
   ## JS Commands
+
+  # TODO(v2,end) drop `show/2`, `hide/2`, `show_dialog/2` and `hide_dialog/2` helper functions
 
   def show(js \\ %JS{}, selector) do
     JS.show(js,

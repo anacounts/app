@@ -5,7 +5,13 @@ const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  content: ["./js/**/*.js", "../lib/*_web.ex", "../lib/*_web/**/*.*ex"],
+  content: [
+    "./js/**/*.js",
+    "../lib/*_web.ex",
+    "../lib/*_web/**/*.*ex",
+    // Storybook stories
+    "../storybook/**/*.story.exs",
+  ],
   theme: {
     borderRadius: {
       component: "0.5rem",
@@ -18,11 +24,16 @@ module.exports = {
       lg: "0.5rem",
       "3xl": "1.5rem",
     },
+    fontSize: {
+      sm: "0.875rem",
+      base: "1rem",
+      xl: "1.25rem",
+    },
     extend: {
       colors: {
         // Theme colors
         theme: {
-          50: "#ffede8",
+          50: "#fff0ee",
           100: "#ffcab9",
           200: "#ffa78b",
           300: "#ff845d",
@@ -101,6 +112,7 @@ module.exports = {
     },
   },
   plugins: [
+    // TODO(v2,end) remove typography plugin
     require("@tailwindcss/typography"),
     plugin(({ addVariant }) =>
       addVariant("phx-no-feedback", [".phx-no-feedback&", ".phx-no-feedback &"])
