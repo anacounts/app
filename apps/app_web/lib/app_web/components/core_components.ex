@@ -402,6 +402,23 @@ defmodule AppWeb.CoreComponents do
   defp card_color_class(:red), do: "card--red"
   defp card_color_class(:neutral), do: "card--neutral"
 
+  ## Card grid
+
+  @doc """
+  Card grid are used to display a collection of cards in a grid layout.
+
+  The grid contains two columns of equal width.
+  """
+  slot :inner_block, required: true
+
+  def card_grid(assigns) do
+    ~H"""
+    <div class="card-grid">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   ## Dropdown
 
   # TODO(v2,end) drop `dropdown/1` component
