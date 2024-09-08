@@ -93,20 +93,13 @@ defmodule AppWeb.MixProject do
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": [
         "tailwind default",
-        "esbuild default",
-        "sprite.generate"
+        "esbuild default"
       ],
       "assets.deploy": [
         "tailwind default --minify",
         "esbuild default --minify",
-        "sprite.generate",
         "phx.digest"
-      ],
-      "sprite.generate": """
-      cmd npm install svg-sprite && \
-          ./node_modules/.bin/svg-sprite --dest=priv/static/assets --symbol --symbol-dest=. --symbol-sprite=sprite.svg 'assets/icons/*.svg' && \
-          rm -rf node_modules/ package.json package-lock.json
-      """
+      ]
     ]
   end
 end
