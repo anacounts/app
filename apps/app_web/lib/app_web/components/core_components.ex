@@ -671,18 +671,9 @@ defmodule AppWeb.CoreComponents do
   @doc """
   Icons may be used in a variety of contexts to provide visual cues and enhance the user
   experience.
-
-  See them used in other components, like "Button".
-
-  ## Icon sets
-
-  The icon component is currently works with two icon sets:
-  - the `:heroicons` library, which should be the default choice as of now,
-  - and custom icons found in `assets/icons/`, which are bundled into a
-    single sprite. These icons are deprecated and should be replaced by
-    `:heroicons` icons.
   """
 
+  # TODO (v2,end) drop binary name support, set type to `:atom`
   attr :name, :any, required: true, doc: "The name of the icon"
   attr :alt, :string, default: nil, doc: "The alt text of the icon"
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
@@ -692,22 +683,7 @@ defmodule AppWeb.CoreComponents do
   attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
 
   # TODO (v2,end) drop binary name support
-  # this also means deleting the apps/app_web/assets/icons/ directory
-  # and removing the `sprite.generate` mix alias.
-  def icon(%{name: name} = assigns) when is_binary(name) do
-    ~H"""
-    <svg
-      class={["icon", icon_size_class(@size), @class]}
-      fill="currentColor"
-      role="img"
-      aria-hidden={"#{is_nil(@alt)}"}
-      {@rest}
-    >
-      <title :if={@alt}><%= @alt %></title>
-      <use href={icon_sprite_url(@name)} />
-    </svg>
-    """
-  end
+  def icon(%{name: name} = assigns) when is_binary(name), do: ~H""
 
   def icon(assigns) do
     ~H"""
@@ -729,14 +705,6 @@ defmodule AppWeb.CoreComponents do
   def heroicon(assigns) do
     apply(Heroicons, assigns.name, [assigns])
   end
-
-  # TODO deprecated, remove
-  defp icon_size_class(nil), do: nil
-  defp icon_size_class(:md), do: "icon--md"
-  defp icon_size_class(:lg), do: "icon--lg"
-
-  defp icon_sprite_url(icon_name),
-    do: ~p"/assets/sprite.svg##{icon_name}"
 
   ## List
 
