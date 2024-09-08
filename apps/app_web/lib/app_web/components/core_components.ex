@@ -328,6 +328,47 @@ defmodule AppWeb.CoreComponents do
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
 
+  ## Card
+
+  @doc """
+  Cards are simple containers. They consist of white boxes with rounded corners,
+  containing a title and a body. In most cases, the body is a simple short text,
+  but more complex content can be added.
+  """
+  attr :color, :atom,
+    values: [:secondary, :green, :red, :neutral],
+    default: :secondary,
+    doc: """
+    The color of the card is used when displaying the balance of members, conveying the
+    idea of positive, negative, and undefined balances.
+    """
+
+  attr :rest, :global
+
+  slot :title, required: true
+  slot :inner_block, required: true
+
+  def card(assigns) do
+    assigns = prepend_class(assigns, ["card", card_color_class(assigns.color)])
+
+    ~H"""
+    <div {@rest}>
+      <div class="card__title">
+        <%= render_slot(@title) %>
+      </div>
+      <div class="card__body">
+        <%= render_slot(@inner_block) %>
+      </div>
+    </div>
+    """
+  end
+
+  defp card_color_class(:primary), do: "card--primary"
+  defp card_color_class(:secondary), do: "card--secondary"
+  defp card_color_class(:green), do: "card--green"
+  defp card_color_class(:red), do: "card--red"
+  defp card_color_class(:neutral), do: "card--neutral"
+
   ## Dropdown
 
   # TODO(v2,end) drop `dropdown/1` component

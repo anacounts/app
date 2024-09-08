@@ -7,5 +7,10 @@
 
 /* Overrides for Storybook to apply our style */
 .psb-sandbox {
-    @apply font-sans;
+  @apply rounded-container
+         font-sans;
+}
+
+.psb-sandbox[data-background="theme"] {
+  @apply bg-theme-50;
 }

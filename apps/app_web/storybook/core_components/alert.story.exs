@@ -23,7 +23,7 @@ defmodule Storybook.CoreComponents.Alert do
         },
         slots: [
           """
-          <span class="psb-grow">Your revenues are not set</span>
+          <span class="grow">Your revenues are not set</span>
           <.icon name={:chevron_right} />
           """
         ]
