@@ -101,6 +101,7 @@ module.exports = {
     },
   },
   plugins: [
+    // TODO(v2,end) remove typography plugin
     require("@tailwindcss/typography"),
     plugin(({ addVariant }) =>
       addVariant("phx-no-feedback", [".phx-no-feedback&", ".phx-no-feedback &"])

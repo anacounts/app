@@ -97,6 +97,8 @@ defmodule AppWeb.CoreComponents do
 
   ## Accordion
 
+  # TODO(v2,end) drop `accordion/1` component
+
   @doc """
   Generates an accordion.
 
@@ -328,6 +330,8 @@ defmodule AppWeb.CoreComponents do
 
   ## Dropdown
 
+  # TODO(v2,end) drop `dropdown/1` component
+
   @doc """
   Generates a dropdown.
 
@@ -389,6 +393,8 @@ defmodule AppWeb.CoreComponents do
 
   ## FAB
 
+  # TODO(v2,end) drop `fab_container/1` and `fab/1` components
+
   @doc """
   Generates a floating action button container.
   The container will place the buttons at the bottom right of the screen.
@@ -446,6 +452,8 @@ defmodule AppWeb.CoreComponents do
     </.link>
     """
   end
+
+  # TODO(v2,end) drop `flash/1` and `flash_group/1` components
 
   @doc """
   Renders flash notices.
@@ -530,6 +538,8 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  # TODO(v2,end) drop `heading/1` component
+
   @doc """
   Generates a heading element.
 
@@ -587,9 +597,12 @@ defmodule AppWeb.CoreComponents do
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
   attr :rest, :global
 
-  # TODO deprecated, remove
+  # TODO (v2,end) deprecated, remove
   attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
 
+  # TODO (v2,end) drop binary name support
+  # this also means deleting the apps/app_web/assets/icons/ directory
+  # and removing the `sprite.generate` mix alias.
   def icon(%{name: name} = assigns) when is_binary(name) do
     ~H"""
     <svg
@@ -673,6 +686,8 @@ defmodule AppWeb.CoreComponents do
     </li>
     """
   end
+
+  # TODO(v2,end) drop `popup/1` component
 
   @doc """
   Generates a popup element.
@@ -825,6 +840,8 @@ defmodule AppWeb.CoreComponents do
   end
 
   ## Tabs
+
+  # TODO(v2,end) drop `tabs/1` component
 
   @doc """
   Generates a tab menu.
@@ -1060,6 +1077,8 @@ defmodule AppWeb.CoreComponents do
   end
 
   ## JS Commands
+
+  # TODO(v2,end) drop `show/2`, `hide/2`, `show_dialog/2` and `hide_dialog/2` helper functions
 
   def show(js \\ %JS{}, selector) do
     JS.show(js,
