@@ -8,6 +8,14 @@
            transition-colors;
   }
 
+  /* ## Variants */
+
+  .card--button {
+    @apply flex flex-col justify-center items-center
+           pt-4
+           text-base font-bold;
+  }
+
   /* ## Colors */
 
   /* ### Primary */

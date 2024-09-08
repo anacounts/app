@@ -349,7 +349,7 @@ defmodule AppWeb.CoreComponents do
   slot :inner_block, required: true
 
   def card(assigns) do
-    assigns = prepend_class(assigns, ["card", card_color_class(assigns.color)])
+    assigns = prepend_card_classes(assigns)
 
     ~H"""
     <div {@rest}>
@@ -361,6 +361,39 @@ defmodule AppWeb.CoreComponents do
       </div>
     </div>
     """
+  end
+
+  @doc """
+  Card buttons are a specialized version of the card component that contains act as
+  a button or link and only contain an icon and label.
+
+  Unlike traditional cards, card buttons do not have a title slot since the title is
+  the main content of the component.
+
+  Card buttons cannot be used to display balance, so they cannot be green, red, or
+  neutral. They can however be primary or secondary. The same usage rules as the button
+  component apply.
+  """
+  attr :icon, :atom
+  attr :color, :atom, values: [:primary, :secondary], default: :secondary
+
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
+  def card_button(assigns) do
+    assigns = prepend_card_classes(assigns, "card--button")
+
+    ~H"""
+    <div {@rest}>
+      <.icon name={@icon} />
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  defp prepend_card_classes(assigns, extra_classes \\ nil) do
+    prepend_class(assigns, ["card", card_color_class(assigns.color), extra_classes])
   end
 
   defp card_color_class(:primary), do: "card--primary"
