@@ -48,18 +48,6 @@ module.exports = {
         // Gray colors
         white: "#ffffff",
         gray: {
-          50: "#f3f3f4",
-          100: "#dadcde",
-          200: "#c1c5c9",
-          300: "#a9aeb3",
-          400: "#90979d",
-          500: "#778088",
-          600: "#62686f",
-          700: "#4c5156",
-          800: "#363a3e",
-          900: "#212325",
-          950: "#0b0c0c",
-          // TODO deprecated shades, to be removed
           5: "#f8f9fa",
           10: "#f1f3f4",
           20: "#e9ecef",
@@ -87,9 +75,6 @@ module.exports = {
       },
       width: {
         prose: "65ch",
-      },
-      borderRadius: {
-        std: "0.5rem",
       },
       fontFamily: {
         sans: ["Lato", ...defaultTheme.fontFamily.sans],

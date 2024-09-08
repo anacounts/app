@@ -38,7 +38,7 @@ defmodule AppWeb.BookInvitationControllerTest do
                ~s(input type="hidden" name="book_member[id]" id="book_member_id" value="new")
 
       assert response =~ "Back to the app\n  </a>"
-      assert response =~ "Join\n    \n\n</button>"
+      assert response =~ "Join\n    \n</button>"
       assert response =~ "Disconnect\n  </a>"
     end
 
