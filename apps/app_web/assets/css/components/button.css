@@ -4,72 +4,72 @@
            inline-flex justify-center items-center gap-2
            h-md
            px-4
-           border rounded-std
+           border rounded-component
            outline outline-1 outline-transparent outline-offset-0
            leading-none
-           font-bold font-sans
+           font-bold
            transition-all;
   }
 
-  /* ## Call to action */
+  /* ## Primary */
 
-  .button--cta {
+  .button--primary {
     @apply bg-theme-500
            border-theme-500
            text-white;
   }
 
-  .button--cta:hover {
+  .button--primary:hover {
     @apply bg-theme-600
            border-theme-600;
   }
 
-  .button--cta:active {
+  .button--primary:active {
     @apply bg-theme-700
            border-theme-700;
   }
 
-  .button--cta:focus-visible {
+  .button--primary:focus-visible {
     @apply border-theme-800
            outline-theme-800;
   }
 
-  .button--cta:disabled {
-    @apply bg-gray-500
-           border-gray-500;
+  .button--primary:disabled {
+    @apply bg-neutral-500
+           border-neutral-500;
   }
 
-  /* ## Feature & Ghost */
+  /* ## Secondary & Ghost */
 
-  .button--feature {
+  .button--secondary {
     @apply bg-white
-           border-gray-500;
+           border-neutral-500;
   }
 
   .button--ghost {
     @apply border-transparent;
   }
 
-  .button--feature:hover,
+  .button--secondary:hover,
   .button--ghost:hover {
-    @apply bg-gray-500/10;
+    @apply bg-neutral-500/10;
   }
 
-  .button--feature:active,
+  .button--secondary:active,
   .button--ghost:active {
-    @apply bg-gray-500/20;
+    @apply bg-neutral-500/20;
   }
 
-  .button--feature:disabled,
+  .button--secondary:disabled,
   .button--ghost:disabled {
-    @apply text-gray-70
-           bg-gray-20
-           border-gray-40;
+    @apply text-neutral-700
+           bg-neutral-200
+           border-neutral-400;
   }
 
-  .button--feature:focus-visible,
+  .button--secondary:focus-visible,
   .button--ghost:focus-visible {
-    @apply border-gray-800
-           outline outline-gray-800;
+    @apply border-neutral-800
+           outline outline-neutral-800;
   }
 }
