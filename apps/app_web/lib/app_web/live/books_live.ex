@@ -19,14 +19,18 @@ defmodule AppWeb.BooksLive do
           </.button>
         </div>
 
-        <.tile :if={Enum.empty?(@books)} summary_class="text-xl" navigate={~p"/books/new"}>
+        <.deprecated_tile :if={Enum.empty?(@books)} summary_class="text-xl" navigate={~p"/books/new"}>
           <.icon name="add" />
           <%= gettext("Create your first book") %>
-        </.tile>
-        <.tile :for={book <- @books} navigate={~p"/books/#{book.id}/transfers"} data-book-id={book.id}>
+        </.deprecated_tile>
+        <.deprecated_tile
+          :for={book <- @books}
+          navigate={~p"/books/#{book.id}/transfers"}
+          data-book-id={book.id}
+        >
           <.avatar src={~p"/images/book-default-avatar.png"} alt="" />
           <div class="grow text-lg line-clamp-2"><%= book.name %></div>
-        </.tile>
+        </.deprecated_tile>
       </div>
 
       <.filters id="filters" phx-change="filter">
