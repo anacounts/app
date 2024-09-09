@@ -67,7 +67,7 @@ defmodule AppWeb.MoneyTransfersLive do
             if(@page == 1, do: "pt-10", else: "pt-[calc(200vh)]")
           ]}
         >
-          <.tile
+          <.deprecated_tile
             :for={{id, transfer} <- @streams.money_transfers}
             id={id}
             summary_class={["font-bold", class_for_transfer_type(transfer.type)]}
@@ -107,7 +107,7 @@ defmodule AppWeb.MoneyTransfersLive do
             >
               <%= gettext("Delete") %>
             </:button>
-          </.tile>
+          </.deprecated_tile>
         </div>
       </div>
 
