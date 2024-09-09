@@ -77,18 +77,18 @@ defmodule Storybook.CoreComponents.Card do
           """
           <div class="mb-2 p-2 rounded-component bg-red-100 text-red-500 flex items-center gap-2">
             <.icon name={:minus} />
-            <span class="text-base font-bold text-left grow">Housing</span>
-            <span class="text-base font-bold">-33.33€</span>
+            <span class="label text-left grow">Housing</span>
+            <span class="label">-33.33€</span>
           </div>
           <div class="mb-2 p-2 rounded-component bg-neutral-100 text-neutral-500 flex items-center gap-2">
             <.icon name={:arrow_right} />
-            <span class="text-base font-bold text-left grow">Reimbursement</span>
-            <span class="text-base font-bold">+33.33€</span>
+            <span class="label text-left grow">Reimbursement</span>
+            <span class="label">+33.33€</span>
           </div>
           <div class="mb-2 p-2 rounded-component bg-green-100 text-green-500 flex items-center gap-2">
             <.icon name={:plus} />
-            <span class="text-base font-bold text-left grow">Overcharge</span>
-            <span class="text-base font-bold">+33.33€</span>
+            <span class="label text-left grow">Overcharge</span>
+            <span class="label">+33.33€</span>
           </div>
           """
         ]

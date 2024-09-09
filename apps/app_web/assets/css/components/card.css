@@ -11,9 +11,9 @@
   /* ## Variants */
 
   .card--button {
+    @apply label;
     @apply flex flex-col justify-center items-center
-           pt-4
-           text-base font-bold;
+           pt-4;
   }
 
   /* ## Colors */
@@ -95,11 +95,9 @@
 
   /* # Elements */
 
-  /* # TODO(v2,typography) extend "label" component instead of applying custom classes */
-
   .card__title {
-    @apply flex justify-between items-center gap-2
-           text-base font-bold;
+    @apply label;
+    @apply flex justify-between items-center gap-2;
   }
 
   .card__body {
