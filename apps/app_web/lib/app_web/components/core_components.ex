@@ -722,41 +722,63 @@ defmodule AppWeb.CoreComponents do
 
   ## List
 
+  @doc """
+  Lists are used to display a collection of items in a vertical list.
+  """
   attr :rest, :global
 
-  slot :inner_block
+  slot :inner_block, required: true
 
   def list(assigns) do
+    assigns = prepend_class(assigns, "list")
+
     ~H"""
-    <ul class="list" {@rest}>
+    <ul {@rest}>
       <%= render_slot(@inner_block) %>
     </ul>
     """
   end
 
+  @doc """
+  List items are used within lists to display items.
+
+  When using buttons within list item, consider using `list_item_link/1` instead.
+
+  This component should be used within the `list/1` component.
+  """
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
   def list_item(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class]))
+    assigns = prepend_class(assigns, "list__item")
 
     ~H"""
-    <li class={["list__item", assigns[:class]]} {@extra}>
+    <li {@rest}>
       <%= render_slot(@inner_block) %>
     </li>
     """
   end
 
+  @doc """
+  List item links are variants of list items that are used to navigate.
+
+  They should contain a ghost button placed at the end of the item, indicating the intent
+  to navigate to a different page.
+
+  This component should be used within the `list/1` component.
+  """
+  attr :rest, :global, include: @link_attrs
+
+  slot :inner_block, required: true
+
   def list_item_link(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class]))
+    assigns = prepend_class(assigns, "list__item list__item--link")
 
     ~H"""
-    <li class="contents">
-      <.link class={["list__item", assigns[:class]]} {@extra}>
-        <%= render_slot(@inner_block) %>
-      </.link>
-    </li>
+    <.link role="listitem" {@rest}>
+      <%= render_slot(@inner_block) %>
+    </.link>
     """
   end
 
