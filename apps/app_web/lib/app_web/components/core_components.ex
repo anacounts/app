@@ -419,6 +419,20 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  ## Divider
+  @doc """
+  """
+
+  attr :rest, :global
+
+  def divider(assigns) do
+    assigns = prepend_class(assigns, "divider")
+
+    ~H"""
+    <hr {@rest} />
+    """
+  end
+
   ## Dropdown
 
   # TODO(v2,end) drop `dropdown/1` component
