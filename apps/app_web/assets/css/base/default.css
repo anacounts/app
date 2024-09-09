@@ -1,8 +1,8 @@
 @layer base {
   html {
-    @apply accent-theme
-           text-theme-950
-           bg-background;
+    @apply text-theme-950 font-sans
+           accent-theme
+           bg-theme-50;
   }
 
   [hidden] {
