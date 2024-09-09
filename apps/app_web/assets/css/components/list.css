@@ -1,9 +1,35 @@
 @layer components {
-  /* .list {} */
+  .list {
+    @apply overflow-y-auto;
+  }
 
   .list__item {
-    @apply flex items-center gap-4
-           p-4
-           transition-colors;
+    @apply relative
+           min-h-md
+           py-1 px-4
+           bg-white
+           rounded-component;
+  }
+
+  .list__item:not(:last-child) {
+    margin-block-end: calc(1px + 0.5rem * 2);
+  }
+  
+  .list__item:not(:last-child)::after {
+    content: "";
+    @apply absolute
+           top-full right-0 left-0
+           block
+           my-2
+           text-neutral-200
+           border-t border-neutral-200;
+  }
+
+  .list__item--link {
+    @apply transition-colors;
+  }
+  
+  .list__item--link:hover {
+    @apply bg-neutral-500/10;
   }
 }
