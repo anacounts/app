@@ -54,7 +54,7 @@ defmodule Storybook.CoreComponents.List do
   defp list_item_content(name) do
     """
     <.avatar src="https://avatars.githubusercontent.com/u/1" alt="" />
-    <span class="text-base font-bold grow">#{name}</span>
+    <span class="label grow">#{name}</span>
     """
   end
 

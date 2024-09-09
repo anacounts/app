@@ -6,9 +6,13 @@
 @import "./anacounts.css";
 
 /* Overrides for Storybook to apply our style */
+html {
+  @apply bg-white;
+}
+
 .psb-sandbox {
   @apply rounded-container
-         font-sans;
+       text-theme-950 font-sans;
 }
 
 .psb-sandbox[data-background="theme"] {
