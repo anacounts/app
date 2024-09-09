@@ -829,44 +829,7 @@ defmodule AppWeb.CoreComponents do
   ## Tile
 
   @doc """
-  A card is a flexible and extensible content container.
-
-  ## When to use
-
-  Cards can be used as navigation links, so that when the user clicks on them, they are
-  taken to a new page. To enable this behavior, the `<.tile>` must receive a `navigate`
-  attribute with the URL to navigate to.
-
-  They can also be collapsible, so that when the user clicks on them, they are expanded
-  to show more content. To enable this behavior, the `<.tile>` must receive a `collapse`
-  attribute.
-
-  These two behaviors are mutually exclusive. Links do not support the `header` and
-  `button` slots.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.tile navigate="/book/1">
-        My book name
-      </.tile>
-
-      <.tile collapse>
-        <:header>
-          Some content summarized
-        </:header>
-
-        The description of the content
-
-        <:button>
-          Edit
-        </:button>
-        <:button class="text-error">
-          Delete
-        </:button>
-      </.tile>
-
+  Deprecated
   """
 
   attr :collapse, :boolean,
@@ -901,7 +864,7 @@ defmodule AppWeb.CoreComponents do
     attr :"phx-value-id", :string
   end
 
-  def tile(%{collapse: true} = assigns) do
+  def deprecated_tile(%{collapse: true} = assigns) do
     ~H"""
     <details class={["tile", @class]} {@rest}>
       <summary class={["tile__summary", @summary_class]}>
@@ -924,7 +887,7 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  def tile(%{navigate: _} = assigns) do
+  def deprecated_tile(%{navigate: _} = assigns) do
     ~H"""
     <.link class={["tile tile--clickable", @class]} navigate={@navigate} {@rest}>
       <div class={["tile__summary", @summary_class]}>

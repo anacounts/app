@@ -21,23 +21,26 @@ defmodule AppWeb.BookMembersLive do
     ~H"""
     <div class="max-w-prose mx-auto">
       <div :if={not Books.closed?(@book)} class="grid grid-cols-2">
-        <.tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
+        <.deprecated_tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
           <.icon name="mail" />
           <%= gettext("Invite people") %>
-        </.tile>
-        <.tile navigate={~p"/books/#{@book}/members/new"} summary_class="justify-center">
+        </.deprecated_tile>
+        <.deprecated_tile navigate={~p"/books/#{@book}/members/new"} summary_class="justify-center">
           <.icon name="person-add" />
           <%= gettext("Create manually") %>
-        </.tile>
+        </.deprecated_tile>
       </div>
 
-      <.tile :for={member <- @book_members} navigate={~p"/books/#{@book}/members/#{member}"}>
+      <.deprecated_tile
+        :for={member <- @book_members}
+        navigate={~p"/books/#{@book}/members/#{member}"}
+      >
         <.member_avatar member={member} />
         <span class="grow font-bold">
           <%= member.display_name %>
         </span>
         <.member_balance member={member} />
-      </.tile>
+      </.deprecated_tile>
     </div>
     """
   end
