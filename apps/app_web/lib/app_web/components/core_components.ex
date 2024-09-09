@@ -946,6 +946,32 @@ defmodule AppWeb.CoreComponents do
   defp tabs_link_active_class(true), do: "tabs__link--active"
   defp tabs_link_active_class(_active?), do: nil
 
+  ## Tile
+
+  @doc """
+  Tiles are interactive elements that are mostly used to navigate to different pages.
+  """
+  attr :color, :atom,
+    values: [:primary, :secondary],
+    default: :secondary
+
+  attr :rest, :global
+
+  slot :inner_block, required: true
+
+  def tile(assigns) do
+    assigns = prepend_class(assigns, ["tile", tile_color_class(assigns.color)])
+
+    ~H"""
+    <div {@rest}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  defp tile_color_class(:primary), do: "tile--primary"
+  defp tile_color_class(:secondary), do: "tile--secondary"
+
   @doc """
   Renders an input with label and error messages.
 
