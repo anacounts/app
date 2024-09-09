@@ -1,0 +1,5 @@
+@layer components {
+  .divider {
+    @apply my-2 text-neutral-200 border-neutral-200;
+  }
+}
