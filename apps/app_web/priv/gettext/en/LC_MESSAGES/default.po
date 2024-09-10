@@ -12,6 +12,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
+msgid "%{count} members"
+msgstr "%{count} members"
+
+#, elixir-autogen, elixir-format
 msgid "%{count} transfer"
 msgid_plural "%{count} transfers"
 msgstr[0] "%{count} transfer"
@@ -202,6 +206,10 @@ msgstr "Display name"
 #, elixir-autogen, elixir-format
 msgid "Divide equally"
 msgstr "Divide equally"
+
+#, elixir-autogen, elixir-format
+msgid "Divided"
+msgstr "Divided"
 
 #, elixir-autogen, elixir-format
 msgid "Don't have an account?"
@@ -656,12 +664,20 @@ msgid "User confirmed successfully."
 msgstr "User confirmed successfully."
 
 #, elixir-autogen, elixir-format
+msgid "View"
+msgstr "View"
+
+#, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "We can't find the internet"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
 msgstr "Weight by income"
+
+#, elixir-autogen, elixir-format
+msgid "Weighted"
+msgstr "Weighted"
 
 #, elixir-autogen, elixir-format
 msgid "Welcome back!"
