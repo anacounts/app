@@ -11,6 +11,10 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "%{count} members"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "%{count} transfer"
 msgid_plural "%{count} transfers"
 msgstr[0] ""
@@ -200,6 +204,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Divide equally"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Divided"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -655,11 +663,19 @@ msgid "User confirmed successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "View"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Weighted"
 msgstr ""
 
 #, elixir-autogen, elixir-format

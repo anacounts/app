@@ -43,11 +43,13 @@
 
   .button--secondary {
     @apply bg-white
-           border-neutral-500;
+           border-neutral-500
+           text-theme-950;
   }
 
   .button--ghost {
-    @apply border-transparent;
+    @apply border-transparent
+           text-theme-950;
   }
 
   .button--secondary:hover,

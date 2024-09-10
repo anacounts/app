@@ -32,4 +32,48 @@
   .tile--secondary:active {
     @apply bg-neutral-500/20;
   }
+
+  /* ## Transfer tile specific */
+
+  /* ### Red */
+
+  .tile--red {
+    @apply bg-red-100 text-red-500;
+  }
+  
+  .tile--red .divider {
+    @apply border-red-200;
+  }
+
+  .tile--red .\[custom\]tile__text {
+    @apply text-red-950;
+  }
+
+  /* ### Green */
+
+  .tile--green {
+    @apply bg-green-100 text-green-500;
+  }
+
+  .tile--green .divider {
+    @apply border-green-200;
+  }
+
+  .tile--green .\[custom\]tile__text {
+    @apply text-green-950;
+  }
+
+  /* ### Neutral */
+
+  .tile--neutral {
+    @apply bg-neutral-100 text-neutral-500;
+  }
+
+  .tile--neutral .divider {
+    @apply border-neutral-200;
+  }
+
+  .tile--neutral .\[custom\]tile__text {
+    @apply text-neutral-950;
+  }
 }
