@@ -8,8 +8,8 @@ defmodule AppWeb.CoreComponents do
   Related CSS can be found in `assets/css/components/*`.
   """
   use Phoenix.Component
-  use AppWeb, :verified_routes
 
+  # TODO(v2,end) remove gettext from this file
   use AppWeb, :gettext
 
   alias Phoenix.LiveView.JS
@@ -19,6 +19,9 @@ defmodule AppWeb.CoreComponents do
   # can be overriden using the `:include` option of `attr/3`.
   # e.g. `attr :rest, :global, include: @link_attrs`
   @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
+
+  # Attributes of the `<input>` HTML element
+  @input_attrs ~w(name value checked)
 
   # The <.link_or_button> component is used to conditionally render a link or a button
   # depending on the presence of the `navigate` attribute.
@@ -419,8 +422,36 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  ## Divider
+  ## Checkbox
+
   @doc """
+  Checkboxes are used to let the user choose whether to activate an option when a form
+  submission.
+
+  When the effect of the checkbox is immediate, switches should be used instead.
+  (NB, no switch component has been developed yet).
+
+  For usage with Phoenix's forms, consider using the `input/1` component.
+  """
+  attr :rest, :global, include: @input_attrs
+
+  def checkbox(assigns) do
+    assigns = prepend_class(assigns, "checkbox")
+
+    ~H"""
+    <input type="checkbox" {@rest} />
+    """
+  end
+
+  ## Divider
+
+  @doc """
+  Dividers are used to separate distinct sectionss of content.
+
+  For example, they are used to separate the login form from
+  the sign-up button in the login page, or to separate the
+  items of a list (although it's implemented in a different way,
+  the visual is the same).
   """
 
   attr :rest, :global
@@ -1028,13 +1059,14 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <label class={@label_class} phx-feedback-for={@name}>
       <input type="hidden" name={@name} value="false" />
-      <input type="checkbox" id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
+      <.checkbox id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
       <%= @label %>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </label>
     """
   end
 
+  # TODO(v2,end) drop `radio` clause
   def input(%{type: "radio"} = assigns) do
     # Some attributes aren't handled or are handled improperly because they were
     # not needed in the original implementation. They can be added as needed.
