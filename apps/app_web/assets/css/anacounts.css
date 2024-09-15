@@ -1,6 +1,5 @@
 @import "./base/default.css";
 @import "./base/fonts.css";
-@import "./base/form.css";
 
 @import "./components/accordion.css";
 @import "./components/alert.css";
@@ -22,3 +21,5 @@
 @import "./components/tile.css";
 @import "./components/toggle-group.css";
 @import "./components/typography.css";
+
+@import "./form/checkbox.css";

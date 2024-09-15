@@ -14,7 +14,7 @@ module.exports = {
   ],
   theme: {
     borderRadius: {
-      component: "0.5rem",
+      component: "0.375rem",
       container: "1rem",
       full: "9999px",
 
