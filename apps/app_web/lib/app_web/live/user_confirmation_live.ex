@@ -35,8 +35,13 @@ defmodule AppWeb.UserConfirmationLive do
   def mount(%{"token" => token}, _session, socket) do
     form = to_form(%{"token" => token}, as: "user")
 
-    {:ok, assign(socket, form: form, page_title: gettext("Confirm your account")),
-     layout: {AppWeb.Layouts, :auth}, temporary_assigns: [form: nil, page_title: nil]}
+    socket =
+      assign(socket,
+        form: form,
+        page_title: gettext("Confirm your account")
+      )
+
+    {:ok, socket, temporary_assigns: [form: nil, page_title: nil]}
   end
 
   # Do not log in the user after confirmation to avoid a

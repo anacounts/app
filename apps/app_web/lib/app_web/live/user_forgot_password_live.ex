@@ -47,9 +47,13 @@ defmodule AppWeb.UserForgotPasswordLive do
   end
 
   def mount(_params, _session, socket) do
-    {:ok,
-     assign(socket, form: to_form(%{}, as: "user"), page_title: gettext("Forgot your password?")),
-     layout: {AppWeb.Layouts, :auth}, temporary_assigns: [page_title: nil]}
+    socket =
+      assign(socket,
+        form: to_form(%{}, as: "user"),
+        page_title: gettext("Forgot your password?")
+      )
+
+    {:ok, socket, temporary_assigns: [page_title: nil]}
   end
 
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do

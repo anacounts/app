@@ -65,8 +65,7 @@ defmodule AppWeb.UserRegistrationLive do
       |> assign(page_title: gettext("Create an account"))
       |> assign_form(changeset)
 
-    {:ok, socket,
-     layout: {AppWeb.Layouts, :auth}, temporary_assigns: [form: nil, page_title: nil]}
+    {:ok, socket, temporary_assigns: [form: nil, page_title: nil]}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do

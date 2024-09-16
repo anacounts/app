@@ -55,7 +55,12 @@ defmodule AppWeb.UserLoginLive do
     email = Phoenix.Flash.get(socket.assigns.flash, :email)
     form = to_form(%{"email" => email}, as: "user")
 
-    {:ok, assign(socket, form: form, page_title: gettext("Sign in to your account")),
-     temporary_assigns: [form: form, page_title: nil], layout: {AppWeb.Layouts, :auth}}
+    socket =
+      assign(socket,
+        form: form,
+        page_title: gettext("Sign in to your account")
+      )
+
+    {:ok, socket, temporary_assigns: [form: form, page_title: nil]}
   end
 end
