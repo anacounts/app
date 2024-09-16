@@ -63,6 +63,8 @@ defmodule AppWeb.Router do
 
       live "/users/settings/balance", BalanceConfigLive, :edit
     end
+
+    get "/users/confirm/:token", UserConfirmationController, :update
   end
 
   scope "/", AppWeb do
@@ -73,7 +75,6 @@ defmodule AppWeb.Router do
     live_session :current_user,
       on_mount: [{AppWeb.UserAuth, :mount_current_user}],
       layout: {AppWeb.Layouts, :auth} do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
