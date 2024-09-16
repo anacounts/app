@@ -258,7 +258,7 @@ defmodule AppWeb.CoreComponents do
   def breadcrumb_item(%{navigate: _} = assigns) do
     ~H"""
     <.icon name={:chevron_right} />
-    <.link class="breadcrumb__item">
+    <.link class="breadcrumb__item" navigate={@navigate}>
       <%= render_slot(@inner_block) %>
     </.link>
     """

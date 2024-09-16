@@ -7,12 +7,41 @@ defmodule AppWeb.PageComponents do
   in more specific contexts.
   """
 
+  use AppWeb, :gettext
+  use AppWeb, :verified_routes
   use Phoenix.Component
 
-  use AppWeb, :gettext
   import AppWeb.CoreComponents
 
   alias Phoenix.LiveView.JS
+
+  ## App page
+
+  @doc """
+  The app page contains part of the layout of most pages of the application.
+
+  It includes the breadcrumb, title, and the main content of the page.
+  """
+
+  slot :breadcrumb, required: true
+  slot :title, required: true
+
+  def app_page(assigns) do
+    ~H"""
+    <div class="app-page">
+      <header>
+        <.breadcrumb>
+          <.breadcrumb_home navigate={~p"/"} alt={gettext("Home")} />
+          <%= render_slot(@breadcrumb) %>
+        </.breadcrumb>
+        <h1 class="title-1"><%= render_slot(@title) %></h1>
+      </header>
+      <main>
+        <%= render_slot(@inner_block) %>
+      </main>
+    </div>
+    """
+  end
 
   ## Filters
 
@@ -116,46 +145,9 @@ defmodule AppWeb.PageComponents do
     """
   end
 
-  ## Page header
-
-  @doc """
-  Generates the base header.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.page_header hide_back>
-        <:title>Anacounts</:title>
-
-        <:menu>
-          <.dropdown id="contextual-menu">
-            <:toggle>
-              <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
-            </:toggle>
-
-            <:tab_item navigate="/tab_one">
-              <.icon name="account" size={:md} />
-              Go to tab one
-            </:tab_item>
-            <:tab_item navigate="/tab_two">
-              <.icon name="add" size={:md} />
-              Go to tab two
-            </:tab_item>
-
-            <.list_item_link navigate="/users/settings">
-              <.icon name="settings" />
-              Settings
-            </.list_item_link>
-            <.list_item_link href="/users/log_out" method="delete">
-              <.icon name="out" />
-              Disconnect
-            </.list_item_link>
-          </.dropdown>
-        </:menu>
-      </.page_header>
-
-  """
+  @doc false
+  # DEPRECATED
+  # TODO(v2,end) remove
   def page_header(assigns) do
     ~H"""
     <header class="sticky top-0
