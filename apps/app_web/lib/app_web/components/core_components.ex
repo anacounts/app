@@ -977,6 +977,54 @@ defmodule AppWeb.CoreComponents do
   defp tabs_link_active_class(true), do: "tabs__link--active"
   defp tabs_link_active_class(_active?), do: nil
 
+  ## Text input
+
+  @doc """
+  Text inputs are used to collect data from the user.
+
+  The name `text_input` is used to differentiate from the `input/1` component,
+  but the input can actually be used for multiple types of input, listed in the
+  `:type` attribute.
+
+  For usage with Phoenix's forms, consider using the `input/1` component.
+  """
+
+  attr :type, :string, default: "text", values: ~w(date email number password text)
+  attr :error, :boolean, default: false
+
+  attr :prefix, :atom, doc: "An icon to display before the input"
+  attr :suffix, :atom, doc: "An icon to display after the input"
+
+  attr :container_class, :any, default: nil, doc: "Classes added to the input container"
+  attr :rest, :global, include: @input_attrs
+
+  def text_input(assigns) do
+    assigns = prepend_class(assigns, "text-input__input")
+
+    ~H"""
+    <div class={["text-input", text_input_error_class(assigns.error), @container_class]}>
+      <%= text_input_prefix(assigns) %>
+      <input {@rest} />
+      <%= text_input_suffix(assigns) %>
+    </div>
+    """
+  end
+
+  defp text_input_error_class(true), do: "text-input--error"
+  defp text_input_error_class(false), do: nil
+
+  defp text_input_prefix(%{prefix: _} = assigns) do
+    ~H|<.icon class="text-input__addon" name={@prefix} />|
+  end
+
+  defp text_input_prefix(_assigns), do: nil
+
+  defp text_input_suffix(%{suffix: _} = assigns) do
+    ~H|<.icon class="text-input__addon" name={@suffix} />|
+  end
+
+  defp text_input_suffix(_assigns), do: nil
+
   ## Tile
 
   @doc """
@@ -1024,7 +1072,7 @@ defmodule AppWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden money month number
-               password range radio search select tel text textarea time toggle-group url week)
+               password range radio search select tel text time toggle-group url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -1095,16 +1143,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  def input(%{type: "textarea"} = assigns) do
-    ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
-      <textarea id={@id || @name} name={@name} {@rest}><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
-    """
-  end
-
   def input(%{type: "money"} = assigns) do
     assigns =
       assign_new(assigns, :normalized_value, fn ->
@@ -1163,7 +1201,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <label class={@label_class} phx-feedback-for={@name}>
       <%= @label %>
-      <input
+      <.text_input
         type={@type}
         name={@name}
         id={@id || @name}

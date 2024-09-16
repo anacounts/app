@@ -1,0 +1,43 @@
+@layer components {
+  .text-input {
+    @apply flex items-center gap-1
+           h-md
+           px-2
+           rounded-component bg-white
+           border-2 border-neutral-200
+           outline-none
+           transition-colors;
+  }
+
+  .text-input:hover {
+    @apply border-neutral-300;
+  }
+
+  .text-input:focus-within {
+    @apply border-theme-500;
+  }
+
+  .text-input:has(> :disabled) {
+    @apply bg-neutral-100 border-neutral-300
+           text-neutral-500;
+  }
+
+  .text-input--error {
+    @apply border-red-500;
+  }
+
+  .text-input--error:hover {
+    @apply border-red-600;
+  }
+
+  .text-input__input {
+    @apply grow
+           h-full
+           border-none outline-none;
+  }
+
+  .text-input__addon {
+    @apply block size-xs
+           text-center;
+  }
+}
