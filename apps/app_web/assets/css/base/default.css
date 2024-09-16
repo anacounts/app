@@ -1,4 +1,9 @@
 @layer base {
+  html,
+  body {
+    @apply h-full;
+  }
+
   html {
     @apply text-theme-950 font-sans
            accent-theme
@@ -7,5 +12,10 @@
 
   [hidden] {
     @apply hidden;
+  }
+
+  /* Make the LiveView container only account for its content */
+  [data-phx-main] {
+    @apply contents;
   }
 }

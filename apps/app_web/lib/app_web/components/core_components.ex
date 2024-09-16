@@ -1142,6 +1142,7 @@ defmodule AppWeb.CoreComponents do
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
+  attr :helper, :string
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
@@ -1273,7 +1274,7 @@ defmodule AppWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <%= input_helper_or_errors(assigns) %>
     </div>
     """
   end
@@ -1281,6 +1282,10 @@ defmodule AppWeb.CoreComponents do
   defp currencies_options do
     [[key: "€", value: "EUR"]]
   end
+
+  defp input_helper_or_errors(%{errors: [], helper: _} = assigns), do: ~H|<%= @helper %>|
+  defp input_helper_or_errors(%{errors: []} = _assigns), do: nil
+  defp input_helper_or_errors(assigns), do: ~H|<.error :for={msg <- @errors}><%= msg %></.error>|
 
   @doc """
   Generates a generic error message.
