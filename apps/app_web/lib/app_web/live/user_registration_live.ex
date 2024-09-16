@@ -9,49 +9,46 @@ defmodule AppWeb.UserRegistrationLive do
     <.form
       for={@form}
       id="registration_form"
-      class="px-4"
       phx-submit="save"
       phx-change="validate"
       phx-trigger-action={@trigger_submit}
       action={~p"/users/log_in?_action=registered"}
       method="post"
+      class="space-y-2"
     >
       <.input
         field={@form[:email]}
         type="email"
-        label={gettext("Email address")}
-        class="w-full"
+        label={gettext("Email")}
+        helper={gettext("This email will be your identifier")}
         required
+        phx-debounce
         autocomplete="email"
-      />
-
-      <.input
-        field={@form[:display_name]}
-        type="text"
-        label={gettext("Display name")}
-        class="w-full"
-        required
-        autocomplete="nickname"
       />
 
       <.input
         field={@form[:password]}
         type="password"
         label={gettext("Password")}
-        class="w-full"
+        pattern=".{12,}"
+        helper={gettext("Your password must be at least 12 characters long")}
         required
+        phx-debounce
         autocomplete="new-password"
       />
 
-      <div class="text-right mb-4">
-        <.link navigate={~p"/users/log_in"} class="text-action">
-          <%= gettext("Already have an account?") %>
-        </.link>
-      </div>
+      <.button_group>
+        <.button kind={:primary}>
+          <%= gettext("Register") %>
+        </.button>
+      </.button_group>
 
-      <.button color={:cta} class="w-full" phx-disable-with={gettext("Creating account...")}>
-        <%= gettext("Register") %>
-      </.button>
+      <div class="text-right">
+        <%= gettext("Already have an account?") %>
+        <.anchor navigate={~p"/users/log_in"}>
+          <%= gettext("Log in here.") %>
+        </.anchor>
+      </div>
     </.form>
     """
   end
@@ -78,16 +75,23 @@ defmodule AppWeb.UserRegistrationLive do
           )
 
         changeset = Accounts.change_user_registration(user)
-        {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
+        socket = socket |> assign(trigger_submit: true) |> assign_form(changeset)
+        {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, socket |> assign_form(changeset)}
+        socket = assign_form(socket, changeset)
+        {:noreply, socket}
     end
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do
-    changeset = Accounts.change_user_registration(%User{}, user_params)
-    {:noreply, assign_form(socket, Map.put(changeset, :action, :validate))}
+    changeset =
+      %User{}
+      |> Accounts.change_user_registration(user_params)
+      |> Map.put(:action, :validate)
+
+    socket = assign_form(socket, changeset)
+    {:noreply, socket}
   end
 
   defp assign_form(socket, changeset) do
