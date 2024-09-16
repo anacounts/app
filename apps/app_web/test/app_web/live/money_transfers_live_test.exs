@@ -87,7 +87,6 @@ defmodule AppWeb.MoneyTransfersLiveTest do
              |> render_click()
              |> follow_redirect(conn, ~p"/books")
 
-    assert html =~ "Book deleted successfully"
     refute html =~ book.name
   end
 

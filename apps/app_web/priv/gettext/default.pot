@@ -33,10 +33,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Alphabetically"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr ""
 
@@ -123,10 +119,6 @@ msgid "Close"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr ""
 
@@ -156,10 +148,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Create manually"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Create your first book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -419,27 +407,7 @@ msgid "Not %{user_name}? Disconnect"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Not owned by me"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Oldest"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Open"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Open and closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Owned by anyone"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Owned by me"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -480,10 +448,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -540,10 +504,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Settings"
 msgstr ""
 
 #, elixir-autogen, elixir-format

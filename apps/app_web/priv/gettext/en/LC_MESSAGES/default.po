@@ -34,10 +34,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "A link to confirm your email change has been sent to the new address."
 
 #, elixir-autogen, elixir-format
-msgid "Alphabetically"
-msgstr "Alphabetically"
-
-#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -124,10 +120,6 @@ msgid "Close"
 msgstr "Close"
 
 #, elixir-autogen, elixir-format
-msgid "Closed"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirm new password"
 
@@ -158,10 +150,6 @@ msgstr "Create an account"
 #, elixir-autogen, elixir-format
 msgid "Create manually"
 msgstr "Create manually"
-
-#, elixir-autogen, elixir-format
-msgid "Create your first book"
-msgstr "Create your first book"
 
 #, elixir-autogen, elixir-format
 msgid "Created on %{date}"
@@ -420,28 +408,8 @@ msgid "Not %{user_name}? Disconnect"
 msgstr "Not %{user_name}? Disconnect"
 
 #, elixir-autogen, elixir-format
-msgid "Not owned by me"
-msgstr "Not owned by me"
-
-#, elixir-autogen, elixir-format
 msgid "Oldest"
 msgstr "Oldest"
-
-#, elixir-autogen, elixir-format
-msgid "Open"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format
-msgid "Open and closed"
-msgstr "Open and closed"
-
-#, elixir-autogen, elixir-format
-msgid "Owned by anyone"
-msgstr "Owned by anyone"
-
-#, elixir-autogen, elixir-format
-msgid "Owned by me"
-msgstr "Owned by me"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -482,10 +450,6 @@ msgstr "Payments"
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr "Please enter a new password for your account"
-
-#, elixir-autogen, elixir-format
-msgid "Profile"
-msgstr "Profile"
 
 #, elixir-autogen, elixir-format
 msgid "Received by"
@@ -542,10 +506,6 @@ msgstr "Send confirmation instructions for your account"
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
 msgstr "Send instructions"
-
-#, elixir-autogen, elixir-format
-msgid "Settings"
-msgstr "Settings"
 
 #, elixir-autogen, elixir-format
 msgid "Settle up"

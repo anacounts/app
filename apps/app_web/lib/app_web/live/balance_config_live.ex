@@ -1,3 +1,4 @@
+# TODO(v2,end) Remove this file
 defmodule AppWeb.BalanceConfigLive do
   use AppWeb, :live_view
 

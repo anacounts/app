@@ -34,10 +34,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Un lien de confirmation a été envoyé à votre nouvelle adresse."
 
 #, elixir-autogen, elixir-format
-msgid "Alphabetically"
-msgstr "Order alphabétique"
-
-#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
@@ -124,10 +120,6 @@ msgid "Close"
 msgstr "Fermer"
 
 #, elixir-autogen, elixir-format
-msgid "Closed"
-msgstr "Clôt"
-
-#, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
@@ -158,10 +150,6 @@ msgstr "Créer un compte"
 #, elixir-autogen, elixir-format
 msgid "Create manually"
 msgstr "Créer manuellement"
-
-#, elixir-autogen, elixir-format
-msgid "Create your first book"
-msgstr "Créer mon premier livret"
 
 #, elixir-autogen, elixir-format
 msgid "Created on %{date}"
@@ -420,28 +408,8 @@ msgid "Not %{user_name}? Disconnect"
 msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
 
 #, elixir-autogen, elixir-format
-msgid "Not owned by me"
-msgstr "Ne m'appartenant pas"
-
-#, elixir-autogen, elixir-format
 msgid "Oldest"
 msgstr "Plus ancien"
-
-#, elixir-autogen, elixir-format
-msgid "Open"
-msgstr "Ouvert"
-
-#, elixir-autogen, elixir-format
-msgid "Open and closed"
-msgstr "Ouvert et clôt"
-
-#, elixir-autogen, elixir-format
-msgid "Owned by anyone"
-msgstr "Tous"
-
-#, elixir-autogen, elixir-format
-msgid "Owned by me"
-msgstr "M'appartenant"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -482,10 +450,6 @@ msgstr "Paiements"
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr "Entrez un nouveau mot de passe pour votre compte"
-
-#, elixir-autogen, elixir-format
-msgid "Profile"
-msgstr "Profil"
 
 #, elixir-autogen, elixir-format
 msgid "Received by"
@@ -542,10 +506,6 @@ msgstr "Envoyer les instructions de confirmation"
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
 msgstr "Envoyer les instructions"
-
-#, elixir-autogen, elixir-format
-msgid "Settings"
-msgstr "Paramètres"
 
 #, elixir-autogen, elixir-format
 msgid "Settle up"
