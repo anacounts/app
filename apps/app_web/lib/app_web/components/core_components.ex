@@ -60,7 +60,7 @@ defmodule AppWeb.CoreComponents do
   They should take the full width of the screen and should be placed at the beginning
   of the page so that they are visible to the user as soon as the page loads.
   """
-  attr :kind, :atom, values: [:warning, :error]
+  attr :kind, :atom, values: [:info, :warning, :error]
 
   attr :rest, :global
 
@@ -77,9 +77,11 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  defp alert_kind_class(:info), do: "alert--info"
   defp alert_kind_class(:warning), do: "alert--warning"
   defp alert_kind_class(:error), do: "alert--error"
 
+  defp alert_icon(%{kind: :info} = assigns), do: ~H"<.icon name={:information_circle} />"
   defp alert_icon(%{kind: :warning} = assigns), do: ~H"<.icon name={:exclamation_triangle} />"
   defp alert_icon(%{kind: :error} = assigns), do: ~H"<.icon name={:exclamation_circle} />"
 
@@ -87,7 +89,7 @@ defmodule AppWeb.CoreComponents do
   Alert flashes display `alert/1` components based on flash messages.
   """
   attr :flash, :map, doc: "The @flash assign"
-  attr :kind, :atom, values: [:error]
+  attr :kind, :atom, values: [:info, :error]
 
   attr :rest, :global
 

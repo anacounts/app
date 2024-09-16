@@ -27,6 +27,16 @@ defmodule Storybook.CoreComponents.Alert do
           <.icon name={:chevron_right} />
           """
         ]
+      },
+      %Variation{
+        id: :info,
+        attributes: %{
+          kind: :info,
+          style: "width: 20rem"
+        },
+        slots: [
+          ~s|If your email is in our system, you will receive instructions to reset your password shortly.|
+        ]
       }
     ]
   end

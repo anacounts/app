@@ -23,7 +23,7 @@ defmodule AppWeb.UserResetPasswordLiveTest do
 
       assert html =~ "Reset your password"
       assert html =~ "Reset password"
-      assert html =~ "Sign in to your account"
+      assert html =~ "Go back to sign in page."
     end
 
     test "does not render reset password with invalid token", %{conn: conn} do
@@ -95,7 +95,7 @@ defmodule AppWeb.UserResetPasswordLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|main a:fl-contains("Sign in to your account")|)
+        |> element(~s|main a:fl-contains("Go back to sign in page.")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 

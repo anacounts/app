@@ -228,10 +228,6 @@ msgid "Email"
 msgstr "Email"
 
 #, elixir-autogen, elixir-format
-msgid "Email address"
-msgstr "Adresse email"
-
-#, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr "Le lien de changement d'email est invalide ou a expiré."
 
@@ -262,6 +258,10 @@ msgstr "Forgot your password?"
 #, elixir-autogen, elixir-format
 msgid "Go back"
 msgstr "Revenir en arrière"
+
+#, elixir-autogen, elixir-format
+msgid "Go back to sign in page."
+msgstr "Revenez à la page de connexion."
 
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars"
@@ -420,6 +420,10 @@ msgid "Nickname"
 msgstr "Surnom"
 
 #, elixir-autogen, elixir-format
+msgid "Not %{email}?"
+msgstr "Vous n'êtes pas %{email} ?"
+
+#, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
 msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
 
@@ -438,10 +442,6 @@ msgstr "Ouvert"
 #, elixir-autogen, elixir-format
 msgid "Open and closed"
 msgstr "Ouvert et clôt"
-
-#, elixir-autogen, elixir-format
-msgid "Or continue to"
-msgstr "Ou aller vers"
 
 #, elixir-autogen, elixir-format
 msgid "Owned by anyone"
@@ -536,10 +536,6 @@ msgid "Reset your password"
 msgstr "Réinitialiser mon mot de passe"
 
 #, elixir-autogen, elixir-format
-msgid "Resetting..."
-msgstr "Réinitialisation..."
-
-#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -553,10 +549,6 @@ msgstr "Envoyer les instructions de confirmation"
 
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
-msgstr "Envoyer les instructions"
-
-#, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
 msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format

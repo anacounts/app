@@ -7,6 +7,7 @@
   <main class="container w-full">
     <h2 class="title-2"><%= @page_title %></h2>
     <.alert_flash flash={@flash} kind={:error} class="mb-2" />
+    <.alert_flash flash={@flash} kind={:info} class="mb-2" />
     <%= @inner_content %>
   </main>
 </div>
