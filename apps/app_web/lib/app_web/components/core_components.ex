@@ -110,7 +110,7 @@ defmodule AppWeb.CoreComponents do
   def anchor(assigns) do
     assigns = prepend_class(assigns, "anchor")
 
-    link(assigns)
+    ~H|<.link {@rest}><%= render_slot(@inner_block) %></.link>|
   end
 
   ## Accordion
