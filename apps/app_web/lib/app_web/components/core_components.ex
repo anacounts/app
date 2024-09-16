@@ -346,6 +346,19 @@ defmodule AppWeb.CoreComponents do
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
 
+  @doc """
+  Button groups are used to group buttons together.
+  """
+  attr :rest, :global
+
+  slot :inner_block
+
+  def button_group(assigns) do
+    assigns = prepend_class(assigns, "button-group")
+
+    ~H|<div {@rest}><%= render_slot(@inner_block) %></div>|
+  end
+
   ## Card
 
   @doc """

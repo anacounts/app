@@ -28,11 +28,11 @@ defmodule AppWeb.UserLoginLive do
         </.anchor>
       </div>
 
-      <div class="text-right">
+      <.button_group>
         <.button kind={:primary}>
           <%= gettext("Sign in") %>
         </.button>
-      </div>
+      </.button_group>
     </.form>
 
     <.divider class="my-4" />
@@ -46,12 +46,12 @@ defmodule AppWeb.UserLoginLive do
       ) %>
     </p>
 
-    <div class="text-right">
+    <.button_group>
       <.button kind={:secondary} navigate={~p"/users/register"}>
         <.icon name={:envelope} />
         <%= gettext("Create an account") %>
       </.button>
-    </div>
+    </.button_group>
     """
   end
 
