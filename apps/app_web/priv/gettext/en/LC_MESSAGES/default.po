@@ -260,6 +260,10 @@ msgid "Go back"
 msgstr "Go back"
 
 #, elixir-autogen, elixir-format
+msgid "Go back to sign in page."
+msgstr "Go back to sign in page."
+
+#, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars"
 msgstr "Gravatar is a service providing globally unique avatars"
 
@@ -416,6 +420,10 @@ msgid "Nickname"
 msgstr "Nickname"
 
 #, elixir-autogen, elixir-format
+msgid "Not %{email}?"
+msgstr "Not %{email}?"
+
+#, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
 msgstr "Not %{user_name}? Disconnect"
 
@@ -434,10 +442,6 @@ msgstr "Open"
 #, elixir-autogen, elixir-format
 msgid "Open and closed"
 msgstr "Open and closed"
-
-#, elixir-autogen, elixir-format
-msgid "Or continue to"
-msgstr "Or continue to"
 
 #, elixir-autogen, elixir-format
 msgid "Owned by anyone"
@@ -530,10 +534,6 @@ msgstr "Reset password link is invalid or it has expired."
 #, elixir-autogen, elixir-format
 msgid "Reset your password"
 msgstr "Reset your password"
-
-#, elixir-autogen, elixir-format
-msgid "Resetting..."
-msgstr "Resetting..."
 
 #, elixir-autogen, elixir-format
 msgid "Save"
