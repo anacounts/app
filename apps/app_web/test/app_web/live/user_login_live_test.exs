@@ -8,9 +8,9 @@ defmodule AppWeb.UserLoginLiveTest do
     test "renders log in page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/log_in")
 
-      assert html =~ "Sign in"
-      assert html =~ "Don&#39;t have an account?"
+      assert html =~ "Sign in to your account"
       assert html =~ "Forgot your password?"
+      assert html =~ "Create an account"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -63,7 +63,7 @@ defmodule AppWeb.UserLoginLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|a:fl-contains("Create one here")|)
+        |> element(~s|a:fl-contains("Create an account")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 
