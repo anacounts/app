@@ -228,10 +228,6 @@ msgid "Email"
 msgstr "Email"
 
 #, elixir-autogen, elixir-format
-msgid "Email address"
-msgstr "Adresse email"
-
-#, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr "Le lien de changement d'email est invalide ou a expiré."
 
@@ -553,10 +549,6 @@ msgstr "Envoyer les instructions de confirmation"
 
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
-msgstr "Envoyer les instructions"
-
-#, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
 msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format
