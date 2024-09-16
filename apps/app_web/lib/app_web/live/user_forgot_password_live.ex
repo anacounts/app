@@ -5,43 +5,32 @@ defmodule AppWeb.UserForgotPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <p class="mx-4 mb-4">
-      <%= gettext(
-        "Enter your user account's email address and we will send you a password reset link."
-      ) %>
-    </p>
+    <.form for={@form} id="reset_password_form" phx-submit="send_email" class="space-y-2">
+      <p class="mb-4">
+        <%= gettext(
+          "Enter your user account's email address and we will send you a password reset link."
+        ) %>
+      </p>
 
-    <.form for={@form} id="reset_password_form" class="mx-4" phx-submit="send_email">
       <.input
         field={@form[:email]}
         type="email"
-        label={gettext("Email address")}
-        class="w-full"
+        label={gettext("Email")}
         autocomplete="email"
         required
       />
 
-      <.button color={:cta} class="w-full">
-        <%= gettext("Send password reset instructions") %>
-      </.button>
+      <.button_group>
+        <.button kind={:primary}>
+          <%= gettext("Send instructions") %>
+        </.button>
+      </.button_group>
     </.form>
 
-    <div class="mt-8
-                border-t border-gray-50
-                text-center
-                text-gray-50 font-bold">
-      <span class="relative bottom-3 p-3 bg-white">
-        <%= gettext("Or continue to") %>
-      </span>
-    </div>
-
-    <div class="flex justify-between">
-      <.link navigate={~p"/users/log_in"} class="text-action">
+    <div class="text-right">
+      <.anchor navigate={~p"/users/log_in"}>
         <%= gettext("Sign in to your account") %>
-      </.link>
-      <.link navigate={~p"/users/register"} class="text-action">
-        <%= gettext("Create an account") %>
-      </.link>
+      </.anchor>
     </div>
     """
   end
@@ -53,7 +42,7 @@ defmodule AppWeb.UserForgotPasswordLive do
         page_title: gettext("Forgot your password?")
       )
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket, temporary_assigns: [form: nil, page_title: nil]}
   end
 
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
@@ -66,12 +55,15 @@ defmodule AppWeb.UserForgotPasswordLive do
 
     info =
       gettext(
-        "If your email is in our system, you will receive instructions to reset your password shortly."
+        "If your email is in our system, you will receive instructions" <>
+          " to reset your password shortly."
       )
 
-    {:noreply,
-     socket
-     |> put_flash(:info, info)
-     |> redirect(to: ~p"/")}
+    socket =
+      socket
+      |> put_flash(:info, info)
+      |> redirect(to: ~p"/users/log_in")
+
+    {:noreply, socket}
   end
 end

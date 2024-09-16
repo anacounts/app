@@ -8,12 +8,14 @@ defmodule AppWeb.UserResetPasswordLive do
     <.form
       for={@form}
       id="reset_password_form"
-      class="px-4"
       phx-submit="reset_password"
       phx-change="validate"
+      class="space-y-2"
     >
-      <p><%= gettext("Please enter a new password for your account") %></p>
-      <p class="mb-4 font-bold"><%= @user.email %></p>
+      <p class="mb-4">
+        <%= gettext("Please enter a new password for your account") %><br />
+        <span class="label"><%= @user.email %></span>
+      </p>
 
       <.input
         field={@form[:password]}
@@ -33,25 +35,19 @@ defmodule AppWeb.UserResetPasswordLive do
         autocomplete="new-password"
       />
 
-      <div>
-        <.button color={:cta} class="w-full" phx-disable-with={gettext("Resetting...")}>
+      <.button_group>
+        <.button kind={:primary}>
           <%= gettext("Reset password") %>
         </.button>
-      </div>
+      </.button_group>
     </.form>
 
-    <div class="mt-8
-                border-t border-gray-50
-                text-center
-                text-gray-50 font-bold">
-      <span class="relative bottom-3 p-3 bg-white">
-        <%= gettext("Or continue to") %>
-      </span>
+    <div class="text-right">
+      <%= gettext("Not %{email}?", email: @user.email) %>
+      <.anchor navigate={~p"/users/log_in"}>
+        <%= gettext("Go back to sign in page.") %>
+      </.anchor>
     </div>
-
-    <.link navigate={~p"/users/log_in"} class="text-action">
-      <%= gettext("Sign in to your account") %>
-    </.link>
     """
   end
 
@@ -86,13 +82,18 @@ defmodule AppWeb.UserResetPasswordLive do
          |> redirect(to: ~p"/users/log_in")}
 
       {:error, changeset} ->
-        {:noreply, assign_form(socket, Map.put(changeset, :action, :insert))}
+        changeset = Map.put(changeset, :action, :insert)
+        {:noreply, assign_form(socket, changeset)}
     end
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do
-    changeset = Accounts.change_user_password(socket.assigns.user, user_params)
-    {:noreply, assign_form(socket, Map.put(changeset, :action, :validate))}
+    changeset =
+      socket.assigns.user
+      |> Accounts.change_user_password(user_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign_form(socket, changeset)}
   end
 
   defp assign_user_and_token(socket, %{"token" => token}) do

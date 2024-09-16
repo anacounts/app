@@ -227,10 +227,6 @@ msgid "Email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Email address"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr ""
 
@@ -260,6 +256,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Go back"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Go back to sign in page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -419,6 +419,10 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Not %{email}?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Not %{user_name}? Disconnect"
 msgstr ""
 
@@ -436,10 +440,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Open and closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Or continue to"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -535,10 +535,6 @@ msgid "Reset your password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Resetting..."
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
 
@@ -552,10 +548,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Send instructions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
 msgstr ""
 
 #, elixir-autogen, elixir-format

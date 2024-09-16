@@ -5,6 +5,10 @@
            rounded-container;
   }
 
+  .alert--info {
+    @apply bg-blue-500 text-white;
+  }
+
   .alert--warning {
     @apply bg-amber-500;
   }
