@@ -115,54 +115,6 @@ defmodule AppWeb.CoreComponents do
     ~H|<.link {@rest}><%= render_slot(@inner_block) %></.link>|
   end
 
-  ## Accordion
-
-  # TODO(v2,end) drop `accordion/1` component
-
-  @doc """
-  Generates an accordion.
-
-  ## Slots
-
-  - item: The items of the accordion.
-    - title: The title of the item
-
-    - default slot: The content of the item
-
-  ## Examples
-
-      <.accordion title="Title">
-        <:item title="Item 1" open>
-          <p>Item 1 content</p>
-        </:item>
-        <:item title="Item 2">
-          <p>Item 2 content</p>
-        </:item>
-      </.accordion>
-
-  """
-  def accordion(assigns) do
-    assigns =
-      assigns
-      |> assign(:extra, assigns_to_attributes(assigns, [:class, :item]))
-
-    ~H"""
-    <div class={["accordion", assigns[:class]]} {@extra}>
-      <details
-        :for={item <- @item}
-        class={["accordion__item", item[:class]]}
-        {assigns_to_attributes(item, [:class, :title])}
-      >
-        <summary class="accordion__header">
-          <strong class="accordion__title"><%= item.title %></strong>
-          <.icon class="accordion__icon" name="expand-more" />
-        </summary>
-        <%= render_slot(item) %>
-      </details>
-    </div>
-    """
-  end
-
   ## Avatar
 
   @doc """
@@ -258,7 +210,7 @@ defmodule AppWeb.CoreComponents do
   def breadcrumb_item(%{navigate: _} = assigns) do
     ~H"""
     <.icon name={:chevron_right} />
-    <.link class="breadcrumb__item">
+    <.link class="breadcrumb__item" navigate={@navigate}>
       <%= render_slot(@inner_block) %>
     </.link>
     """
@@ -1166,6 +1118,12 @@ defmodule AppWeb.CoreComponents do
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
+  end
+
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <input type="hidden" name={@name} id={@id || @name} value={@value} {@rest} />
+    """
   end
 
   def input(%{type: "checkbox", value: value} = assigns) do

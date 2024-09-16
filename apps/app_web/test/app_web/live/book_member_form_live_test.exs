@@ -15,13 +15,11 @@ defmodule AppWeb.BookMemberFormLiveTest do
     test "show the member new page", %{conn: conn, book: book} do
       {:ok, live, _html} = live(conn, ~p"/books/#{book}/members/new")
 
-      assert {:ok, _live, html} =
+      assert {:ok, _live, _html} =
                live
                |> form("form", book_member: %{nickname: "Nickname"})
                |> render_submit()
                |> follow_redirect(conn)
-
-      assert html =~ "Member created successfully"
 
       assert member = Repo.get_by!(BookMember, book_id: book.id, nickname: "Nickname")
       assert member.book_id == book.id
@@ -32,13 +30,11 @@ defmodule AppWeb.BookMemberFormLiveTest do
     test "shows the member edit page", %{conn: conn, book: book, member: member} do
       {:ok, live, _html} = live(conn, ~p"/books/#{book}/members/#{member}/edit")
 
-      {:ok, _live, html} =
+      {:ok, _live, _html} =
         live
         |> form("form", book_member: %{nickname: "Updated Nickname"})
         |> render_submit()
         |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
-
-      assert html =~ "Member updated successfully"
 
       member = Repo.reload(member)
       assert member.nickname == "Updated Nickname"

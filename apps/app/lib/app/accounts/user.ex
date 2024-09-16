@@ -180,11 +180,6 @@ defmodule App.Accounts.User do
     end
   end
 
-  # TODO(v2,end) remove this function
-  def display_name_changeset(user, attrs) do
-    cast(user, attrs, [])
-  end
-
   @doc """
   A user changeset for changing the user balance config.
   """

@@ -1,0 +1,6 @@
+@layer components {
+  .app-page {
+    @apply max-w-lg
+           mx-auto p-4;
+  }
+}
