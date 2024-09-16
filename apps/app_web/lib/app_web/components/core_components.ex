@@ -1168,6 +1168,12 @@ defmodule AppWeb.CoreComponents do
     |> input()
   end
 
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <input type="hidden" name={@name} id={@id || @name} value={@value} {@rest} />
+    """
+  end
+
   def input(%{type: "checkbox", value: value} = assigns) do
     assigns =
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
