@@ -4,7 +4,13 @@ defmodule Storybook.CoreComponents.Card do
   def function, do: &AppWeb.CoreComponents.card/1
 
   def container, do: {:div, "data-background": "theme"}
-  def imports, do: [{AppWeb.CoreComponents, icon: 1}]
+
+  def imports do
+    [
+      {AppWeb.CoreComponents, icon: 1},
+      {AppWeb.TransfersComponents, transfer_tile: 1}
+    ]
+  end
 
   def variations do
     [
@@ -71,24 +77,17 @@ defmodule Storybook.CoreComponents.Card do
         attributes: %{
           style: "width: 20rem"
         },
-        # TODO(v2,transfer tile) replace by actual transfer tile component
         slots: [
           ~s|<:title>Latest transfers <.icon name={:chevron_right} /></:title>|,
           """
-          <div class="mb-2 p-2 rounded-component bg-red-100 text-red-500 flex items-center gap-2">
-            <.icon name={:minus} />
-            <span class="label text-left grow">Housing</span>
-            <span class="label">-33.33€</span>
-          </div>
-          <div class="mb-2 p-2 rounded-component bg-neutral-100 text-neutral-500 flex items-center gap-2">
-            <.icon name={:arrow_right} />
-            <span class="label text-left grow">Reimbursement</span>
-            <span class="label">+33.33€</span>
-          </div>
-          <div class="mb-2 p-2 rounded-component bg-green-100 text-green-500 flex items-center gap-2">
-            <.icon name={:plus} />
-            <span class="label text-left grow">Overcharge</span>
-            <span class="label">+33.33€</span>
+          <div class="space-y-2">
+            <%= for transfer <- [
+              %App.Transfers.MoneyTransfer{type: :payment, label: "Housing", amount: Money.new(:EUR, "333.33")},
+              %App.Transfers.MoneyTransfer{type: :income, label: "Overcharge", amount: Money.new(:EUR, "333.33")},
+              %App.Transfers.MoneyTransfer{type: :reimbursement, label: "Reimbursement", amount: Money.new(:EUR, "333.33")}
+            ] do %>
+              <.transfer_tile transfer={transfer} />
+            <% end %>
           </div>
           """
         ]
