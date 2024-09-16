@@ -56,7 +56,7 @@ defmodule AppWeb.Router do
   scope "/", AppWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live_session :require_authenticated_user,
+    live_session :user_settings,
       on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
@@ -64,8 +64,8 @@ defmodule AppWeb.Router do
       live "/users/settings/balance", BalanceConfigLive, :edit
     end
 
-    live_session :current_user,
-      on_mount: [{AppWeb.UserAuth, :mount_current_user}],
+    live_session :user_confirmation,
+      on_mount: [{AppWeb.UserAuth, :ensure_authenticated}],
       layout: {AppWeb.Layouts, :auth} do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
