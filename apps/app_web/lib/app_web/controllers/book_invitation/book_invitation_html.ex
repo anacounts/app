@@ -1,5 +1,5 @@
 defmodule AppWeb.BookInvitationHTML do
   use AppWeb, :html
 
-  embed_templates "book_invitation/*"
+  embed_templates "book_invitation_html/*"
 end

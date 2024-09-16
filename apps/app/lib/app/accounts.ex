@@ -308,9 +308,10 @@ defmodule App.Accounts do
   If the token matches, the user account is marked as confirmed
   and the token is deleted.
   """
-  def confirm_user(token) do
+  @spec confirm_user(User.t(), String.t()) :: {:ok, User.t()} | :error
+  def confirm_user(%User{id: id} = _user, token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
-         %User{} = user <- Repo.one(query),
+         %User{id: ^id} = user <- Repo.one(query),
          {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user)) do
       {:ok, user}
     else
