@@ -83,6 +83,21 @@ defmodule AppWeb.CoreComponents do
   defp alert_icon(%{kind: :warning} = assigns), do: ~H"<.icon name={:exclamation_triangle} />"
   defp alert_icon(%{kind: :error} = assigns), do: ~H"<.icon name={:exclamation_circle} />"
 
+  @doc """
+  Alert flashes display `alert/1` components based on flash messages.
+  """
+  attr :flash, :map, doc: "The @flash assign"
+  attr :kind, :atom, values: [:error]
+
+  attr :rest, :global
+
+  def alert_flash(assigns) do
+    assigns =
+      assign(assigns, :message, Phoenix.Flash.get(assigns.flash, assigns.kind))
+
+    ~H|<.alert :if={@message} kind={@kind} {@rest}><%= @message %></.alert>|
+  end
+
   ## Anchor
 
   @doc """
