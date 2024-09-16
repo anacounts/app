@@ -132,6 +132,10 @@ module.exports = {
     ),
   ],
 
+  corePlugins: {
+    container: false,
+  },
+
   // Instruction required for `:phoenix_storybook`
   important: ".app-web",
 };

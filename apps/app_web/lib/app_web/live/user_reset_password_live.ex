@@ -67,9 +67,12 @@ defmodule AppWeb.UserResetPasswordLive do
           %{}
       end
 
-    {:ok,
-     socket |> assign(page_title: gettext("Reset your password")) |> assign_form(form_source),
-     layout: {AppWeb.Layouts, :auth}, temporary_assigns: [form: nil, page_title: nil]}
+    socket =
+      socket
+      |> assign(page_title: gettext("Reset your password"))
+      |> assign_form(form_source)
+
+    {:ok, socket, temporary_assigns: [form: nil, page_title: nil]}
   end
 
   # Do not log in the user after reset password to avoid a

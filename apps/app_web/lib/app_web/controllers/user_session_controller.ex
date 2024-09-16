@@ -5,26 +5,24 @@ defmodule AppWeb.UserSessionController do
   alias AppWeb.UserAuth
 
   def create(conn, %{"_action" => "registered"} = params) do
-    create(conn, params, gettext("Account created successfully!"))
+    create_user_session(conn, params)
   end
 
   def create(conn, %{"_action" => "password_updated"} = params) do
     conn
     |> put_session(:user_return_to, ~p"/users/settings")
-    |> create(params, gettext("Password updated successfully!"))
+    |> create_user_session(params)
   end
 
   def create(conn, params) do
-    create(conn, params, gettext("Welcome back!"))
+    create_user_session(conn, params)
   end
 
-  defp create(conn, %{"user" => user_params}, info) do
+  defp create_user_session(conn, %{"user" => user_params}) do
     %{"email" => email, "password" => password} = user_params
 
     if user = Accounts.get_user_by_email_and_password(email, password) do
-      conn
-      |> put_flash(:info, info)
-      |> UserAuth.log_in_user(user, user_params)
+      UserAuth.log_in_user(conn, user, user_params)
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
       conn
@@ -35,8 +33,6 @@ defmodule AppWeb.UserSessionController do
   end
 
   def delete(conn, _params) do
-    conn
-    |> put_flash(:info, gettext("Logged out successfully."))
-    |> UserAuth.log_out_user()
+    UserAuth.log_out_user(conn)
   end
 end

@@ -42,7 +42,8 @@ defmodule AppWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{AppWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      on_mount: [{AppWeb.UserAuth, :redirect_if_user_is_authenticated}],
+      layout: {AppWeb.Layouts, :auth} do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
@@ -70,7 +71,8 @@ defmodule AppWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{AppWeb.UserAuth, :mount_current_user}] do
+      on_mount: [{AppWeb.UserAuth, :mount_current_user}],
+      layout: {AppWeb.Layouts, :auth} do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end

@@ -83,6 +83,21 @@ defmodule AppWeb.CoreComponents do
   defp alert_icon(%{kind: :warning} = assigns), do: ~H"<.icon name={:exclamation_triangle} />"
   defp alert_icon(%{kind: :error} = assigns), do: ~H"<.icon name={:exclamation_circle} />"
 
+  @doc """
+  Alert flashes display `alert/1` components based on flash messages.
+  """
+  attr :flash, :map, doc: "The @flash assign"
+  attr :kind, :atom, values: [:error]
+
+  attr :rest, :global
+
+  def alert_flash(assigns) do
+    assigns =
+      assign(assigns, :message, Phoenix.Flash.get(assigns.flash, assigns.kind))
+
+    ~H|<.alert :if={@message} kind={@kind} {@rest}><%= @message %></.alert>|
+  end
+
   ## Anchor
 
   @doc """
@@ -95,7 +110,7 @@ defmodule AppWeb.CoreComponents do
   def anchor(assigns) do
     assigns = prepend_class(assigns, "anchor")
 
-    link(assigns)
+    ~H|<.link {@rest}><%= render_slot(@inner_block) %></.link>|
   end
 
   ## Accordion
@@ -330,6 +345,19 @@ defmodule AppWeb.CoreComponents do
   defp button_kind_class(:primary), do: "button--primary"
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
+
+  @doc """
+  Button groups are used to group buttons together.
+  """
+  attr :rest, :global
+
+  slot :inner_block
+
+  def button_group(assigns) do
+    assigns = prepend_class(assigns, "button-group")
+
+    ~H|<div {@rest}><%= render_slot(@inner_block) %></div>|
+  end
 
   ## Card
 
@@ -1041,7 +1069,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <div class={["text-input", text_input_error_class(assigns.error), @container_class]}>
       <%= text_input_prefix(assigns) %>
-      <input {@rest} />
+      <input type={@type} {@rest} />
       <%= text_input_suffix(assigns) %>
     </div>
     """
@@ -1142,12 +1170,12 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} class="form-control-container">
       <input type="hidden" name={@name} value="false" />
       <.checkbox id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
-      <%= @label %>
+      <label for={@id || @name}><%= @label %></label>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    </div>
     """
   end
 
@@ -1236,8 +1264,8 @@ defmodule AppWeb.CoreComponents do
 
   def input(assigns) do
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
       <.text_input
         type={@type}
         name={@name}
@@ -1246,7 +1274,7 @@ defmodule AppWeb.CoreComponents do
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    </div>
     """
   end
 
