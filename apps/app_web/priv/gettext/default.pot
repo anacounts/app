@@ -143,7 +143,7 @@ msgid "Confirm your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Confirming..."
+msgid "Confirmation instructions were sent when you created your account. If you did not receive them, check out your spam, or send the instructions again."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -283,7 +283,7 @@ msgid "How to balance?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgid "If your email has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -523,10 +523,6 @@ msgid "Reopen"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Resend confirmation instructions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Reset password"
 msgstr ""
 
@@ -551,11 +547,15 @@ msgid "Saving..."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
+msgid "Send confirmation instructions for your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Sending..."
+msgid "Send instructions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Send password reset instructions"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -611,6 +611,10 @@ msgid "The transactions are balanced already!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This confirmation link is invalid or it has expired."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This email will be your identifier"
 msgstr ""
 
@@ -636,14 +640,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "User confirmation link is invalid or it has expired."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "User confirmed successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -680,6 +676,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your account was confirmed successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
