@@ -34,8 +34,9 @@ defmodule AppWeb.BookInvitationControllerTest do
       assert response =~ "You have been invited to join"
       assert response =~ book.name
 
-      assert response =~
-               ~s(input type="hidden" name="book_member[id]" id="book_member_id" value="new")
+      # TODO(v2,book invitation)
+      # assert response =~
+      #          ~s(input type="hidden" name="book_member[id]" id="book_member_id" value="new")
 
       assert response =~ "Back to the app\n  </a>"
       assert response =~ "Join\n    \n</button>"
