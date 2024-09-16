@@ -15,7 +15,7 @@ defmodule Storybook.CoreComponents.Tile do
         },
         slots: [
           """
-          <span class="label leading-none line-clamp-2">Milano</span>
+          <span class="label grow leading-none line-clamp-2">Milano</span>
           <.button kind={:ghost}>
             Open
             <.icon name={:chevron_right} />
@@ -48,7 +48,7 @@ defmodule Storybook.CoreComponents.Tile do
       %Variation{
         id: :new_transfer,
         attributes: %{
-          color: :primary,
+          kind: :primary,
           style: "width: 20rem"
         },
         slots: [

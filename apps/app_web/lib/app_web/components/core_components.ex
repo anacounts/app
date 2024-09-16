@@ -1049,7 +1049,7 @@ defmodule AppWeb.CoreComponents do
   @doc """
   Tiles are interactive elements that are mostly used to navigate to different pages.
   """
-  attr :color, :atom,
+  attr :kind, :atom,
     values: [:primary, :secondary],
     default: :secondary
 
@@ -1058,7 +1058,7 @@ defmodule AppWeb.CoreComponents do
   slot :inner_block, required: true
 
   def tile(assigns) do
-    assigns = prepend_class(assigns, ["tile", tile_color_class(assigns.color)])
+    assigns = prepend_class(assigns, ["tile", tile_kind_class(assigns.kind)])
 
     ~H"""
     <div {@rest}>
@@ -1067,8 +1067,8 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp tile_color_class(:primary), do: "tile--primary"
-  defp tile_color_class(:secondary), do: "tile--secondary"
+  defp tile_kind_class(:primary), do: "tile--primary"
+  defp tile_kind_class(:secondary), do: "tile--secondary"
 
   @doc """
   Renders an input with label and error messages.
