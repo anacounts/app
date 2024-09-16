@@ -6,4 +6,4 @@ runs:
   steps:
     - name: Run tests
       shell: bash
-      run: mix test --trace --warnings-as-errors
+      run: mix test --warnings-as-errors

@@ -33,10 +33,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Account created successfully!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Alphabetically"
 msgstr ""
 
@@ -53,6 +49,10 @@ msgid "An error occured while balancing the transactions:"
 msgid_plural "Errors occured while balancing the transactions:"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
@@ -167,10 +167,6 @@ msgid "Create manually"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Create one here"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Create your first book"
 msgstr ""
 
@@ -211,10 +207,6 @@ msgid "Divided"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Don't have an account?"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
 
@@ -236,6 +228,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -356,10 +352,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Last year incomes"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Logged out successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -491,10 +483,6 @@ msgid "Password reset successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Password updated successfully!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr ""
 
@@ -599,10 +587,6 @@ msgid "Sign in to your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Signing in..."
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Someone new"
 msgstr ""
 
@@ -676,10 +660,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Weighted"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Welcome back!"
 msgstr ""
 
 #, elixir-autogen, elixir-format

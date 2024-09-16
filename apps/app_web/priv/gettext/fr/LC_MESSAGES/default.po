@@ -34,10 +34,6 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Un lien de confirmation a été envoyé à votre nouvelle adresse."
 
 #, elixir-autogen, elixir-format
-msgid "Account created successfully!"
-msgstr "Votre compte a été créé avec succès!"
-
-#, elixir-autogen, elixir-format
 msgid "Alphabetically"
 msgstr "Order alphabétique"
 
@@ -54,6 +50,10 @@ msgid "An error occured while balancing the transactions:"
 msgid_plural "Errors occured while balancing the transactions:"
 msgstr[0] "Une erreur est survenue pendant l'équilibrage des transactions :"
 msgstr[1] "Des erreurs sont survenues pendant l'équilibrage des transactions :"
+
+#, elixir-autogen, elixir-format
+msgid "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
+msgstr "Anacounts est un logiciel gratuit et open source aidant à rendre la répartition des dépenses de vos voyages ou de votre foyer plus juste."
 
 #, elixir-autogen, elixir-format
 msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
@@ -168,10 +168,6 @@ msgid "Create manually"
 msgstr "Créer manuellement"
 
 #, elixir-autogen, elixir-format
-msgid "Create one here"
-msgstr "Créez-en un ici"
-
-#, elixir-autogen, elixir-format
 msgid "Create your first book"
 msgstr "Créer mon premier livret"
 
@@ -212,10 +208,6 @@ msgid "Divided"
 msgstr "Divisé"
 
 #, elixir-autogen, elixir-format
-msgid "Don't have an account?"
-msgstr "Vous n'avez pas de compte ?"
-
-#, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifier"
 
@@ -238,6 +230,10 @@ msgstr "Modifier le membre"
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
 msgstr "Editer le transfert"
+
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr "Email"
 
 #, elixir-autogen, elixir-format
 msgid "Email address"
@@ -358,10 +354,6 @@ msgstr "Dernier créé"
 #, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
-
-#, elixir-autogen, elixir-format
-msgid "Logged out successfully."
-msgstr "Vous êtes déconnecté"
 
 #, elixir-autogen, elixir-format
 msgid "Member created successfully"
@@ -492,10 +484,6 @@ msgid "Password reset successfully."
 msgstr "Mot de passe réinitialisé"
 
 #, elixir-autogen, elixir-format
-msgid "Password updated successfully!"
-msgstr "Mot de passe mis à jour!"
-
-#, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Paiement"
 
@@ -600,10 +588,6 @@ msgid "Sign in to your account"
 msgstr "Se connecter à mon compte"
 
 #, elixir-autogen, elixir-format
-msgid "Signing in..."
-msgstr "Connexion..."
-
-#, elixir-autogen, elixir-format
 msgid "Someone new"
 msgstr "Quelqu'un d'autre"
 
@@ -678,10 +662,6 @@ msgstr "Pondérer par revenu"
 #, elixir-autogen, elixir-format
 msgid "Weighted"
 msgstr "Pondéré"
-
-#, elixir-autogen, elixir-format
-msgid "Welcome back!"
-msgstr "Heureux de vous revoir!"
 
 #, elixir-autogen, elixir-format
 msgid "Who are you?"

@@ -1,0 +1,12 @@
+@layer components {
+  /*
+   * `.form-control-container` is not a component per se, but is rather
+   * used as a wrapper for checkboxes, and may be used in the future for
+   * other similar form controls
+   */
+
+  .form-control-container {
+    @apply flex items-center gap-2
+           h-md;
+  }
+}

@@ -115,9 +115,6 @@ defmodule AppWeb.UserSettingsLiveTest do
 
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
 
-      assert Phoenix.Flash.get(new_password_conn.assigns.flash, :info) =~
-               "Password updated successfully"
-
       assert Accounts.get_user_by_email_and_password(user.email, new_password)
     end
 

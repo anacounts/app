@@ -34,11 +34,13 @@ defmodule AppWeb.UserConfirmationInstructionsLive do
   end
 
   def mount(_params, _session, socket) do
-    {:ok,
-     assign(socket,
-       form: to_form(%{}, as: "user"),
-       page_title: gettext("Resend confirmation instructions")
-     ), layout: {AppWeb.Layouts, :auth}, temporary_assigns: [page_title: nil]}
+    socket =
+      assign(socket,
+        form: to_form(%{}, as: "user"),
+        page_title: gettext("Resend confirmation instructions")
+      )
+
+    {:ok, socket, temporary_assigns: [page_title: nil]}
   end
 
   def handle_event("send_instructions", %{"user" => %{"email" => email}}, socket) do
