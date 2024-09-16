@@ -857,6 +857,43 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  ## Select
+
+  @doc """
+  Selects are form controls used to input data from a list of options.
+
+  For usage with Phoenix's forms, consider using the `input/1` component.
+  """
+
+  attr :prompt, :string,
+    default: nil,
+    doc: "the prompt to display as the first option of the select"
+
+  attr :value, :any, default: nil, doc: "the initially selected value"
+  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :error, :boolean, default: false
+
+  attr :container_class, :any, default: nil, doc: "Classes added to the input container"
+  attr :rest, :global, include: @input_attrs
+
+  def select(assigns) do
+    assigns = prepend_class(assigns, "text-input__input text-input__input--select")
+
+    ~H"""
+    <div class={[
+      "text-input",
+      text_input_error_class(assigns.error),
+      @container_class
+    ]}>
+      <select {@rest}>
+        <option :if={@prompt} value=""><%= @prompt %></option>
+        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+      </select>
+    </div>
+    """
+  end
+
   ## Tile
 
   @doc """

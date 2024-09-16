@@ -36,6 +36,19 @@
            border-none outline-none;
   }
 
+  .text-input__input--select {
+    /* Remove default appearance because Safari adds a weird non-removable background.
+    Removing the appearance also removes the arrow, so we need to add a custom one
+    (which has the advantage of being the same on every browser). */
+    appearance: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path d='M5 14L24 34L43 14' stroke='%2314101f' stroke-width='4' stroke-linecap='round' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 10px;
+    padding-inline-end: 12px;
+  }
+
   .text-input__addon {
     @apply block size-xs
            text-center;
