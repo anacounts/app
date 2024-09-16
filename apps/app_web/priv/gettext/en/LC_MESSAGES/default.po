@@ -56,8 +56,8 @@ msgid "Anacounts is a free and open-source software that helps you share expense
 msgstr "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
 
 #, elixir-autogen, elixir-format
-msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
-msgstr "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgid "Anacounts uses Gravatar to display user avatars."
+msgstr "Anacounts uses Gravatar to display user avatars."
 
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete the transfer?"
@@ -88,6 +88,10 @@ msgid "Balance settings updated"
 msgstr "Balance settings updated"
 
 #, elixir-autogen, elixir-format
+msgid "Before making the change effective, a confirmation email will be sent to the new address."
+msgstr "Before making the change effective, a confirmation email will be sent to the new address."
+
+#, elixir-autogen, elixir-format
 msgid "Book closed successfully"
 msgstr "Book closed successfully"
 
@@ -112,16 +116,8 @@ msgid "Change email"
 msgstr "Change email"
 
 #, elixir-autogen, elixir-format
-msgid "Change name"
-msgstr "Change name"
-
-#, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr "Change password"
-
-#, elixir-autogen, elixir-format
-msgid "Changing..."
-msgstr "Changing..."
 
 #, elixir-autogen, elixir-format
 msgid "Close"
@@ -129,15 +125,11 @@ msgstr "Close"
 
 #, elixir-autogen, elixir-format
 msgid "Closed"
-msgstr ""
+msgstr "Closed"
 
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirm new password"
-
-#, elixir-autogen, elixir-format
-msgid "Confirm password"
-msgstr "Confirm password"
 
 #, elixir-autogen, elixir-format
 msgid "Confirm your account"
@@ -174,10 +166,6 @@ msgstr "Create your first book"
 #, elixir-autogen, elixir-format
 msgid "Created on %{date}"
 msgstr "Created on %{date}"
-
-#, elixir-autogen, elixir-format
-msgid "Current password"
-msgstr "Current password"
 
 #, elixir-autogen, elixir-format
 msgid "Date"
@@ -228,12 +216,8 @@ msgid "Email"
 msgstr "Email"
 
 #, elixir-autogen, elixir-format
-msgid "Email change link is invalid or it has expired."
-msgstr "Email change link is invalid or it has expired."
-
-#, elixir-autogen, elixir-format
-msgid "Email changed successfully."
-msgstr "Email changed successfully."
+msgid "Email change link is invalid or it has expired. You can create a new one."
+msgstr "Email change link is invalid or it has expired. You can create a new one."
 
 #, elixir-autogen, elixir-format
 msgid "Enter your user account's email address and we will send you a password reset link."
@@ -264,8 +248,12 @@ msgid "Go back to sign in page."
 msgstr "Go back to sign in page."
 
 #, elixir-autogen, elixir-format
-msgid "Gravatar is a service providing globally unique avatars"
-msgstr "Gravatar is a service providing globally unique avatars"
+msgid "Go to Gravatar"
+msgstr "Go to Gravatar"
+
+#, elixir-autogen, elixir-format
+msgid "Gravatar is a service providing globally unique avatars."
+msgstr "Gravatar is a service providing globally unique avatars."
 
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
@@ -274,6 +262,10 @@ msgstr "Hang in there while we get back on track"
 #, elixir-autogen, elixir-format
 msgid "Hi %{user_name} 👋"
 msgstr "Hi %{user_name} 👋"
+
+#, elixir-autogen, elixir-format
+msgid "Home"
+msgstr "Home"
 
 #, elixir-autogen, elixir-format
 msgid "How to balance by default?"
@@ -376,6 +368,10 @@ msgid "Most recent"
 msgstr "Most recent"
 
 #, elixir-autogen, elixir-format
+msgid "My account"
+msgstr "My account"
+
+#, elixir-autogen, elixir-format
 msgid "My books"
 msgstr "My books"
 
@@ -402,10 +398,6 @@ msgstr "New Transfer"
 #, elixir-autogen, elixir-format
 msgid "New email"
 msgstr "New email"
-
-#, elixir-autogen, elixir-format
-msgid "New name"
-msgstr "New name"
 
 #, elixir-autogen, elixir-format
 msgid "New password"
@@ -596,6 +588,10 @@ msgid "The book is not balanced. Are you sure you want to close it?"
 msgstr "The book is not balanced. Are you sure you want to close it?"
 
 #, elixir-autogen, elixir-format
+msgid "The confirmation email will be sent to this address."
+msgstr "The confirmation email will be sent to this address."
+
+#, elixir-autogen, elixir-format
 msgid "The member's avatar"
 msgstr "The member's avatar"
 
@@ -620,8 +616,8 @@ msgid "This page is not accessible while the book is closed"
 msgstr "This page is not accessible while the book is closed"
 
 #, elixir-autogen, elixir-format
-msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
-msgstr "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+msgid "To edit your avatar, create an account and personalize your Gravatar."
+msgstr "To edit your avatar, create an account and personalize your Gravatar."
 
 #, elixir-autogen, elixir-format
 msgid "Transfer deleted successfully"
@@ -678,6 +674,14 @@ msgstr "Your account was confirmed successfully."
 #, elixir-autogen, elixir-format
 msgid "Your avatar"
 msgstr "Your avatar"
+
+#, elixir-autogen, elixir-format
+msgid "Your current password is required to make this change."
+msgstr "Your current password is required to make this change."
+
+#, elixir-autogen, elixir-format
+msgid "Your email address was not confirmed"
+msgstr "Your email address was not confirmed"
 
 #, elixir-autogen, elixir-format
 msgid "Your incomes"
