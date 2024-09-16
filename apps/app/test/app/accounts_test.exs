@@ -396,7 +396,7 @@ defmodule App.AccountsTest do
     end
   end
 
-  describe "confirm_user/1" do
+  describe "confirm_user/2" do
     setup do
       user = user_fixture()
 
@@ -409,24 +409,30 @@ defmodule App.AccountsTest do
     end
 
     test "confirms the email with a valid token", %{user: user, token: token} do
-      assert {:ok, confirmed_user} = Accounts.confirm_user(token)
+      assert {:ok, confirmed_user} = Accounts.confirm_user(user, token)
       assert confirmed_user.confirmed_at
       assert confirmed_user.confirmed_at != user.confirmed_at
-      assert Repo.get!(User, user.id).confirmed_at
+      assert Repo.reload!(user).confirmed_at
       refute Repo.get_by(UserToken, user_id: user.id)
     end
 
     test "does not confirm with invalid token", %{user: user} do
-      assert Accounts.confirm_user("oops") == :error
-      refute Repo.get!(User, user.id).confirmed_at
+      assert Accounts.confirm_user(user, "oops") == :error
+      refute Repo.reload!(user).confirmed_at
       assert Repo.get_by(UserToken, user_id: user.id)
     end
 
     test "does not confirm email if token expired", %{user: user, token: token} do
       {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
-      assert Accounts.confirm_user(token) == :error
-      refute Repo.get!(User, user.id).confirmed_at
+      assert Accounts.confirm_user(user, token) == :error
+      refute Repo.reload!(user).confirmed_at
       assert Repo.get_by(UserToken, user_id: user.id)
+    end
+
+    test "does not confirm email if the user does not match", %{user: user, token: token} do
+      user2 = user_fixture()
+      assert Accounts.confirm_user(user2, token) == :error
+      refute Repo.reload!(user).confirmed_at
     end
   end
 

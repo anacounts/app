@@ -5,60 +5,49 @@ defmodule AppWeb.UserConfirmationInstructionsLive do
 
   def render(assigns) do
     ~H"""
-    <.form for={@form} id="resend_confirmation_form" class="px-4" phx-submit="send_instructions">
-      <.input field={@form[:email]} type="email" label="Email" required autocomplete="username" />
+    <p class="mb-4">
+      <%= gettext(
+        "Confirmation instructions were sent when you created your account." <>
+          " If you did not receive them, check out your spam, or send the instructions again."
+      ) %>
+    </p>
 
-      <.button color={:cta} class="w-full" phx-disable-with={gettext("Sending...")}>
-        <%= gettext("Resend confirmation instructions") %>
+    <p>
+      <%= gettext("Send confirmation instructions for your account") %><br />
+      <span class="label"><%= @current_user.email %></span>
+    </p>
+
+    <.button_group>
+      <.button kind={:primary} phx-click="send_instructions">
+        <%= gettext("Send instructions") %>
       </.button>
-    </.form>
-
-    <div class="mt-8
-                border-t border-gray-50
-                text-center
-                text-gray-50 font-bold">
-      <span class="relative bottom-3 p-3 bg-white">
-        <%= gettext("Or continue to") %>
-      </span>
-    </div>
-
-    <div class="flex justify-between">
-      <.link href={~p"/users/log_in"} class="text-action">
-        <%= gettext("Sign in to your account") %>
-      </.link>
-      <.link href={~p"/users/register"} class="text-action">
-        <%= gettext("Create an account") %>
-      </.link>
-    </div>
+    </.button_group>
     """
   end
 
   def mount(_params, _session, socket) do
-    socket =
-      assign(socket,
-        form: to_form(%{}, as: "user"),
-        page_title: gettext("Resend confirmation instructions")
-      )
+    socket = assign(socket, page_title: gettext("Confirm your account"))
 
     {:ok, socket, temporary_assigns: [page_title: nil]}
   end
 
-  def handle_event("send_instructions", %{"user" => %{"email" => email}}, socket) do
-    if user = Accounts.get_user_by_email(email) do
-      Accounts.deliver_user_confirmation_instructions(
-        user,
-        &url(~p"/users/confirm/#{&1}")
-      )
-    end
+  def handle_event("send_instructions", _params, socket) do
+    Accounts.deliver_user_confirmation_instructions(
+      socket.assigns.current_user,
+      &url(~p"/users/confirm/#{&1}")
+    )
 
-    info =
-      gettext(
-        "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+    socket =
+      socket
+      |> put_flash(
+        :info,
+        gettext(
+          "If your email has not been confirmed yet," <>
+            " you will receive an email with instructions shortly."
+        )
       )
+      |> redirect(to: ~p"/users/settings")
 
-    {:noreply,
-     socket
-     |> put_flash(:info, info)
-     |> redirect(to: ~p"/")}
+    {:noreply, socket}
   end
 end

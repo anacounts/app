@@ -144,8 +144,8 @@ msgid "Confirm your account"
 msgstr "Confirmer mon compte"
 
 #, elixir-autogen, elixir-format
-msgid "Confirming..."
-msgstr "Confirmation..."
+msgid "Confirmation instructions were sent when you created your account. If you did not receive them, check out your spam, or send the instructions again."
+msgstr "Des instructions de confirmations ont été envoyés à la création de votre compte. Si vous ne les avez pas reçu, vérifiez vos spams, ou envoyez les à nouveau."
 
 #, elixir-autogen, elixir-format
 msgid "Contextual menu"
@@ -284,8 +284,8 @@ msgid "How to balance?"
 msgstr "Comment équilibrer ?"
 
 #, elixir-autogen, elixir-format
-msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
-msgstr "Si votre adresse email est dans notre système et n'a pas encore été confirmé, vous allez recevoir un email contenant les instructions."
+msgid "If your email has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Si votre adresse email n'a pas encore été confirmée, vous allez recevoir un email contenant les instructions."
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
@@ -524,10 +524,6 @@ msgid "Reopen"
 msgstr "Réouvrir"
 
 #, elixir-autogen, elixir-format
-msgid "Resend confirmation instructions"
-msgstr "Envoyer les instructions de confirmation à nouveau"
-
-#, elixir-autogen, elixir-format
 msgid "Reset password"
 msgstr "Réinitialisé mon mot de passe"
 
@@ -552,12 +548,16 @@ msgid "Saving..."
 msgstr "Enregistrement en cours..."
 
 #, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
+msgid "Send confirmation instructions for your account"
+msgstr "Envoyer les instructions de confirmation"
+
+#, elixir-autogen, elixir-format
+msgid "Send instructions"
 msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format
-msgid "Sending..."
-msgstr "Envoi en cours..."
+msgid "Send password reset instructions"
+msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format
 msgid "Settings"
@@ -612,6 +612,10 @@ msgid "The transactions are balanced already!"
 msgstr "Les transactions sont déjà équilibrée !"
 
 #, elixir-autogen, elixir-format
+msgid "This confirmation link is invalid or it has expired."
+msgstr "Le lien de confirmation est invalide ou a expiré."
+
+#, elixir-autogen, elixir-format
 msgid "This email will be your identifier"
 msgstr "Cette email sera votre identifiant"
 
@@ -638,14 +642,6 @@ msgstr "Transferts"
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
 msgstr "Transferts · %{book_name}"
-
-#, elixir-autogen, elixir-format
-msgid "User confirmation link is invalid or it has expired."
-msgstr "Le lien de confirmation est invalide ou a expiré."
-
-#, elixir-autogen, elixir-format
-msgid "User confirmed successfully."
-msgstr "Utilisateur confirmé."
 
 #, elixir-autogen, elixir-format
 msgid "View"
@@ -682,6 +678,10 @@ msgstr "Vous avez été invité à rejoindre un livret:"
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Vous devez vous connecter pour accéder à cette page."
+
+#, elixir-autogen, elixir-format
+msgid "Your account was confirmed successfully."
+msgstr "Votre compte est maintenant confirmé."
 
 #, elixir-autogen, elixir-format
 msgid "Your avatar"
