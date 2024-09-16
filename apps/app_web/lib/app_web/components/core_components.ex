@@ -1157,12 +1157,12 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} class="form-control-container">
       <input type="hidden" name={@name} value="false" />
       <.checkbox id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
-      <%= @label %>
+      <label for={@id || @name}><%= @label %></label>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    </div>
     """
   end
 
