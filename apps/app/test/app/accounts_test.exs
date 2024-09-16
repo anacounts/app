@@ -8,8 +8,6 @@ defmodule App.AccountsTest do
   alias App.Accounts.UserToken
 
   @valid_user_password "initial valid password"
-  @valid_user_display_name "valid display name"
-  @invalid_user_display_name nil
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -59,7 +57,6 @@ defmodule App.AccountsTest do
 
       assert %{
                email: ["can't be blank"],
-               display_name: ["can't be blank"],
                password: ["can't be blank"]
              } = errors_on(changeset)
     end
@@ -116,7 +113,7 @@ defmodule App.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :display_name, :email]
+      assert changeset.required == [:password, :email]
     end
 
     test "allows fields to be set" do
@@ -133,41 +130,6 @@ defmodule App.AccountsTest do
       assert get_change(changeset, :email) == email
       assert get_change(changeset, :password) == password
       assert is_nil(get_change(changeset, :hashed_password))
-    end
-  end
-
-  describe "change_user_display_name/2" do
-    test "returns a changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_display_name(%User{})
-      assert changeset.required == [:display_name]
-    end
-
-    test "allows fields to be set" do
-      changeset =
-        Accounts.change_user_display_name(%User{}, %{display_name: @valid_user_display_name})
-
-      assert changeset.valid?
-      assert get_change(changeset, :display_name) == @valid_user_display_name
-    end
-  end
-
-  describe "update_user_display_name/2" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "updates the display name", %{user: user} do
-      {:ok, user} =
-        Accounts.update_user_display_name(user, %{display_name: @valid_user_display_name})
-
-      assert user.display_name == @valid_user_display_name
-    end
-
-    test "check display name is valid", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_display_name(user, %{display_name: @invalid_user_display_name})
-
-      assert "can't be blank" in errors_on(changeset).display_name
     end
   end
 

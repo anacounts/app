@@ -60,7 +60,7 @@ defmodule App.Books.Members do
     from([book_member: book_member] in BookMember.base_query(),
       left_join: user in assoc(book_member, :user),
       where: book_member.book_id == ^book.id,
-      order_by: [asc: coalesce(user.display_name, book_member.nickname)]
+      order_by: [asc: book_member.nickname]
     )
     |> BookMember.select_display_name()
     |> BookMember.select_email()

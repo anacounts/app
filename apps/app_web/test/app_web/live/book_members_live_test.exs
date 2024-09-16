@@ -22,7 +22,7 @@ defmodule AppWeb.BookMembersLiveTest do
   end
 
   test "displays book members", %{conn: conn, book: book} do
-    _member1 = book_member_fixture(book, user_id: user_fixture(display_name: "Samuel").id)
+    _member1 = book_member_fixture(book, user_id: user_fixture().id, nickname: "Samuel")
     _member2 = book_member_fixture(book, nickname: "John")
     _other_member = book_member_fixture(book_fixture(), nickname: "Eric")
 

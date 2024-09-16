@@ -13,7 +13,7 @@ defmodule AppWeb.BookMemberLiveTest do
 
     # avatar, display name and email are displayed
     assert html =~ ~s(class="avatar)
-    assert html =~ "#{user.display_name}</span><span>(#{member.nickname})"
+    assert html =~ member.nickname
     assert html =~ user.email
 
     # balance is displayed
