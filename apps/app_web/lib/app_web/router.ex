@@ -64,6 +64,12 @@ defmodule AppWeb.Router do
       live "/users/settings/balance", BalanceConfigLive, :edit
     end
 
+    live_session :current_user,
+      on_mount: [{AppWeb.UserAuth, :mount_current_user}],
+      layout: {AppWeb.Layouts, :auth} do
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
+
     get "/users/confirm/:token", UserConfirmationController, :update
   end
 
@@ -71,12 +77,6 @@ defmodule AppWeb.Router do
     pipe_through [:browser]
 
     delete "/users/log_out", UserSessionController, :delete
-
-    live_session :current_user,
-      on_mount: [{AppWeb.UserAuth, :mount_current_user}],
-      layout: {AppWeb.Layouts, :auth} do
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
-    end
   end
 
   ## Books routes
