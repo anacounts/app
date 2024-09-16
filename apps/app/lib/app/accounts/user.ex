@@ -29,8 +29,8 @@ defmodule App.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
-    # display information
-    field :display_name, :string
+    # TODO(v2,end) deprecated field, to be removed, only per book nicknames are kept
+    field :display_name, :string, virtual: true, default: "deprecated"
 
     # the current balance configuration of the user
     belongs_to :balance_config, BalanceConfig
@@ -63,9 +63,8 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :display_name, :password])
+    |> cast(attrs, [:email, :password])
     |> validate_email(opts)
-    |> validate_display_name()
     |> validate_password(opts)
   end
 
@@ -181,19 +180,9 @@ defmodule App.Accounts.User do
     end
   end
 
-  @doc """
-  A user changeset for changing the user display name.
-  """
+  # TODO(v2,end) remove this function
   def display_name_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:display_name])
-    |> validate_display_name()
-  end
-
-  defp validate_display_name(changeset) do
-    changeset
-    |> validate_required(:display_name)
-    |> validate_length(:display_name, max: 255)
+    cast(user, attrs, [])
   end
 
   @doc """

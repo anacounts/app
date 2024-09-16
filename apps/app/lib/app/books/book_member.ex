@@ -44,6 +44,7 @@ defmodule App.Books.BookMember do
     # member's `:nickname`, set at creation
     field :nickname, :string
 
+    # TODO(v2,end) drop this field, only `:nickname` remains
     # Filled with the user `:display_name` if there is one, otherwise `:nickname`
     field :display_name, :string, virtual: true
     # Filled with the user `:email` if there is one
@@ -84,10 +85,11 @@ defmodule App.Books.BookMember do
   @doc """
   Updates an `%Ecto.Query{}` to select the `:display_name` of book members.
   """
+  # TODO(v2,end) remove, only the member nickname remains
   @spec select_display_name(Ecto.Query.t()) :: Ecto.Query.t()
   def select_display_name(query) do
     from [book_member: book_member, user: user] in join_user(query),
-      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
+      select_merge: %{display_name: book_member.nickname}
   end
 
   @doc """

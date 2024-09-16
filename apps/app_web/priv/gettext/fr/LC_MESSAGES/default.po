@@ -176,10 +176,6 @@ msgid "Created on %{date}"
 msgstr "Créé le %{date}"
 
 #, elixir-autogen, elixir-format
-msgid "Creating account..."
-msgstr "Création du compte..."
-
-#, elixir-autogen, elixir-format
 msgid "Current password"
 msgstr "Mot de passe actuel"
 
@@ -194,10 +190,6 @@ msgstr "Supprimer"
 #, elixir-autogen, elixir-format
 msgid "Disconnect"
 msgstr "Déconnexion"
-
-#, elixir-autogen, elixir-format
-msgid "Display name"
-msgstr "Nom d'affichage"
 
 #, elixir-autogen, elixir-format
 msgid "Divide equally"
@@ -354,6 +346,10 @@ msgstr "Dernier créé"
 #, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
+
+#, elixir-autogen, elixir-format
+msgid "Log in here."
+msgstr "Connectez-vous ici."
 
 #, elixir-autogen, elixir-format
 msgid "Member created successfully"
@@ -616,6 +612,10 @@ msgid "The transactions are balanced already!"
 msgstr "Les transactions sont déjà équilibrée !"
 
 #, elixir-autogen, elixir-format
+msgid "This email will be your identifier"
+msgstr "Cette email sera votre identifiant"
+
+#, elixir-autogen, elixir-format
 msgid "This invitation is irrelevant?"
 msgstr "Pas concerné par l'invitation ?"
 
@@ -690,6 +690,10 @@ msgstr "Votre avatar"
 #, elixir-autogen, elixir-format
 msgid "Your incomes"
 msgstr "Vos revenus"
+
+#, elixir-autogen, elixir-format
+msgid "Your password must be at least 12 characters long"
+msgstr "Votre mot de passe doit faire au moins 12 caractères"
 
 #, elixir-autogen, elixir-format
 msgid "Your payments"
