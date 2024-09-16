@@ -99,36 +99,6 @@ defmodule App.Accounts do
   ## Settings
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for changing user display name.
-
-  ## Examples
-
-      iex> change_user_display_name(user)
-      %Ecto.Changeset{data: %User{}}
-
-  """
-  def change_user_display_name(user, attrs \\ %{}) do
-    User.display_name_changeset(user, attrs)
-  end
-
-  @doc """
-  Updates the user display name.
-
-  ## Examples
-
-      iex> update_user_display_name(user, %{display_name: "valid display name"})
-      {:ok, %User{}}
-
-      iex> update_user_display_name(user, %{display_name: "invalid display name"})
-      {:error, %Ecto.Changeset{}}
-  """
-  def update_user_display_name(user, attrs) do
-    user
-    |> User.display_name_changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for changing the user email.
 
   ## Examples
