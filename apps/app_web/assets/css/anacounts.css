@@ -18,3 +18,5 @@
 @import "./components/text-input.css";
 @import "./components/tile.css";
 @import "./components/typography.css";
+
+@import "./layouts/app-page.css";
