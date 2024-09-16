@@ -31,14 +31,14 @@ defmodule AppWeb.UserSettingsPasswordLive do
           field={@form[:password]}
           type="password"
           label={gettext("New password")}
-          helper={gettext("Your new password must be at least 12 characters long")}
+          helper={gettext("Your password must be at least 12 characters long")}
           required
           autocomplete="new-password"
         />
         <.input
           field={@form[:password_confirmation]}
           type="password"
-          label={gettext("Confirm password")}
+          label={gettext("Confirm new password")}
           helper={gettext("Type your new password again here")}
           required
           autocomplete="new-password"
@@ -49,7 +49,7 @@ defmodule AppWeb.UserSettingsPasswordLive do
           id="current_password"
           type="password"
           label={gettext("Current password")}
-          helper={gettext("Your current password is required to make this change.")}
+          helper={gettext("Your current password is required to make this change")}
           required
           autocomplete="current-password"
         />

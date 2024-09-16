@@ -168,6 +168,10 @@ msgid "Created on %{date}"
 msgstr "Créé le %{date}"
 
 #, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr "Mot de passe actuel"
+
+#, elixir-autogen, elixir-format
 msgid "Date"
 msgstr "Date"
 
@@ -380,10 +384,6 @@ msgid "Name"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
-msgid "Name updated successfully."
-msgstr "Nom modifié"
-
-#, elixir-autogen, elixir-format
 msgid "New Book"
 msgstr "Nouveau livret"
 
@@ -588,8 +588,8 @@ msgid "The book is not balanced. Are you sure you want to close it?"
 msgstr "Le livret n'est pas équilibré. Êtes-vous certain de vouloir le fermer ?"
 
 #, elixir-autogen, elixir-format
-msgid "The confirmation email will be sent to this address."
-msgstr "L'email de confirmation sera envoyé à cette adresse."
+msgid "The confirmation email will be sent to this address"
+msgstr "L'email de confirmation sera envoyé à cette adresse"
 
 #, elixir-autogen, elixir-format
 msgid "The member's avatar"
@@ -630,6 +630,10 @@ msgstr "Transferts"
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
 msgstr "Transferts · %{book_name}"
+
+#, elixir-autogen, elixir-format
+msgid "Type your new password again here"
+msgstr "Taper votre nouveau mot de passe encore une fois ici"
 
 #, elixir-autogen, elixir-format
 msgid "View"
@@ -676,8 +680,8 @@ msgid "Your avatar"
 msgstr "Votre avatar"
 
 #, elixir-autogen, elixir-format
-msgid "Your current password is required to make this change."
-msgstr "Votre mot de passe est actuel est requis pour faire ce changement."
+msgid "Your current password is required to make this change"
+msgstr "Votre mot de passe est actuel est requis pour faire ce changement"
 
 #, elixir-autogen, elixir-format
 msgid "Your email address was not confirmed"

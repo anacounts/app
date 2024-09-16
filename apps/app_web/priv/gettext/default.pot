@@ -167,6 +167,10 @@ msgid "Created on %{date}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Date"
 msgstr ""
 
@@ -379,10 +383,6 @@ msgid "Name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Name updated successfully."
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "New Book"
 msgstr ""
 
@@ -587,7 +587,7 @@ msgid "The book is not balanced. Are you sure you want to close it?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The confirmation email will be sent to this address."
+msgid "The confirmation email will be sent to this address"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -628,6 +628,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Transfers · %{book_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Type your new password again here"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -675,7 +679,7 @@ msgid "Your avatar"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Your current password is required to make this change."
+msgid "Your current password is required to make this change"
 msgstr ""
 
 #, elixir-autogen, elixir-format
