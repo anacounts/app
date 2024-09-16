@@ -1056,7 +1056,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <div class={["text-input", text_input_error_class(assigns.error), @container_class]}>
       <%= text_input_prefix(assigns) %>
-      <input {@rest} />
+      <input type={@type} {@rest} />
       <%= text_input_suffix(assigns) %>
     </div>
     """
@@ -1251,8 +1251,8 @@ defmodule AppWeb.CoreComponents do
 
   def input(assigns) do
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
       <.text_input
         type={@type}
         name={@name}
@@ -1261,7 +1261,7 @@ defmodule AppWeb.CoreComponents do
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    </div>
     """
   end
 
