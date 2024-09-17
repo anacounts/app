@@ -99,7 +99,7 @@ defmodule AppWeb.Router do
       live "/books/:book_id/members/:book_member_id", BookMemberLive, :show
       live "/books/:book_id/members/:book_member_id/nickname", BookMemberNicknameLive, :edit
       live "/books/:book_id/profile", BookProfileLive, :show
-      live "/books/:book_id/transfers", MoneyTransfersLive, :index
+      live "/books/:book_id/transfers", BookTransfersLive, :index
       live "/books/:book_id/transfers/new", MoneyTransferFormLive, :new
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
     end

@@ -195,21 +195,6 @@ defmodule App.Transfers do
     end)
   end
 
-  ## Preloads
-
-  @doc """
-  Preloads the tenant of one or a list of money transfers.
-  Includes the display name of the tenant.
-  """
-  @spec with_tenant([MoneyTransfer.t()]) :: [MoneyTransfer.t()]
-  def with_tenant(transfers) do
-    Repo.preload(transfers,
-      tenant:
-        BookMember.base_query()
-        |> BookMember.select_display_name()
-    )
-  end
-
   ## CRUD
 
   @doc """

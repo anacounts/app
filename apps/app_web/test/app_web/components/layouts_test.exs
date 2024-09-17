@@ -23,7 +23,7 @@ defmodule AppWeb.LayoutsTest do
       book = book_fixture(closed_at: ~N[2021-01-01 00:00:00])
       _member = book_member_fixture(book, user_id: user.id)
 
-      {:ok, _live, html} = live(conn, ~p"/books/#{book}/transfers")
+      {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
 
       refute html =~ ~s(id="close-book")
       assert html =~ ~s(id="reopen-book")

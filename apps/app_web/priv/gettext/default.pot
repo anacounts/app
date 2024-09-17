@@ -15,12 +15,6 @@ msgid "%{count} members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{count} transfer"
-msgid_plural "%{count} transfers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
 msgid "%{member_name} in %{book_name}"
 msgstr ""
 
@@ -219,14 +213,6 @@ msgid "Error!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Filter by"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "First created"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
 
@@ -283,10 +269,6 @@ msgid "Income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Incomes"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr ""
 
@@ -331,10 +313,6 @@ msgid "Label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Last created"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr ""
 
@@ -364,10 +342,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Money transfer updated successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Most recent"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -431,27 +405,7 @@ msgid "Not %{user_name}? Disconnect"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Oldest"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Paid by"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by anyone"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by me"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by others"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -467,10 +421,6 @@ msgid "Payment"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Payments"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr ""
 
@@ -479,15 +429,7 @@ msgid "Received by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Received by %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Register"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Reimbursed to %{name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -563,10 +505,6 @@ msgid "Something went wrong!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Sort by"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
@@ -623,15 +561,7 @@ msgid "Transfers"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Transfers · %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Type your new password again here"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "View"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -687,15 +617,7 @@ msgid "Your email address was not confirmed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Your incomes"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Your password must be at least 12 characters long"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Your payments"
 msgstr ""
 
 #, elixir-autogen, elixir-format

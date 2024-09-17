@@ -46,6 +46,8 @@ defmodule AppWeb.TransfersComponents do
 
   attr :rest, :global
 
+  slot :extra
+
   def transfer_details(assigns) do
     ~H"""
     <details class={[transfer_tile_classes(@transfer), "h-auto"]} {@rest}>
@@ -59,6 +61,7 @@ defmodule AppWeb.TransfersComponents do
       </summary>
       <.divider />
       <%= transfer_details_summary(assigns) %>
+      <%= render_slot(@extra, @transfer) %>
     </details>
     """
   end
@@ -109,17 +112,6 @@ defmodule AppWeb.TransfersComponents do
         <%= format_balance_params_code(@transfer.balance_params.means_code) %>
         <.icon name={:arrows_right_left} />
       </span>
-    </div>
-    <.divider />
-    <div class="grid grid-cols-2 gap-2">
-      <.button kind={:secondary}>
-        <.icon name={:eye} />
-        <%= gettext("View") %>
-      </.button>
-      <.button kind={:secondary}>
-        <.icon name={:pencil} />
-        <%= gettext("Edit") %>
-      </.button>
     </div>
     """
   end

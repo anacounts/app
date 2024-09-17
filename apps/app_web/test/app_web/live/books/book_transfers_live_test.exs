@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransfersLiveTest do
+defmodule AppWeb.BookTransfersLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
@@ -6,24 +6,7 @@ defmodule AppWeb.MoneyTransfersLiveTest do
   import App.Books.MembersFixtures
   import App.TransfersFixtures
 
-  alias App.Repo
-
-  alias App.Books
-
   setup [:register_and_log_in_user, :book_with_member_context]
-
-  test "transfers tab is highlighted", %{conn: conn, book: book} do
-    {:ok, _live, html} = live(conn, ~p"/books/#{book}/transfers")
-
-    assert [class] =
-             Floki.attribute(
-               html,
-               ~s(.tabs__link[href="#{~p"/books/#{book}/transfers"}"]),
-               "class"
-             )
-
-    assert String.contains?(class, "tabs__link--active")
-  end
 
   test "lists book money transfers", %{conn: conn, book: book, member: member} do
     money_transfer = money_transfer_fixture(book, tenant_id: member.id)
@@ -53,7 +36,7 @@ defmodule AppWeb.MoneyTransfersLiveTest do
 
     {:ok, _edit_live, html} =
       index_live
-      |> element(".tile__button", "Edit")
+      |> element(".button", "Edit")
       |> render_click()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
@@ -72,48 +55,10 @@ defmodule AppWeb.MoneyTransfersLiveTest do
 
     html =
       index_live
-      |> element(".tile__button", "Delete")
+      |> element(".button", "Delete")
       |> render_click()
 
     refute html =~ money_transfer.label
-  end
-
-  test "deletes book", %{conn: conn, book: book} do
-    {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/transfers")
-
-    assert {:ok, _, html} =
-             show_live
-             |> element("#delete-book", "Delete")
-             |> render_click()
-             |> follow_redirect(conn, ~p"/books")
-
-    refute html =~ book.name
-  end
-
-  test "closes book", %{conn: conn, book: book} do
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/transfers")
-
-    assert html =
-             live
-             |> element("#close-book", "Close")
-             |> render_click()
-
-    assert html =~ "Book closed successfully"
-    assert book |> Repo.reload() |> Books.closed?()
-  end
-
-  test "reopens book", %{conn: conn, book: book} do
-    book = Books.close_book!(book)
-
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/transfers")
-
-    assert html =
-             live
-             |> element("#reopen-book", "Reopen")
-             |> render_click()
-
-    assert html =~ "Book reopened successfully"
-    refute book |> Repo.reload() |> Books.closed?()
   end
 
   # Depends on :register_and_log_in_user

@@ -5,6 +5,7 @@ defmodule App.Transfers.Peer do
 
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias App.Balance.BalanceConfig
   alias App.Books.BookMember
@@ -83,5 +84,15 @@ defmodule App.Transfers.Peer do
   defp validate_balance_config_id(changeset) do
     changeset
     |> foreign_key_constraint(:balance_config_id)
+  end
+
+  ## Queries
+
+  @doc """
+  Returns an `%Ecto.Query{}` fetching all peers.
+  """
+  @spec base_query() :: Ecto.Query.t()
+  def base_query do
+    from peer in __MODULE__, as: :peer
   end
 end

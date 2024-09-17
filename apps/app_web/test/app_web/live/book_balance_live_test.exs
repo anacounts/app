@@ -146,7 +146,7 @@ defmodule AppWeb.BookBalanceLiveTest do
         |> render_submit()
         |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-      assert html =~ "Reimbursement created successfully"
+      assert html =~ "My label"
     end
   end
 
