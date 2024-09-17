@@ -44,7 +44,7 @@ defmodule AppWeb.BookMemberLive do
         <.button
           color={:feature}
           class="min-w-[5rem]"
-          navigate={~p"/books/#{@book}/members/#{@book_member}/edit"}
+          navigate={~p"/books/#{@book}/members/#{@book_member}/nickname"}
         >
           <%= gettext("Edit") %>
         </.button>

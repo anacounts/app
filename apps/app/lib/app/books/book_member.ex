@@ -59,9 +59,9 @@ defmodule App.Books.BookMember do
     timestamps()
   end
 
-  ## Changeset
+  ## Changesets
 
-  def changeset(struct, attrs) do
+  def nickname_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:nickname])
     |> validate_nickname()

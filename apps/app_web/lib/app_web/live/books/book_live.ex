@@ -23,8 +23,7 @@ defmodule AppWeb.BookLive do
       </:breadcrumb>
       <:title><%= @page_title %></:title>
 
-      <% # TODO(v2,profile) replace route by `~p"/books/profile"` %>
-      <.link :if={@no_revenues?} navigate={~p"/books/#{@book}/members/#{@current_member}"}>
+      <.link :if={@no_revenues?} navigate={~p"/books/#{@book}/profile"}>
         <.alert kind={:warning}>
           <span class="grow"><%= gettext("Your revenues are not set") %></span>
           <.icon name={:chevron_right} />
@@ -32,8 +31,7 @@ defmodule AppWeb.BookLive do
       </.link>
 
       <.card_grid>
-        <% # TODO(v2,profile) replace route by `~p"/books/profile"` %>
-        <.link navigate={~p"/books/#{@book}/members/#{@current_member}"}>
+        <.link navigate={~p"/books/#{@book}/profile"}>
           <.card>
             <:title>My profile <.icon name={:chevron_right} /></:title>
             <%= @current_member.nickname %>

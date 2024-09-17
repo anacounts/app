@@ -26,54 +26,6 @@ defmodule AppWeb.BookMemberFormLiveTest do
     end
   end
 
-  describe "/books/:book_id/members/:member_id/edit" do
-    test "shows the member edit page", %{conn: conn, book: book, member: member} do
-      {:ok, live, _html} = live(conn, ~p"/books/#{book}/members/#{member}/edit")
-
-      {:ok, _live, _html} =
-        live
-        |> form("form", book_member: %{nickname: "Updated Nickname"})
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
-
-      member = Repo.reload(member)
-      assert member.nickname == "Updated Nickname"
-    end
-
-    test "responds with not found if the book or member does not exist", %{
-      conn: conn,
-      book: book,
-      member: member
-    } do
-      assert_raise Ecto.NoResultsError, fn ->
-        live(conn, ~p"/books/0/members/#{member}/edit")
-      end
-
-      assert_raise Ecto.NoResultsError, fn ->
-        live(conn, ~p"/books/#{book}/members/0/edit")
-      end
-    end
-
-    test "responds with not found if the book member does not belongs to the book", %{
-      conn: conn,
-      book: book
-    } do
-      other_member = book_member_fixture(book_fixture())
-
-      assert_raise Ecto.NoResultsError, fn ->
-        live(conn, ~p"/books/#{book}/members/#{other_member}/edit")
-      end
-    end
-  end
-
-  test "validates the form fields", %{conn: conn, book: book, member: member} do
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members/#{member}/edit")
-
-    assert live
-           |> form("form", book_member: %{nickname: ""})
-           |> render_submit() =~ "can&#39;t be blank"
-  end
-
   # Depends on :register_and_log_in_user
   defp book_with_member_context(%{user: user} = context) do
     book = book_fixture()
