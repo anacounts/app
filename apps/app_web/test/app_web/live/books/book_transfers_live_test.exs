@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransfersLiveTest do
+defmodule AppWeb.BookTransfersLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest

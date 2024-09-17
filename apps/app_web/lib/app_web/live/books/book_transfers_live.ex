@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransfersLive do
+defmodule AppWeb.BookTransfersLive do
   @moduledoc """
   The money transfer index live view.
   Shows money transfers for the current book.
