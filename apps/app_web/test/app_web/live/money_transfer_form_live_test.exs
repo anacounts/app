@@ -57,7 +57,7 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-    assert html =~ "Money transfer created successfully"
+    assert html =~ @create_attrs.label
   end
 
   test "updates money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
@@ -73,7 +73,8 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-    assert html =~ "Money transfer updated successfully"
+    refute html =~ money_transfer.label
+    assert html =~ @update_attrs.label
   end
 
   test "update the peers instead of deleting them", %{conn: conn, book: book} do
@@ -81,6 +82,7 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
 
     money_transfer =
       deprecated_money_transfer_fixture(book,
+        label: "Original transfer name",
         tenant_id: member.id,
         peers: [%{member_id: member.id}]
       )
@@ -93,7 +95,8 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-    assert html =~ "Money transfer updated successfully"
+    refute html =~ money_transfer.label
+    assert html =~ @update_attrs.label
 
     original_peer_ids = Enum.map(money_transfer.peers, & &1.id)
 
@@ -114,7 +117,7 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
       |> render_click()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-    assert html =~ "Transfer deleted successfully"
+    refute html =~ money_transfer.label
   end
 
   # Depends on :register_and_log_in_user

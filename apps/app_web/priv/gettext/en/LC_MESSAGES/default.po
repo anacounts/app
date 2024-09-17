@@ -16,12 +16,6 @@ msgid "%{count} members"
 msgstr "%{count} members"
 
 #, elixir-autogen, elixir-format
-msgid "%{count} transfer"
-msgid_plural "%{count} transfers"
-msgstr[0] "%{count} transfer"
-msgstr[1] "%{count} transfers"
-
-#, elixir-autogen, elixir-format
 msgid "%{member_name} in %{book_name}"
 msgstr "%{member_name} in %{book_name}"
 
@@ -220,14 +214,6 @@ msgid "Error!"
 msgstr "Error!"
 
 #, elixir-autogen, elixir-format
-msgid "Filter by"
-msgstr "Filter by"
-
-#, elixir-autogen, elixir-format
-msgid "First created"
-msgstr "First created"
-
-#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
@@ -284,10 +270,6 @@ msgid "Income"
 msgstr "Income"
 
 #, elixir-autogen, elixir-format
-msgid "Incomes"
-msgstr "Incomes"
-
-#, elixir-autogen, elixir-format
 msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 
@@ -332,10 +314,6 @@ msgid "Label"
 msgstr "Label"
 
 #, elixir-autogen, elixir-format
-msgid "Last created"
-msgstr "Last created"
-
-#, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Last year incomes"
 
@@ -366,10 +344,6 @@ msgstr "Money transfer created successfully"
 #, elixir-autogen, elixir-format
 msgid "Money transfer updated successfully"
 msgstr "Money transfer updated successfully"
-
-#, elixir-autogen, elixir-format
-msgid "Most recent"
-msgstr "Most recent"
 
 #, elixir-autogen, elixir-format
 msgid "My account"
@@ -432,28 +406,8 @@ msgid "Not %{user_name}? Disconnect"
 msgstr "Not %{user_name}? Disconnect"
 
 #, elixir-autogen, elixir-format
-msgid "Oldest"
-msgstr "Oldest"
-
-#, elixir-autogen, elixir-format
 msgid "Paid by"
 msgstr "Paid by"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by %{name}"
-msgstr "Paid by %{name}"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by anyone"
-msgstr "Paid by anyone"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by me"
-msgstr "Paid by me"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by others"
-msgstr "Paid by others"
 
 #, elixir-autogen, elixir-format
 msgid "Password"
@@ -468,10 +422,6 @@ msgid "Payment"
 msgstr "Payment"
 
 #, elixir-autogen, elixir-format
-msgid "Payments"
-msgstr "Payments"
-
-#, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr "Please enter a new password for your account"
 
@@ -480,16 +430,8 @@ msgid "Received by"
 msgstr "Received by"
 
 #, elixir-autogen, elixir-format
-msgid "Received by %{name}"
-msgstr "Received by %{name}"
-
-#, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Register"
-
-#, elixir-autogen, elixir-format
-msgid "Reimbursed to %{name}"
-msgstr "Reimbursed to %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement created successfully"
@@ -564,10 +506,6 @@ msgid "Something went wrong!"
 msgstr "Something went wrong!"
 
 #, elixir-autogen, elixir-format
-msgid "Sort by"
-msgstr "Sort by"
-
-#, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr "Success!"
 
@@ -624,16 +562,8 @@ msgid "Transfers"
 msgstr "Transfers"
 
 #, elixir-autogen, elixir-format
-msgid "Transfers · %{book_name}"
-msgstr "Transfers · %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "Type your new password again here"
 msgstr "Type your new password again here"
-
-#, elixir-autogen, elixir-format
-msgid "View"
-msgstr "View"
 
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
@@ -688,16 +618,8 @@ msgid "Your email address was not confirmed"
 msgstr "Your email address was not confirmed"
 
 #, elixir-autogen, elixir-format
-msgid "Your incomes"
-msgstr "Your incomes"
-
-#, elixir-autogen, elixir-format
 msgid "Your password must be at least 12 characters long"
 msgstr "Your password must be at least 12 characters long"
-
-#, elixir-autogen, elixir-format
-msgid "Your payments"
-msgstr "Your payments"
 
 #, elixir-autogen, elixir-format
 msgid "Your revenues are not set"
