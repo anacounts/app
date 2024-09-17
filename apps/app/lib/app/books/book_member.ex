@@ -78,8 +78,18 @@ defmodule App.Books.BookMember do
   @doc """
   Returns an `%Ecto.Query{}` fetching all book members.
   """
+  @spec base_query() :: Ecto.Query.t()
   def base_query do
     from __MODULE__, as: :book_member
+  end
+
+  @doc """
+  Returns an `%Ecto.Query{}` fetching all book members of a given book.
+  """
+  @spec book_query(Ecto.Queryable.t(), Book.t()) :: Ecto.Query.t()
+  def book_query(query \\ base_query(), book) do
+    from [book_member: book_member] in query,
+      where: book_member.book_id == ^book.id
   end
 
   @doc """
