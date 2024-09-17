@@ -111,6 +111,10 @@ msgid "Change email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Change nickname"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr ""
 
@@ -187,19 +191,11 @@ msgid "Edit"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Edit %{member_name} · %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Edit Book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Edit Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -244,6 +240,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Go to Gravatar"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Go to my account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -319,6 +319,10 @@ msgid "Join %{book_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Joined on"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Keep me logged in"
 msgstr ""
 
@@ -372,6 +376,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "My books"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "My profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -523,6 +531,10 @@ msgid "Send instructions"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Set revenues"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Settle up"
 msgstr ""
 
@@ -587,7 +599,15 @@ msgid "This invitation is irrelevant?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This is your current nickname"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -624,6 +644,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Weighted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "What would you like to change it to?"
 msgstr ""
 
 #, elixir-autogen, elixir-format

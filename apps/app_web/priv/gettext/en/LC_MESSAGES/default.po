@@ -112,6 +112,10 @@ msgid "Change email"
 msgstr "Change email"
 
 #, elixir-autogen, elixir-format
+msgid "Change nickname"
+msgstr "Change nickname"
+
+#, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr "Change password"
 
@@ -188,20 +192,12 @@ msgid "Edit"
 msgstr "Edit"
 
 #, elixir-autogen, elixir-format
-msgid "Edit %{member_name} · %{book_name}"
-msgstr "Edit %{member_name} · %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "Edit Book"
 msgstr "Edit Book"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
 msgstr "Edit Book · %{name}"
-
-#, elixir-autogen, elixir-format
-msgid "Edit Member"
-msgstr "Edit Member"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
@@ -246,6 +242,10 @@ msgstr "Go back to sign in page."
 #, elixir-autogen, elixir-format
 msgid "Go to Gravatar"
 msgstr "Go to Gravatar"
+
+#, elixir-autogen, elixir-format
+msgid "Go to my account"
+msgstr "Go to my account"
 
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars."
@@ -320,6 +320,10 @@ msgid "Join %{book_name}"
 msgstr "Join %{book_name}"
 
 #, elixir-autogen, elixir-format
+msgid "Joined on"
+msgstr "Joined on"
+
+#, elixir-autogen, elixir-format
 msgid "Keep me logged in"
 msgstr "Keep me logged in"
 
@@ -374,6 +378,10 @@ msgstr "My account"
 #, elixir-autogen, elixir-format
 msgid "My books"
 msgstr "My books"
+
+#, elixir-autogen, elixir-format
+msgid "My profile"
+msgstr "My profile"
 
 #, elixir-autogen, elixir-format
 msgid "Name"
@@ -524,6 +532,10 @@ msgid "Send instructions"
 msgstr "Send instructions"
 
 #, elixir-autogen, elixir-format
+msgid "Set revenues"
+msgstr "Set revenues"
+
+#, elixir-autogen, elixir-format
 msgid "Settle up"
 msgstr "Settle up"
 
@@ -588,8 +600,16 @@ msgid "This invitation is irrelevant?"
 msgstr "This invitation is irrelevant?"
 
 #, elixir-autogen, elixir-format
+msgid "This is your current nickname"
+msgstr "This is your current nickname"
+
+#, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
 msgstr "This page is not accessible while the book is closed"
+
+#, elixir-autogen, elixir-format
+msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
+msgstr "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
@@ -626,6 +646,10 @@ msgstr "Weight by income"
 #, elixir-autogen, elixir-format
 msgid "Weighted"
 msgstr "Weighted"
+
+#, elixir-autogen, elixir-format
+msgid "What would you like to change it to?"
+msgstr "What would you like to change it to?"
 
 #, elixir-autogen, elixir-format
 msgid "Who are you?"

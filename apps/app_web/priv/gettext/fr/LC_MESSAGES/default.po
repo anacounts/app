@@ -112,6 +112,10 @@ msgid "Change email"
 msgstr "Modifier mon email"
 
 #, elixir-autogen, elixir-format
+msgid "Change nickname"
+msgstr "Modifier votre pseudo"
+
+#, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr "Modifier mon mot de passe"
 
@@ -188,20 +192,12 @@ msgid "Edit"
 msgstr "Modifier"
 
 #, elixir-autogen, elixir-format
-msgid "Edit %{member_name} · %{book_name}"
-msgstr "Modifier %{member_name} · %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "Edit Book"
 msgstr "Modifier un livret"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Book · %{name}"
 msgstr "Editer un livret · %{name}"
-
-#, elixir-autogen, elixir-format
-msgid "Edit Member"
-msgstr "Modifier le membre"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
@@ -246,6 +242,10 @@ msgstr "Revenez à la page de connexion."
 #, elixir-autogen, elixir-format
 msgid "Go to Gravatar"
 msgstr "Aller sur Gravatar"
+
+#, elixir-autogen, elixir-format
+msgid "Go to my account"
+msgstr "Voir mon compte"
 
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars."
@@ -320,6 +320,10 @@ msgid "Join %{book_name}"
 msgstr "Rejoindre %{book_name}"
 
 #, elixir-autogen, elixir-format
+msgid "Joined on"
+msgstr "Rejoint le"
+
+#, elixir-autogen, elixir-format
 msgid "Keep me logged in"
 msgstr "Rester connecté"
 
@@ -376,6 +380,10 @@ msgid "My books"
 msgstr "Mes livrets"
 
 #, elixir-autogen, elixir-format
+msgid "My profile"
+msgstr "Mon profil"
+
+#, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nom"
 
@@ -409,7 +417,7 @@ msgstr "Nouveau transfert"
 
 #, elixir-autogen, elixir-format
 msgid "Nickname"
-msgstr "Surnom"
+msgstr "Pseudo"
 
 #, elixir-autogen, elixir-format
 msgid "No transfers yet"
@@ -524,6 +532,10 @@ msgid "Send instructions"
 msgstr "Envoyer les instructions"
 
 #, elixir-autogen, elixir-format
+msgid "Set revenues"
+msgstr "Définir vos revenues"
+
+#, elixir-autogen, elixir-format
 msgid "Settle up"
 msgstr "Rembourser"
 
@@ -588,8 +600,16 @@ msgid "This invitation is irrelevant?"
 msgstr "Pas concerné par l'invitation ?"
 
 #, elixir-autogen, elixir-format
+msgid "This is your current nickname"
+msgstr "Votre pseudo actuel est le suivant"
+
+#, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
 msgstr "Cette page n'est pas accessible tant que le livret est clôt"
+
+#, elixir-autogen, elixir-format
+msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
+msgstr "Ceci changera votre pseudo dans ce livret uniquement. Vous pouvez changer de pseudo autant de fois que souhaité ou nécessaire."
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
@@ -626,6 +646,10 @@ msgstr "Pondérer par revenu"
 #, elixir-autogen, elixir-format
 msgid "Weighted"
 msgstr "Pondéré"
+
+#, elixir-autogen, elixir-format
+msgid "What would you like to change it to?"
+msgstr "Quel sera votre nouveau pseudo ?"
 
 #, elixir-autogen, elixir-format
 msgid "Who are you?"
