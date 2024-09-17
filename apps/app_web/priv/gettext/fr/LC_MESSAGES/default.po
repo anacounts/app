@@ -120,6 +120,10 @@ msgid "Close"
 msgstr "Fermer"
 
 #, elixir-autogen, elixir-format
+msgid "Configuration"
+msgstr "Configuration"
+
+#, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
@@ -332,6 +336,10 @@ msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
 
 #, elixir-autogen, elixir-format
+msgid "Latest transfers"
+msgstr "Derniers transferts"
+
+#, elixir-autogen, elixir-format
 msgid "Log in here."
 msgstr "Connectez-vous ici."
 
@@ -396,8 +404,16 @@ msgid "New reimbursement"
 msgstr "Nouveau remboursement"
 
 #, elixir-autogen, elixir-format
+msgid "New transfer"
+msgstr "Nouveau transfert"
+
+#, elixir-autogen, elixir-format
 msgid "Nickname"
 msgstr "Surnom"
+
+#, elixir-autogen, elixir-format
+msgid "No transfers yet"
+msgstr "Pas de transfert"
 
 #, elixir-autogen, elixir-format
 msgid "Not %{email}?"
@@ -658,6 +674,10 @@ msgstr "Votre mot de passe doit faire au moins 12 caractères"
 #, elixir-autogen, elixir-format
 msgid "Your payments"
 msgstr "Vos paiements"
+
+#, elixir-autogen, elixir-format
+msgid "Your revenues are not set"
+msgstr "Vos revenues ne sont pas définis"
 
 #, elixir-autogen, elixir-format
 msgid "gives"

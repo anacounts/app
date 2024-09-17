@@ -95,6 +95,23 @@ defmodule App.Balance.BalanceConfigs do
   end
 
   @doc """
+  Check if a member has revenues set in their balance configuration.
+
+  Returns `false` both if the member has no balance configuration or if the balance
+  configuration has no annual income set.
+  """
+  @spec member_has_revenues?(BookMember.t()) :: boolean()
+  def member_has_revenues?(%BookMember{balance_config_id: nil} = _member), do: false
+
+  def member_has_revenues?(%BookMember{} = member) do
+    from(balance_config in BalanceConfig,
+      where: balance_config.id == ^member.balance_config_id,
+      select: not is_nil(balance_config.annual_income)
+    )
+    |> Repo.one!()
+  end
+
+  @doc """
   Link a member to the user's balance configuration.
   """
   @spec link_user_balance_configs_to_member!(User.t(), BookMember.t()) :: :ok

@@ -26,13 +26,8 @@ defmodule AppWeb.BooksLive do
             <%= gettext("Create a new book") %>
           </.tile>
         </.link>
-        <% # TODO(v2, book show) use link to show page %>
         <div id="books" phx-update="stream">
-          <.link
-            :for={{dom_id, book} <- @streams.books}
-            id={dom_id}
-            navigate={~p"/books/#{book.id}/transfers"}
-          >
+          <.link :for={{dom_id, book} <- @streams.books} id={dom_id} navigate={~p"/books/#{book.id}"}>
             <.tile class="mt-4">
               <span class="label grow leading-none line-clamp-2"><%= book.name %></span>
               <.button kind={:ghost}>
