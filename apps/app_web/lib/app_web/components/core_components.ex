@@ -23,29 +23,6 @@ defmodule AppWeb.CoreComponents do
   # Attributes of the `<input>` HTML element
   @input_attrs ~w(name value checked)
 
-  # The <.link_or_button> component is used to conditionally render a link or a button
-  # depending on the presence of the `navigate` attribute.
-
-  defp link_or_button(%{navigate: _} = assigns), do: render_link(assigns)
-  defp link_or_button(%{patch: _} = assigns), do: render_link(assigns)
-  defp link_or_button(%{href: _} = assigns), do: render_link(assigns)
-
-  defp link_or_button(assigns) do
-    ~H"""
-    <button {assigns_to_attributes(assigns)}>
-      <%= render_slot(@inner_block) %>
-    </button>
-    """
-  end
-
-  defp render_link(assigns) do
-    ~H"""
-    <.link {assigns_to_attributes(assigns)}>
-      <%= render_slot(@inner_block) %>
-    </.link>
-    """
-  end
-
   # prepend a class in `[:rest, :class]`
   defp prepend_class(assigns, class) do
     update(assigns, :rest, fn rest -> Map.update(rest, :class, class, &[class, &1]) end)
@@ -367,6 +344,8 @@ defmodule AppWeb.CoreComponents do
   slot :inner_block, required: true
 
   def card_button(assigns) do
+    # TODO add disabled style, based on parent aria-disabled
+    # Selector: [aria-disabled="true"] .card--button { ... }
     assigns = prepend_card_classes(assigns, "card--button")
 
     ~H"""
@@ -394,11 +373,15 @@ defmodule AppWeb.CoreComponents do
 
   The grid contains two columns of equal width.
   """
+  attr :rest, :global
+
   slot :inner_block, required: true
 
   def card_grid(assigns) do
+    assigns = prepend_class(assigns, "card-grid")
+
     ~H"""
-    <div class="card-grid">
+    <div {@rest}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -873,77 +856,6 @@ defmodule AppWeb.CoreComponents do
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
     </div>
-    """
-  end
-
-  ## Tile
-
-  @doc """
-  Deprecated
-  """
-
-  attr :collapse, :boolean,
-    default: false,
-    doc: """
-    Whether to collapse the tile.
-    Incompatible with `:navigate` and `:clickable`
-    """
-
-  attr :navigate, :string,
-    doc: """
-    The URL to navigate to when clicking the tile.
-    Incompatible with `:collapse`.
-    """
-
-  attr :class, :any, default: nil, doc: "Extra classes to add to the tile"
-  attr :summary_class, :any, default: nil, doc: "Extra classes to add to the tile summary"
-
-  attr :rest, :global
-
-  slot :inner_block
-
-  slot :description, doc: "When using collapsible tiles, the extended content of the tile"
-
-  slot :button, doc: "The button appearing in the footer of the tile" do
-    # XXX should be removed, circumvent a weird behaviour in LiveView
-    # https://github.com/phoenixframework/phoenix_live_view/issues/2265
-    attr :navigate, :string
-    attr :class, :any
-    attr :"data-confirm", :string
-    attr :"phx-click", :string
-    attr :"phx-value-id", :string
-  end
-
-  def deprecated_tile(%{collapse: true} = assigns) do
-    ~H"""
-    <details class={["tile", @class]} {@rest}>
-      <summary class={["tile__summary", @summary_class]}>
-        <%= render_slot(@inner_block) %>
-        <.icon class="tile__collapse-icon" name="expand-more" />
-      </summary>
-      <div class="tile__description">
-        <%= render_slot(@description) %>
-      </div>
-      <div :if={not Enum.empty?(@button)} class="tile__footer">
-        <.link_or_button
-          :for={button <- @button}
-          class={["tile__button", button[:class]]}
-          {assigns_to_attributes(button, [:class])}
-        >
-          <%= render_slot(button) %>
-        </.link_or_button>
-      </div>
-    </details>
-    """
-  end
-
-  def deprecated_tile(%{navigate: _} = assigns) do
-    ~H"""
-    <.link class={["tile tile--clickable", @class]} navigate={@navigate} {@rest}>
-      <div class={["tile__summary", @summary_class]}>
-        <%= render_slot(@inner_block) %>
-      </div>
-    </.link>
     """
   end
 

@@ -13,7 +13,7 @@ defmodule AppWeb.LayoutsTest do
       book = book_fixture()
       _member = book_member_fixture(book, user_id: user.id)
 
-      {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
+      {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
       assert html =~ ~s(id="close-book")
       refute html =~ ~s(id="reopen-book")
@@ -23,7 +23,7 @@ defmodule AppWeb.LayoutsTest do
       book = book_fixture(closed_at: ~N[2021-01-01 00:00:00])
       _member = book_member_fixture(book, user_id: user.id)
 
-      {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
+      {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
       refute html =~ ~s(id="close-book")
       assert html =~ ~s(id="reopen-book")
@@ -44,7 +44,7 @@ defmodule AppWeb.LayoutsTest do
           peers: [%{member_id: member1.id}, %{member_id: member2.id}]
         )
 
-      {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
+      {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
       assert Floki.attribute(html, "#close-book", "data-confirm") == [
                "The book is not balanced. Are you sure you want to close it?"
