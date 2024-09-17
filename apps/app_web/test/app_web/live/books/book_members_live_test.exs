@@ -6,20 +6,7 @@ defmodule AppWeb.BookMembersLiveTest do
   import App.BooksFixtures
   import App.Books.MembersFixtures
 
-  alias App.Repo
-
-  alias App.Books
-
   setup [:register_and_log_in_user, :book_with_member_context]
-
-  test "members tab is highlighted", %{conn: conn, book: book} do
-    {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
-
-    assert [class] =
-             Floki.attribute(html, ~s(.tabs__link[href="#{~p"/books/#{book}/members"}"]), "class")
-
-    assert String.contains?(class, "tabs__link--active")
-  end
 
   test "displays book members", %{conn: conn, book: book} do
     _member1 = book_member_fixture(book, user_id: user_fixture().id, nickname: "Samuel")
@@ -28,9 +15,6 @@ defmodule AppWeb.BookMembersLiveTest do
 
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/members")
 
-    # the book name is the main title
-    assert html =~ book.name <> "\n  </b>"
-    # the tabs are displayed
     assert html =~ "Members"
     # there are links that go to the invitation and member creation pages
     assert html =~ ~s(href="#{~p|/books/#{book}/invite|}")
@@ -38,10 +22,9 @@ defmodule AppWeb.BookMembersLiveTest do
     # the members are displayed, along with their status as an icon
     assert html =~ "Samuel"
     assert html =~ ~s(class="avatar)
+    assert html =~ "€0.00"
 
     assert html =~ "John"
-    # TODO(v2, book members) find svg icon
-    # assert html =~ ~s(person_off)
 
     refute html =~ "Eric"
   end
@@ -51,49 +34,14 @@ defmodule AppWeb.BookMembersLiveTest do
 
     {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
 
-    assert {:ok, _live, _html} =
+    assert {:ok, _live, html} =
              live
-             |> element(".tile", member.nickname)
+             |> element("[href='/books/#{book.id}/members/#{member.id}']", member.nickname)
              |> render_click()
              |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}")
-  end
 
-  test "closes book", %{conn: conn, book: book} do
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
-
-    assert html =
-             live
-             |> element("#close-book", "Close")
-             |> render_click()
-
-    assert html =~ "Book closed successfully"
-    assert book |> Repo.reload() |> Books.closed?()
-  end
-
-  test "reopens book", %{conn: conn, book: book} do
-    book = Books.close_book!(book)
-
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/members")
-
-    assert html =
-             live
-             |> element("#reopen-book", "Reopen")
-             |> render_click()
-
-    assert html =~ "Book reopened successfully"
-    refute book |> Repo.reload() |> Books.closed?()
-  end
-
-  test "deletes book", %{conn: conn, book: book} do
-    {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/members")
-
-    assert {:ok, _, html} =
-             show_live
-             |> element("#delete-book", "Delete")
-             |> render_click()
-             |> follow_redirect(conn, ~p"/books")
-
-    refute html =~ book.name
+    assert html =~ "Member"
+    assert html =~ member.nickname
   end
 
   # Depends on :register_and_log_in_user

@@ -34,9 +34,30 @@ defmodule AppWeb.BooksComponents do
     end
   end
 
+  @doc """
+  The book member balance displayed as a colorized text.
+  """
+  attr :book_member, BookMember, required: true
+
+  def balance_text(assigns) do
+    ~H"""
+    <span class={["label", balance_text_class(@book_member)]}>
+      <%= balance_string(@book_member) %>
+    </span>
+    """
+  end
+
+  defp balance_text_class(book_member) do
+    cond do
+      Balance.has_balance_error?(book_member) -> "text-neutral-500"
+      Money.negative?(book_member.balance) -> "text-red-500"
+      true -> "text-green-500"
+    end
+  end
+
   defp balance_string(book_member) do
     if Balance.has_balance_error?(book_member) do
-      "XX.XX€"
+      "XX.XX"
     else
       Money.to_string!(book_member.balance)
     end

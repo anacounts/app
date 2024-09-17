@@ -6,54 +6,78 @@ defmodule AppWeb.BookMembersLive do
 
   use AppWeb, :live_view
 
+  import AppWeb.BooksComponents, only: [balance_text: 1]
+
   alias App.Accounts.Avatars
   alias App.Balance
   alias App.Books
-
-  alias AppWeb.BooksHelpers
+  alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
-  on_mount {AppWeb.BookAccess, :assign_book_members}
-  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <div class="max-w-prose mx-auto">
-      <div :if={not Books.closed?(@book)} class="grid grid-cols-2">
-        <.deprecated_tile navigate={~p"/books/#{@book}/invite"} summary_class="justify-center">
-          <.icon name="mail" />
-          <%= gettext("Invite people") %>
-        </.deprecated_tile>
-        <.deprecated_tile navigate={~p"/books/#{@book}/members/new"} summary_class="justify-center">
-          <.icon name="person-add" />
-          <%= gettext("Create manually") %>
-        </.deprecated_tile>
-      </div>
+    <.app_page>
+      <:breadcrumb>
+        <.breadcrumb_item navigate={~p"/books/#{@book}"}>
+          <%= @book.name %>
+        </.breadcrumb_item>
+        <.breadcrumb_item>
+          <%= @page_title %>
+        </.breadcrumb_item>
+      </:breadcrumb>
+      <:title><%= @page_title %></:title>
 
-      <.deprecated_tile
-        :for={member <- @book_members}
-        navigate={~p"/books/#{@book}/members/#{member}"}
-      >
-        <.member_avatar member={member} />
-        <span class="grow font-bold">
-          <%= member.display_name %>
-        </span>
-        <.member_balance member={member} />
-      </.deprecated_tile>
-    </div>
+      <.card_grid class="mb-4">
+        <.link navigate={~p"/books/#{@book}/invite"} aria-disabled={Books.closed?(@book) && "true"}>
+          <.card_button color={:primary} icon={:envelope}>
+            <%= gettext("Invite people") %>
+          </.card_button>
+        </.link>
+        <.link
+          navigate={~p"/books/#{@book}/members/new"}
+          aria-disabled={Books.closed?(@book) && "true"}
+        >
+          <.card_button icon={:user_plus}>
+            <%= gettext("Create manually") %>
+          </.card_button>
+        </.link>
+      </.card_grid>
+
+      <div id="members" phx-update="stream" class="space-y-4">
+        <.link
+          :for={{dom_id, member} <- @streams.members}
+          id={dom_id}
+          navigate={~p"/books/#{@book}/members/#{member}"}
+          class="block"
+        >
+          <.tile class="h-">
+            <div class="grow grid grid-cols-[1fr_9rem] grid-flow-col">
+              <div class="row-span-2 flex items-center gap-2 truncate">
+                <.member_avatar member={member} />
+                <span class="label"><%= member.nickname %></span>
+              </div>
+              <div class="text-right pr-5">
+                <.balance_text book_member={member} />
+              </div>
+              <.button kind={:ghost} class="h-xs px-1">
+                <%= gettext("View profile") %>
+                <.icon name={:chevron_right} />
+              </.button>
+            </div>
+          </.tile>
+        </.link>
+      </div>
+    </.app_page>
     """
   end
 
   defp member_avatar(assigns) do
     if has_user?(assigns.member) do
-      ~H"""
-      <.avatar src={Avatars.avatar_url(@member)} alt="" />
-      """
+      ~H|<.avatar src={Avatars.avatar_url(@member)} alt="" />|
     else
-      ~H"""
-      <.icon size={:lg} name="person_off" class="mx-1" />
-      """
+      ~H|<.icon name={:user} class="m-1" />|
     end
   end
 
@@ -61,47 +85,20 @@ defmodule AppWeb.BookMembersLive do
     book_member.user_id != nil
   end
 
-  defp member_balance(assigns) do
-    ~H"""
-    <%= if Balance.has_balance_error?(@member) do %>
-      <span class="font-bold text-gray-60">
-        XX.xx
-      </span>
-    <% else %>
-      <span class={["font-bold", class_for_member_balance(@member.balance)]}>
-        <%= @member.balance %>
-      </span>
-    <% end %>
-    """
-  end
-
-  defp class_for_member_balance(balance) do
-    cond do
-      Money.zero?(balance) -> nil
-      Money.negative?(balance) -> "text-error"
-      true -> "text-info"
-    end
-  end
-
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     book = socket.assigns.book
 
-    socket = assign(socket, page_title: book.name)
+    members =
+      book
+      |> Members.list_members_of_book()
+      |> Balance.fill_members_balance()
 
-    {:ok, socket, layout: {AppWeb.Layouts, :book}}
-  end
+    socket =
+      socket
+      |> assign(:page_title, gettext("Members"))
+      |> stream(:members, members)
 
-  @impl Phoenix.LiveView
-  def handle_event("delete-book", _params, socket) do
-    BooksHelpers.handle_delete_book(socket)
-  end
-
-  def handle_event("close-book", _params, socket) do
-    BooksHelpers.handle_close_book(socket)
-  end
-
-  def handle_event("reopen-book", _params, socket) do
-    BooksHelpers.handle_reopen_book(socket)
+    {:ok, socket}
   end
 end
