@@ -67,7 +67,7 @@ defmodule Storybook.CoreComponents.Card do
             attributes: %{color: :neutral},
             slots: [
               ~s|<:title>Balance <.icon name={:chevron_right} /></:title>|,
-              ~s|XX.XX€|
+              ~s|XX.XX|
             ]
           )
         ]

@@ -566,6 +566,10 @@ msgid "Type your new password again here"
 msgstr "Taper votre nouveau mot de passe encore une fois ici"
 
 #, elixir-autogen, elixir-format
+msgid "View profile"
+msgstr "Voir le profil"
+
+#, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "Nous ne trouvons pas internet"
 
