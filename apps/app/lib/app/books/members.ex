@@ -57,9 +57,8 @@ defmodule App.Books.Members do
   end
 
   defp members_of_book_query(book) do
-    from([book_member: book_member] in BookMember.base_query(),
+    from([book_member: book_member] in BookMember.book_query(book),
       left_join: user in assoc(book_member, :user),
-      where: book_member.book_id == ^book.id,
       order_by: [asc: book_member.nickname]
     )
     |> BookMember.select_display_name()

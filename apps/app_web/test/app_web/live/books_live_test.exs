@@ -24,10 +24,10 @@ defmodule AppWeb.BooksLiveTest do
 
     assert {:ok, _, html} =
              index_live
-             |> element("[href='/books/#{book.id}/transfers']", book.name)
+             |> element("[href='/books/#{book.id}']", book.name)
              |> render_click()
-             |> follow_redirect(conn, ~p"/books/#{book.id}/transfers")
+             |> follow_redirect(conn, ~p"/books/#{book.id}")
 
-    assert html =~ "Transfers"
+    assert html =~ book.name
   end
 end
