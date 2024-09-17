@@ -16,12 +16,6 @@ msgid "%{count} members"
 msgstr "%{count} membres"
 
 #, elixir-autogen, elixir-format
-msgid "%{count} transfer"
-msgid_plural "%{count} transfers"
-msgstr[0] "%{count} transfert"
-msgstr[1] "%{count} transferts"
-
-#, elixir-autogen, elixir-format
 msgid "%{member_name} in %{book_name}"
 msgstr "%{member_name} dans %{book_name}"
 
@@ -220,14 +214,6 @@ msgid "Error!"
 msgstr "Erreur !"
 
 #, elixir-autogen, elixir-format
-msgid "Filter by"
-msgstr "Filtrer par"
-
-#, elixir-autogen, elixir-format
-msgid "First created"
-msgstr "Premier créé"
-
-#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
@@ -284,10 +270,6 @@ msgid "Income"
 msgstr "Revenu"
 
 #, elixir-autogen, elixir-format
-msgid "Incomes"
-msgstr "Revenus"
-
-#, elixir-autogen, elixir-format
 msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr "Indiquez vos revenus de l'année passée. Pour se faire, nous vous conseillons d'aller sur le site de votre banque, et d'additionner tous les revenus pendant la dernière année."
 
@@ -332,10 +314,6 @@ msgid "Label"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
-msgid "Last created"
-msgstr "Dernier créé"
-
-#, elixir-autogen, elixir-format
 msgid "Last year incomes"
 msgstr "Revenus de l'année passée"
 
@@ -366,10 +344,6 @@ msgstr "Transfert d'argent créé"
 #, elixir-autogen, elixir-format
 msgid "Money transfer updated successfully"
 msgstr "Transfert d'argent modifié"
-
-#, elixir-autogen, elixir-format
-msgid "Most recent"
-msgstr "Plus récent"
 
 #, elixir-autogen, elixir-format
 msgid "My account"
@@ -432,28 +406,8 @@ msgid "Not %{user_name}? Disconnect"
 msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
 
 #, elixir-autogen, elixir-format
-msgid "Oldest"
-msgstr "Plus ancien"
-
-#, elixir-autogen, elixir-format
 msgid "Paid by"
 msgstr "Payé par"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by %{name}"
-msgstr "Payé par %{name}"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by anyone"
-msgstr "Tous"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by me"
-msgstr "Que j'ai payé"
-
-#, elixir-autogen, elixir-format
-msgid "Paid by others"
-msgstr "Payé par quelqu'un d'autre"
 
 #, elixir-autogen, elixir-format
 msgid "Password"
@@ -468,10 +422,6 @@ msgid "Payment"
 msgstr "Paiement"
 
 #, elixir-autogen, elixir-format
-msgid "Payments"
-msgstr "Paiements"
-
-#, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
 msgstr "Entrez un nouveau mot de passe pour votre compte"
 
@@ -480,16 +430,8 @@ msgid "Received by"
 msgstr "Reçu par"
 
 #, elixir-autogen, elixir-format
-msgid "Received by %{name}"
-msgstr "Reçu par %{name}"
-
-#, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Créer un compte"
-
-#, elixir-autogen, elixir-format
-msgid "Reimbursed to %{name}"
-msgstr "Remboursé à %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement created successfully"
@@ -564,10 +506,6 @@ msgid "Something went wrong!"
 msgstr "Une erreur est survenue !"
 
 #, elixir-autogen, elixir-format
-msgid "Sort by"
-msgstr "Trier par"
-
-#, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr "C'est un succès !"
 
@@ -624,16 +562,8 @@ msgid "Transfers"
 msgstr "Transferts"
 
 #, elixir-autogen, elixir-format
-msgid "Transfers · %{book_name}"
-msgstr "Transferts · %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "Type your new password again here"
 msgstr "Taper votre nouveau mot de passe encore une fois ici"
-
-#, elixir-autogen, elixir-format
-msgid "View"
-msgstr "Voir"
 
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
@@ -688,16 +618,8 @@ msgid "Your email address was not confirmed"
 msgstr "Votre adresse email n'a pas été confirmée"
 
 #, elixir-autogen, elixir-format
-msgid "Your incomes"
-msgstr "Vos revenus"
-
-#, elixir-autogen, elixir-format
 msgid "Your password must be at least 12 characters long"
 msgstr "Votre mot de passe doit faire au moins 12 caractères"
-
-#, elixir-autogen, elixir-format
-msgid "Your payments"
-msgstr "Vos paiements"
 
 #, elixir-autogen, elixir-format
 msgid "Your revenues are not set"

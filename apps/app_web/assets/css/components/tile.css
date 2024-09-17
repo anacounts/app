@@ -4,6 +4,7 @@
            h-12
            py-2 pr-1 pl-4
            rounded-component
+           font-bold
            transition-colors;
   }
 
