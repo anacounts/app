@@ -85,27 +85,27 @@ defmodule App.Books.Members do
       book_id: book.id,
       role: :member
     }
-    |> BookMember.changeset(attrs)
+    |> BookMember.nickname_changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Update a book member.
+  Update the nickname of a book member.
   """
-  @spec update_book_member(BookMember.t(), map()) ::
+  @spec update_book_member_nickname(BookMember.t(), map()) ::
           {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
-  def update_book_member(book_member, attrs) do
+  def update_book_member_nickname(book_member, attrs) do
     book_member
-    |> BookMember.changeset(attrs)
+    |> BookMember.nickname_changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Return an `%Ecto.Changeset{}` for tracking book member changes.
+  Return an `%Ecto.Changeset{}` for tracking changes to a book member nickname.
   """
-  @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
-  def change_book_member(book_member, attrs \\ %{}) do
-    BookMember.changeset(book_member, attrs)
+  @spec change_book_member_nickname(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
+  def change_book_member_nickname(book_member, attrs \\ %{}) do
+    BookMember.nickname_changeset(book_member, attrs)
   end
 
   ## User invitations

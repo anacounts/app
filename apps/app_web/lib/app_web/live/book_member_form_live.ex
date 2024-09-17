@@ -16,9 +16,7 @@ defmodule AppWeb.BookMemberFormLive do
     ~H"""
     <.page_header>
       <:title>
-        <%= if @live_action == :new,
-          do: gettext("New Member"),
-          else: gettext("Edit Member") %>
+        <%= gettext("New Member") %>
       </:title>
     </.page_header>
 
@@ -57,25 +55,7 @@ defmodule AppWeb.BookMemberFormLive do
       page_title: gettext("New Member"),
       form:
         %BookMember{}
-        |> Members.change_book_member()
-        |> to_form()
-    )
-  end
-
-  defp mount_action(socket, :edit, %{"book_member_id" => book_member_id}) do
-    book = socket.assigns.book
-    member = Members.get_member_of_book!(book_member_id, book)
-
-    assign(socket,
-      page_title:
-        gettext("Edit %{member_name} · %{book_name}",
-          member_name: member.display_name,
-          book_name: book.name
-        ),
-      book_member: member,
-      form:
-        member
-        |> Members.change_book_member()
+        |> Members.change_book_member_nickname()
         |> to_form()
     )
   end
@@ -84,7 +64,7 @@ defmodule AppWeb.BookMemberFormLive do
   def handle_event("validate", %{"book_member" => book_member_params}, socket) do
     form =
       %BookMember{}
-      |> Members.change_book_member(book_member_params)
+      |> Members.change_book_member_nickname(book_member_params)
       |> Map.put(:action, :validate)
       |> to_form()
 
@@ -103,21 +83,6 @@ defmodule AppWeb.BookMemberFormLive do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Member created successfully"))
-         |> push_navigate(to: ~p"/books/#{book}/members/#{member}")}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :form, to_form(changeset))}
-    end
-  end
-
-  defp save_book_member(socket, :edit, book_member_params) do
-    %{book: book, book_member: member} = socket.assigns
-
-    case Members.update_book_member(member, book_member_params) do
-      {:ok, member} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Member updated successfully"))
          |> push_navigate(to: ~p"/books/#{book}/members/#{member}")}
 
       {:error, changeset} ->

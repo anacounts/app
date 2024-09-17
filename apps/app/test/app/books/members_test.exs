@@ -89,7 +89,7 @@ defmodule App.Books.MembersTest do
     end
   end
 
-  describe "update_book_member/2" do
+  describe "update_book_member_nickname/2" do
     setup do
       book = book_fixture()
       book_member = book_member_fixture(book)
@@ -99,25 +99,25 @@ defmodule App.Books.MembersTest do
 
     test "updates the book member", %{book_member: book_member} do
       assert {:ok, book_member} =
-               Members.update_book_member(book_member, %{nickname: "New Nickname"})
+               Members.update_book_member_nickname(book_member, %{nickname: "New Nickname"})
 
       assert book_member.nickname == "New Nickname"
     end
 
     test "fails if given invalid values", %{book_member: book_member} do
       assert {:error, changeset} =
-               Members.update_book_member(book_member, %{nickname: ""})
+               Members.update_book_member_nickname(book_member, %{nickname: ""})
 
       assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
 
     test "cannot set the user_id", %{book_member: book_member} do
-      assert {:ok, book_member} = Members.update_book_member(book_member, %{user_id: 1})
+      assert {:ok, book_member} = Members.update_book_member_nickname(book_member, %{user_id: 1})
       assert book_member.user_id == nil
     end
   end
 
-  describe "change_book_member/2" do
+  describe "change_book_member_nickname/2" do
     setup do
       book = book_fixture()
       book_member = book_member_fixture(book)
@@ -126,18 +126,18 @@ defmodule App.Books.MembersTest do
     end
 
     test "returns a changeset for the given book member", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member)
+      assert changeset = Members.change_book_member_nickname(book_member)
       assert changeset.valid?
       assert changeset.params == %{}
     end
 
     test "validates the user attributes", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member, %{nickname: ""})
+      assert changeset = Members.change_book_member_nickname(book_member, %{nickname: ""})
       assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
 
     test "cannot set the user_id", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member, %{user_id: 1})
+      assert changeset = Members.change_book_member_nickname(book_member, %{user_id: 1})
       assert changeset.valid?
       refute Ecto.Changeset.changed?(changeset, :user_id)
     end

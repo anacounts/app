@@ -91,17 +91,17 @@ defmodule AppWeb.Router do
       live "/books", BooksLive, :index
       live "/books/new", BookFormLive, :new
       live "/books/:book_id", BookLive, :show
+      live "/books/:book_id/balance", BookBalanceLive, :show
       live "/books/:book_id/edit", BookFormLive, :edit
-
       live "/books/:book_id/invite", BookInvitationsLive, :show
       live "/books/:book_id/members", BookMembersLive, :index
       live "/books/:book_id/members/new", BookMemberFormLive, :new
       live "/books/:book_id/members/:book_member_id", BookMemberLive, :show
-      live "/books/:book_id/members/:book_member_id/edit", BookMemberFormLive, :edit
+      live "/books/:book_id/members/:book_member_id/nickname", BookMemberNicknameLive, :edit
+      live "/books/:book_id/profile", BookProfileLive, :show
       live "/books/:book_id/transfers", MoneyTransfersLive, :index
       live "/books/:book_id/transfers/new", MoneyTransferFormLive, :new
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
-      live "/books/:book_id/balance", BookBalanceLive, :show
     end
 
     get "/invitations/:token", BookInvitationController, :edit
