@@ -104,8 +104,11 @@ defmodule AppWeb.Router do
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
     end
 
-    get "/invitations/:token", BookInvitationController, :edit
-    put "/invitations/:token", BookInvitationController, :update
+    get "/invitations/:token", BookInvitationController, :show
+    get "/invitations/:token/members/new", BookInvitationController, :new
+    post "/invitations/:token/members/new", BookInvitationController, :create
+    get "/invitations/:token/members/:book_member_id", BookInvitationController, :edit
+    put "/invitations/:token/members/:book_member_id", BookInvitationController, :update
   end
 
   ## Metrics routes

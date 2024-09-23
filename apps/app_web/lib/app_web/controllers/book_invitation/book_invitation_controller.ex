@@ -16,45 +16,58 @@ defmodule AppWeb.BookInvitationController do
 
   plug :get_book_by_token
   plug :ensure_user_is_not_member_of_book
+  plug :get_member when action in [:edit, :update]
+
   plug :put_layout, html: :auth
+  plug :set_page_title
 
-  def edit(conn, _opts) do
-    book = conn.assigns.book
-    members = Members.list_unlinked_members_of_book(book)
+  def show(conn, _opts) do
+    members = Members.list_unlinked_members_of_book(conn.assigns.book)
 
-    render(conn, :edit,
-      page_title: gettext("Join %{book_name}", book_name: book.name),
-      book: book,
-      members: members,
-      form: to_form(%{"id" => ""}, as: :book_member)
-    )
+    render(conn, members: members)
   end
 
-  def update(conn, %{"book_member" => %{"id" => book_member_id}}) do
+  def new(conn, _params) do
+    render(conn, form: to_form(%{"nickname" => ""}, as: :book_member))
+  end
+
+  def create(conn, %{"book_member" => book_member_params}) do
     %{book: book, current_user: current_user} = conn.assigns
 
-    if book_member_id == "new" do
-      Members.create_book_member_for_user(book, current_user)
-    else
-      book_member_id
-      |> Members.get_member_of_book!(book)
-      |> Members.link_book_member_to_user(current_user)
+    case Members.create_book_member_for_user(book, current_user, book_member_params) do
+      {:ok, _book_member} ->
+        conn
+        |> put_flash(:info, gettext("You have been added to the book"))
+        |> redirect(to: ~p"/books/#{book}")
+
+      {:error, changeset} ->
+        render(conn, :new, form: to_form(changeset))
     end
+  end
+
+  def edit(conn, _params) do
+    render(conn)
+  end
+
+  def update(conn, _params) do
+    %{book: book, member: member, current_user: current_user} = conn.assigns
+
+    Members.link_book_member_to_user(member, current_user)
 
     conn
     |> put_flash(:info, gettext("You have been added to the book"))
-    |> redirect(to: ~p"/books/#{book}/transfers")
+    |> redirect(to: ~p"/books/#{book}")
   end
 
   defp get_book_by_token(conn, _opts) do
     %{"token" => token} = conn.params
 
     if book = Books.get_book_by_invitation_token(token) do
-      conn |> assign(:token, token) |> assign(:book, book)
+      merge_assigns(conn, token: token, book: book)
     else
       conn
       |> put_flash(:error, gettext("Invitation link is invalid or it has expired"))
-      |> redirect(to: ~p"/")
+      |> redirect(to: ~p"/books")
       |> halt()
     end
   end
@@ -64,11 +77,24 @@ defmodule AppWeb.BookInvitationController do
 
     if Members.get_membership(book, current_user) do
       conn
-      |> put_flash(:info, gettext("You are already member of this book"))
-      |> redirect(to: ~p"/books/#{book}/transfers")
+      |> put_flash(:info, gettext("You are already part of this book."))
+      |> redirect(to: ~p"/books/#{book}")
       |> halt()
     else
       conn
     end
+  end
+
+  defp get_member(conn, _opts) do
+    book_member_id = conn.params["book_member_id"]
+    book = conn.assigns.book
+
+    member = Members.get_member_of_book!(book_member_id, book)
+
+    assign(conn, :member, member)
+  end
+
+  defp set_page_title(conn, _opts) do
+    assign(conn, :page_title, gettext("Join book"))
   end
 end

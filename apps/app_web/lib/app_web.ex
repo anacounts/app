@@ -48,7 +48,7 @@ defmodule AppWeb do
         layouts: [html: AppWeb.Layouts]
 
       # Import Phoenix form helpers
-      import Phoenix.Component, only: [to_form: 2]
+      import Phoenix.Component, only: [to_form: 1, to_form: 2]
 
       import Plug.Conn
       unquote(gettext())

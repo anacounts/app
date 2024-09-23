@@ -61,10 +61,6 @@ msgid "Attempting to reconnect"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Back to the app"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr ""
 
@@ -137,7 +133,7 @@ msgid "Contextual menu"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Copied to clipboard"
+msgid "Copied to clipboard !"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -241,7 +237,7 @@ msgid "Hang in there while we get back on track"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Hi %{user_name} 👋"
+msgid "Hello 👋 You have been invited to join a new book:"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -281,7 +277,7 @@ msgid "Invitation link is invalid or it has expired"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invitations · %{book_name}"
+msgid "Invitations"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -289,7 +285,7 @@ msgid "Invite people"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invite people to join"
+msgid "It can be changed at any time after joining"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -297,7 +293,7 @@ msgid "Join"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Join %{book_name}"
+msgid "Join book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -393,6 +389,10 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Nicknames can be changed later on."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "No transfers yet"
 msgstr ""
 
@@ -401,7 +401,7 @@ msgid "Not %{email}?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Not %{user_name}? Disconnect"
+msgid "Not %{user_name}?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -418,6 +418,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Payment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "People clicking this link will be asked either to join as an existing member, or to create a new one."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -533,10 +537,6 @@ msgid "This email will be your identifier"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "This invitation is irrelevant?"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr ""
 
@@ -581,15 +581,15 @@ msgid "Weighted"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "What nickname do you want to use?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "What would you like to change it to?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Who are you?"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "You are already member of this book"
+msgid "You are already part of this book."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -597,11 +597,15 @@ msgid "You have been added to the book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "You have been invited to join a new book:"
+msgid "You must log in to access this page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "You must log in to access this page."
+msgid "You need to identify yourself. Who are you?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You will join as the following member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
