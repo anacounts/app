@@ -16,6 +16,10 @@ msgid "%{count} members"
 msgstr "%{count} membres"
 
 #, elixir-autogen, elixir-format
+msgid "%{count} unlinked"
+msgstr "%{count} sans utilisateur"
+
+#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr "%{transfer_name} · %{book_name}"
 
