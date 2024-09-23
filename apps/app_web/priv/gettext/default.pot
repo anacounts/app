@@ -317,11 +317,11 @@ msgid "Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member created successfully"
+msgid "Members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Members"
+msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -350,10 +350,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New Book"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -514,6 +510,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 msgstr ""
 
 #, elixir-autogen, elixir-format

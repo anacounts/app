@@ -23,7 +23,7 @@ defmodule AppWeb.BookMemberNicknameLive do
         phx-submit="submit"
         class="container space-y-2"
       >
-        <p class="mb-4">
+        <p>
           <%= nickname_helper(@live_action) %><br />
           <span class="label"><%= @book_member.nickname %></span>
         </p>

@@ -318,12 +318,12 @@ msgid "Member"
 msgstr "Member"
 
 #, elixir-autogen, elixir-format
-msgid "Member created successfully"
-msgstr "Member created successfully"
-
-#, elixir-autogen, elixir-format
 msgid "Members"
 msgstr "Members"
+
+#, elixir-autogen, elixir-format
+msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
+msgstr "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 
 #, elixir-autogen, elixir-format
 msgid "Money transfer created successfully"
@@ -352,10 +352,6 @@ msgstr "Name"
 #, elixir-autogen, elixir-format
 msgid "New Book"
 msgstr "New Book"
-
-#, elixir-autogen, elixir-format
-msgid "New Member"
-msgstr "New Member"
 
 #, elixir-autogen, elixir-format
 msgid "New Transfer"
@@ -516,6 +512,10 @@ msgstr "The book is not balanced. Are you sure you want to close it?"
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
 msgstr "The confirmation email will be sent to this address"
+
+#, elixir-autogen, elixir-format
+msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
+msgstr "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 
 #, elixir-autogen, elixir-format
 msgid "The transactions are balanced already!"

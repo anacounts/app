@@ -14,50 +14,68 @@ defmodule AppWeb.BookMemberCreationLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header>
-      <:title>
-        <%= gettext("New Member") %>
-      </:title>
-    </.page_header>
+    <.app_page>
+      <:breadcrumb>
+        <.breadcrumb_ellipsis />
+        <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
+          <%= gettext("Members") %>
+        </.breadcrumb_item>
+        <.breadcrumb_item>
+          <%= @page_title %>
+        </.breadcrumb_item>
+      </:breadcrumb>
+      <:title><%= @page_title %></:title>
 
-    <main class="max-w-prose mx-auto">
-      <.form for={@form} id="member-form" phx-change="validate" phx-submit="save">
-        <section id="details">
-          <div class="mx-4 mb-4 md:min-w-[380px]">
-            <.input
-              type="text"
-              label={gettext("Nickname")}
-              field={@form[:nickname]}
-              class="w-full"
-              pattern=".{1,255}"
-              required
-            />
-          </div>
+      <.form
+        for={@form}
+        id="member-form"
+        phx-change="validate"
+        phx-submit="save"
+        class="container space-y-2"
+      >
+        <p>
+          <%= gettext(
+            "Members created manually will appear alongside invited members," <>
+              " but are not linked to a user until someone invited through the invitation link" <>
+              " claims them."
+          ) %>
+        </p>
+        <p>
+          <%= gettext(
+            "The main difference with invited members is that you can see and edit" <>
+              " revenues of unlinked members from their member page."
+          ) %>
+        </p>
+        <.input
+          type="text"
+          label={gettext("Nickname")}
+          field={@form[:nickname]}
+          pattern=".{1,255}"
+          required
+        />
 
-          <div class="mx-4 mb-4">
-            <.button color={:cta} class="min-w-[5rem]" phx-disable-with={gettext("Saving...")}>
-              <%= gettext("Save") %>
-            </.button>
-          </div>
-        </section>
+        <.button_group>
+          <.button kind={:primary}>
+            <%= gettext("Save") %>
+          </.button>
+        </.button_group>
       </.form>
-    </main>
+    </.app_page>
     """
   end
 
   @impl Phoenix.LiveView
-  def mount(params, _session, socket) do
-    {:ok, mount_action(socket, socket.assigns.live_action, params)}
-  end
+  def mount(_params, _session, socket) do
+    socket =
+      assign(socket,
+        page_title: gettext("Create manually"),
+        form:
+          %BookMember{}
+          |> Members.change_book_member_nickname()
+          |> to_form()
+      )
 
-  defp mount_action(socket, :new, _params) do
-    assign(socket,
-      page_title: gettext("New Member"),
-      form:
-        %BookMember{}
-        |> Members.change_book_member_nickname()
-        |> to_form()
-    )
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
@@ -72,18 +90,11 @@ defmodule AppWeb.BookMemberCreationLive do
   end
 
   def handle_event("save", %{"book_member" => book_member_params}, socket) do
-    save_book_member(socket, socket.assigns.live_action, book_member_params)
-  end
-
-  defp save_book_member(socket, :new, book_member_params) do
     book = socket.assigns.book
 
     case Members.create_book_member(book, book_member_params) do
-      {:ok, member} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Member created successfully"))
-         |> push_navigate(to: ~p"/books/#{book}/members/#{member}")}
+      {:ok, _member} ->
+        {:noreply, push_navigate(socket, to: ~p"/books/#{book}/members")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :form, to_form(changeset))}

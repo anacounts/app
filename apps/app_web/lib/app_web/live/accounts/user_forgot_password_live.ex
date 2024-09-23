@@ -6,7 +6,7 @@ defmodule AppWeb.UserForgotPasswordLive do
   def render(assigns) do
     ~H"""
     <.form for={@form} id="reset_password_form" phx-submit="send_email" class="space-y-2">
-      <p class="mb-4">
+      <p>
         <%= gettext(
           "Enter your user account's email address and we will send you a password reset link."
         ) %>
