@@ -16,10 +16,6 @@ msgid "%{count} members"
 msgstr "%{count} membres"
 
 #, elixir-autogen, elixir-format
-msgid "%{member_name} in %{book_name}"
-msgstr "%{member_name} dans %{book_name}"
-
-#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr "%{transfer_name} · %{book_name}"
 
@@ -148,10 +144,6 @@ msgstr "Créer un compte"
 #, elixir-autogen, elixir-format
 msgid "Create manually"
 msgstr "Créer manuellement"
-
-#, elixir-autogen, elixir-format
-msgid "Created on %{date}"
-msgstr "Créé le %{date}"
 
 #, elixir-autogen, elixir-format
 msgid "Current password"
@@ -320,6 +312,10 @@ msgstr "Derniers transferts"
 #, elixir-autogen, elixir-format
 msgid "Log in here."
 msgstr "Connectez-vous ici."
+
+#, elixir-autogen, elixir-format
+msgid "Member"
+msgstr "Membre"
 
 #, elixir-autogen, elixir-format
 msgid "Member created successfully"
@@ -520,10 +516,6 @@ msgstr "Le livret n'est pas équilibré. Êtes-vous certain de vouloir le fermer
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
 msgstr "L'email de confirmation sera envoyé à cette adresse"
-
-#, elixir-autogen, elixir-format
-msgid "The member's avatar"
-msgstr "L'avatar du membre"
 
 #, elixir-autogen, elixir-format
 msgid "The transactions are balanced already!"

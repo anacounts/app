@@ -77,7 +77,7 @@ defmodule AppWeb.BookMembersLive do
     if has_user?(assigns.member) do
       ~H|<.avatar src={Avatars.avatar_url(@member)} alt="" />|
     else
-      ~H|<.icon name={:user} class="m-1" />|
+      ~H|<.icon name={:user_circle} class="m-1" />|
     end
   end
 

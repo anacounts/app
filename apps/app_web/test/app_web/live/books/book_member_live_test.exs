@@ -2,54 +2,73 @@ defmodule AppWeb.BookMemberLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
+  import App.AccountsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
   import App.TransfersFixtures
 
-  setup [:register_and_log_in_user, :book_with_member_context]
+  setup [:register_and_log_in_user]
 
-  test "show a member page", %{conn: conn, book: book, member: member, user: user} do
+  setup %{user: user} do
+    book = book_fixture()
+    member = book_member_fixture(book, user_id: user.id)
+    %{book: book, member: member}
+  end
+
+  test "show a member page", %{conn: conn, book: book} do
+    user = user_fixture()
+    member = book_member_fixture(book, user_id: user.id)
+
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/members/#{member}")
 
-    # avatar, display name and email are displayed
+    # display the avatar, nickname and email
     assert html =~ ~s(class="avatar)
     assert html =~ member.nickname
     assert html =~ user.email
 
-    # balance is displayed
+    # display the balance
     assert html =~ "€0.00"
 
-    # creation date is displayed
-    assert html =~ ~r/Created on \d{2}-\d{2}-\d{4}/
+    # display the creation date
+    assert html =~ "Joined on"
+    assert html =~ ~r/\d{2}-\d{2}-\d{4}/
+
+    # display the set revenues card, without a link since the user is already linked
+    assert html =~ "Set revenues"
+    # TODO(v2, revenues) use ~p
+    refute html =~ "/books/#{book.id}/members/#{member.id}/revenues"
+
+    # display the change nickname card
+    assert html =~ "Change nickname"
   end
 
   test "shows an unlinked member page", %{conn: conn, book: book} do
     member1 = book_member_fixture(book)
     member2 = book_member_fixture(book)
 
-    deprecated_money_transfer_fixture(book,
-      amount: Money.new!(:EUR, 2),
-      tenant_id: member1.id,
-      peers: [%{member_id: member1.id}, %{member_id: member2.id}]
-    )
+    transfer =
+      money_transfer_fixture(book,
+        amount: Money.new!(:EUR, 2),
+        tenant_id: member1.id
+      )
+
+    _peer1 = peer_fixture(member_id: member1.id, transfer_id: transfer.id)
+    _peer2 = peer_fixture(member_id: member2.id, transfer_id: transfer.id)
 
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/members/#{member1}")
 
-    # TODO(v2, book members) find svg icon
-    # assert html =~ "person_off"
     assert html =~ member1.nickname
-
     assert html =~ "€1.00"
   end
 
-  # Depends on :register_and_log_in_user
-  defp book_with_member_context(%{user: user} = context) do
-    book = book_fixture()
-    member = book_member_fixture(book, user_id: user.id, role: :creator)
+  test "redirects to the profile if it belongs to the current user", %{
+    conn: conn,
+    book: book,
+    member: member
+  } do
+    redirected_to = ~p"/books/#{book}/profile"
 
-    Map.merge(context, %{
-      book: book,
-      member: member
-    })
+    assert {:error, {:live_redirect, %{to: ^redirected_to}}} =
+             live(conn, ~p"/books/#{book}/members/#{member}")
   end
 end

@@ -5,9 +5,11 @@ defmodule AppWeb.BookMemberLive do
   """
   use AppWeb, :live_view
 
-  alias App.Accounts.Avatars
+  import AppWeb.AccountsComponents, only: [hero_avatar: 1]
+  import AppWeb.BooksComponents, only: [balance_card_link: 1]
+
+  alias App.Accounts
   alias App.Balance
-  alias App.Books
   alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -16,100 +18,74 @@ defmodule AppWeb.BookMemberLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header>
-      <:title><%= @book.name %></:title>
-    </.page_header>
+    <.app_page>
+      <:breadcrumb>
+        <.breadcrumb_ellipsis />
+        <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
+          <%= gettext("Members") %>
+        </.breadcrumb_item>
+        <.breadcrumb_item>
+          <%= @page_title %>
+        </.breadcrumb_item>
+      </:breadcrumb>
+      <:title><%= @page_title %></:title>
 
-    <main class="max-w-prose mx-auto">
-      <div class="flex items-center gap-4 mx-4 mb-4">
-        <.member_avatar book_member={@book_member} />
-        <address class="not-italic">
-          <span class="font-bold"><%= @book_member.display_name %></span>
-          <%= if has_user?(@book_member) do %>
-            <span>(<%= @book_member.nickname %>)</span>
-            <div><%= @book_member.email %></div>
-          <% end %>
-        </address>
-        <.member_balance book_member={@book_member} />
-      </div>
+      <%= if @user do %>
+        <.hero_avatar user={@user} alt={gettext("Your avatar")} book_member={@book_member} />
+      <% else %>
+        <div class="text-center my-4">
+          <.icon name={:user_circle} class="block size-[8rem] mx-auto" />
+          <span class="label"><%= @book_member.nickname %></span>
+        </div>
+      <% end %>
 
-      <div class="mx-4 mb-4">
-        <.icon name="calendar-month" />
-        <time datetime={@book_member.inserted_at}>
-          <%= gettext("Created on %{date}", date: format_date(@book_member.inserted_at)) %>
-        </time>
-      </div>
-
-      <div :if={not Books.closed?(@book)} class="flex gap-4 mx-4">
-        <.button
-          color={:feature}
-          class="min-w-[5rem]"
-          navigate={~p"/books/#{@book}/members/#{@book_member}/nickname"}
-        >
-          <%= gettext("Edit") %>
-        </.button>
-      </div>
-    </main>
+      <.card_grid>
+        <.balance_card_link book_member={@book_member} />
+        <.card>
+          <:title><%= gettext("Joined on") %></:title>
+          <%= format_date(@book_member.inserted_at) %>
+        </.card>
+        <.link navigate={is_nil(@user) && ~p"/books/#{@book}"} aria-disabled={@user && "true"}>
+          <.card_button icon={:banknotes}>
+            <%= gettext("Set revenues") %>
+          </.card_button>
+        </.link>
+        <.link navigate={~p"/books/#{@book}/members/#{@book_member}/nickname"}>
+          <.card_button icon={:identification}>
+            <%= gettext("Change nickname") %>
+          </.card_button>
+        </.link>
+      </.card_grid>
+    </.app_page>
     """
-  end
-
-  # TODO similar to the one in book_members_live.ex, merge
-  defp member_avatar(assigns) do
-    ~H"""
-    <%= if has_user?(@book_member) do %>
-      <.avatar src={Avatars.avatar_url(@book_member)} alt={gettext("The member's avatar")} size={:lg} />
-    <% else %>
-      <.icon size={:lg} name="person_off" class="m-2" />
-    <% end %>
-    """
-  end
-
-  # TODO similar to the one in book_members_live.ex, merge
-  defp member_balance(assigns) do
-    ~H"""
-    <%= if Balance.has_balance_error?(@book_member) do %>
-      <span class="ml-auto font-bold text-gray-60">
-        XX.xx
-      </span>
-    <% else %>
-      <span class={["ml-auto font-bold", class_for_member_balance(@book_member.balance)]}>
-        <%= @book_member.balance %>
-      </span>
-    <% end %>
-    """
-  end
-
-  defp class_for_member_balance(balance) do
-    cond do
-      Money.zero?(balance) -> nil
-      Money.negative?(balance) -> "text-error"
-      true -> "text-info"
-    end
   end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    %{book: book, book_member: book_member} = socket.assigns
+    %{book: book, book_member: book_member, current_member: current_member} = socket.assigns
 
-    # FIXME expensive, cache members balance ?
-    book_member =
-      book
-      |> Members.list_members_of_book()
-      |> Balance.fill_members_balance()
-      |> Enum.find(&(&1.id == book_member.id))
+    if book_member.id == current_member.id do
+      {:ok, push_navigate(socket, to: ~p"/books/#{book.id}/profile")}
+    else
+      %{book: book, book_member: book_member} = socket.assigns
 
-    {:ok,
-     assign(socket,
-       book_member: book_member,
-       page_title:
-         gettext("%{member_name} in %{book_name}",
-           member_name: book_member.display_name,
-           book_name: book.name
-         )
-     )}
-  end
+      # FIXME expensive, cache members balance
+      book_member =
+        book
+        |> Members.list_members_of_book()
+        |> Balance.fill_members_balance()
+        |> Enum.find(&(&1.id == book_member.id))
 
-  defp has_user?(book_member) do
-    book_member.user_id != nil
+      user = book_member.user_id && Accounts.get_user!(book_member.user_id)
+
+      socket =
+        assign(socket,
+          page_title: gettext("Member"),
+          book_member: book_member,
+          user: user
+        )
+
+      {:ok, socket}
+    end
   end
 end

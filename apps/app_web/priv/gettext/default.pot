@@ -15,10 +15,6 @@ msgid "%{count} members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{member_name} in %{book_name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
 msgstr ""
 
@@ -146,10 +142,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Create manually"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Created on %{date}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -318,6 +310,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Log in here."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -518,10 +514,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "The member's avatar"
 msgstr ""
 
 #, elixir-autogen, elixir-format
