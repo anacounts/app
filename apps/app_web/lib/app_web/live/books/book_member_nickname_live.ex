@@ -1,24 +1,18 @@
 defmodule AppWeb.BookMemberNicknameLive do
   use AppWeb, :live_view
 
+  alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
-  on_mount {AppWeb.BookAccess, :ensure_book_member!}
 
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <.app_page>
       <:breadcrumb>
-        <.breadcrumb_ellipsis />
-        <.breadcrumb_item navigate={~p"/books/#{@book}/profile"}>
-          <%= gettext("My profile") %>
-        </.breadcrumb_item>
-        <.breadcrumb_item>
-          <%= @page_title %>
-        </.breadcrumb_item>
+        <%= nickname_breadcrumbs(assigns) %>
       </:breadcrumb>
       <:title><%= @page_title %></:title>
 
@@ -29,16 +23,16 @@ defmodule AppWeb.BookMemberNicknameLive do
         phx-submit="submit"
         class="container space-y-2"
       >
-        <p class="mb-4">
-          <%= gettext("This is your current nickname") %><br />
-          <span class="label"><%= @current_member.nickname %></span>
+        <p>
+          <%= nickname_helper(@live_action) %><br />
+          <span class="label"><%= @book_member.nickname %></span>
         </p>
         <p><%= gettext("What would you like to change it to?") %></p>
         <.input field={@form[:nickname]} type="text" required phx-debounce />
         <p>
           <%= gettext(
-            "This will only change you nickname in the current book." <>
-              " You can change your nickname as many times as you want or need to."
+            "Only the current book will be affected." <>
+              " Nicknames can be changed as many times as you want or need to."
           ) %>
         </p>
 
@@ -52,20 +46,62 @@ defmodule AppWeb.BookMemberNicknameLive do
     """
   end
 
+  attr :live_action, :atom, required: true
+  attr :book, Book, required: true
+  attr :book_member, BookMember, required: true
+
+  defp nickname_breadcrumbs(%{live_action: :profile} = assigns) do
+    ~H"""
+    <.breadcrumb_ellipsis />
+    <.breadcrumb_item navigate={~p"/books/#{@book}/profile"}>
+      <%= gettext("My profile") %>
+    </.breadcrumb_item>
+    <.breadcrumb_item>
+      <%= gettext("Change nickname") %>
+    </.breadcrumb_item>
+    """
+  end
+
+  defp nickname_breadcrumbs(%{live_action: :member} = assigns) do
+    ~H"""
+    <.breadcrumb_ellipsis />
+    <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
+      <%= gettext("Member") %>
+    </.breadcrumb_item>
+    <.breadcrumb_item>
+      <%= gettext("Change nickname") %>
+    </.breadcrumb_item>
+    """
+  end
+
+  defp nickname_helper(:profile), do: gettext("This is your current nickname")
+  defp nickname_helper(:member), do: gettext("This is the current nickname of the member")
+
   @impl Phoenix.LiveView
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     form =
       %BookMember{}
       |> Members.change_book_member_nickname()
       |> to_form()
 
     socket =
-      assign(socket,
+      socket
+      |> assign(
         page_title: gettext("Change nickname"),
         form: form
       )
+      |> mount_action(socket.assigns.live_action, params)
 
     {:ok, socket}
+  end
+
+  defp mount_action(socket, :profile, _params) do
+    assign(socket, :book_member, socket.assigns.current_member)
+  end
+
+  defp mount_action(socket, :member, %{"book_member_id" => book_member_id}) do
+    book_member = Members.get_member_of_book!(book_member_id, socket.assigns.book)
+    assign(socket, :book_member, book_member)
   end
 
   @impl Phoenix.LiveView
@@ -82,25 +118,15 @@ defmodule AppWeb.BookMemberNicknameLive do
   def handle_event("submit", %{"book_member" => book_member_params}, socket) do
     case Members.update_book_member_nickname(socket.assigns.book_member, book_member_params) do
       {:ok, member} ->
-        redirect_path = redirect_path(member, socket.assigns.current_member)
+        redirect_path = redirect_path(member, socket.assigns.live_action)
 
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Member updated successfully"))
-         |> push_navigate(to: redirect_path)}
+        {:noreply, push_navigate(socket, to: redirect_path)}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :form, to_form(changeset))}
     end
   end
 
-  # If the edited member is the current member, redirect to their profile
-  # Otherwise, redirect to the member's page.
-  defp redirect_path(%{id: id} = member, %{id: id} = _current_member) do
-    ~p"/books/#{member.book_id}/profile"
-  end
-
-  defp redirect_path(member, _current_member) do
-    ~p"/books/#{member.book_id}/members/#{member}"
-  end
+  defp redirect_path(member, :profile), do: ~p"/books/#{member.book_id}/profile"
+  defp redirect_path(member, :member), do: ~p"/books/#{member.book_id}/members/#{member}"
 end
