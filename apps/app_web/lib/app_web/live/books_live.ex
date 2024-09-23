@@ -20,6 +20,8 @@ defmodule AppWeb.BooksLive do
         </.button>
       </header>
       <main>
+        <.alert_flash flash={@flash} kind={:error} class="mb-4" />
+
         <.link navigate={~p"/books/new"}>
           <.tile kind={:primary}>
             <.icon name={:plus} />

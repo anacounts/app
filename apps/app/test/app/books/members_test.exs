@@ -143,17 +143,26 @@ defmodule App.Books.MembersTest do
     end
   end
 
-  describe "create_book_member_for_user/2" do
+  describe "create_book_member_for_user/3" do
     setup do
       %{book: book_fixture(), user: user_fixture()}
     end
 
     test "creates a book member with the user", %{book: book, user: user} do
-      assert book_member = Members.create_book_member_for_user(book, user)
+      assert {:ok, book_member} =
+               Members.create_book_member_for_user(book, user, %{nickname: "Member"})
+
       assert book_member.book_id == book.id
       assert book_member.role == :member
       assert book_member.user_id == user.id
-      assert book_member.nickname == user.display_name
+      assert book_member.nickname == "Member"
+    end
+
+    test "returns an error if the parameters are invalid", %{book: book, user: user} do
+      assert {:error, changeset} =
+               Members.create_book_member_for_user(book, user, %{nickname: ""})
+
+      assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
   end
 

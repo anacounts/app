@@ -1176,7 +1176,7 @@ defmodule AppWeb.CoreComponents do
 
   # TODO(v2,end) drop `show/2`, `hide/2`, `show_dialog/2` and `hide_dialog/2` helper functions
 
-  def show(js \\ %JS{}, selector) do
+  defp show(js \\ %JS{}, selector) do
     JS.show(js,
       to: selector,
       transition:
@@ -1186,7 +1186,7 @@ defmodule AppWeb.CoreComponents do
     )
   end
 
-  def hide(js \\ %JS{}, selector) do
+  defp hide(js \\ %JS{}, selector) do
     JS.hide(js,
       to: selector,
       time: 200,
