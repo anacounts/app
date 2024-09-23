@@ -1,0 +1,23 @@
+<.invitation_layout book={@book} current_user={@current_user}>
+  <p class="mb-2">
+    <%= gettext("You need to identify yourself. Who are you?") %> <br />
+    <%= gettext("Nicknames can be changed later on.") %>
+  </p>
+
+  <.list class="mb-4">
+    <.list_item :for={member <- @members} class="flex items-center justify-between">
+      <span class="label line-clamp-2"><%= member.nickname %></span>
+      <.button kind={:ghost} navigate={~p"/invitations/#{@token}/members/#{member.id}"}>
+        <%= gettext("Join") %>
+        <.icon name={:chevron_right} />
+      </.button>
+    </.list_item>
+    <.list_item class="flex items-center justify-between">
+      <span class="label"><%= gettext("Someone new") %></span>
+      <.button kind={:ghost} navigate={~p"/invitations/#{@token}/members/new"}>
+        <%= gettext("Join") %>
+        <.icon name={:chevron_right} />
+      </.button>
+    </.list_item>
+  </.list>
+</.invitation_layout>

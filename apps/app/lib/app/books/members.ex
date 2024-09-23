@@ -113,15 +113,16 @@ defmodule App.Books.Members do
   @doc """
   Create a new book member within a book and link it to a user.
   """
-  @spec create_book_member_for_user(Book.t(), User.t()) :: BookMember.t()
-  def create_book_member_for_user(book, user) do
+  @spec create_book_member_for_user(Book.t(), User.t(), map()) ::
+          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
+  def create_book_member_for_user(book, user, params) do
     %BookMember{
       book_id: book.id,
       role: :member,
-      user_id: user.id,
-      nickname: user.display_name
+      user_id: user.id
     }
-    |> Repo.insert!()
+    |> BookMember.nickname_changeset(params)
+    |> Repo.insert()
   end
 
   @doc """

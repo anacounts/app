@@ -23,6 +23,8 @@ defmodule AppWeb.BookLive do
       </:breadcrumb>
       <:title><%= @page_title %></:title>
 
+      <.alert_flash flash={@flash} kind={:info} class="mb-4" />
+
       <.link :if={@no_revenues?} navigate={~p"/books/#{@book}/profile"}>
         <.alert kind={:warning}>
           <span class="grow"><%= gettext("Your revenues are not set") %></span>
@@ -30,7 +32,7 @@ defmodule AppWeb.BookLive do
         </.alert>
       </.link>
 
-      <.card_grid>
+      <.card_grid class="mt-4">
         <.link navigate={~p"/books/#{@book}/profile"}>
           <.card>
             <:title>My profile <.icon name={:chevron_right} /></:title>

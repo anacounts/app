@@ -62,10 +62,6 @@ msgid "Attempting to reconnect"
 msgstr "Tentative de reconnexion"
 
 #, elixir-autogen, elixir-format
-msgid "Back to the app"
-msgstr "Retourner à l'application"
-
-#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Solde"
 
@@ -138,7 +134,7 @@ msgid "Contextual menu"
 msgstr "Menu contextuel"
 
 #, elixir-autogen, elixir-format
-msgid "Copied to clipboard"
+msgid "Copied to clipboard !"
 msgstr "Copié dans le presse-papier"
 
 #, elixir-autogen, elixir-format
@@ -242,8 +238,8 @@ msgid "Hang in there while we get back on track"
 msgstr "Patientez pendant que nous nous remettons sur les rails"
 
 #, elixir-autogen, elixir-format
-msgid "Hi %{user_name} 👋"
-msgstr "Bonjour %{user_name} 👋"
+msgid "Hello 👋 You have been invited to join a new book:"
+msgstr "Bonjour 👋 Vous avez été invité à rejoindre un nouveau livret:"
 
 #, elixir-autogen, elixir-format
 msgid "Home"
@@ -282,24 +278,24 @@ msgid "Invitation link is invalid or it has expired"
 msgstr "Le lien d'invitation est invalide ou a expiré"
 
 #, elixir-autogen, elixir-format
-msgid "Invitations · %{book_name}"
-msgstr "Invitations · %{book_name}"
+msgid "Invitations"
+msgstr "Invitations"
 
 #, elixir-autogen, elixir-format
 msgid "Invite people"
 msgstr "Inviter des personnes"
 
 #, elixir-autogen, elixir-format
-msgid "Invite people to join"
-msgstr "Inviter des personnes à rejoindre"
+msgid "It can be changed at any time after joining"
+msgstr "Il peut être changé à tout moment après avoir rejoint"
 
 #, elixir-autogen, elixir-format
 msgid "Join"
 msgstr "Rejoindre"
 
 #, elixir-autogen, elixir-format
-msgid "Join %{book_name}"
-msgstr "Rejoindre %{book_name}"
+msgid "Join book"
+msgstr "Rejoindre le livret"
 
 #, elixir-autogen, elixir-format
 msgid "Joined on"
@@ -394,6 +390,10 @@ msgid "Nickname"
 msgstr "Pseudo"
 
 #, elixir-autogen, elixir-format
+msgid "Nicknames can be changed later on."
+msgstr "Les pseudos peuvent être changés plus tard."
+
+#, elixir-autogen, elixir-format
 msgid "No transfers yet"
 msgstr "Pas de transfert"
 
@@ -402,8 +402,8 @@ msgid "Not %{email}?"
 msgstr "Vous n'êtes pas %{email} ?"
 
 #, elixir-autogen, elixir-format
-msgid "Not %{user_name}? Disconnect"
-msgstr "Vous n'êtes pas %{user_name} ? Déconnectez-vous"
+msgid "Not %{user_name}?"
+msgstr "Vous n'êtes pas %{user_name} ?"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -420,6 +420,10 @@ msgstr "Mot de passe réinitialisé"
 #, elixir-autogen, elixir-format
 msgid "Payment"
 msgstr "Paiement"
+
+#, elixir-autogen, elixir-format
+msgid "People clicking this link will be asked either to join as an existing member, or to create a new one."
+msgstr "Après avoir cliqué sur le lien, il sera proposé de rejoindre en tant qu'un membre existant, ou d'en créer un nouveau."
 
 #, elixir-autogen, elixir-format
 msgid "Please enter a new password for your account"
@@ -534,10 +538,6 @@ msgid "This email will be your identifier"
 msgstr "Cette email sera votre identifiant"
 
 #, elixir-autogen, elixir-format
-msgid "This invitation is irrelevant?"
-msgstr "Pas concerné par l'invitation ?"
-
-#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr "Votre pseudo actuel est le suivant"
 
@@ -582,28 +582,32 @@ msgid "Weighted"
 msgstr "Pondéré"
 
 #, elixir-autogen, elixir-format
+msgid "What nickname do you want to use?"
+msgstr "Quel pseudo voulez-vous utiliser?"
+
+#, elixir-autogen, elixir-format
 msgid "What would you like to change it to?"
 msgstr "Quel sera votre nouveau pseudo ?"
 
 #, elixir-autogen, elixir-format
-msgid "Who are you?"
-msgstr "Qui êtes-vous ?"
-
-#, elixir-autogen, elixir-format
-msgid "You are already member of this book"
-msgstr "Vous êtes déjà membre de ce livret"
+msgid "You are already part of this book."
+msgstr "Vous êtes déjà membre de ce livret."
 
 #, elixir-autogen, elixir-format
 msgid "You have been added to the book"
 msgstr "Vous avez été ajouté au livret"
 
 #, elixir-autogen, elixir-format
-msgid "You have been invited to join a new book:"
-msgstr "Vous avez été invité à rejoindre un livret:"
-
-#, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Vous devez vous connecter pour accéder à cette page."
+
+#, elixir-autogen, elixir-format
+msgid "You need to identify yourself. Who are you?"
+msgstr "Vous devez vous identifier. Qui êtes-vous ?"
+
+#, elixir-autogen, elixir-format
+msgid "You will join as the following member"
+msgstr "Vous allez rejoindre le livret en temps que le membre suivant"
 
 #, elixir-autogen, elixir-format
 msgid "Your account was confirmed successfully."
