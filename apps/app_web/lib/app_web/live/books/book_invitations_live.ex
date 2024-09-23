@@ -13,28 +13,45 @@ defmodule AppWeb.BookInvitationsLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.page_header>
-      <:title><%= @book.name %></:title>
-    </.page_header>
+    <.app_page>
+      <:breadcrumb>
+        <.breadcrumb_ellipsis />
+        <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
+          <%= gettext("Members") %>
+        </.breadcrumb_item>
+        <.breadcrumb_item>
+          <%= @page_title %>
+        </.breadcrumb_item>
+      </:breadcrumb>
+      <:title><%= @page_title %></:title>
 
-    <main class="max-w-prose mx-auto mt-32">
-      <div class="text-center">
-        <span class="font-bold"><%= gettext("Invite people to join") %></span>
+      <div class="container">
+        <p class="mb-4">
+          <%= gettext(
+            "People clicking this link will be asked either to join as an existing member," <>
+              " or to create a new one."
+          ) %>
+        </p>
+
         <.input
           type="text"
           name="invitation_url"
           value={@invitation_url}
-          label_class="mb-0"
-          class="inline w-80 text-center"
           readonly
-          phx-click={JS.dispatch("app:copy-to-clipboard") |> show("#copied-to-clipboard")}
+          phx-click={
+            JS.dispatch("app:copy-to-clipboard")
+            |> JS.hide(to: "#copy-to-clipboard-helper")
+            |> JS.show(to: "#copied-to-clipboard")
+          }
         />
-        <%= gettext("Share this link so people can join your book") %>
+        <p id="copy-to-clipboard-helper">
+          <%= gettext("Share this link so people can join your book") %>
+        </p>
+        <p id="copied-to-clipboard" class="hidden">
+          <%= gettext("Copied to clipboard !") %>
+        </p>
       </div>
-      <.flash kind={:info} title={gettext("Success!")} id="copied-to-clipboard" hidden>
-        <%= gettext("Copied to clipboard") %>
-      </.flash>
-    </main>
+    </.app_page>
     """
   end
 
@@ -45,7 +62,7 @@ defmodule AppWeb.BookInvitationsLive do
 
     socket =
       assign(socket,
-        page_title: gettext("Invitations · %{book_name}", book_name: book.name),
+        page_title: gettext("Invitations"),
         invitation_url: url(~p"/invitations/#{invitation_token}")
       )
 
