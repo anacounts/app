@@ -321,10 +321,6 @@ msgid "Member created successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member updated successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Members"
 msgstr ""
 
@@ -398,6 +394,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -529,15 +529,15 @@ msgid "This email will be your identifier"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This is the current nickname of the member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
 msgstr ""
 
 #, elixir-autogen, elixir-format

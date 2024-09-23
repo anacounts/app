@@ -322,10 +322,6 @@ msgid "Member created successfully"
 msgstr "Membre créé"
 
 #, elixir-autogen, elixir-format
-msgid "Member updated successfully"
-msgstr "Membre mis à jour"
-
-#, elixir-autogen, elixir-format
 msgid "Members"
 msgstr "Membres"
 
@@ -400,6 +396,10 @@ msgstr "Vous n'êtes pas %{email} ?"
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}?"
 msgstr "Vous n'êtes pas %{user_name} ?"
+
+#, elixir-autogen, elixir-format
+msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
+msgstr "Seul le livret actuel sera affecté. Les pseudos peuvent être changés autant de fois que souhaité ou nécessaire."
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -530,16 +530,16 @@ msgid "This email will be your identifier"
 msgstr "Cette email sera votre identifiant"
 
 #, elixir-autogen, elixir-format
+msgid "This is the current nickname of the member"
+msgstr "Ceci est le pseudo actuel du membre"
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr "Votre pseudo actuel est le suivant"
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
 msgstr "Cette page n'est pas accessible tant que le livret est clôt"
-
-#, elixir-autogen, elixir-format
-msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
-msgstr "Ceci changera votre pseudo dans ce livret uniquement. Vous pouvez changer de pseudo autant de fois que souhaité ou nécessaire."
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
