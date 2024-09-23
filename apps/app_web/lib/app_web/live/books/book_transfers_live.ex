@@ -128,9 +128,7 @@ defmodule AppWeb.BookTransfersLive do
     )
     # TODO optimize preload, the peers are only necessary for reimbursement transfers
     |> Repo.preload(
-      tenant:
-        BookMember.base_query()
-        |> BookMember.select_display_name(),
+      tenant: BookMember.base_query(),
       peers:
         Peer.base_query()
         |> select([:id, :member_id])

@@ -95,7 +95,7 @@ defmodule AppWeb.ReimbursementModalComponent do
   defp member_options_of_book(book) do
     book
     |> Members.list_members_of_book()
-    |> Enum.map(&{&1.display_name, &1.id})
+    |> Enum.map(&{&1.nickname, &1.id})
   end
 
   defp assign_form(socket, assigns) do
@@ -122,8 +122,8 @@ defmodule AppWeb.ReimbursementModalComponent do
 
   defp new_transfer_label(creditor, debtor) do
     gettext("Reimbursement from %{debtor_name} to %{creditor_name}",
-      debtor_name: debtor.display_name,
-      creditor_name: creditor.display_name
+      debtor_name: debtor.nickname,
+      creditor_name: creditor.nickname
     )
   end
 

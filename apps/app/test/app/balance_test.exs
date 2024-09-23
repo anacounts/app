@@ -247,7 +247,7 @@ defmodule App.BalanceTest do
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
-      member1 = book_member_fixture(book, display_name: "member1")
+      member1 = book_member_fixture(book, nickname: "member1")
       _balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
 
       member2 = book_member_fixture(book)
