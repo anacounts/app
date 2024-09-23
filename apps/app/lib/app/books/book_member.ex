@@ -23,7 +23,6 @@ defmodule App.Books.BookMember do
           user: User.t() | Ecto.Association.NotLoaded.t() | nil,
           deleted_at: NaiveDateTime.t() | nil,
           nickname: String.t() | nil,
-          display_name: String.t() | nil,
           email: String.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
           balance_config: BalanceConfig.t() | Ecto.Association.NotLoaded.t() | nil,
@@ -44,9 +43,6 @@ defmodule App.Books.BookMember do
     # member's `:nickname`, set at creation
     field :nickname, :string
 
-    # TODO(v2,end) drop this field, only `:nickname` remains
-    # Filled with the user `:display_name` if there is one, otherwise `:nickname`
-    field :display_name, :string, virtual: true
     # Filled with the user `:email` if there is one
     field :email, :string, virtual: true
 
@@ -90,16 +86,6 @@ defmodule App.Books.BookMember do
   def book_query(query \\ base_query(), book) do
     from [book_member: book_member] in query,
       where: book_member.book_id == ^book.id
-  end
-
-  @doc """
-  Updates an `%Ecto.Query{}` to select the `:display_name` of book members.
-  """
-  # TODO(v2,end) remove, only the member nickname remains
-  @spec select_display_name(Ecto.Query.t()) :: Ecto.Query.t()
-  def select_display_name(query) do
-    from [book_member: book_member, user: user] in join_user(query),
-      select_merge: %{display_name: book_member.nickname}
   end
 
   @doc """

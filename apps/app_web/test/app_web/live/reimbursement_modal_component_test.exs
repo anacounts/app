@@ -8,8 +8,8 @@ defmodule AppWeb.ReimbursementModalComponentTest do
   setup [:register_and_log_in_user, :book_with_member_context]
 
   test "displays transaction reimbursement", %{book: book} do
-    member1 = book_member_fixture(book, display_name: "Member 1")
-    member2 = book_member_fixture(book, display_name: "Member 2")
+    member1 = book_member_fixture(book, nickname: "Member 1")
+    member2 = book_member_fixture(book, nickname: "Member 2")
 
     html =
       render_component(AppWeb.ReimbursementModalComponent, %{

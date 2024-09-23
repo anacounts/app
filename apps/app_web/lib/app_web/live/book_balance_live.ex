@@ -43,11 +43,11 @@ defmodule AppWeb.BookBalanceLive do
             <.list_item :for={transaction <- @transactions}>
               <div class="grow">
                 <span class="font-bold">
-                  <%= transaction.from.display_name %>
+                  <%= transaction.from.nickname %>
                 </span>
                 <span><%= gettext("gives") %></span>
                 <span class="font-bold">
-                  <%= transaction.to.display_name %>
+                  <%= transaction.to.nickname %>
                 </span>
               </div>
               <%= transaction.amount %>

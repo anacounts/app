@@ -156,7 +156,7 @@ defmodule AppWeb.MoneyTransferFormLive do
                     />
                     <.avatar src={Avatars.avatar_url(member)} alt="" />
                     <div class="grow">
-                      <%= member.display_name %>
+                      <%= member.nickname %>
                     </div>
                     <input
                       type="number"
@@ -321,8 +321,8 @@ defmodule AppWeb.MoneyTransferFormLive do
 
   defp tenant_id_options(book_members) do
     book_members
-    |> Enum.sort_by(& &1.display_name)
-    |> Enum.map(&[key: &1.display_name || "", value: &1.id])
+    |> Enum.sort_by(& &1.nickname)
+    |> Enum.map(&[key: &1.nickname, value: &1.id])
   end
 
   defp balance_params_options do

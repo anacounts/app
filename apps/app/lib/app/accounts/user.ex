@@ -15,7 +15,6 @@ defmodule App.Accounts.User do
           password: String.t(),
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
-          display_name: String.t(),
           balance_config: BalanceConfig.t(),
           balance_config_id: BalanceConfig.id(),
           inserted_at: NaiveDateTime.t(),
@@ -28,9 +27,6 @@ defmodule App.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-
-    # TODO(v2,end) deprecated field, to be removed, only per book nicknames are kept
-    field :display_name, :string, virtual: true, default: "deprecated"
 
     # the current balance configuration of the user
     belongs_to :balance_config, BalanceConfig
