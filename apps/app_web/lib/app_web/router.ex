@@ -44,10 +44,10 @@ defmodule AppWeb.Router do
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{AppWeb.UserAuth, :redirect_if_user_is_authenticated}],
       layout: {AppWeb.Layouts, :auth} do
-      live "/users/register", UserRegistrationLive, :new
-      live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+      live "/users/register", UserRegistrationLive
+      live "/users/log_in", UserLoginLive
+      live "/users/reset_password", UserForgotPasswordLive
+      live "/users/reset_password/:token", UserResetPasswordLive
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -58,13 +58,13 @@ defmodule AppWeb.Router do
 
     live_session :user_settings,
       on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/email", UserSettingsEmailLive, :edit
-      live "/users/settings/email/confirm/:token", UserSettingsEmailLive, :confirm_email
-      live "/users/settings/avatar", UserSettingsAvatarLive, :edit
-      live "/users/settings/password", UserSettingsPasswordLive, :edit
+      live "/users/settings", UserSettingsLive
+      live "/users/settings/email", UserSettingsEmailLive
+      live "/users/settings/email/confirm/:token", UserSettingsEmailLive
+      live "/users/settings/avatar", UserSettingsAvatarLive
+      live "/users/settings/password", UserSettingsPasswordLive
 
-      live "/users/settings/balance", BalanceConfigLive, :edit
+      live "/users/settings/balance", BalanceConfigLive
     end
 
     live_session :user_confirmation,
@@ -88,18 +88,19 @@ defmodule AppWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :books, on_mount: [{AppWeb.UserAuth, :ensure_authenticated}] do
-      live "/books", BooksLive, :index
+      live "/books", BooksLive
       live "/books/new", BookFormLive, :new
-      live "/books/:book_id", BookLive, :show
-      live "/books/:book_id/balance", BookBalanceLive, :show
+      live "/books/:book_id", BookLive
+      live "/books/:book_id/balance", BookBalanceLive
       live "/books/:book_id/edit", BookFormLive, :edit
-      live "/books/:book_id/invite", BookInvitationsLive, :show
-      live "/books/:book_id/members", BookMembersLive, :index
-      live "/books/:book_id/members/new", BookMemberFormLive, :new
-      live "/books/:book_id/members/:book_member_id", BookMemberLive, :show
-      live "/books/:book_id/members/:book_member_id/nickname", BookMemberNicknameLive, :edit
-      live "/books/:book_id/profile", BookProfileLive, :show
-      live "/books/:book_id/transfers", BookTransfersLive, :index
+      live "/books/:book_id/invite", BookInvitationsLive
+      live "/books/:book_id/members", BookMembersLive
+      live "/books/:book_id/members/new", BookMemberCreationLive
+      live "/books/:book_id/members/:book_member_id", BookMemberLive
+      live "/books/:book_id/members/:book_member_id/nickname", BookMemberNicknameLive, :member
+      live "/books/:book_id/profile", BookProfileLive
+      live "/books/:book_id/profile/nickname", BookMemberNicknameLive, :profile
+      live "/books/:book_id/transfers", BookTransfersLive
       live "/books/:book_id/transfers/new", MoneyTransferFormLive, :new
       live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
     end

@@ -15,7 +15,7 @@ msgid "%{count} members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{member_name} in %{book_name}"
+msgid "%{count} unlinked"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -146,10 +146,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Create manually"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Created on %{date}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -321,15 +317,15 @@ msgid "Log in here."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member created successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Member updated successfully"
+msgid "Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Members"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -358,10 +354,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "New Book"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -402,6 +394,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -521,7 +517,7 @@ msgid "The confirmation email will be sent to this address"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The member's avatar"
+msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -537,15 +533,15 @@ msgid "This email will be your identifier"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This is the current nickname of the member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
 msgstr ""
 
 #, elixir-autogen, elixir-format

@@ -36,7 +36,7 @@ defmodule AppWeb.BookProfileLive do
             <%= gettext("Set revenues") %>
           </.card_button>
         </.link>
-        <.link navigate={~p"/books/#{@book}/members/#{@current_member}/nickname"}>
+        <.link navigate={~p"/books/#{@book}/profile/nickname"}>
           <.card_button icon={:identification}>
             <%= gettext("Change nickname") %>
           </.card_button>

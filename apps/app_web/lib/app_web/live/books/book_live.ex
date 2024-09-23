@@ -66,7 +66,9 @@ defmodule AppWeb.BookLive do
             <div class="flex justify-center items-center">
               <%= @members_count.total %> <.icon name={:user} />
             </div>
-            <div class="text-sm"><%= @members_count.unlinked %> unlinked</div>
+            <div class="text-sm">
+              <%= gettext("%{count} unlinked", count: @members_count.unlinked) %>
+            </div>
           </.card>
         </.link>
         <.link navigate={~p"/books/#{@book}/edit"}>

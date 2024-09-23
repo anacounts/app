@@ -26,7 +26,7 @@ defmodule AppWeb.UserSettingsEmailLive do
         phx-submit="update"
         class="container space-y-2"
       >
-        <p class="mb-4">
+        <p>
           <%= gettext(
             "Before making the change effective, a confirmation" <>
               " email will be sent to the new address."

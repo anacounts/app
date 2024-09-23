@@ -73,17 +73,17 @@ defmodule AppWeb.BookProfileLiveTest do
   end
 
   describe "Change nickname card" do
-    test "navigates to the nickname change page", %{conn: conn, book: book, member: member} do
+    test "navigates to the nickname change page", %{conn: conn, book: book} do
       {:ok, live, _html} = live(conn, ~p"/books/#{book}/profile")
 
       assert {:ok, _live, html} =
                live
                |> element(
-                 "[href='/books/#{book.id}/members/#{member.id}/nickname']",
+                 "[href='/books/#{book.id}/profile/nickname']",
                  "Change nickname"
                )
                |> render_click()
-               |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}/nickname")
+               |> follow_redirect(conn, ~p"/books/#{book}/profile/nickname")
 
       assert html =~ "Change nickname"
     end

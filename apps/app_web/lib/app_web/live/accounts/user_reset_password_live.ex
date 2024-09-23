@@ -12,7 +12,7 @@ defmodule AppWeb.UserResetPasswordLive do
       phx-change="validate"
       class="space-y-2"
     >
-      <p class="mb-4">
+      <p>
         <%= gettext("Please enter a new password for your account") %><br />
         <span class="label"><%= @user.email %></span>
       </p>

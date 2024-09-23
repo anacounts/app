@@ -16,8 +16,8 @@ msgid "%{count} members"
 msgstr "%{count} members"
 
 #, elixir-autogen, elixir-format
-msgid "%{member_name} in %{book_name}"
-msgstr "%{member_name} in %{book_name}"
+msgid "%{count} unlinked"
+msgstr "%{count} unlinked"
 
 #, elixir-autogen, elixir-format
 msgid "%{transfer_name} · %{book_name}"
@@ -148,10 +148,6 @@ msgstr "Create an account"
 #, elixir-autogen, elixir-format
 msgid "Create manually"
 msgstr "Create manually"
-
-#, elixir-autogen, elixir-format
-msgid "Created on %{date}"
-msgstr "Created on %{date}"
 
 #, elixir-autogen, elixir-format
 msgid "Current password"
@@ -322,16 +318,16 @@ msgid "Log in here."
 msgstr "Log in here."
 
 #, elixir-autogen, elixir-format
-msgid "Member created successfully"
-msgstr "Member created successfully"
-
-#, elixir-autogen, elixir-format
-msgid "Member updated successfully"
-msgstr "Member updated successfully"
+msgid "Member"
+msgstr "Member"
 
 #, elixir-autogen, elixir-format
 msgid "Members"
 msgstr "Members"
+
+#, elixir-autogen, elixir-format
+msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
+msgstr "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 
 #, elixir-autogen, elixir-format
 msgid "Money transfer created successfully"
@@ -360,10 +356,6 @@ msgstr "Name"
 #, elixir-autogen, elixir-format
 msgid "New Book"
 msgstr "New Book"
-
-#, elixir-autogen, elixir-format
-msgid "New Member"
-msgstr "New Member"
 
 #, elixir-autogen, elixir-format
 msgid "New Transfer"
@@ -404,6 +396,10 @@ msgstr "Not %{email}?"
 #, elixir-autogen, elixir-format
 msgid "Not %{user_name}?"
 msgstr "Not %{user_name}?"
+
+#, elixir-autogen, elixir-format
+msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
+msgstr "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -522,8 +518,8 @@ msgid "The confirmation email will be sent to this address"
 msgstr "The confirmation email will be sent to this address"
 
 #, elixir-autogen, elixir-format
-msgid "The member's avatar"
-msgstr "The member's avatar"
+msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
+msgstr "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 
 #, elixir-autogen, elixir-format
 msgid "The transactions are balanced already!"
@@ -538,16 +534,16 @@ msgid "This email will be your identifier"
 msgstr "This email will be your identifier"
 
 #, elixir-autogen, elixir-format
+msgid "This is the current nickname of the member"
+msgstr "This is the current nickname of the member"
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr "This is your current nickname"
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
 msgstr "This page is not accessible while the book is closed"
-
-#, elixir-autogen, elixir-format
-msgid "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
-msgstr "This will only change you nickname in the current book. You can change your nickname as many times as you want or need to."
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
