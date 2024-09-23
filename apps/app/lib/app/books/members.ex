@@ -20,7 +20,6 @@ defmodule App.Books.Members do
   @spec get_book_member!(BookMember.id()) :: BookMember.t()
   def get_book_member!(id) do
     BookMember.base_query()
-    |> BookMember.select_display_name()
     |> Repo.get!(id)
   end
 
@@ -61,7 +60,6 @@ defmodule App.Books.Members do
       left_join: user in assoc(book_member, :user),
       order_by: [asc: book_member.nickname]
     )
-    |> BookMember.select_display_name()
     |> BookMember.select_email()
   end
 

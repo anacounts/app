@@ -128,7 +128,7 @@ defmodule App.Balance do
     error_reasons =
       Enum.map(peers_without_annual_income, fn peer ->
         %{
-          message: "#{peer.member.display_name} did not set their annual income",
+          message: "#{peer.member.nickname} did not set their annual income",
           uniq_hash: "income_not_set_#{peer.member_id}"
         }
       end)

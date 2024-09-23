@@ -135,7 +135,7 @@ defmodule App.Books do
           role: :creator,
           book_id: book.id,
           user_id: creator.id,
-          nickname: creator.display_name,
+          nickname: creator.email,
           balance_config_id: creator.balance_config_id
         }
       end)

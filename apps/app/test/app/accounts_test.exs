@@ -52,7 +52,7 @@ defmodule App.AccountsTest do
   end
 
   describe "register_user/1" do
-    test "requires email, display_name and password to be set" do
+    test "requires email and password to be set" do
       {:error, changeset} = Accounts.register_user(%{})
 
       assert %{
@@ -83,7 +83,6 @@ defmodule App.AccountsTest do
       {:error, changeset} =
         Accounts.register_user(%{
           email: email,
-          display_name: "Hey, I'm valid !",
           password: @valid_user_password
         })
 
@@ -93,7 +92,6 @@ defmodule App.AccountsTest do
       {:error, changeset_upcase} =
         Accounts.register_user(%{
           email: String.upcase(email),
-          display_name: "Oh no, email was taken already",
           password: @valid_user_password
         })
 
