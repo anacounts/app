@@ -1,4 +1,4 @@
-defmodule AppWeb.BookMemberFormLive do
+defmodule AppWeb.BookMemberCreationLive do
   @moduledoc """
   The live view for the book member form.
   Create or edit a book member.

@@ -1,4 +1,4 @@
-defmodule AppWeb.BookMemberFormLiveTest do
+defmodule AppWeb.BookMemberCreationLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
