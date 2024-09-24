@@ -1,120 +1,117 @@
 defmodule AppWeb.BookBalanceLive do
   use AppWeb, :live_view
 
-  alias App.Balance
-  alias App.Books
+  import AppWeb.BooksComponents, only: [balance_card: 1]
 
-  alias AppWeb.BooksHelpers
-  alias AppWeb.ReimbursementModalComponent
+  alias App.Balance
+  alias App.Books.Book
+  alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
-  on_mount {AppWeb.BookAccess, :assign_book_members}
-  on_mount {AppWeb.BookAccess, :assign_book_unbalanced}
 
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <section>
-      <.heading level={:section} class="mt-4">
-        <%= gettext("How to balance?") %>
-      </.heading>
-      <.list>
-        <%= if @transactions_errors != nil do %>
-          <.list_item>
-            <div>
-              <%= ngettext(
-                "An error occured while balancing the transactions:",
-                "Errors occured while balancing the transactions:",
-                Enum.count(@transactions_errors)
-              ) %>
-              <ul class="mt-2 ms-2">
-                <li :for={reason <- @transactions_errors}>
-                  <%= reason.message %>
-                </li>
-              </ul>
+    <.app_page>
+      <:breadcrumb>
+        <.breadcrumb_item navigate={~p"/books/#{@book}"}>
+          <%= @book.name %>
+        </.breadcrumb_item>
+        <.breadcrumb_item>
+          <%= @page_title %>
+        </.breadcrumb_item>
+      </:breadcrumb>
+      <:title><%= @page_title %></:title>
+
+      <.card_grid class="mb-4">
+        <.balance_card book_member={@current_member} />
+        <.link navigate={~p"/books/#{@book}"}>
+          <.card_button icon={:credit_card}>
+            <%= gettext("Manual reimbursement") %>
+          </.card_button>
+        </.link>
+      </.card_grid>
+
+      <%= if @transaction_errors != nil do %>
+        <.alert kind={:error} class="mb-4">
+          <%= gettext("Some information is missing to balance the book") %>
+        </.alert>
+        <section class="space-y-4">
+          <.transaction_error_tile
+            :for={transaction_error <- @transaction_errors}
+            book={@book}
+            {transaction_error}
+          />
+        </section>
+      <% else %>
+        <.tile>
+          <div class="grid grid-rows-2 grid-cols-[1fr_9rem] items-center grid-flow-col grow">
+            <div class="truncate">
+              <span class="label text-theme-500">John Doe</span>
+              owes <span class="label">Jane Doe</span>
             </div>
-          </.list_item>
-        <% else %>
-          <%= if Enum.empty?(@transactions) do %>
-            <.list_item>
-              <%= gettext("The transactions are balanced already!") %>
-            </.list_item>
-          <% else %>
-            <.list_item :for={transaction <- @transactions}>
-              <div class="grow">
-                <span class="font-bold">
-                  <%= transaction.from.nickname %>
-                </span>
-                <span><%= gettext("gives") %></span>
-                <span class="font-bold">
-                  <%= transaction.to.nickname %>
-                </span>
-              </div>
-              <%= transaction.amount %>
-              <.button
-                :if={not Books.closed?(@book)}
-                color={:cta}
-                phx-click={JS.push("select-transaction") |> show_dialog("#reimbursement-modal")}
-                phx-value-transaction-id={transaction.id}
-              >
-                <%= gettext("Settle up") %>
-              </.button>
-            </.list_item>
-          <% end %>
-        <% end %>
-      </.list>
-      <.live_component
-        module={ReimbursementModalComponent}
-        id="reimbursement-modal"
-        book={@book}
-        open={@current_transaction != nil}
-        transaction={@current_transaction}
-      />
-    </section>
+            <span class="label">330€</span>
+            <.button kind={:ghost} class="row-span-2">
+              Settle up <.icon name={:chevron_right} />
+            </.button>
+          </div>
+        </.tile>
+      <% end %>
+    </.app_page>
+    """
+  end
+
+  attr :book, Book, required: true
+  attr :kind, :atom, required: true
+  attr :extra, :map, required: true
+
+  defp transaction_error_tile(%{kind: :revenues_missing} = assigns) do
+    ~H"""
+    <.link navigate={~p"/books/#{@book}/members/#{@extra.member}"} class="block">
+      <.tile class="justify-between">
+        <div class="truncate">
+          <span class="label"><%= @extra.member.nickname %></span>
+          <span class="font-normal">did not set their revenues.</span>
+        </div>
+        <.button kind={:ghost}>
+          <%= gettext("Fix it") %> <.icon name={:chevron_right} />
+        </.button>
+      </.tile>
+    </.link>
     """
   end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    book = socket.assigns.book
+    %{book: book, current_member: current_member} = socket.assigns
+
+    members =
+      book
+      |> Members.list_members_of_book()
+      |> Balance.fill_members_balance()
+
+    current_member = Enum.find(members, &(&1.id == current_member.id))
 
     socket =
       socket
       |> assign(
-        page_title: "Balance · #{book.name}",
-        current_transaction: nil
+        page_title: gettext("Balance"),
+        current_member: current_member
       )
-      |> assign_transactions()
+      |> assign_transactions(members)
 
-    {:ok, socket, layout: {AppWeb.Layouts, :book}}
+    {:ok, socket, temporary_assigns: [transaction_errors: []]}
   end
 
-  defp assign_transactions(socket) do
-    case Balance.transactions(socket.assigns.book_members) do
+  defp assign_transactions(socket, members) do
+    case Balance.transactions(members) do
       {:ok, transactions} ->
-        assign(socket, transactions_errors: nil, transactions: transactions)
+        socket
+        |> assign(transaction_errors: nil)
+        |> stream(:transactions, transactions)
 
       {:error, reasons} ->
-        assign(socket, transactions_errors: reasons)
+        assign(socket, transaction_errors: reasons)
     end
-  end
-
-  @impl Phoenix.LiveView
-  def handle_event("delete-book", _params, socket) do
-    BooksHelpers.handle_delete_book(socket)
-  end
-
-  def handle_event("close-book", _params, socket) do
-    BooksHelpers.handle_close_book(socket)
-  end
-
-  def handle_event("reopen-book", _params, socket) do
-    BooksHelpers.handle_reopen_book(socket)
-  end
-
-  def handle_event("select-transaction", %{"transaction-id" => transaction_id}, socket) do
-    transaction = Enum.find(socket.assigns.transactions, &(&1.id == transaction_id))
-
-    {:noreply, assign(socket, current_transaction: transaction)}
   end
 end

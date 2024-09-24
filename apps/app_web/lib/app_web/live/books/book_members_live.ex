@@ -52,7 +52,7 @@ defmodule AppWeb.BookMembersLive do
           navigate={~p"/books/#{@book}/members/#{member}"}
           class="block"
         >
-          <.tile class="h-">
+          <.tile>
             <div class="grow grid grid-cols-[1fr_9rem] grid-flow-col">
               <div class="row-span-2 flex items-center gap-2 truncate">
                 <.member_avatar member={member} />
