@@ -26,7 +26,7 @@ defmodule AppWeb.BookBalanceLive do
 
       <.card_grid class="mb-4">
         <.balance_card book_member={@current_member} />
-        <.link navigate={~p"/books/#{@book}"}>
+        <.link navigate={~p"/books/#{@book}/reimbursements/new"}>
           <.card_button icon={:credit_card}>
             <%= gettext("Manual reimbursement") %>
           </.card_button>
@@ -46,19 +46,28 @@ defmodule AppWeb.BookBalanceLive do
         </section>
       <% else %>
         <section class="space-y-4" phx-update="stream" id="transactions">
-          <.tile :for={{dom_id, transaction} <- @streams.transactions} id={dom_id}>
-            <div class="grid grid-rows-2 grid-cols-[1fr_9rem] items-center grid-flow-col grow">
-              <div class="truncate">
-                <.member_nickname book_member={transaction.from} current_member={@current_member} />
-                owes
-                <.member_nickname book_member={transaction.to} current_member={@current_member} />
+          <.link
+            :for={{dom_id, transaction} <- @streams.transactions}
+            id={dom_id}
+            navigate={
+              ~p"/books/#{@book}/reimbursements/new?from=#{transaction.from.id}&to=#{transaction.to.id}&amount=#{Money.to_string!(transaction.amount)}"
+            }
+            class="block"
+          >
+            <.tile>
+              <div class="grid grid-rows-2 grid-cols-[1fr_9rem] items-center grid-flow-col grow">
+                <div class="truncate">
+                  <.member_nickname book_member={transaction.from} current_member={@current_member} />
+                  owes
+                  <.member_nickname book_member={transaction.to} current_member={@current_member} />
+                </div>
+                <span class="label"><%= transaction.amount %></span>
+                <.button kind={:ghost} class="row-span-2">
+                  <%= gettext("Settle up") %> <.icon name={:chevron_right} />
+                </.button>
               </div>
-              <span class="label"><%= transaction.amount %></span>
-              <.button kind={:ghost} class="row-span-2">
-                <%= gettext("Settle up") %> <.icon name={:chevron_right} />
-              </.button>
-            </div>
-          </.tile>
+            </.tile>
+          </.link>
         </section>
       <% end %>
     </.app_page>

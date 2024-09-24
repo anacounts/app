@@ -4,10 +4,11 @@ defmodule App.Transfers do
   """
 
   import Ecto.Query
-  alias App.Repo
 
+  alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Books.BookMember
+  alias App.Repo
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
@@ -266,6 +267,30 @@ defmodule App.Transfers do
     money_transfer
     |> MoneyTransfer.changeset(attrs)
     |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
+  end
+
+  ## Reimbursements
+
+  @doc """
+  Creates a new reimbursement.
+  """
+  @spec create_reimbursement(Book.t(), map()) ::
+          {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
+  def create_reimbursement(%Book{} = book, attrs) do
+    %MoneyTransfer{
+      book_id: book.id,
+      type: :reimbursement,
+      balance_params: %TransferParams{means_code: :divide_equally}
+    }
+    |> MoneyTransfer.reimbursement_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking reimbursement changes.
+  """
+  def change_reimbursement(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
+    MoneyTransfer.reimbursement_changeset(money_transfer, attrs)
   end
 
   ## Status/fields

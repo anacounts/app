@@ -75,6 +75,17 @@ defmodule App.Transfers.MoneyTransfer do
     |> cast_assoc(:peers, with: with_changeset)
   end
 
+  @doc """
+  Changeset for creating a reimbursement kind of money transfer.
+  """
+  def reimbursement_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:label, :amount, :date, :tenant_id])
+    |> validate_label()
+    |> validate_amount()
+    |> cast_assoc(:peers, with: &Peer.update_money_transfer_changeset/2)
+  end
+
   defp validate_label(changeset) do
     changeset
     |> validate_required(:label)
@@ -89,6 +100,7 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_type(changeset) do
     changeset
     |> validate_required(:type)
+    |> validate_inclusion(:type, [:payment, :income])
   end
 
   defp validate_tenant_id(changeset) do
