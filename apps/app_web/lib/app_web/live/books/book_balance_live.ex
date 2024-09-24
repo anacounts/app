@@ -5,6 +5,7 @@ defmodule AppWeb.BookBalanceLive do
 
   alias App.Balance
   alias App.Books.Book
+  alias App.Books.BookMember
   alias App.Books.Members
 
   on_mount {AppWeb.BookAccess, :ensure_book!}
@@ -33,10 +34,10 @@ defmodule AppWeb.BookBalanceLive do
       </.card_grid>
 
       <%= if @transaction_errors != nil do %>
-        <.alert kind={:error} class="mb-4">
-          <%= gettext("Some information is missing to balance the book") %>
-        </.alert>
         <section class="space-y-4">
+          <.alert kind={:error}>
+            <%= gettext("Some information is missing to balance the book") %>
+          </.alert>
           <.transaction_error_tile
             :for={transaction_error <- @transaction_errors}
             book={@book}
@@ -44,18 +45,21 @@ defmodule AppWeb.BookBalanceLive do
           />
         </section>
       <% else %>
-        <.tile>
-          <div class="grid grid-rows-2 grid-cols-[1fr_9rem] items-center grid-flow-col grow">
-            <div class="truncate">
-              <span class="label text-theme-500">John Doe</span>
-              owes <span class="label">Jane Doe</span>
+        <section class="space-y-4" phx-update="stream" id="transactions">
+          <.tile :for={{dom_id, transaction} <- @streams.transactions} id={dom_id}>
+            <div class="grid grid-rows-2 grid-cols-[1fr_9rem] items-center grid-flow-col grow">
+              <div class="truncate">
+                <.member_nickname book_member={transaction.from} current_member={@current_member} />
+                owes
+                <.member_nickname book_member={transaction.to} current_member={@current_member} />
+              </div>
+              <span class="label"><%= transaction.amount %></span>
+              <.button kind={:ghost} class="row-span-2">
+                <%= gettext("Settle up") %> <.icon name={:chevron_right} />
+              </.button>
             </div>
-            <span class="label">330€</span>
-            <.button kind={:ghost} class="row-span-2">
-              Settle up <.icon name={:chevron_right} />
-            </.button>
-          </div>
-        </.tile>
+          </.tile>
+        </section>
       <% end %>
     </.app_page>
     """
@@ -78,6 +82,23 @@ defmodule AppWeb.BookBalanceLive do
         </.button>
       </.tile>
     </.link>
+    """
+  end
+
+  # Highlight the nickname of the current member
+  #
+  attr :book_member, BookMember, required: true
+  attr :current_member, BookMember, required: true
+
+  defp member_nickname(%{book_member: %{id: id}, current_member: %{id: id}} = assigns) do
+    ~H"""
+    <span class="label text-theme-500"><%= @book_member.nickname %></span>
+    """
+  end
+
+  defp member_nickname(assigns) do
+    ~H"""
+    <span class="label"><%= @book_member.nickname %></span>
     """
   end
 
