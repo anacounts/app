@@ -18,7 +18,7 @@ defmodule AppWeb.CoreComponents do
   @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
 
   # Attributes of the `<input>` HTML element
-  @input_attrs ~w(name value checked)
+  @input_attrs ~w(name value checked step)
 
   # prepend a class in `[:rest, :class]`
   defp prepend_class(assigns, class) do
@@ -774,8 +774,6 @@ defmodule AppWeb.CoreComponents do
     doc:
       "the options to pass to Phoenix.HTML.Form.options_for_select/2, or for the toggle-group input"
 
-  attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
-
   attr :label_class, :any, default: nil, doc: "Extra classes to add to the label"
   attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
                                    pattern placeholder readonly required rows size step)
@@ -784,7 +782,7 @@ defmodule AppWeb.CoreComponents do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
-    |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
+    |> assign_new(:name, fn -> field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
   end
@@ -811,14 +809,11 @@ defmodule AppWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
-      <select id={@id} name={@name} multiple={@multiple} {@rest}>
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
-      </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
+      <.select id={@id} name={@name} prompt={@prompt} options={@options} value={@value} {@rest} />
+      <%= input_helper_or_errors(assigns) %>
+    </div>
     """
   end
 
@@ -831,24 +826,18 @@ defmodule AppWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="flex items-end gap-4">
-      <label class={@label_class} phx-feedback-for={@name}>
-        <%= @label %>
-        <input
-          type="number"
-          name={@name}
-          id={@id || @name}
-          value={Phoenix.HTML.Form.normalize_value("number", @normalized_value)}
-          step="0.01"
-          {@rest}
-        />
-        <.error :for={msg <- @errors}><%= msg %></.error>
-      </label>
-      <label class={@label_class}>
-        <select disabled>
-          <%= Phoenix.HTML.Form.options_for_select(currencies_options(), "EUR") %>
-        </select>
-      </label>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
+      <.text_input
+        type="number"
+        name={@name}
+        id={@id || @name}
+        value={Phoenix.HTML.Form.normalize_value("number", @normalized_value)}
+        suffix={:currency_euro}
+        step="0.01"
+        {@rest}
+      />
+      <%= input_helper_or_errors(assigns) %>
     </div>
     """
   end
@@ -890,10 +879,6 @@ defmodule AppWeb.CoreComponents do
       <%= input_helper_or_errors(assigns) %>
     </div>
     """
-  end
-
-  defp currencies_options do
-    [[key: "€", value: "EUR"]]
   end
 
   defp input_helper_or_errors(%{errors: [], helper: _} = assigns), do: ~H|<%= @helper %>|
