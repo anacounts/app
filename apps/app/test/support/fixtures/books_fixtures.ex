@@ -4,8 +4,6 @@ defmodule App.BooksFixtures do
   entities via the `App.Books` context.
   """
 
-  import App.BalanceFixtures
-
   alias App.Repo
 
   alias App.Books.Book
@@ -13,8 +11,7 @@ defmodule App.BooksFixtures do
 
   def book_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
-      name: "A valid book name !",
-      default_balance_params: transfer_params_attributes()
+      name: "A valid book name !"
     })
   end
 

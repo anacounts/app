@@ -40,7 +40,7 @@ defmodule AppWeb.BalanceConfigLive do
       |> BalanceConfigs.change_balance_config()
 
     {:ok, assign(socket, form: to_form(form), page_title: gettext("Balance Settings")),
-     temporary_assigns: [form: form, page_title: nil]}
+     temporary_assigns: [form: form]}
   end
 
   def handle_event("validate", params, socket) do

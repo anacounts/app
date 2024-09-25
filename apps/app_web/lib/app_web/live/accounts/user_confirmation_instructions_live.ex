@@ -28,7 +28,7 @@ defmodule AppWeb.UserConfirmationInstructionsLive do
   def mount(_params, _session, socket) do
     socket = assign(socket, page_title: gettext("Confirm your account"))
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket}
   end
 
   def handle_event("send_instructions", _params, socket) do

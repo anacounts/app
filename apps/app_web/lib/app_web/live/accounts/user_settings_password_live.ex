@@ -77,7 +77,7 @@ defmodule AppWeb.UserSettingsPasswordLive do
         trigger_submit: false
       )
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket}
   end
 
   def handle_event("validate", params, socket) do

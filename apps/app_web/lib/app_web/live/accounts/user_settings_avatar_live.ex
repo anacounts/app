@@ -34,6 +34,6 @@ defmodule AppWeb.UserSettingsAvatarLive do
   def mount(_params, _session, socket) do
     socket = assign(socket, :page_title, gettext("Change avatar"))
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket}
   end
 end
