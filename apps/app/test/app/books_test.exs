@@ -14,7 +14,7 @@ defmodule App.BooksTest do
 
   @valid_book_name "A valid book name !"
 
-  @invalid_book_attrs %{name: nil, default_balance_params: %{}}
+  @invalid_book_attrs %{name: nil}
 
   ## Database getters
 
@@ -198,16 +198,10 @@ defmodule App.BooksTest do
       user_balance_config_fixture(user)
 
       {:ok, book} =
-        book_attributes(
-          name: @valid_book_name,
-          default_balance_params: transfer_params_attributes()
-        )
+        book_attributes(name: @valid_book_name)
         |> Books.create_book(user)
 
       assert book.name == @valid_book_name
-
-      assert book.default_balance_params ==
-               struct!(TransferParams, transfer_params_attributes())
 
       assert member = Members.get_membership(book, user)
       assert member.role == :creator
@@ -221,34 +215,6 @@ defmodule App.BooksTest do
 
       assert errors_on(changeset) == %{name: ["can't be blank"]}
     end
-
-    test "fails when not given balance params", %{user: user} do
-      {:error, changeset} =
-        book_attributes(default_balance_params: nil)
-        |> Books.create_book(user)
-
-      assert errors_on(changeset) == %{default_balance_params: ["can't be blank"]}
-    end
-
-    test "fails when given invalid balance params means code", %{user: user} do
-      {:error, changeset} =
-        book_attributes(
-          default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
-        )
-        |> Books.create_book(user)
-
-      assert errors_on(changeset) == %{default_balance_params: ["is invalid"]}
-    end
-
-    test "fails when given invalid balance params parameters", %{user: user} do
-      {:error, changeset} =
-        book_attributes(
-          default_balance_params: %{means_code: :divide_equally, params: %{foo: :bar}}
-        )
-        |> Books.create_book(user)
-
-      assert errors_on(changeset) == %{default_balance_params: ["did not expect any parameter"]}
-    end
   end
 
   describe "update_book/2" do
@@ -257,16 +223,10 @@ defmodule App.BooksTest do
     test "updates the book", %{book: book} do
       assert {:ok, updated} =
                Books.update_book(book, %{
-                 name: "My awesome new never seen name !",
-                 default_balance_params: %{means_code: :weight_by_income}
+                 name: "My awesome new never seen name !"
                })
 
       assert updated.name == "My awesome new never seen name !"
-
-      assert updated.default_balance_params == %TransferParams{
-               means_code: :weight_by_income,
-               params: nil
-             }
     end
 
     test "returns error changeset with invalid data", %{book: book} do
