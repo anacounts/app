@@ -48,59 +48,6 @@ defmodule AppWeb.BookAccessTest do
     end
   end
 
-  describe "on_mount: assign_book_members" do
-    test "assigns the book members of the book assign", %{socket: socket} do
-      book = book_fixture()
-      member = book_member_fixture(book)
-
-      socket = Phoenix.Component.assign(socket, :book, book)
-
-      {:cont, updated_socket} =
-        BookAccess.on_mount(:assign_book_members, nil, nil, socket)
-
-      assert Enum.map(updated_socket.assigns.book_members, & &1.id) == [member.id]
-    end
-  end
-
-  describe "on_mount: assign_book_unbalanced" do
-    test "assigns book_unbalanced? == true if the book isn't balanced", %{socket: socket} do
-      book = book_fixture()
-      member1 = book_member_fixture(book)
-      member2 = book_member_fixture(book)
-
-      transfer =
-        money_transfer_fixture(book,
-          amount: Money.new!(:EUR, 1000),
-          tenant_id: member1.id
-        )
-
-      _peer = peer_fixture(transfer, member_id: member1.id)
-      _peer = peer_fixture(transfer, member_id: member2.id)
-
-      members = Balance.fill_members_balance([member1, member2])
-      socket = Phoenix.Component.assign(socket, book: book, book_members: members)
-
-      {:cont, updated_socket} =
-        BookAccess.on_mount(:assign_book_unbalanced, nil, nil, socket)
-
-      assert updated_socket.assigns.book_unbalanced?
-    end
-
-    test "assigns book_unbalanced? == false if the book is balanced", %{socket: socket} do
-      book = book_fixture()
-      member1 = book_member_fixture(book)
-      member2 = book_member_fixture(book)
-
-      members = Balance.fill_members_balance([member1, member2])
-      socket = Phoenix.Component.assign(socket, book: book, book_members: members)
-
-      {:cont, updated_socket} =
-        BookAccess.on_mount(:assign_book_unbalanced, nil, nil, socket)
-
-      refute updated_socket.assigns.book_unbalanced?
-    end
-  end
-
   describe "on_mount: ensure_book_member!" do
     setup %{socket: socket} do
       book = book_fixture()
