@@ -64,14 +64,6 @@ msgid "Balance"
 msgstr "Balance"
 
 #, elixir-autogen, elixir-format
-msgid "Balance Settings"
-msgstr "Balance Settings"
-
-#, elixir-autogen, elixir-format
-msgid "Balance settings updated"
-msgstr "Balance settings updated"
-
-#, elixir-autogen, elixir-format
 msgid "Before making the change effective, a confirmation email will be sent to the new address."
 msgstr "Before making the change effective, a confirmation email will be sent to the new address."
 
@@ -248,10 +240,6 @@ msgid "Income"
 msgstr "Income"
 
 #, elixir-autogen, elixir-format
-msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
-msgstr "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
-
-#, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr "Invalid email or password"
 
@@ -294,10 +282,6 @@ msgstr "Keep me logged in"
 #, elixir-autogen, elixir-format
 msgid "Label"
 msgstr "Label"
-
-#, elixir-autogen, elixir-format
-msgid "Last year incomes"
-msgstr "Last year incomes"
 
 #, elixir-autogen, elixir-format
 msgid "Latest transfers"
