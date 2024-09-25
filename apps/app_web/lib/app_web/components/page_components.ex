@@ -166,12 +166,6 @@ defmodule AppWeb.PageComponents do
         <%= render_slot(@title) %>
       </b>
 
-      <.tabs :if={not is_nil(assigns[:tab_item]) and not Enum.empty?(@tab_item)}>
-        <:item :for={tab_item <- @tab_item} {assigns_to_attributes(tab_item)}>
-          <%= render_slot(tab_item) %>
-        </:item>
-      </.tabs>
-
       <%= render_slot(assigns[:menu] || []) %>
     </header>
     """

@@ -5,9 +5,7 @@ defmodule App.TransfersFixtures do
 
   import App.BalanceFixtures
 
-  alias App.Books.Book
   alias App.Repo
-  alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
@@ -17,14 +15,8 @@ defmodule App.TransfersFixtures do
       amount: Money.new!(:EUR, 1799),
       date: ~D[2022-06-23],
       type: :payment,
-      balance_params: transfer_params_attributes(),
-      peers: []
+      balance_params: transfer_params_attributes()
     })
-  end
-
-  def deprecated_money_transfer_fixture(%Book{} = book, attrs \\ %{}) do
-    {:ok, transfer} = Transfers.create_money_transfer(book, money_transfer_attributes(attrs))
-    transfer
   end
 
   def money_transfer_fixture(book, attrs \\ %{}) do
@@ -39,8 +31,8 @@ defmodule App.TransfersFixtures do
     })
   end
 
-  def peer_fixture(attrs \\ %{}) do
-    %Peer{}
+  def peer_fixture(transfer, attrs) do
+    %Peer{transfer_id: transfer.id}
     |> Map.merge(peer_attributes(attrs))
     |> Repo.insert!()
   end

@@ -75,6 +75,18 @@ defmodule App.Transfers.MoneyTransfer do
     |> cast_assoc(:peers, with: with_changeset)
   end
 
+  @doc """
+  Changeset for creating a reimbursement kind of money transfer.
+  """
+  def reimbursement_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [:label, :amount, :date, :tenant_id])
+    |> validate_label()
+    |> validate_amount()
+    |> cast_assoc(:peers, with: &Peer.update_money_transfer_changeset/2)
+    |> validate_reimbursement_peers()
+  end
+
   defp validate_label(changeset) do
     changeset
     |> validate_required(:label)
@@ -89,6 +101,7 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_type(changeset) do
     changeset
     |> validate_required(:type)
+    |> validate_inclusion(:type, [:payment, :income])
   end
 
   defp validate_tenant_id(changeset) do
@@ -106,6 +119,25 @@ defmodule App.Transfers.MoneyTransfer do
   defp validate_balance_params(changeset) do
     changeset
     |> validate_required(:balance_params)
+  end
+
+  defp validate_reimbursement_peers(changeset) do
+    tenant_id = Ecto.Changeset.fetch_field!(changeset, :tenant_id)
+
+    changeset
+    |> validate_change(:peers, fn :peers, peers ->
+      case peers do
+        [_one_peer] -> []
+        _peers -> raise Ecto.ChangeError, "A reimbursement must have exactly one peer"
+      end
+    end)
+    |> validate_change(:peers, fn :peers, [peer] ->
+      peer_member_id = Ecto.Changeset.fetch_field!(peer, :member_id)
+
+      if peer_member_id == tenant_id,
+        do: [tenant_id: "cannot be the same as the debtor"],
+        else: []
+    end)
   end
 
   ## Queries

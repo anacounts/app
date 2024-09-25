@@ -77,15 +77,16 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
     assert html =~ @update_attrs.label
   end
 
-  test "update the peers instead of deleting them", %{conn: conn, book: book} do
+  test "update the peers instead of recreating them", %{conn: conn, book: book} do
     member = book_member_fixture(book)
 
     money_transfer =
-      deprecated_money_transfer_fixture(book,
+      money_transfer_fixture(book,
         label: "Original transfer name",
-        tenant_id: member.id,
-        peers: [%{member_id: member.id}]
+        tenant_id: member.id
       )
+
+    peer = peer_fixture(money_transfer, member_id: member.id)
 
     {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
@@ -98,14 +99,12 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
     refute html =~ money_transfer.label
     assert html =~ @update_attrs.label
 
-    original_peer_ids = Enum.map(money_transfer.peers, & &1.id)
-
     new_peer_ids =
       Peer
       |> Repo.all(transfer_id: money_transfer.id)
       |> Enum.map(& &1.id)
 
-    assert original_peer_ids == new_peer_ids
+    assert [peer.id] == new_peer_ids
   end
 
   test "deletes money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do

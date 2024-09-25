@@ -52,8 +52,8 @@ defmodule AppWeb.BookMemberLiveTest do
         tenant_id: member1.id
       )
 
-    _peer1 = peer_fixture(member_id: member1.id, transfer_id: transfer.id)
-    _peer2 = peer_fixture(member_id: member2.id, transfer_id: transfer.id)
+    _peer1 = peer_fixture(transfer, member_id: member1.id)
+    _peer2 = peer_fixture(transfer, member_id: member2.id)
 
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/members/#{member1}")
 

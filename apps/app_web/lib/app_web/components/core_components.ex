@@ -9,9 +9,6 @@ defmodule AppWeb.CoreComponents do
   """
   use Phoenix.Component
 
-  # TODO(v2,end) remove gettext from this file
-  use AppWeb, :gettext
-
   alias Phoenix.LiveView.JS
 
   # Some components need to pass attributes down to a <.link> component. The attributes
@@ -21,7 +18,7 @@ defmodule AppWeb.CoreComponents do
   @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
 
   # Attributes of the `<input>` HTML element
-  @input_attrs ~w(name value checked)
+  @input_attrs ~w(name value checked step)
 
   # prepend a class in `[:rest, :class]`
   defp prepend_class(assigns, class) do
@@ -492,153 +489,6 @@ defmodule AppWeb.CoreComponents do
     |> JS.toggle(to: "##{id}-popover")
   end
 
-  ## FAB
-
-  # TODO(v2,end) drop `fab_container/1` and `fab/1` components
-
-  @doc """
-  Generates a floating action button container.
-  The container will place the buttons at the bottom right of the screen.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.fab_container>
-        <:item>
-          <.fab>
-            <.icon name="settings" />
-          </.fab>
-        </:item>
-      </.fab_container>
-
-  """
-
-  attr :class, :any, default: nil, doc: "Extra classes to add to the container"
-  attr :rest, :global
-
-  slot :item, required: true, doc: "The items of the floating action button container"
-
-  def fab_container(assigns) do
-    ~H"""
-    <menu class={["fab-container", @class]} {@rest}>
-      <li :for={item <- @item}>
-        <%= render_slot(item) %>
-      </li>
-    </menu>
-    """
-  end
-
-  @doc """
-  Generates a floating action button.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.fab navigate="https://example.com">
-        <.icon name="settings" />
-      </.fab>
-
-  """
-
-  attr :rest, :global, include: @link_attrs
-
-  slot :inner_block, required: true
-
-  def fab(assigns) do
-    ~H"""
-    <.link class="fab" {@rest}>
-      <%= render_slot(@inner_block) %>
-    </.link>
-    """
-  end
-
-  # TODO(v2,end) drop `flash/1` and `flash_group/1` components
-
-  @doc """
-  Renders flash notices.
-
-  ## Examples
-
-      <.flash kind={:info} flash={@flash} />
-      <.flash kind={:info} phx-mounted={show("#flash")}>Welcome Back!</.flash>
-  """
-  attr :id, :string, doc: "the optional id of flash container"
-  attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
-  attr :title, :string, default: nil
-  attr :kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup"
-  attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
-
-  slot :inner_block, doc: "the optional inner block that renders the flash message"
-
-  def flash(assigns) do
-    assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
-
-    ~H"""
-    <div
-      :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
-      id={@id}
-      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
-      role="alert"
-      class={["flash", @kind == :info && "flash--info", @kind == :error && "flash--error"]}
-      {@rest}
-    >
-      <p :if={@title} class="flash__title">
-        <.icon :if={@kind == :info} name="info" class="flash__icon" />
-        <.icon :if={@kind == :error} name="error" class="flash__icon" />
-        <%= @title %>
-      </p>
-      <p class="flash__body"><%= msg %></p>
-      <button type="button" class="group flash__close-button" aria-label={gettext("Close")}>
-        <.icon name="close" class="flash__close-icon" />
-      </button>
-    </div>
-    """
-  end
-
-  @doc """
-  Shows the flash group with standard titles and content.
-
-  ## Examples
-
-      <.flash_group flash={@flash} />
-  """
-  attr :flash, :map, required: true, doc: "the map of flash messages"
-  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
-
-  def flash_group(assigns) do
-    ~H"""
-    <div id={@id}>
-      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
-      <.flash
-        id="client-error"
-        kind={:error}
-        title={gettext("We can't find the internet")}
-        phx-disconnected={show(".phx-client-error #client-error")}
-        phx-connected={hide("#client-error")}
-        hidden
-      >
-        <%= gettext("Attempting to reconnect") %>
-        <.icon name="autorenew" class="ml-1 h-4 w-4 animate-spin" />
-      </.flash>
-
-      <.flash
-        id="server-error"
-        kind={:error}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error")}
-        phx-connected={hide("#server-error")}
-        hidden
-      >
-        <%= gettext("Hang in there while we get back on track") %>
-        <.icon name="autorenew" class="ml-1 h-4 w-4 animate-spin" />
-      </.flash>
-    </div>
-    """
-  end
-
   # TODO(v2,end) drop `heading/1` component
 
   @doc """
@@ -778,50 +628,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  # TODO(v2,end) drop `popup/1` component
-
-  @doc """
-  Generates a popup element.
-
-  ## Example
-
-      <.popup id="popup">
-        <:title>Popup title</:title>
-
-        <p>Popup body</p>
-      </.popup>
-
-  """
-
-  attr :id, :string, required: true, doc: "The id of the popup"
-  attr :class, :any, default: nil, doc: "Classes to apply to the popup dialog element"
-  attr :rest, :global, include: ~w(open)
-
-  slot :label, required: true
-  slot :title, required: true
-  slot :inner_block, required: true
-  slot :footer
-
-  def popup(assigns) do
-    ~H"""
-    <dialog id={@id} class={["popup", @class]} {@rest}>
-      <header class="popup__header">
-        <p class="label"><%= render_slot(@label) %></p>
-        <h1 class="text-3xl font-bold"><%= render_slot(@title) %></h1>
-        <.button color={:ghost} class="popup__dismiss" phx-click={hide_dialog("##{@id}")}>
-          <.icon name="close" />
-        </.button>
-      </header>
-      <div class="popup__body">
-        <%= render_slot(@inner_block) %>
-      </div>
-      <footer class="popup__footer">
-        <%= render_slot(@footer) %>
-      </footer>
-    </dialog>
-    """
-  end
-
   ## Select
 
   @doc """
@@ -858,55 +664,6 @@ defmodule AppWeb.CoreComponents do
     </div>
     """
   end
-
-  ## Tabs
-
-  # TODO(v2,end) drop `tabs/1` component
-
-  @doc """
-  Generates a tab menu.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.tabs>
-        <:item to="/book" active>
-          <.icon name="book" size={:md} />
-          Books
-        </:item>
-        <:item to="/users/settings">
-          <.icon name="settings" size={:md} />
-          Settings
-        </:item>
-      </.tabs>
-
-  """
-
-  slot :item, required: true, doc: "The items of the tabs" do
-    attr :navigate, :string, required: true
-    attr :active, :boolean
-  end
-
-  def tabs(assigns) do
-    ~H"""
-    <menu class="tabs" role="navigation">
-      <li :for={item <- @item} class="tabs__item">
-        <.link
-          navigate={item.navigate}
-          replace
-          class={["tabs__link", tabs_link_active_class(item[:active])]}
-          aria-current={if item[:active], do: "page"}
-        >
-          <%= render_slot(item) %>
-        </.link>
-      </li>
-    </menu>
-    """
-  end
-
-  defp tabs_link_active_class(true), do: "tabs__link--active"
-  defp tabs_link_active_class(_active?), do: nil
 
   ## Text input
 
@@ -1017,8 +774,6 @@ defmodule AppWeb.CoreComponents do
     doc:
       "the options to pass to Phoenix.HTML.Form.options_for_select/2, or for the toggle-group input"
 
-  attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
-
   attr :label_class, :any, default: nil, doc: "Extra classes to add to the label"
   attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
                                    pattern placeholder readonly required rows size step)
@@ -1027,7 +782,7 @@ defmodule AppWeb.CoreComponents do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
-    |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
+    |> assign_new(:name, fn -> field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
   end
@@ -1052,32 +807,13 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  # TODO(v2,end) drop `radio` clause
-  def input(%{type: "radio"} = assigns) do
-    # Some attributes aren't handled or are handled improperly because they were
-    # not needed in the original implementation. They can be added as needed.
-    # e.g. `:checked` does not work
-
-    # `:errors` are not displayed since they would be duplicated for each radio button
-
-    ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <input type="radio" name={@name} value={@value} {@rest} />
-      <%= @label %>
-    </label>
-    """
-  end
-
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <label class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
-      <select id={@id} name={@name} multiple={@multiple} {@rest}>
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
-      </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
+      <.select id={@id} name={@name} prompt={@prompt} options={@options} value={@value} {@rest} />
+      <%= input_helper_or_errors(assigns) %>
+    </div>
     """
   end
 
@@ -1090,24 +826,18 @@ defmodule AppWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="flex items-end gap-4">
-      <label class={@label_class} phx-feedback-for={@name}>
-        <%= @label %>
-        <input
-          type="number"
-          name={@name}
-          id={@id || @name}
-          value={Phoenix.HTML.Form.normalize_value("number", @normalized_value)}
-          step="0.01"
-          {@rest}
-        />
-        <.error :for={msg <- @errors}><%= msg %></.error>
-      </label>
-      <label class={@label_class}>
-        <select disabled>
-          <%= Phoenix.HTML.Form.options_for_select(currencies_options(), "EUR") %>
-        </select>
-      </label>
+    <div phx-feedback-for={@name}>
+      <label for={@id || @name} class="label"><%= @label %></label>
+      <.text_input
+        type="number"
+        name={@name}
+        id={@id || @name}
+        value={Phoenix.HTML.Form.normalize_value("number", @normalized_value)}
+        suffix={:currency_euro}
+        step="0.01"
+        {@rest}
+      />
+      <%= input_helper_or_errors(assigns) %>
     </div>
     """
   end
@@ -1151,10 +881,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  defp currencies_options do
-    [[key: "€", value: "EUR"]]
-  end
-
   defp input_helper_or_errors(%{errors: [], helper: _} = assigns), do: ~H|<%= @helper %>|
   defp input_helper_or_errors(%{errors: []} = _assigns), do: nil
   defp input_helper_or_errors(assigns), do: ~H|<.error :for={msg <- @errors}><%= msg %></.error>|
@@ -1174,28 +900,7 @@ defmodule AppWeb.CoreComponents do
 
   ## JS Commands
 
-  # TODO(v2,end) drop `show/2`, `hide/2`, `show_dialog/2` and `hide_dialog/2` helper functions
-
-  defp show(js \\ %JS{}, selector) do
-    JS.show(js,
-      to: selector,
-      transition:
-        {"transition-all transform ease-out duration-300",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
-         "opacity-100 translate-y-0 sm:scale-100"}
-    )
-  end
-
-  defp hide(js \\ %JS{}, selector) do
-    JS.hide(js,
-      to: selector,
-      time: 200,
-      transition:
-        {"transition-all transform ease-in duration-200",
-         "opacity-100 translate-y-0 sm:scale-100",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
-    )
-  end
+  # TODO(v2,end) drop `show_dialog/2` and `hide_dialog/2` helper functions
 
   def show_dialog(js \\ %JS{}, selector) do
     JS.dispatch(js, "app:open-dialog", to: selector)

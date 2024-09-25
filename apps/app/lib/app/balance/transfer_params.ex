@@ -18,8 +18,8 @@ defmodule App.Balance.TransferParams do
   @means_codes [:divide_equally, :weight_by_income]
   @string_codes Enum.map(@means_codes, &Atom.to_string/1)
 
-  @enforce_keys [:means_code, :params]
-  defstruct means_code: nil, params: nil
+  @enforce_keys [:means_code]
+  defstruct means_code: nil, params: %{}
 
   @type t :: %__MODULE__{
           means_code: means_code(),

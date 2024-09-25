@@ -68,12 +68,14 @@ defmodule AppWeb.BookAccessTest do
       member1 = book_member_fixture(book)
       member2 = book_member_fixture(book)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 1000),
-          tenant_id: member1.id,
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+          tenant_id: member1.id
         )
+
+      _peer = peer_fixture(transfer, member_id: member1.id)
+      _peer = peer_fixture(transfer, member_id: member2.id)
 
       members = Balance.fill_members_balance([member1, member2])
       socket = Phoenix.Component.assign(socket, book: book, book_members: members)
