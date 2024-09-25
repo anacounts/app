@@ -13,6 +13,7 @@ defmodule App.TransfersTest do
   alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Transfers
+  alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
 
   describe "list_transfers_of_book/2" do
@@ -188,17 +189,13 @@ defmodule App.TransfersTest do
       member1 = book_member_fixture(book)
       member2 = book_member_fixture(book)
 
-      transfer1 =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member1.id,
-          peers: [%{member_id: member2.id}]
-        )
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id)
+      _peer = peer_fixture(transfer1, member_id: member2.id)
 
-      transfer2 =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member2.id,
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
-        )
+      transfer2 = money_transfer_fixture(book, tenant_id: member2.id)
+
+      _peer = peer_fixture(transfer2, member_id: member1.id)
+      _peer = peer_fixture(transfer2, member_id: member2.id)
 
       assert Transfers.list_transfers_of_members([member1, member2])
              |> Enum.map(& &1.id)
@@ -227,6 +224,8 @@ defmodule App.TransfersTest do
       assert transfer.type == :payment
       assert transfer.date == ~D[2022-06-23]
       assert transfer.balance_params == struct!(TransferParams, transfer_params_attributes())
+
+      transfer = Repo.preload(transfer, :peers)
       assert Enum.empty?(transfer.peers)
     end
 
@@ -353,16 +352,13 @@ defmodule App.TransfersTest do
     end
 
     test "updates existing peers", %{book: book, member: member} do
-      money_transfer =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member.id,
-          peers: [%{member_id: member.id, weight: Decimal.new(2)}]
-        )
-
-      [peer] = money_transfer.peers
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+      peer = peer_fixture(money_transfer, member_id: member.id, weight: Decimal.new(2))
 
       assert {:ok, updated_transfer} =
-               Transfers.update_money_transfer(money_transfer, %{
+               money_transfer
+               |> Repo.preload(:peers)
+               |> Transfers.update_money_transfer(%{
                  peers: [%{id: peer.id, member_id: member.id, weight: Decimal.new(3)}]
                })
 
@@ -373,13 +369,8 @@ defmodule App.TransfersTest do
     end
 
     test "cannot update member_id of existing peer", %{book: book, member: member} do
-      money_transfer =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member.id,
-          peers: [%{member_id: member.id}]
-        )
-
-      [peer] = money_transfer.peers
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+      peer = peer_fixture(money_transfer, member_id: member.id)
 
       other_user = user_fixture()
       other_member = book_member_fixture(book, user_id: other_user.id)
@@ -395,11 +386,8 @@ defmodule App.TransfersTest do
     end
 
     test "deletes peers", %{book: book, member: member} do
-      money_transfer =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member.id,
-          peers: [%{member_id: member.id}]
-        )
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+      _peer = peer_fixture(money_transfer, member_id: member.id)
 
       assert {:ok, updated_transfer} =
                Transfers.update_money_transfer(money_transfer, %{
@@ -434,15 +422,129 @@ defmodule App.TransfersTest do
     end
 
     test "deleted related peers", %{book: book, member: member} do
-      money_transfer =
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member.id,
-          peers: [%{member_id: member.id}]
-        )
+      money_transfer = money_transfer_fixture(book, tenant_id: member.id)
+      _peer = peer_fixture(money_transfer, member_id: member.id)
 
       assert {:ok, _deleted_transfer} = Transfers.delete_money_transfer(money_transfer)
 
       refute Repo.get_by(Peer, transfer_id: money_transfer.id)
+    end
+  end
+
+  describe "create_reimbursement/2" do
+    setup do
+      book = book_fixture()
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      %{book: book, member1: member1, member2: member2}
+    end
+
+    test "creates a reimbursement in a book", %{book: book, member1: member1, member2: member2} do
+      assert {:ok, money_transfer} =
+               Transfers.create_reimbursement(book, %{
+                 label: "Reimbursement from member1 to member2",
+                 amount: Money.new!(:EUR, 100),
+                 date: ~D[2020-06-29],
+                 tenant_id: member1.id,
+                 peers: [%{member_id: member2.id}]
+               })
+
+      assert money_transfer.label == "Reimbursement from member1 to member2"
+      assert money_transfer.amount == Money.new!(:EUR, 100)
+      assert money_transfer.type == :reimbursement
+      assert money_transfer.date == ~D[2020-06-29]
+      assert money_transfer.tenant_id == member1.id
+      assert money_transfer.balance_params.means_code == :divide_equally
+    end
+
+    test "cannot create a payment or an income", %{book: book, member1: member1, member2: member2} do
+      assert {:ok, money_transfer} =
+               Transfers.create_reimbursement(
+                 book,
+                 money_transfer_attributes(
+                   type: :payment,
+                   tenant_id: member1.id,
+                   peers: [%{member_id: member2.id}]
+                 )
+               )
+
+      assert money_transfer.type == :reimbursement
+    end
+
+    test "cannot create a money transfer weighted by income", %{
+      book: book,
+      member1: member1,
+      member2: member2
+    } do
+      assert {:ok, money_transfer} =
+               Transfers.create_reimbursement(
+                 book,
+                 money_transfer_attributes(
+                   balance_params: %{means_code: :weighted_by_income},
+                   tenant_id: member1.id,
+                   peers: [%{member_id: member2.id, weight: Decimal.new(3)}]
+                 )
+               )
+
+      assert money_transfer.balance_params.means_code == :divide_equally
+    end
+
+    test "cannot create a money transfer withour peers", %{book: book, member1: member1} do
+      assert_raise Ecto.ChangeError, "A reimbursement must have exactly one peer", fn ->
+        Transfers.create_reimbursement(
+          book,
+          money_transfer_attributes(
+            tenant_id: member1.id,
+            peers: []
+          )
+        )
+      end
+    end
+
+    test "cannot create a money transfer with multiple peers", %{book: book, member1: member1} do
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
+
+      assert_raise Ecto.ChangeError, "A reimbursement must have exactly one peer", fn ->
+        Transfers.create_reimbursement(
+          book,
+          money_transfer_attributes(
+            tenant_id: member1.id,
+            peers: [%{member_id: member2.id}, %{member_id: member3.id}]
+          )
+        )
+      end
+    end
+
+    test "cannot create a money transfer with the only peer being the tenant", %{
+      book: book,
+      member1: member1
+    } do
+      assert {:error, changeset} =
+               Transfers.create_reimbursement(
+                 book,
+                 money_transfer_attributes(
+                   tenant_id: member1.id,
+                   peers: [%{member_id: member1.id}]
+                 )
+               )
+
+      assert errors_on(changeset) == %{
+               tenant_id: ["cannot be the same as the debtor"]
+             }
+    end
+  end
+
+  describe "change_reimbursement/2" do
+    test "creates a reimbursement changeset" do
+      assert %Ecto.Changeset{} = Transfers.change_reimbursement(%MoneyTransfer{})
+    end
+
+    test "cannot change the type of the transfer" do
+      changeset = Transfers.change_reimbursement(%MoneyTransfer{}, %{type: :payment})
+
+      assert Ecto.Changeset.fetch_change(changeset, :type) == :error
     end
   end
 
@@ -459,11 +561,7 @@ defmodule App.TransfersTest do
   end
 
   # Depends on :book_with_member_context
-  defp money_transfer_in_book_context(%{book: book, member: member} = context) do
-    Map.put(
-      context,
-      :money_transfer,
-      money_transfer_fixture(book, tenant_id: member.id)
-    )
+  defp money_transfer_in_book_context(%{book: book, member: member}) do
+    %{money_transfer: money_transfer_fixture(book, tenant_id: member.id)}
   end
 end

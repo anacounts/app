@@ -216,10 +216,15 @@ defmodule App.Books.MembersTest do
       member_balance_config = member_balance_config_fixture(book_member)
       book_member = Repo.reload(book_member)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book_fixture(),
-          tenant_id: book_member.id,
-          peers: [%{member_id: book_member.id, balance_config_id: member_balance_config.id}]
+      transfer =
+        money_transfer_fixture(book_fixture(),
+          tenant_id: book_member.id
+        )
+
+      _peer =
+        peer_fixture(transfer,
+          member_id: book_member.id,
+          balance_config_id: member_balance_config.id
         )
 
       _user_balance_config = user_balance_config_fixture(user)

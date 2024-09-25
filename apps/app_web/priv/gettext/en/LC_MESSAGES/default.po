@@ -36,12 +36,6 @@ msgid "Amount"
 msgstr "Amount"
 
 #, elixir-autogen, elixir-format
-msgid "An error occured while balancing the transactions:"
-msgid_plural "Errors occured while balancing the transactions:"
-msgstr[0] "An error occured while balancing the transactions:"
-msgstr[1] "Errors occured while balancing the transactions:"
-
-#, elixir-autogen, elixir-format
 msgid "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
 msgstr "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
 
@@ -52,14 +46,6 @@ msgstr "Anacounts uses Gravatar to display user avatars."
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete the transfer?"
 msgstr "Are you sure you want to delete the transfer?"
-
-#, elixir-autogen, elixir-format
-msgid "Are you sure you want to delete this book?"
-msgstr "Are you sure you want to delete this book?"
-
-#, elixir-autogen, elixir-format
-msgid "Attempting to reconnect"
-msgstr "Attempting to reconnect"
 
 #, elixir-autogen, elixir-format
 msgid "Balance"
@@ -78,22 +64,6 @@ msgid "Before making the change effective, a confirmation email will be sent to 
 msgstr "Before making the change effective, a confirmation email will be sent to the new address."
 
 #, elixir-autogen, elixir-format
-msgid "Book closed successfully"
-msgstr "Book closed successfully"
-
-#, elixir-autogen, elixir-format
-msgid "Book deleted successfully"
-msgstr "Book deleted successfully"
-
-#, elixir-autogen, elixir-format
-msgid "Book reopened successfully"
-msgstr "Book reopened successfully"
-
-#, elixir-autogen, elixir-format
-msgid "Cancel"
-msgstr "Cancel"
-
-#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr "Change avatar"
 
@@ -108,10 +78,6 @@ msgstr "Change nickname"
 #, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr "Change password"
-
-#, elixir-autogen, elixir-format
-msgid "Close"
-msgstr "Close"
 
 #, elixir-autogen, elixir-format
 msgid "Configuration"
@@ -148,6 +114,10 @@ msgstr "Create an account"
 #, elixir-autogen, elixir-format
 msgid "Create manually"
 msgstr "Create manually"
+
+#, elixir-autogen, elixir-format
+msgid "Create reimbursement"
+msgstr "Create reimbursement"
 
 #, elixir-autogen, elixir-format
 msgid "Current password"
@@ -202,8 +172,8 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr "Enter your user account's email address and we will send you a password reset link."
 
 #, elixir-autogen, elixir-format
-msgid "Error!"
-msgstr "Error!"
+msgid "Fix it"
+msgstr "Fix it"
 
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
@@ -228,10 +198,6 @@ msgstr "Go to my account"
 #, elixir-autogen, elixir-format
 msgid "Gravatar is a service providing globally unique avatars."
 msgstr "Gravatar is a service providing globally unique avatars."
-
-#, elixir-autogen, elixir-format
-msgid "Hang in there while we get back on track"
-msgstr "Hang in there while we get back on track"
 
 #, elixir-autogen, elixir-format
 msgid "Hello 👋 You have been invited to join a new book:"
@@ -318,6 +284,10 @@ msgid "Log in here."
 msgstr "Log in here."
 
 #, elixir-autogen, elixir-format
+msgid "Manual reimbursement"
+msgstr "Manual reimbursement"
+
+#, elixir-autogen, elixir-format
 msgid "Member"
 msgstr "Member"
 
@@ -368,10 +338,6 @@ msgstr "New email"
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "New password"
-
-#, elixir-autogen, elixir-format
-msgid "New reimbursement"
-msgstr "New reimbursement"
 
 #, elixir-autogen, elixir-format
 msgid "New transfer"
@@ -434,16 +400,8 @@ msgid "Register"
 msgstr "Register"
 
 #, elixir-autogen, elixir-format
-msgid "Reimbursement created successfully"
-msgstr "Reimbursement created successfully"
-
-#, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr "Reimbursement from %{debtor_name} to %{creditor_name}"
-
-#, elixir-autogen, elixir-format
-msgid "Reopen"
-msgstr "Reopen"
 
 #, elixir-autogen, elixir-format
 msgid "Reset password"
@@ -498,20 +456,12 @@ msgid "Sign in to your account"
 msgstr "Sign in to your account"
 
 #, elixir-autogen, elixir-format
+msgid "Some information is missing to balance the book"
+msgstr "Some information is missing to balance the book"
+
+#, elixir-autogen, elixir-format
 msgid "Someone new"
 msgstr "Someone new"
-
-#, elixir-autogen, elixir-format
-msgid "Something went wrong!"
-msgstr "Something went wrong!"
-
-#, elixir-autogen, elixir-format
-msgid "Success!"
-msgstr "Success!"
-
-#, elixir-autogen, elixir-format
-msgid "The book is not balanced. Are you sure you want to close it?"
-msgstr "The book is not balanced. Are you sure you want to close it?"
 
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
@@ -520,10 +470,6 @@ msgstr "The confirmation email will be sent to this address"
 #, elixir-autogen, elixir-format
 msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 msgstr "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
-
-#, elixir-autogen, elixir-format
-msgid "The transactions are balanced already!"
-msgstr "The transactions are balanced already!"
 
 #, elixir-autogen, elixir-format
 msgid "This confirmation link is invalid or it has expired."
@@ -564,10 +510,6 @@ msgstr "Type your new password again here"
 #, elixir-autogen, elixir-format
 msgid "View profile"
 msgstr "View profile"
-
-#, elixir-autogen, elixir-format
-msgid "We can't find the internet"
-msgstr "We can't find the internet"
 
 #, elixir-autogen, elixir-format
 msgid "Weight by income"
@@ -628,7 +570,3 @@ msgstr "Your password must be at least 12 characters long"
 #, elixir-autogen, elixir-format
 msgid "Your revenues are not set"
 msgstr "Your revenues are not set"
-
-#, elixir-autogen, elixir-format
-msgid "gives"
-msgstr "gives"
