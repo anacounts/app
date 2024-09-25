@@ -187,7 +187,7 @@ defmodule App.BooksTest do
     end
   end
 
-  ## CRUD
+  ## Creation
 
   describe "create_book/2" do
     setup do
@@ -198,22 +198,30 @@ defmodule App.BooksTest do
       user_balance_config_fixture(user)
 
       {:ok, book} =
-        book_attributes(name: @valid_book_name)
+        book_attributes(nickname: "Creator nickname")
         |> Books.create_book(user)
 
       assert book.name == @valid_book_name
 
       assert member = Members.get_membership(book, user)
       assert member.role == :creator
-      assert member.balance_config_id == user.balance_config_id
+      assert member.nickname == "Creator nickname"
     end
 
-    test "fails when not given a name", %{user: user} do
+    test "returns an error when the name is empty", %{user: user} do
       {:error, changeset} =
         book_attributes(name: nil)
         |> Books.create_book(user)
 
       assert errors_on(changeset) == %{name: ["can't be blank"]}
+    end
+
+    test "returns an error when the nickname is empty", %{user: user} do
+      {:error, changeset} =
+        book_attributes(nickname: nil)
+        |> Books.create_book(user)
+
+      assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
   end
 

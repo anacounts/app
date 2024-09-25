@@ -120,30 +120,34 @@ defmodule App.Books do
   defp filter_books_by_close_state(query, :closed),
     do: from([book: book] in query, where: not is_nil(book.closed_at))
 
-  ## CRUD
+  ## Creation
 
   @doc """
   Creates a book.
   """
-  @spec create_book(map(), User.t()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  @spec create_book(map(), User.t()) ::
+          {:ok, Book.t()}
+          | {:error, Ecto.Changeset.t(Book.t())}
+          | {:error, Ecto.Changeset.t(BookMember.t())}
   def create_book(attrs, %User{} = creator) do
     result =
       Ecto.Multi.new()
-      |> Ecto.Multi.insert(:book, Book.changeset(%Book{}, attrs))
+      |> Ecto.Multi.insert(:book, Book.name_changeset(%Book{}, attrs))
       |> Ecto.Multi.insert(:creator, fn %{book: book} ->
-        %BookMember{
+        member = %BookMember{
           role: :creator,
           book_id: book.id,
-          user_id: creator.id,
-          nickname: creator.email,
-          balance_config_id: creator.balance_config_id
+          user_id: creator.id
         }
+
+        Members.change_book_member_nickname(member, attrs)
       end)
       |> Repo.transaction()
 
     case result do
       {:ok, %{book: book}} -> {:ok, book}
       {:error, :book, changeset, _changes} -> {:error, changeset}
+      {:error, :creator, changeset, _changes} -> {:error, changeset}
     end
   end
 
