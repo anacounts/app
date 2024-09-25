@@ -71,7 +71,7 @@ defmodule AppWeb.BookLive do
             </div>
           </.card>
         </.link>
-        <.link navigate={~p"/books/#{@book}/edit"}>
+        <.link navigate={~p"/books/#{@book}/configuration"}>
           <.card_button icon={:cog_6_tooth} class="h-24">
             <%= gettext("Configuration") %>
           </.card_button>
