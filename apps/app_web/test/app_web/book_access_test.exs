@@ -3,12 +3,8 @@ defmodule AppWeb.BookAccessTest do
 
   import App.BooksFixtures
   import App.Books.MembersFixtures
-  import App.TransfersFixtures
-
-  alias App.Balance
 
   alias AppWeb.BookAccess
-
   alias Phoenix.LiveView
 
   setup :register_and_log_in_user
