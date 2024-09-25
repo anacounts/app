@@ -11,46 +11,12 @@ defmodule App.Balance.BalanceConfigTest do
   end
 
   describe "changeset/2" do
-    test "allows past and present `:start_date_of_validity`", %{user: user} do
+    test "allows valid `:annual_income`", %{user: user} do
       changeset =
         BalanceConfig.changeset(
           %BalanceConfig{},
-          balance_config_attributes(user,
-            start_date_of_validity: DateTime.utc_now() |> DateTime.add(-1, :day)
-          )
-        )
-
-      assert changeset.valid?
-
-      changeset =
-        BalanceConfig.changeset(
-          %BalanceConfig{},
-          balance_config_attributes(user,
-            start_date_of_validity: DateTime.utc_now()
-          )
-        )
-
-      assert changeset.valid?
-    end
-
-    test "does not allow future `:start_date_of_validity`", %{user: user} do
-      changeset =
-        BalanceConfig.changeset(
-          %BalanceConfig{},
-          balance_config_attributes(user,
-            start_date_of_validity: DateTime.utc_now() |> DateTime.add(1, :day)
-          )
-        )
-
-      refute changeset.valid?
-      assert errors_on(changeset) == %{start_date_of_validity: ["must be now or a past date"]}
-    end
-
-    test "does allow valid `:annual_income`", %{user: user} do
-      changeset =
-        BalanceConfig.changeset(
-          %BalanceConfig{},
-          balance_config_attributes(user,
+          balance_config_attributes(
+            owner_id: user.id,
             annual_income: 0
           )
         )
@@ -62,7 +28,8 @@ defmodule App.Balance.BalanceConfigTest do
       changeset =
         BalanceConfig.changeset(
           %BalanceConfig{},
-          balance_config_attributes(user,
+          balance_config_attributes(
+            owner_id: user.id,
             annual_income: -1
           )
         )

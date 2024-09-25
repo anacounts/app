@@ -7,8 +7,6 @@ defmodule App.Books.Members do
   alias App.Repo
 
   alias App.Accounts.User
-  alias App.Balance.BalanceConfig
-  alias App.Balance.BalanceConfigs
   alias App.Books.Book
   alias App.Books.BookMember
 
@@ -135,27 +133,8 @@ defmodule App.Books.Members do
         from(BookMember, where: [id: ^book_member.id]),
         set: [user_id: user.id]
       )
-      |> link_user_balance_configs_multi(book_member, user)
-      |> maybe_try_to_delete_balance_config_multi(book_member.balance_config_id)
       |> Repo.transaction()
 
     :ok
-  end
-
-  defp link_user_balance_configs_multi(multi, book_member, user) do
-    Ecto.Multi.run(multi, :balance_config, fn _repo, _changes ->
-      BalanceConfigs.link_user_balance_configs_to_member!(user, book_member)
-      {:ok, nil}
-    end)
-  end
-
-  defp maybe_try_to_delete_balance_config_multi(multi, nil), do: multi
-
-  defp maybe_try_to_delete_balance_config_multi(multi, balance_config_id) do
-    Ecto.Multi.run(multi, :delete_balance_config, fn _repo, _changes ->
-      balance_config = %BalanceConfig{id: balance_config_id}
-      BalanceConfigs.try_to_delete_balance_config(balance_config)
-      {:ok, nil}
-    end)
   end
 end
