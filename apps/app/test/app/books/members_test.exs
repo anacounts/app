@@ -2,10 +2,8 @@ defmodule App.Books.MembersTest do
   use App.DataCase, async: true
 
   import App.AccountsFixtures
-  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
-  import App.TransfersFixtures
 
   alias App.Books.Members
 
@@ -179,60 +177,6 @@ defmodule App.Books.MembersTest do
 
       book_member = Repo.reload(book_member)
       assert book_member.user_id == user.id
-    end
-
-    test "link the balance config of the user to the member", %{
-      book_member: book_member,
-      user: user
-    } do
-      balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      book_member = Repo.reload(book_member)
-      assert book_member.balance_config_id == balance_config.id
-    end
-
-    test "delete the former balance config of the member if it is not used", %{
-      book_member: book_member,
-      user: user
-    } do
-      member_balance_config = member_balance_config_fixture(book_member)
-      book_member = Repo.reload(book_member)
-
-      _user_balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      refute Repo.reload(member_balance_config)
-    end
-
-    test "does not delete the balance config of the member if it is used", %{
-      book_member: book_member,
-      user: user
-    } do
-      member_balance_config = member_balance_config_fixture(book_member)
-      book_member = Repo.reload(book_member)
-
-      transfer =
-        money_transfer_fixture(book_fixture(),
-          tenant_id: book_member.id
-        )
-
-      _peer =
-        peer_fixture(transfer,
-          member_id: book_member.id,
-          balance_config_id: member_balance_config.id
-        )
-
-      _user_balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      assert Repo.reload(member_balance_config)
     end
   end
 

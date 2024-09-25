@@ -2,7 +2,6 @@ defmodule App.BooksTest do
   use App.DataCase, async: true
 
   import App.AccountsFixtures
-  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
 
@@ -191,8 +190,6 @@ defmodule App.BooksTest do
     end
 
     test "creates a new book and sets the user the creator", %{user: user} do
-      user_balance_config_fixture(user)
-
       {:ok, book} =
         book_attributes(nickname: "Creator nickname")
         |> Books.create_book(user)
