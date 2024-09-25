@@ -29,7 +29,7 @@ defmodule AppWeb.BookReimbursementCreationLive do
           </div>
 
           <.input
-            field={@form[:creditor_id]}
+            field={@form[:tenant_id]}
             type="select"
             options={@member_options}
             label={gettext("Received by")}
@@ -38,7 +38,7 @@ defmodule AppWeb.BookReimbursementCreationLive do
           <.input field={@form[:amount]} type="money" label={gettext("Amount")} required />
 
           <.input
-            field={@form[:debtor_id]}
+            field={@form[:peer_member_id]}
             type="select"
             options={@member_options}
             label={gettext("Paid by")}
@@ -71,19 +71,19 @@ defmodule AppWeb.BookReimbursementCreationLive do
         member_options: Enum.map(members, &{&1.nickname, &1.id})
       )
 
-    {:ok, socket, temporary_assigns: [page_title: nil, member_options: nil]}
+    {:ok, socket, temporary_assigns: [page_title: nil]}
   end
 
   defp parse_params_form(params, members) do
-    debtor = get_params_member(params, members, "from")
-    creditor = get_params_member(params, members, "to")
+    peer_member = get_params_member(params, members, "from")
+    tenant = get_params_member(params, members, "to")
     amount = get_params_amount(params)
 
     to_form(
       %{
-        "label" => creditor && debtor && new_transfer_label(creditor, debtor),
-        "debtor_id" => debtor && debtor.id,
-        "creditor_id" => creditor && creditor.id,
+        "label" => tenant && peer_member && new_transfer_label(tenant, peer_member),
+        "peer_member_id" => peer_member && peer_member.id,
+        "tenant_id" => tenant && tenant.id,
         "amount" => amount,
         "date" => Date.utc_today()
       },
@@ -104,10 +104,10 @@ defmodule AppWeb.BookReimbursementCreationLive do
 
   defp get_params_amount(_params), do: Money.new!(:EUR, 0)
 
-  defp new_transfer_label(creditor, debtor) do
+  defp new_transfer_label(tenant, peer_member) do
     gettext("Reimbursement from %{debtor_name} to %{creditor_name}",
-      debtor_name: debtor.nickname,
-      creditor_name: creditor.nickname
+      debtor_name: peer_member.nickname,
+      creditor_name: tenant.nickname
     )
   end
 
@@ -142,8 +142,8 @@ defmodule AppWeb.BookReimbursementCreationLive do
       label: params["label"],
       amount: parse_money_or_nil(params["amount"]),
       date: params["date"],
-      tenant_id: params["creditor_id"],
-      peers: [%{member_id: params["debtor_id"]}]
+      tenant_id: params["tenant_id"],
+      peers: [%{member_id: params["peer_member_id"]}]
     }
   end
 
@@ -154,11 +154,8 @@ defmodule AppWeb.BookReimbursementCreationLive do
     changeset
     |> to_form(as: "reimbursement")
     |> Map.update!(:params, fn params ->
-      {tenant_id, params} = Map.pop(params, "tenant_id")
-      params = Map.put(params, "creditor_id", tenant_id)
-
       {[peer], params} = Map.pop(params, "peers")
-      Map.put(params, "debtor_id", peer.member_id)
+      Map.put(params, "peer_member_id", peer.member_id)
     end)
   end
 end

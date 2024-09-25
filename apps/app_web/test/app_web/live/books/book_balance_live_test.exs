@@ -2,175 +2,121 @@ defmodule AppWeb.BookBalanceLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
+  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
   import App.TransfersFixtures
 
-  alias App.Repo
+  alias App.Balance.TransferParams
 
-  alias App.Books
+  setup [:register_and_log_in_user]
 
-  setup [:register_and_log_in_user, :book_with_member_context]
+  setup %{user: user} do
+    book = book_fixture()
+    member = book_member_fixture(book, user_id: user.id, nickname: "Me")
 
-  # Create a money transfer with two peers, making the book imbalanced
-  setup %{book: book} = context do
-    member1 = book_member_fixture(book)
-    member2 = book_member_fixture(book)
-
-    Map.merge(context, %{
-      money_transfer:
-        deprecated_money_transfer_fixture(book,
-          tenant_id: member1.id,
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}],
-          amount: Money.new!(:EUR, 10)
-        ),
-      peer_member1: member1,
-      peer_member2: member2
-    })
+    %{book: book, member: member}
   end
 
-  test "balance tab is highlighted", %{conn: conn, book: book} do
+  test "shows the current member balance", %{conn: conn, book: book, member: member} do
+    other_member = book_member_fixture(book, nickname: "Other Member")
+
+    transfer =
+      money_transfer_fixture(book, tenant_id: member.id, amount: Money.new!(:EUR, "100.00"))
+
+    _peer = peer_fixture(transfer, member_id: member.id)
+    _peer = peer_fixture(transfer, member_id: other_member.id)
+
     {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
-    assert [class] =
-             Floki.attribute(html, ~s(.tabs__link[href="#{~p"/books/#{book}/balance"}"]), "class")
+    card_text =
+      html
+      |> Floki.parse_document!()
+      |> Floki.find(".card-grid .card:nth-child(1)")
+      |> Floki.text()
 
-    assert String.contains?(class, "tabs__link--active")
+    assert card_text =~ "Balance"
+    assert card_text =~ "€50.00"
   end
 
-  test "deletes book", %{conn: conn, book: book} do
-    {:ok, show_live, _html} = live(conn, ~p"/books/#{book}/balance")
+  test "links to manual creation of reimbursements", %{conn: conn, book: book} do
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
-    assert {:ok, _, html} =
-             show_live
-             |> element("#delete-book", "Delete")
-             |> render_click()
-             |> follow_redirect(conn, ~p"/books")
+    card_text =
+      html
+      |> Floki.parse_document!()
+      |> Floki.find(".card-grid a:nth-child(2)")
+      |> Floki.text()
 
-    refute html =~ book.name
+    assert card_text =~ "Manual reimbursement"
   end
 
-  test "closes book", %{conn: conn, book: book} do
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/balance")
+  test "shows the transactions required to balance the book", %{
+    conn: conn,
+    book: book,
+    member: member
+  } do
+    other_member = book_member_fixture(book, nickname: "You")
 
-    assert html =
-             live
-             |> element("#close-book", "Close")
-             |> render_click()
+    transfer =
+      money_transfer_fixture(book, tenant_id: member.id, amount: Money.new!(:EUR, "100.00"))
 
-    assert html =~ "Book closed successfully"
-    assert book |> Repo.reload() |> Books.closed?()
+    _peer = peer_fixture(transfer, member_id: member.id)
+    _peer = peer_fixture(transfer, member_id: other_member.id)
+
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
+
+    # Ensure there's only one tile
+    [tile_link] =
+      html
+      |> Floki.parse_document!()
+      |> Floki.get_by_id("transactions")
+      |> Floki.children()
+
+    expected_href =
+      ~p"/books/#{book}/reimbursements/new?from=#{other_member.id}&to=#{member.id}&amount=%E2%82%AC50.00"
+
+    assert Floki.attribute(tile_link, "href") == [expected_href]
+
+    tile_text = Floki.text(tile_link)
+    assert tile_text =~ "You"
+    assert tile_text =~ "owes"
+    assert tile_text =~ "Me"
+    assert tile_text =~ "€50.00"
+    assert tile_text =~ "Settle up"
   end
 
-  test "reopens book", %{conn: conn, book: book} do
-    book = Books.close_book!(book)
+  test "shows the errors when information is missing", %{conn: conn, book: book, member: member} do
+    other_member = book_member_fixture(book, nickname: "You")
 
-    {:ok, live, _html} = live(conn, ~p"/books/#{book}/balance")
+    transfer =
+      money_transfer_fixture(book,
+        tenant_id: member.id,
+        amount: Money.new!(:EUR, "100.00"),
+        balance_params: %TransferParams{means_code: :weight_by_income}
+      )
 
-    assert html =
-             live
-             |> element("#reopen-book", "Reopen")
-             |> render_click()
+    balance_config = member_balance_config_fixture(member)
+    _peer = peer_fixture(transfer, member_id: member.id, balance_config_id: balance_config.id)
+    _peer = peer_fixture(transfer, member_id: other_member.id)
 
-    assert html =~ "Book reopened successfully"
-    refute book |> Repo.reload() |> Books.closed?()
-  end
+    {:ok, _live, html} = live(conn, ~p"/books/#{book}/balance")
 
-  describe "reimbursement modal" do
-    # Open the modal
-    setup %{conn: conn, book: book} = context do
-      {:ok, lv, _html} = live(conn, ~p"/books/#{book}/balance")
+    assert html =~ "Some information is missing to balance the book"
 
-      html =
-        lv
-        |> element("button", "Settle up")
-        |> render_click()
+    # Ensure there's only one tile
+    [tile_link] =
+      html
+      |> Floki.parse_document!()
+      |> Floki.get_by_id("transaction-errors")
+      |> Floki.find("a")
 
-      Map.merge(context, %{
-        lv: lv,
-        html: html
-      })
-    end
+    expected_href = ~p"/books/#{book}/members/#{other_member.id}"
+    assert Floki.attribute(tile_link, "href") == [expected_href]
 
-    test "opens the modal with transaction information", %{
-      html: html,
-      peer_member1: member1,
-      peer_member2: member2
-    } do
-      modal_document =
-        html
-        |> Floki.parse_document!()
-        |> Floki.find("#reimbursement-modal")
-
-      assert input_value(modal_document, "#reimbursement_label") =~ "Reimbursement from "
-
-      assert select_value(modal_document, "#reimbursement_creditor_id") ==
-               to_string(member1.id)
-
-      assert select_value(modal_document, "#reimbursement_debtor_id") ==
-               to_string(member2.id)
-
-      assert input_value(modal_document, "#reimbursement_amount") == "5.00"
-    end
-
-    test "saves new money transfer", %{
-      conn: conn,
-      lv: lv,
-      book: book,
-      peer_member1: member1,
-      peer_member2: member2
-    } do
-      assert lv
-             |> form("#reimbursement-form",
-               reimbursement: %{
-                 label: "",
-                 creditor_id: member1.id,
-                 amount: "-5.0",
-                 debtor_id: member2.id,
-                 date: ~D[2020-01-01]
-               }
-             )
-             |> render_submit() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        lv
-        |> form("#reimbursement-form",
-          reimbursement: %{
-            label: "My label",
-            creditor_id: member2.id,
-            amount: "3.0",
-            debtor_id: member1.id,
-            date: ~D[2020-01-01]
-          }
-        )
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/books/#{book}/transfers")
-
-      assert html =~ "My label"
-    end
-  end
-
-  # Depends on :register_and_log_in_user
-  defp book_with_member_context(%{user: user} = context) do
-    book = book_fixture()
-    member = book_member_fixture(book, user_id: user.id, role: :creator)
-
-    Map.merge(context, %{
-      book: book,
-      member: member
-    })
-  end
-
-  defp input_value(document, selector) do
-    document
-    |> Floki.attribute(selector, "value")
-    |> hd()
-  end
-
-  defp select_value(document, selector) do
-    document
-    |> Floki.find(selector)
-    |> Floki.attribute("[selected]", "value")
-    |> hd()
+    tile_text = Floki.text(tile_link)
+    assert tile_text =~ "You"
+    assert tile_text =~ "did not set their revenues."
+    assert tile_text =~ "Fix it"
   end
 end

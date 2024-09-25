@@ -34,7 +34,7 @@ defmodule AppWeb.BookBalanceLive do
       </.card_grid>
 
       <%= if @transaction_errors != nil do %>
-        <section class="space-y-4">
+        <section class="space-y-4" id="transaction-errors">
           <.alert kind={:error}>
             <%= gettext("Some information is missing to balance the book") %>
           </.alert>
