@@ -48,6 +48,18 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr "Êtes-vous certain de vouloir supprimer le transfert ?"
 
 #, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete this book? This operation is irreversible."
+msgstr "Êtes-vous certain de vouloir supprimer ce livret? L'opération est irréversible."
+
+#, elixir-autogen, elixir-format
+msgid "As every member, you need a nickname. What do you want to be called?"
+msgstr "Comme tout membre, vous avez besoin d'un pseudo. Comment souhaitez-vous êtes appelé?"
+
+#, elixir-autogen, elixir-format
+msgid "As the creator, you will be the first member of the book, and will be in charge of inviting the first other members."
+msgstr "En temps que créateur du livret, vous serez le premier membre, et aurez la charge d'inviter les premiers autres membres."
+
+#, elixir-autogen, elixir-format
 msgid "Balance"
 msgstr "Solde"
 
@@ -72,12 +84,20 @@ msgid "Change email"
 msgstr "Modifier mon email"
 
 #, elixir-autogen, elixir-format
+msgid "Change name"
+msgstr "Changer le nom"
+
+#, elixir-autogen, elixir-format
 msgid "Change nickname"
 msgstr "Modifier votre pseudo"
 
 #, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr "Modifier mon mot de passe"
+
+#, elixir-autogen, elixir-format
+msgid "Close book"
+msgstr "Fermer le livret"
 
 #, elixir-autogen, elixir-format
 msgid "Configuration"
@@ -102,6 +122,10 @@ msgstr "Menu contextuel"
 #, elixir-autogen, elixir-format
 msgid "Copied to clipboard !"
 msgstr "Copié dans le presse-papier"
+
+#, elixir-autogen, elixir-format
+msgid "Create"
+msgstr "Créer"
 
 #, elixir-autogen, elixir-format
 msgid "Create a new book"
@@ -132,6 +156,14 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #, elixir-autogen, elixir-format
+msgid "Delete book"
+msgstr "Supprimer le livret"
+
+#, elixir-autogen, elixir-format
+msgid "Describe the purpose of the book in a few words."
+msgstr "Décrivez le but du livret en quelques mots."
+
+#, elixir-autogen, elixir-format
 msgid "Disconnect"
 msgstr "Déconnexion"
 
@@ -146,14 +178,6 @@ msgstr "Divisé"
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifier"
-
-#, elixir-autogen, elixir-format
-msgid "Edit Book"
-msgstr "Modifier un livret"
-
-#, elixir-autogen, elixir-format
-msgid "Edit Book · %{name}"
-msgstr "Editer un livret · %{name}"
 
 #, elixir-autogen, elixir-format
 msgid "Edit Transfer"
@@ -208,10 +232,6 @@ msgid "Home"
 msgstr "Accueil"
 
 #, elixir-autogen, elixir-format
-msgid "How to balance by default?"
-msgstr "Comment équilibrer par défaut ?"
-
-#, elixir-autogen, elixir-format
 msgid "How to balance?"
 msgstr "Comment équilibrer ?"
 
@@ -250,6 +270,10 @@ msgstr "Inviter des personnes"
 #, elixir-autogen, elixir-format
 msgid "It can be changed at any time after joining"
 msgstr "Il peut être changé à tout moment après avoir rejoint"
+
+#, elixir-autogen, elixir-format
+msgid "It can be changed later after the book creation."
+msgstr "Il peut être changé après la création du livret."
 
 #, elixir-autogen, elixir-format
 msgid "Join"
@@ -324,12 +348,12 @@ msgid "Name"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
-msgid "New Book"
-msgstr "Nouveau livret"
-
-#, elixir-autogen, elixir-format
 msgid "New Transfer"
 msgstr "Nouveau transfert"
+
+#, elixir-autogen, elixir-format
+msgid "New book"
+msgstr "Nouveau livret"
 
 #, elixir-autogen, elixir-format
 msgid "New email"
@@ -402,6 +426,10 @@ msgstr "Créer un compte"
 #, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr "Remboursement de %{debtor_name} à %{creditor_name}"
+
+#, elixir-autogen, elixir-format
+msgid "Reopen book"
+msgstr "Réouvrir le livret"
 
 #, elixir-autogen, elixir-format
 msgid "Reset password"
@@ -480,6 +508,10 @@ msgid "This email will be your identifier"
 msgstr "Cette email sera votre identifiant"
 
 #, elixir-autogen, elixir-format
+msgid "This is the current name of the book"
+msgstr "Ceci est le nom actuel du livret"
+
+#, elixir-autogen, elixir-format
 msgid "This is the current nickname of the member"
 msgstr "Ceci est le pseudo actuel du membre"
 
@@ -490,6 +522,10 @@ msgstr "Votre pseudo actuel est le suivant"
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
 msgstr "Cette page n'est pas accessible tant que le livret est clôt"
+
+#, elixir-autogen, elixir-format
+msgid "This will prevent prevent any modification from being made to the book. The book can be reopened later. Are you sure you want to close the book?"
+msgstr "Cela va empêcher toute modification du livret et de ses membres et transfers. Le livret peut être réouvert plus tard. Êtes-vous certain de vouloir fermer le livret ?"
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
@@ -518,6 +554,10 @@ msgstr "Pondérer par revenu"
 #, elixir-autogen, elixir-format
 msgid "Weighted"
 msgstr "Pondéré"
+
+#, elixir-autogen, elixir-format
+msgid "What do you want to call your new book?"
+msgstr "Comment voulez-vous appeler votre nouveau livret?"
 
 #, elixir-autogen, elixir-format
 msgid "What nickname do you want to use?"
