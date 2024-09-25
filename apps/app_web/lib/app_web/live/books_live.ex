@@ -52,6 +52,6 @@ defmodule AppWeb.BooksLive do
       |> assign(:page_title, gettext("My books"))
       |> stream(:books, books)
 
-    {:ok, socket, temporary_assigns: [books: []]}
+    {:ok, socket}
   end
 end

@@ -92,7 +92,7 @@ defmodule AppWeb.BookTransfersLive do
       )
       |> paginate_transfers(1)
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket}
   end
 
   defp paginate_transfers(socket, new_page) when new_page >= 1 do
