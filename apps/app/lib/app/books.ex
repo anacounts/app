@@ -4,12 +4,13 @@ defmodule App.Books do
   """
 
   import Ecto.Query
-  alias App.Repo
 
   alias App.Accounts.User
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.InvitationToken
+  alias App.Books.Members
+  alias App.Repo
 
   ## Database getters
 
@@ -151,15 +152,27 @@ defmodule App.Books do
     end
   end
 
+  ## Name update
+
   @doc """
   Updates a book.
   """
-  @spec update_book(Book.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
-  def update_book(book, attrs) do
+  @spec update_book_name(Book.t(), map()) :: {:ok, Book.t()} | {:error, Ecto.Changeset.t()}
+  def update_book_name(book, attrs) do
     book
-    |> Book.changeset(attrs)
+    |> Book.name_changeset(attrs)
     |> Repo.update()
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking book changes.
+  """
+  @spec change_book_name(Book.t(), map()) :: Ecto.Changeset.t()
+  def change_book_name(%Book{} = book, attrs \\ %{}) do
+    Book.name_changeset(book, attrs)
+  end
+
+  ## Deletion
 
   @doc """
   Deletes a book.
@@ -169,13 +182,6 @@ defmodule App.Books do
     book
     |> Book.delete_changeset()
     |> Repo.update!()
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking book changes.
-  """
-  def change_book(%Book{} = book, attrs \\ %{}) do
-    Book.changeset(book, attrs)
   end
 
   ## Close / Reopen

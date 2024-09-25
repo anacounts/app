@@ -1,20 +1,16 @@
 defmodule App.BooksTest do
   use App.DataCase, async: true
 
-  import App.BalanceFixtures
   import App.AccountsFixtures
   import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
 
-  alias App.Balance.TransferParams
   alias App.Books
   alias App.Books.Book
   alias App.Books.Members
 
   @valid_book_name "A valid book name !"
-
-  @invalid_book_attrs %{name: nil}
 
   ## Database getters
 
@@ -225,12 +221,14 @@ defmodule App.BooksTest do
     end
   end
 
-  describe "update_book/2" do
+  ## Name update
+
+  describe "update_book_name/2" do
     setup :book_with_creator_context
 
-    test "updates the book", %{book: book} do
+    test "updates the name of the book", %{book: book} do
       assert {:ok, updated} =
-               Books.update_book(book, %{
+               Books.update_book_name(book, %{
                  name: "My awesome new never seen name !"
                })
 
@@ -238,9 +236,23 @@ defmodule App.BooksTest do
     end
 
     test "returns error changeset with invalid data", %{book: book} do
-      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, @invalid_book_attrs)
+      assert {:error, changeset} = Books.update_book_name(book, %{name: nil})
+
+      assert errors_on(changeset) == %{name: ["can't be blank"]}
     end
   end
+
+  describe "change_book_name/2" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "returns a book changeset", %{book: book} do
+      assert %Ecto.Changeset{} = Books.change_book_name(book)
+    end
+  end
+
+  ## Deletion
 
   describe "delete_book!/2" do
     setup :book_with_creator_context
@@ -251,16 +263,6 @@ defmodule App.BooksTest do
 
       assert deleted_book = Repo.get(Book, book.id)
       assert deleted_book.deleted_at
-    end
-  end
-
-  describe "change_book/1" do
-    setup do
-      %{book: book_fixture()}
-    end
-
-    test "returns a book changeset", %{book: book} do
-      assert %Ecto.Changeset{} = Books.change_book(book)
     end
   end
 

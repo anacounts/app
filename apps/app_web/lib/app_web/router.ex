@@ -93,6 +93,7 @@ defmodule AppWeb.Router do
       live "/books/:book_id", BookLive
       live "/books/:book_id/balance", BookBalanceLive
       live "/books/:book_id/configuration", BookConfigurationLive
+      live "/books/:book_id/configuration/name", BookConfigurationNameLive
       live "/books/:book_id/invite", BookInvitationsLive
       live "/books/:book_id/members", BookMembersLive
       live "/books/:book_id/members/new", BookMemberCreationLive
