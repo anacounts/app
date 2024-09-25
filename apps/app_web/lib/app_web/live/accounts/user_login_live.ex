@@ -65,6 +65,6 @@ defmodule AppWeb.UserLoginLive do
         page_title: gettext("Sign in to your account")
       )
 
-    {:ok, socket, temporary_assigns: [form: form, page_title: nil]}
+    {:ok, socket, temporary_assigns: [form: form]}
   end
 end

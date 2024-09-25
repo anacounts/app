@@ -71,7 +71,7 @@ defmodule AppWeb.BookReimbursementCreationLive do
         member_options: Enum.map(members, &{&1.nickname, &1.id})
       )
 
-    {:ok, socket, temporary_assigns: [page_title: nil]}
+    {:ok, socket}
   end
 
   defp parse_params_form(params, members) do

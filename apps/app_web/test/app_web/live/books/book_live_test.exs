@@ -177,11 +177,11 @@ defmodule AppWeb.BookLiveTest do
 
       assert {:ok, _, html} =
                live
-               |> element("[href='/books/#{book.id}/edit']", "Configuration")
+               |> element("[href='/books/#{book.id}/configuration']", "Configuration")
                |> render_click()
-               |> follow_redirect(conn, ~p"/books/#{book}/edit")
+               |> follow_redirect(conn, ~p"/books/#{book}/configuration")
 
-      assert html =~ "Edit Book"
+      assert html =~ "Configuration"
     end
   end
 end

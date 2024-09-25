@@ -42,7 +42,7 @@ defmodule AppWeb.UserForgotPasswordLive do
         page_title: gettext("Forgot your password?")
       )
 
-    {:ok, socket, temporary_assigns: [form: nil, page_title: nil]}
+    {:ok, socket, temporary_assigns: [form: nil]}
   end
 
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do

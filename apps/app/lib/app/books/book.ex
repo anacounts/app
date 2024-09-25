@@ -7,17 +7,14 @@ defmodule App.Books.Book do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Balance.TransferParams
-
   @type id :: integer()
   @type t :: %__MODULE__{
-          id: id(),
-          name: String.t(),
+          id: id() | nil,
+          name: String.t() | nil,
           closed_at: NaiveDateTime.t() | nil,
-          deleted_at: NaiveDateTime.t(),
-          default_balance_params: TransferParams.t(),
-          inserted_at: NaiveDateTime.t(),
-          updated_at: NaiveDateTime.t()
+          deleted_at: NaiveDateTime.t() | nil,
+          inserted_at: NaiveDateTime.t() | nil,
+          updated_at: NaiveDateTime.t() | nil
         }
 
   schema "books" do
@@ -25,30 +22,21 @@ defmodule App.Books.Book do
     field :closed_at, :naive_datetime
     field :deleted_at, :naive_datetime
 
-    # balance
-    field :default_balance_params, TransferParams
-
     timestamps()
   end
 
   ## Changeset
 
-  def changeset(struct, attrs) do
+  def name_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:name, :default_balance_params])
+    |> cast(attrs, [:name])
     |> validate_name()
-    |> validate_default_balance_params()
   end
 
   defp validate_name(changeset) do
     changeset
     |> validate_required(:name)
     |> validate_length(:name, max: 255)
-  end
-
-  defp validate_default_balance_params(changeset) do
-    changeset
-    |> validate_required(:default_balance_params)
   end
 
   @doc """
