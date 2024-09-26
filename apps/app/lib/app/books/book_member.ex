@@ -57,6 +57,7 @@ defmodule App.Books.BookMember do
 
   ## Changesets
 
+  @spec nickname_changeset(t(), map()) :: Ecto.Changeset.t()
   def nickname_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:nickname])
@@ -67,6 +68,11 @@ defmodule App.Books.BookMember do
     changeset
     |> validate_required(:nickname)
     |> validate_length(:nickname, min: 1, max: 255)
+  end
+
+  @spec change_balance_config(t(), BalanceConfig.t()) :: Ecto.Changeset.t()
+  def change_balance_config(struct, %BalanceConfig{} = balance_config) do
+    change(struct, balance_config_id: balance_config.id)
   end
 
   ## Queries

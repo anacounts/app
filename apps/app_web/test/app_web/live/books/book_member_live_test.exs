@@ -35,8 +35,7 @@ defmodule AppWeb.BookMemberLiveTest do
 
     # display the set revenues card, without a link since the user is already linked
     assert html =~ "Set revenues"
-    # TODO(v2, revenues) use ~p
-    refute html =~ "/books/#{book.id}/members/#{member.id}/revenues"
+    refute html =~ ~p"/books/#{book}/members/#{member}/revenues"
 
     # display the change nickname card
     assert html =~ "Change nickname"
@@ -59,6 +58,10 @@ defmodule AppWeb.BookMemberLiveTest do
 
     assert html =~ member1.nickname
     assert html =~ "€1.00"
+
+    # display the set revenues card, with a link since the member has no user
+    assert html =~ "Set revenues"
+    assert html =~ ~p"/books/#{book}/members/#{member1}/revenues"
   end
 
   test "redirects to the profile if it belongs to the current user", %{

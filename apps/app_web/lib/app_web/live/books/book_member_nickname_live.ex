@@ -66,7 +66,7 @@ defmodule AppWeb.BookMemberNicknameLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= gettext("Member") %>
+      <%= @book_member.nickname %>
     </.breadcrumb_item>
     <.breadcrumb_item>
       <%= gettext("Change nickname") %>
@@ -116,15 +116,17 @@ defmodule AppWeb.BookMemberNicknameLive do
   end
 
   def handle_event("submit", %{"book_member" => book_member_params}, socket) do
-    case Members.update_book_member_nickname(socket.assigns.book_member, book_member_params) do
-      {:ok, member} ->
-        redirect_path = redirect_path(member, socket.assigns.live_action)
+    socket =
+      case Members.update_book_member_nickname(socket.assigns.book_member, book_member_params) do
+        {:ok, member} ->
+          redirect_path = redirect_path(member, socket.assigns.live_action)
+          push_navigate(socket, to: redirect_path)
 
-        {:noreply, push_navigate(socket, to: redirect_path)}
+        {:error, changeset} ->
+          assign(socket, :form, to_form(changeset))
+      end
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, :form, to_form(changeset))}
-    end
+    {:noreply, socket}
   end
 
   defp redirect_path(member, :profile), do: ~p"/books/#{member.book_id}/profile"

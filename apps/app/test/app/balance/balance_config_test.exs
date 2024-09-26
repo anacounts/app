@@ -10,15 +10,12 @@ defmodule App.Balance.BalanceConfigTest do
     %{user: user_fixture()}
   end
 
-  describe "changeset/2" do
+  describe "revenues_changeset/2" do
     test "allows valid `:annual_income`", %{user: user} do
       changeset =
-        BalanceConfig.changeset(
-          %BalanceConfig{},
-          balance_config_attributes(
-            owner_id: user.id,
-            annual_income: 0
-          )
+        BalanceConfig.revenues_changeset(
+          %BalanceConfig{owner_id: user.id},
+          balance_config_attributes(annual_income: 0)
         )
 
       assert changeset.valid?
@@ -26,12 +23,9 @@ defmodule App.Balance.BalanceConfigTest do
 
     test "does not allow negative `:annual_income`", %{user: user} do
       changeset =
-        BalanceConfig.changeset(
-          %BalanceConfig{},
-          balance_config_attributes(
-            owner_id: user.id,
-            annual_income: -1
-          )
+        BalanceConfig.revenues_changeset(
+          %BalanceConfig{owner_id: user.id},
+          balance_config_attributes(annual_income: -1)
         )
 
       refute changeset.valid?

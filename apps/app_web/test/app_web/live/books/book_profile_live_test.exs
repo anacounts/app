@@ -60,15 +60,13 @@ defmodule AppWeb.BookProfileLiveTest do
     test "navigates to the Set revenues page", %{conn: conn, book: book} do
       {:ok, live, _html} = live(conn, ~p"/books/#{book.id}/profile")
 
-      # TODO(v2, set revenues) Use set revenues link
-
-      assert {:ok, _live, _html} =
+      assert {:ok, _live, html} =
                live
-               |> element("[href='/books/#{book.id}']", "Set revenues")
+               |> element("[href='/books/#{book.id}/profile/revenues']", "Set revenues")
                |> render_click()
-               |> follow_redirect(conn, ~p"/books/#{book}")
+               |> follow_redirect(conn, ~p"/books/#{book}/profile/revenues")
 
-      # assert html =~ "Set revenues"
+      assert html =~ "Set revenues"
     end
   end
 

@@ -39,13 +39,18 @@ defmodule AppWeb.BookMemberLive do
         </div>
       <% end %>
 
+      <.alert_flash flash={@flash} kind={:error} class="mb-4" />
+
       <.card_grid>
         <.balance_card_link book_member={@book_member} />
         <.card>
           <:title><%= gettext("Joined on") %></:title>
           <%= format_date(@book_member.inserted_at) %>
         </.card>
-        <.link navigate={is_nil(@user) && ~p"/books/#{@book}"} aria-disabled={@user && "true"}>
+        <.link
+          navigate={is_nil(@user) && ~p"/books/#{@book}/members/#{@book_member}/revenues"}
+          aria-disabled={@user && "true"}
+        >
           <.card_button icon={:banknotes}>
             <%= gettext("Set revenues") %>
           </.card_button>
