@@ -51,6 +51,10 @@ defmodule App.Transfers.MoneyTransfer do
       foreign_key: :transfer_id,
       on_replace: :delete_if_exists
 
+    # The current peer is used in some operations, like when updating the revenues,
+    # in the "transfers" step, to know the link between the current member and the transfer.
+    field :current_peer, :map, virtual: true
+
     # Sum of all the peer `:total_weight`. Depends on the transfer balance means
     field :total_peer_weight, :decimal, virtual: true
 

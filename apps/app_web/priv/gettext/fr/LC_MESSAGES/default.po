@@ -68,6 +68,10 @@ msgid "Before making the change effective, a confirmation email will be sent to 
 msgstr "Avant d'appliquer le changement, un email de confirmation sera envoyé à la nouvelle adresse."
 
 #, elixir-autogen, elixir-format
+msgid "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
+msgstr "Par défault, seuls les nouveaux transfers utiliseront ces revenus. Ici, vous pouvez sélectionner les transfers qui devraient utiliser ces nouveaux revenus."
+
+#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr "Modifier mon avatar"
 
@@ -110,6 +114,10 @@ msgstr "Des instructions de confirmations ont été envoyés à la création de 
 #, elixir-autogen, elixir-format
 msgid "Contextual menu"
 msgstr "Menu contextuel"
+
+#, elixir-autogen, elixir-format
+msgid "Continue"
+msgstr "Continuer"
 
 #, elixir-autogen, elixir-format
 msgid "Copied to clipboard !"
@@ -188,6 +196,10 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr "Entrez votre adresse email et nous vous enverrons les instructions de réinitialisation de mot de passe par email."
 
 #, elixir-autogen, elixir-format
+msgid "Finish"
+msgstr "Terminer"
+
+#, elixir-autogen, elixir-format
 msgid "Fix it"
 msgstr "Corriger"
 
@@ -226,6 +238,10 @@ msgstr "Accueil"
 #, elixir-autogen, elixir-format
 msgid "How to balance?"
 msgstr "Comment équilibrer ?"
+
+#, elixir-autogen, elixir-format
+msgid "If you want to update revenues accross multiple books, you will have go to these books and update the revenues there too."
+msgstr "Si vous souhaitez mettre à jour ces revenues dans plusieurs livrets, il vous faudra vous rendre sur les pages dédiés des livrets concernés."
 
 #, elixir-autogen, elixir-format
 msgid "If your email has not been confirmed yet, you will receive an email with instructions shortly."
@@ -428,6 +444,14 @@ msgid "Reset your password"
 msgstr "Réinitialiser mon mot de passe"
 
 #, elixir-autogen, elixir-format
+msgid "Revenues"
+msgstr "Revenus"
+
+#, elixir-autogen, elixir-format
+msgid "Revenues are set by book. Choose the most fair way to compute revenues (before or after taxes, including gifts or not) with the other members of the book, and enter it here."
+msgstr "Les revenues sont définis par livret. Choisissez la manière la plus équitable de calculer vos revenues (avant ou après les taxes, incluants les cadeaux ou non) avec les autres membres, et entrer la valeur calculée ici."
+
+#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -484,6 +508,10 @@ msgid "The main difference with invited members is that you can see and edit rev
 msgstr "La différence principale avec les membres invités est que vous pouvez voir et modifier les revenues des membres sans utilisateurs."
 
 #, elixir-autogen, elixir-format
+msgid "There is no transfer in the book for now. You can finish the operation safely!"
+msgstr "Il n'y a pas de transfert dans le livret pour le moment. Vous pouvez terminer l'opération !"
+
+#, elixir-autogen, elixir-format
 msgid "This confirmation link is invalid or it has expired."
 msgstr "Le lien de confirmation est invalide ou a expiré."
 
@@ -500,8 +528,20 @@ msgid "This is the current nickname of the member"
 msgstr "Ceci est le pseudo actuel du membre"
 
 #, elixir-autogen, elixir-format
+msgid "This is the current revenues of the member"
+msgstr "Voici les revenus actuels du membre"
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr "Votre pseudo actuel est le suivant"
+
+#, elixir-autogen, elixir-format
+msgid "This is your current revenues"
+msgstr "Voici vos revenus actuels"
+
+#, elixir-autogen, elixir-format
+msgid "This member revenues were not set yet."
+msgstr "Les revenues de ce membre ne sont pas encore définis."
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
@@ -552,12 +592,32 @@ msgid "What would you like to change it to?"
 msgstr "Quel sera votre nouveau pseudo ?"
 
 #, elixir-autogen, elixir-format
+msgid "What would you like to set them to?"
+msgstr "Quel seront vos nouveaux revenus ?"
+
+#, elixir-autogen, elixir-format
 msgid "You are already part of this book."
 msgstr "Vous êtes déjà membre de ce livret."
 
 #, elixir-autogen, elixir-format
+msgid "You are not allowed to set the revenues of this member."
+msgstr "Vous n'êtes pas autorisés à modifier les revenus de ce membre."
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see the current revenues of this member, but you are allowed to change them."
+msgstr "Vous n'êtes pas autorisé à voir les revenus de ce membre, mais vous pouvez les mettre à jour."
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see your current revenues because they were set by someone else."
+msgstr "Vous ne pouvez pas voir vos revenus actuels car ils ont été définis par une autre personne."
+
+#, elixir-autogen, elixir-format
 msgid "You have been added to the book"
 msgstr "Vous avez été ajouté au livret"
+
+#, elixir-autogen, elixir-format
+msgid "You have not set your revenues yet."
+msgstr "Vous n'avez pas encore définis vos revenus."
 
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."

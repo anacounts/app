@@ -18,7 +18,7 @@ defmodule AppWeb.CoreComponents do
   @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
 
   # Attributes of the `<input>` HTML element
-  @input_attrs ~w(name value checked step)
+  @input_attrs ~w(name value checked step disabled)
 
   # prepend a class in `[:rest, :class]`
   defp prepend_class(assigns, class) do
@@ -896,18 +896,6 @@ defmodule AppWeb.CoreComponents do
       <%= render_slot(@inner_block) %>
     </p>
     """
-  end
-
-  ## JS Commands
-
-  # TODO(v2,end) drop `show_dialog/2` and `hide_dialog/2` helper functions
-
-  def show_dialog(js \\ %JS{}, selector) do
-    JS.dispatch(js, "app:open-dialog", to: selector)
-  end
-
-  def hide_dialog(js \\ %JS{}, selector) do
-    JS.dispatch(js, "app:close-dialog", to: selector)
   end
 
   @doc """

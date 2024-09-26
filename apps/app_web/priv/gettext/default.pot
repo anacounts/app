@@ -67,6 +67,10 @@ msgid "Before making the change effective, a confirmation email will be sent to 
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr ""
 
@@ -108,6 +112,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Contextual menu"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Continue"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -187,6 +195,10 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Finish"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Fix it"
 msgstr ""
 
@@ -224,6 +236,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "How to balance?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "If you want to update revenues accross multiple books, you will have go to these books and update the revenues there too."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -427,6 +443,14 @@ msgid "Reset your password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Revenues"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Revenues are set by book. Choose the most fair way to compute revenues (before or after taxes, including gifts or not) with the other members of the book, and enter it here."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
 
@@ -483,6 +507,10 @@ msgid "The main difference with invited members is that you can see and edit rev
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "There is no transfer in the book for now. You can finish the operation safely!"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This confirmation link is invalid or it has expired."
 msgstr ""
 
@@ -499,7 +527,19 @@ msgid "This is the current nickname of the member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "This is the current revenues of the member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This is your current revenues"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This member revenues were not set yet."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -551,11 +591,31 @@ msgid "What would you like to change it to?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "What would you like to set them to?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "You are already part of this book."
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "You are not allowed to set the revenues of this member."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see the current revenues of this member, but you are allowed to change them."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see your current revenues because they were set by someone else."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "You have been added to the book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You have not set your revenues yet."
 msgstr ""
 
 #, elixir-autogen, elixir-format
