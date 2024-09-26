@@ -77,7 +77,7 @@ defmodule AppWeb.BookMemberRevenuesLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= gettext("Member") %>
+      <%= @book_member.nickname %>
     </.breadcrumb_item>
     <.breadcrumb_item>
       <%= gettext("Set revenues") %>
@@ -197,6 +197,9 @@ defmodule AppWeb.BookMemberRevenuesLive do
     {:noreply, socket}
   end
 
-  defp redirect_path(member, :profile), do: ~p"/books/#{member.book_id}/profile/revenues"
-  defp redirect_path(member, :member), do: ~p"/books/#{member.book_id}/members/#{member}/revenues"
+  defp redirect_path(member, :profile),
+    do: ~p"/books/#{member.book_id}/profile/revenues/transfers"
+
+  defp redirect_path(member, :member),
+    do: ~p"/books/#{member.book_id}/members/#{member}/revenues/transfers"
 end

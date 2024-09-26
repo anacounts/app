@@ -66,7 +66,7 @@ defmodule AppWeb.BookMemberNicknameLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= gettext("Member") %>
+      <%= @book_member.nickname %>
     </.breadcrumb_item>
     <.breadcrumb_item>
       <%= gettext("Change nickname") %>
