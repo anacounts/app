@@ -67,6 +67,10 @@ msgid "Before making the change effective, a confirmation email will be sent to 
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr ""
 
@@ -188,6 +192,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Enter your user account's email address and we will send you a password reset link."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Finish"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -496,6 +504,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "There is no transfer in the book for now. You can finish the operation safely!"
 msgstr ""
 
 #, elixir-autogen, elixir-format

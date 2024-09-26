@@ -36,7 +36,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
                live
                |> form("form", balance_config: %{annual_income: 1000})
                |> render_submit()
-               |> follow_redirect(conn, ~p"/books/#{book}/profile/revenues")
+               |> follow_redirect(conn, ~p"/books/#{book}/profile/revenues/transfers")
 
       assert html =~ "Set revenues"
 
@@ -127,13 +127,12 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
                live
                |> form("form", balance_config: %{annual_income: 1500})
                |> render_submit()
-               |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}/revenues")
+               |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}/revenues/transfers")
 
       assert html =~ "Set revenues"
 
-      assert former_balance_config = Repo.reload(former_balance_config)
-      assert former_balance_config.owner_id == nil
-      assert former_balance_config.annual_income == 500
+      # Delete the former balance config, it's not linked to anything anymore
+      refute Repo.reload(former_balance_config)
 
       member = Repo.reload!(member)
       assert balance_config = Repo.get(BalanceConfig, member.balance_config_id)

@@ -7,7 +7,6 @@ defmodule App.Balance.BalanceConfigsTest do
   import App.BooksFixtures
   import App.TransfersFixtures
 
-  alias App.Balance.BalanceConfig
   alias App.Balance.BalanceConfigs
 
   describe "get_balance_config_of_member/1" do
@@ -52,9 +51,7 @@ defmodule App.Balance.BalanceConfigsTest do
 
   describe "create_balance_config/3" do
     test "creates a balance configuration" do
-      former_balance_config = balance_config_fixture()
-
-      member = book_member_fixture(book_fixture(), balance_config_id: former_balance_config.id)
+      member = book_member_fixture(book_fixture())
       owner = user_fixture()
 
       assert {:ok, balance_config} =
@@ -66,9 +63,6 @@ defmodule App.Balance.BalanceConfigsTest do
       # updates the member
       member = Repo.reload!(member)
       assert member.balance_config_id == balance_config.id
-
-      # does not delete the former balance configuration
-      assert Repo.reload(former_balance_config)
     end
 
     test "returns an error if the attributes are invalid" do
@@ -79,6 +73,42 @@ defmodule App.Balance.BalanceConfigsTest do
                BalanceConfigs.create_balance_config(member, owner, %{annual_income: -1})
 
       assert errors_on(changeset) == %{annual_income: ["must be greater than or equal to 0"]}
+    end
+
+    test "deletes the former balance configuration if it's not linked to any entity" do
+      balance_config = balance_config_fixture()
+      member = book_member_fixture(book_fixture(), balance_config_id: balance_config.id)
+
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+
+      refute Repo.reload(balance_config)
+    end
+
+    test "does not delete the balance configuration if it's linked to a member" do
+      book = book_fixture()
+
+      balance_config = balance_config_fixture()
+      member = book_member_fixture(book, balance_config_id: balance_config.id)
+
+      # There is no reason for this case to happen, but better be safe than sorry
+      _member = book_member_fixture(book, balance_config_id: balance_config.id)
+
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+
+      assert Repo.reload(balance_config)
+    end
+
+    test "does not delete the balance configuration if it's linked to a peer" do
+      balance_config = balance_config_fixture()
+
+      book = book_fixture()
+      member = book_member_fixture(book, balance_config_id: balance_config.id)
+      transfer = money_transfer_fixture(book, tenant_id: member.id)
+      _peer = peer_fixture(transfer, member_id: member.id, balance_config_id: balance_config.id)
+
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+
+      assert Repo.reload(balance_config)
     end
   end
 
@@ -107,61 +137,6 @@ defmodule App.Balance.BalanceConfigsTest do
 
       assert changeset.valid?
       assert changeset.changes == %{}
-    end
-  end
-
-  describe "try_to_delete_balance_config/1" do
-    setup do
-      %{balance_config: balance_config_fixture()}
-    end
-
-    test "deletes the balance configuration if it's not linked to any entity", %{
-      balance_config: balance_config
-    } do
-      :ok = BalanceConfigs.try_to_delete_balance_config(balance_config)
-
-      refute Repo.reload(balance_config)
-    end
-
-    test "does not delete the balance configuration if it's linked to a member", %{
-      balance_config: balance_config
-    } do
-      book = book_fixture()
-      _member = book_member_fixture(book, balance_config_id: balance_config.id)
-
-      :ok = BalanceConfigs.try_to_delete_balance_config(balance_config)
-
-      assert Repo.reload(balance_config)
-    end
-
-    test "does not delete the balance configuration if it's linked to a peer", %{
-      balance_config: balance_config
-    } do
-      book = book_fixture()
-      member = book_member_fixture(book)
-      transfer = money_transfer_fixture(book, tenant_id: member.id)
-      _peer = peer_fixture(transfer, member_id: member.id, balance_config_id: balance_config.id)
-
-      :ok = BalanceConfigs.try_to_delete_balance_config(balance_config)
-
-      assert Repo.reload(balance_config)
-    end
-
-    test "does not end the transaction on error", %{balance_config: balance_config} do
-      user = user_fixture()
-
-      {:ok, balance_config} =
-        Repo.transaction(fn ->
-          book = book_fixture()
-          _member = book_member_fixture(book, balance_config_id: balance_config.id)
-
-          :ok = BalanceConfigs.try_to_delete_balance_config(balance_config)
-
-          # Try to insert another entity in the database
-          Repo.insert!(%BalanceConfig{owner_id: user.id})
-        end)
-
-      assert balance_config.owner_id == user.id
     end
   end
 end

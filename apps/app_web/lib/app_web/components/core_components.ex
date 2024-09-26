@@ -18,7 +18,7 @@ defmodule AppWeb.CoreComponents do
   @link_attrs ~w(navigate patch href replace method csrf_token download hreflang referrerpolicy rel target type)
 
   # Attributes of the `<input>` HTML element
-  @input_attrs ~w(name value checked step)
+  @input_attrs ~w(name value checked step disabled)
 
   # prepend a class in `[:rest, :class]`
   defp prepend_class(assigns, class) do

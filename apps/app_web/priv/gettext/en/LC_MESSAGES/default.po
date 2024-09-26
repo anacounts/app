@@ -68,6 +68,10 @@ msgid "Before making the change effective, a confirmation email will be sent to 
 msgstr "Before making the change effective, a confirmation email will be sent to the new address."
 
 #, elixir-autogen, elixir-format
+msgid "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
+msgstr "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
+
+#, elixir-autogen, elixir-format
 msgid "Change avatar"
 msgstr "Change avatar"
 
@@ -190,6 +194,10 @@ msgstr "Email change link is invalid or it has expired. You can create a new one
 #, elixir-autogen, elixir-format
 msgid "Enter your user account's email address and we will send you a password reset link."
 msgstr "Enter your user account's email address and we will send you a password reset link."
+
+#, elixir-autogen, elixir-format
+msgid "Finish"
+msgstr "Finish"
 
 #, elixir-autogen, elixir-format
 msgid "Fix it"
@@ -498,6 +506,10 @@ msgstr "The confirmation email will be sent to this address"
 #, elixir-autogen, elixir-format
 msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 msgstr "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
+
+#, elixir-autogen, elixir-format
+msgid "There is no transfer in the book for now. You can finish the operation safely!"
+msgstr "There is no transfer in the book for now. You can finish the operation safely!"
 
 #, elixir-autogen, elixir-format
 msgid "This confirmation link is invalid or it has expired."
