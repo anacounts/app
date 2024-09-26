@@ -10,6 +10,21 @@ defmodule App.Balance.BalanceConfigsTest do
   alias App.Balance.BalanceConfig
   alias App.Balance.BalanceConfigs
 
+  describe "get_balance_config_of_member/1" do
+    test "returns the balance config of the member" do
+      %{id: id} = balance_config_fixture()
+      member = book_member_fixture(book_fixture(), balance_config_id: id)
+
+      assert %{id: ^id} = BalanceConfigs.get_balance_config_of_member(member)
+    end
+
+    test "returns nil if the member has no balance configuration" do
+      member = book_member_fixture(book_fixture())
+
+      assert BalanceConfigs.get_balance_config_of_member(member) == nil
+    end
+  end
+
   describe "member_has_revenues?/1" do
     setup do
       %{book: book_fixture()}
@@ -32,6 +47,66 @@ defmodule App.Balance.BalanceConfigsTest do
       member = book_member_fixture(book, balance_config_id: balance_config.id)
 
       assert BalanceConfigs.member_has_revenues?(member)
+    end
+  end
+
+  describe "create_balance_config/3" do
+    test "creates a balance configuration" do
+      former_balance_config = balance_config_fixture()
+
+      member = book_member_fixture(book_fixture(), balance_config_id: former_balance_config.id)
+      owner = user_fixture()
+
+      assert {:ok, balance_config} =
+               BalanceConfigs.create_balance_config(member, owner, %{annual_income: 5432})
+
+      assert balance_config.owner_id == owner.id
+      assert balance_config.annual_income == 5432
+
+      # updates the member
+      member = Repo.reload!(member)
+      assert member.balance_config_id == balance_config.id
+
+      # does not delete the former balance configuration
+      assert Repo.reload(former_balance_config)
+    end
+
+    test "returns an error if the attributes are invalid" do
+      member = book_member_fixture(book_fixture())
+      owner = user_fixture()
+
+      assert {:error, changeset} =
+               BalanceConfigs.create_balance_config(member, owner, %{annual_income: -1})
+
+      assert errors_on(changeset) == %{annual_income: ["must be greater than or equal to 0"]}
+    end
+  end
+
+  describe "change_balance_config_revenues/2" do
+    setup do
+      %{balance_config: balance_config_fixture()}
+    end
+
+    test "returns a changeset", %{balance_config: balance_config} do
+      assert %Ecto.Changeset{} =
+               changeset =
+               BalanceConfigs.change_balance_config_revenues(balance_config, %{
+                 annual_income: 2345
+               })
+
+      assert changeset.valid?
+      assert changeset.changes == %{annual_income: 2345}
+    end
+
+    test "cannot change the owner", %{balance_config: balance_config} do
+      assert %Ecto.Changeset{} =
+               changeset =
+               BalanceConfigs.change_balance_config_revenues(balance_config, %{
+                 owner_id: user_fixture().id
+               })
+
+      assert changeset.valid?
+      assert changeset.changes == %{}
     end
   end
 

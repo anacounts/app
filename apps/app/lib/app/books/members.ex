@@ -126,14 +126,9 @@ defmodule App.Books.Members do
   """
   @spec link_book_member_to_user(BookMember.t(), User.t()) :: :ok
   def link_book_member_to_user(book_member, user) do
-    {:ok, _results} =
-      Ecto.Multi.new()
-      |> Ecto.Multi.update_all(
-        :book_member,
-        from(BookMember, where: [id: ^book_member.id]),
-        set: [user_id: user.id]
-      )
-      |> Repo.transaction()
+    {1, nil} =
+      from(BookMember, where: [id: ^book_member.id])
+      |> Repo.update_all(set: [user_id: user.id])
 
     :ok
   end

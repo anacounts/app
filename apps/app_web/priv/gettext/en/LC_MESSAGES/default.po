@@ -112,6 +112,10 @@ msgid "Contextual menu"
 msgstr "Contextual menu"
 
 #, elixir-autogen, elixir-format
+msgid "Continue"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
 msgid "Copied to clipboard !"
 msgstr "Copied to clipboard !"
 
@@ -226,6 +230,10 @@ msgstr "Home"
 #, elixir-autogen, elixir-format
 msgid "How to balance?"
 msgstr "How to balance?"
+
+#, elixir-autogen, elixir-format
+msgid "If you want to update revenues accross multiple books, you will have go to these books and update the revenues there too."
+msgstr "If you want to update revenues accross multiple books, you will have go to these books and update the revenues there too."
 
 #, elixir-autogen, elixir-format
 msgid "If your email has not been confirmed yet, you will receive an email with instructions shortly."
@@ -428,6 +436,14 @@ msgid "Reset your password"
 msgstr "Reset your password"
 
 #, elixir-autogen, elixir-format
+msgid "Revenues"
+msgstr "Revenues"
+
+#, elixir-autogen, elixir-format
+msgid "Revenues are set by book. Choose the most fair way to compute revenues (before or after taxes, including gifts or not) with the other members of the book, and enter it here."
+msgstr "Revenues are set by book. Choose the most fair way to compute revenues (before or after taxes, including gifts or not) with the other members of the book, and enter it here."
+
+#, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Save"
 
@@ -500,8 +516,20 @@ msgid "This is the current nickname of the member"
 msgstr "This is the current nickname of the member"
 
 #, elixir-autogen, elixir-format
+msgid "This is the current revenues of the member"
+msgstr "This is the current revenues of the member"
+
+#, elixir-autogen, elixir-format
 msgid "This is your current nickname"
 msgstr "This is your current nickname"
+
+#, elixir-autogen, elixir-format
+msgid "This is your current revenues"
+msgstr "This is your current revenues"
+
+#, elixir-autogen, elixir-format
+msgid "This member revenues were not set yet."
+msgstr "This member revenues were not set yet."
 
 #, elixir-autogen, elixir-format
 msgid "This page is not accessible while the book is closed"
@@ -552,12 +580,32 @@ msgid "What would you like to change it to?"
 msgstr "What would you like to change it to?"
 
 #, elixir-autogen, elixir-format
+msgid "What would you like to set them to?"
+msgstr "What would you like to set them to?"
+
+#, elixir-autogen, elixir-format
 msgid "You are already part of this book."
 msgstr "You are already part of this book."
 
 #, elixir-autogen, elixir-format
+msgid "You are not allowed to set the revenues of this member."
+msgstr "You are not allowed to set the revenues of this member."
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see the current revenues of this member, but you are allowed to change them."
+msgstr "You cannot see the current revenues of this member, but you are allowed to change them."
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see your current revenues because they were set by someone else."
+msgstr "You cannot see your current revenues because they were set by someone else."
+
+#, elixir-autogen, elixir-format
 msgid "You have been added to the book"
 msgstr "You have been added to the book"
+
+#, elixir-autogen, elixir-format
+msgid "You have not set your revenues yet."
+msgstr "You have not set your revenues yet."
 
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."

@@ -31,7 +31,7 @@ defmodule AppWeb.BookProfileLive do
           <:title><%= gettext("Joined on") %></:title>
           <%= format_date(@current_member.inserted_at) %>
         </.card>
-        <.link navigate={~p"/books/#{@book}"}>
+        <.link navigate={~p"/books/#{@book}/profile/revenues"}>
           <.card_button icon={:banknotes}>
             <%= gettext("Set revenues") %>
           </.card_button>

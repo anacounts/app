@@ -27,7 +27,7 @@ defmodule App.Balance.BalanceConfigsFixtures do
       Ecto.Multi.new()
       |> Ecto.Multi.insert(
         :balance_config,
-        BalanceConfig.changeset(
+        BalanceConfig.revenues_changeset(
           %BalanceConfig{},
           balance_config_attributes(attrs)
         )

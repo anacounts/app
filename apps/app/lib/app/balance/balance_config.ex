@@ -99,9 +99,9 @@ defmodule App.Balance.BalanceConfig do
     timestamps()
   end
 
-  def changeset(struct, attrs) do
+  def revenues_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:owner_id, :annual_income])
+    |> cast(attrs, [:annual_income])
     |> validate_annual_income()
   end
 
