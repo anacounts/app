@@ -40,26 +40,4 @@ defmodule AppWeb.PageComponents do
     </div>
     """
   end
-
-  @doc false
-  # DEPRECATED
-  # TODO(v2,end) remove
-  def page_header(assigns) do
-    ~H"""
-    <header class="sticky top-0
-                   flex items-center gap-2
-                   h-14 mb-2 px-4
-                   bg-theme text-white shadow">
-      <.button :if={assigns[:hide_back] != true} color={:ghost}>
-        <.icon name="arrow-back" alt={gettext("Go back")} />
-      </.button>
-
-      <b class="mr-auto text-xl md:text-2xl font-normal uppercase">
-        <%= render_slot(@title) %>
-      </b>
-
-      <%= render_slot(assigns[:menu] || []) %>
-    </header>
-    """
-  end
 end
