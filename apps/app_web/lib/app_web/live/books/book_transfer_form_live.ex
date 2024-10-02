@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransferFormLive do
+defmodule AppWeb.BookTransferFormLive do
   @moduledoc """
   The money transfer form live view.
   Create or update a money transfer for the current book.

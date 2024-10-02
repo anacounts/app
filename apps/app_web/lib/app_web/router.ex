@@ -111,8 +111,8 @@ defmodule AppWeb.Router do
       live "/books/:book_id/profile/revenues/transfers", BookMemberRevenuesTransfersLive, :profile
       live "/books/:book_id/reimbursements/new", BookReimbursementCreationLive
       live "/books/:book_id/transfers", BookTransfersLive
-      live "/books/:book_id/transfers/new", MoneyTransferFormLive, :new
-      live "/books/:book_id/transfers/:money_transfer_id/edit", MoneyTransferFormLive, :edit
+      live "/books/:book_id/transfers/new", BookTransferFormLive, :new
+      live "/books/:book_id/transfers/:money_transfer_id/edit", BookTransferFormLive, :edit
     end
 
     get "/invitations/:token", BookInvitationController, :show
