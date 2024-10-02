@@ -93,6 +93,7 @@ defmodule AppWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
+      import Phoenix.HTML.Form, only: [input_value: 2]
 
       # Core UI components and translation
       import AppWeb.CoreComponents

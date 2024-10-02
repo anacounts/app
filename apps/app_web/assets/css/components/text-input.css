@@ -32,7 +32,7 @@
 
   .text-input__input {
     @apply grow
-           h-full
+           size-full
            border-none outline-none;
   }
 

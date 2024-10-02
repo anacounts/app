@@ -726,29 +726,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  def input(%{type: "toggle-group"} = assigns) do
-    ~H"""
-    <div class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
-      <div class="toggle-group">
-        <label :for={option <- @options} class="toggle-group__label">
-          <input
-            type="radio"
-            name={@name}
-            id={option[:id]}
-            value={option[:value]}
-            checked={{:safe, option[:value]} == Phoenix.HTML.html_escape(@value)}
-            class="toggle-group__input"
-            {@rest}
-          />
-          <%= option[:key] %>
-        </label>
-      </div>
-      <.error :for={msg <- @errors}><%= msg %></.error>
-    </div>
-    """
-  end
-
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>

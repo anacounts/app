@@ -26,8 +26,8 @@ defmodule App.Transfers do
 
   Raises `Ecto.NoResultsError` if the Money transfer does not exist.
   """
-  def get_money_transfer_of_book!(id, book_id),
-    do: Repo.get_by!(MoneyTransfer, id: id, book_id: book_id)
+  def get_money_transfer_of_book!(id, %Book{} = book),
+    do: Repo.get_by!(MoneyTransfer, id: id, book_id: book.id)
 
   @doc """
   Find all money transfers of a book.
@@ -201,39 +201,32 @@ defmodule App.Transfers do
   @doc """
   Creates a money_transfer.
   """
-  @spec create_money_transfer(Book.t(), map()) ::
+  @spec create_money_transfer(Book.t(), MoneyTransfer.type(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
-  def create_money_transfer(%Book{} = book, attrs \\ %{}) do
-    %MoneyTransfer{book_id: book.id}
-    |> MoneyTransfer.changeset(attrs)
-    |> MoneyTransfer.with_peers(&Peer.create_money_transfer_changeset/2)
-    |> link_balance_config_to_peers_changeset()
-    |> Repo.insert()
-  end
+  def create_money_transfer(%Book{} = book, type, attrs)
+      when is_map(attrs) and type in [:payment, :income] do
+    changeset =
+      %MoneyTransfer{book_id: book.id, type: type}
+      |> MoneyTransfer.changeset(attrs)
 
-  defp link_balance_config_to_peers_changeset(changeset) do
-    case Ecto.Changeset.fetch_change(changeset, :peers) do
-      {:ok, peers_changeset} ->
-        peers =
-          changeset
-          |> Ecto.Changeset.fetch_field!(:peers)
-          # Members are required to fetch their balance config id
-          |> Repo.preload(member: from(BookMember, select: [:balance_config_id]))
+    result =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:money_transfer, changeset)
+      |> Ecto.Multi.update_all(
+        :update_peers_balance_config,
+        fn %{money_transfer: money_transfer} ->
+          from [peer: peer] in Peer.transfer_query(money_transfer),
+            join: member in BookMember,
+            on: peer.member_id == member.id,
+            update: [set: [balance_config_id: member.balance_config_id]]
+        end,
+        []
+      )
+      |> Repo.transaction()
 
-        balance_config_id_by_member_id =
-          Map.new(peers, fn peer -> {peer.member_id, peer.member.balance_config_id} end)
-
-        peers_changeset_with_balance_config =
-          Enum.map(peers_changeset, fn peer_changeset ->
-            member_id = Ecto.Changeset.fetch_field!(peer_changeset, :member_id)
-            balance_config_id = balance_config_id_by_member_id[member_id]
-            Ecto.Changeset.put_change(peer_changeset, :balance_config_id, balance_config_id)
-          end)
-
-        Ecto.Changeset.put_assoc(changeset, :peers, peers_changeset_with_balance_config)
-
-      _ ->
-        changeset
+    case result do
+      {:ok, %{money_transfer: money_transfer}} -> {:ok, money_transfer}
+      {:error, :money_transfer, changeset, _changes} -> {:error, changeset}
     end
   end
 
@@ -244,10 +237,7 @@ defmodule App.Transfers do
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def update_money_transfer(%MoneyTransfer{} = money_transfer, attrs) do
     money_transfer
-    # peers can be updated by the changeset
-    |> Repo.preload(:peers)
     |> MoneyTransfer.changeset(attrs)
-    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
     |> Repo.update()
   end
 
@@ -264,9 +254,7 @@ defmodule App.Transfers do
   Returns an `%Ecto.Changeset{}` for tracking money_transfer changes.
   """
   def change_money_transfer(%MoneyTransfer{} = money_transfer, attrs \\ %{}) do
-    money_transfer
-    |> MoneyTransfer.changeset(attrs)
-    |> MoneyTransfer.with_peers(&Peer.update_money_transfer_changeset/2)
+    MoneyTransfer.changeset(money_transfer, attrs)
   end
 
   ## Reimbursements

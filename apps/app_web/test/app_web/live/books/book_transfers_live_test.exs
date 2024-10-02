@@ -40,7 +40,7 @@ defmodule AppWeb.BookTransfersLiveTest do
       |> render_click()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
-    assert html =~ "Edit"
+    assert html =~ "Save"
     assert html =~ "<form"
     assert html =~ money_transfer.label
   end

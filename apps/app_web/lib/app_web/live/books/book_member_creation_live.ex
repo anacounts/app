@@ -52,6 +52,7 @@ defmodule AppWeb.BookMemberCreationLive do
           field={@form[:nickname]}
           pattern=".{1,255}"
           required
+          phx-debounce
         />
 
         <.button_group>

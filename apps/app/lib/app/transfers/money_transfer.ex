@@ -65,18 +65,12 @@ defmodule App.Transfers.MoneyTransfer do
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:label, :amount, :type, :date, :tenant_id, :balance_params])
+    |> cast(attrs, [:label, :date, :balance_params, :tenant_id, :amount])
     |> validate_label()
-    |> validate_amount()
-    |> validate_type()
-    |> validate_tenant_id()
-    |> validate_book_id()
     |> validate_balance_params()
-  end
-
-  def with_peers(changeset, with_changeset) do
-    changeset
-    |> cast_assoc(:peers, with: with_changeset)
+    |> validate_tenant_id()
+    |> validate_amount()
+    |> cast_assoc(:peers, with: &Ecto.Changeset.cast(&1, &2, [:member_id, :weight]))
   end
 
   @doc """
@@ -87,7 +81,7 @@ defmodule App.Transfers.MoneyTransfer do
     |> cast(attrs, [:label, :amount, :date, :tenant_id])
     |> validate_label()
     |> validate_amount()
-    |> cast_assoc(:peers, with: &Peer.update_money_transfer_changeset/2)
+    |> cast_assoc(:peers, with: &Ecto.Changeset.cast(&1, &2, [:member_id]))
     |> validate_reimbursement_peers()
   end
 
@@ -102,22 +96,10 @@ defmodule App.Transfers.MoneyTransfer do
     |> validate_required(:amount)
   end
 
-  defp validate_type(changeset) do
-    changeset
-    |> validate_required(:type)
-    |> validate_inclusion(:type, [:payment, :income])
-  end
-
   defp validate_tenant_id(changeset) do
     changeset
     |> validate_required(:tenant_id)
     |> foreign_key_constraint(:tenant_id)
-  end
-
-  defp validate_book_id(changeset) do
-    changeset
-    |> validate_required(:book_id)
-    |> foreign_key_constraint(:book_id)
   end
 
   defp validate_balance_params(changeset) do

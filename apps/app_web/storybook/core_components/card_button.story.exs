@@ -35,7 +35,7 @@ defmodule Storybook.CoreComponents.CardButton do
           class: "aspect-square"
         },
         slots: [
-          ~s|New transfer|
+          ~s|New payment|
         ]
       }
     ]
