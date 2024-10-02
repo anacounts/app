@@ -78,7 +78,7 @@ defmodule AppWeb.UserResetPasswordLive do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, gettext("Password reset successfully."))
+         |> put_flash(:info, gettext("Password reset."))
          |> redirect(to: ~p"/users/log_in")}
 
       {:error, changeset} ->
