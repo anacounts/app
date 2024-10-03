@@ -4,9 +4,8 @@ defmodule App.Accounts.User do
   """
 
   use Ecto.Schema
-  import Ecto.Changeset
 
-  alias App.Balance.BalanceConfig
+  import Ecto.Changeset
 
   @type id :: integer()
   @type t :: %__MODULE__{
@@ -15,8 +14,6 @@ defmodule App.Accounts.User do
           password: String.t(),
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
-          balance_config: BalanceConfig.t(),
-          balance_config_id: BalanceConfig.id(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -27,9 +24,6 @@ defmodule App.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-
-    # the current balance configuration of the user
-    belongs_to :balance_config, BalanceConfig
 
     timestamps()
   end
@@ -174,20 +168,5 @@ defmodule App.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
-  end
-
-  @doc """
-  A user changeset for changing the user balance config.
-  """
-  @spec balance_config_changeset(t(), map()) :: Ecto.Changeset.t()
-  def balance_config_changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:balance_config_id])
-    |> validate_balance_config_id()
-  end
-
-  defp validate_balance_config_id(changeset) do
-    changeset
-    |> foreign_key_constraint(:balance_config_id)
   end
 end
