@@ -4,10 +4,10 @@ defmodule AppWeb.BookAccess do
   """
   use AppWeb, :verified_routes
 
+  import Phoenix.LiveView, only: [push_navigate: 2]
+
   alias App.Books
   alias App.Books.Members
-
-  alias AppWeb.BooksHelpers
 
   @doc """
   * :ensure_book!
@@ -36,8 +36,10 @@ defmodule AppWeb.BookAccess do
   end
 
   def on_mount(:ensure_open_book!, _params, _session, socket) do
-    if Books.closed?(socket.assigns.book) do
-      {:halt, BooksHelpers.closed_book_redirect(socket)}
+    book = socket.assigns.book
+
+    if Books.closed?(book) do
+      {:halt, push_navigate(socket, to: ~p"/books/#{book}")}
     else
       {:cont, socket}
     end

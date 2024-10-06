@@ -127,17 +127,17 @@ defmodule AppWeb.BookLiveTest do
     end
   end
 
-  describe "New transfer card" do
-    test "navigates to the new transfer form", %{conn: conn, book: book} do
+  describe "New payment card" do
+    test "navigates to the new payment form", %{conn: conn, book: book} do
       {:ok, live, _html} = live(conn, ~p"/books/#{book}")
 
       assert {:ok, _, html} =
                live
-               |> element("[href='/books/#{book.id}/transfers/new']", "New transfer")
+               |> element("[href='/books/#{book.id}/transfers/new']", "New payment")
                |> render_click()
                |> follow_redirect(conn, ~p"/books/#{book}/transfers/new")
 
-      assert html =~ "New Transfer"
+      assert html =~ "New payment"
     end
   end
 

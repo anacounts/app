@@ -57,7 +57,7 @@ defmodule AppWeb.BookLive do
         </.link>
         <.link navigate={~p"/books/#{@book}/transfers/new"}>
           <.card_button icon={:arrows_right_left} class="h-24">
-            <%= gettext("New transfer") %>
+            <%= gettext("New payment") %>
           </.card_button>
         </.link>
         <.link navigate={~p"/books/#{@book}/members"}>

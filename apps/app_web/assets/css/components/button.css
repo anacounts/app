@@ -64,7 +64,7 @@
 
   .button--secondary:disabled,
   .button--ghost:disabled {
-    @apply text-neutral-700
+    @apply text-neutral-500
            bg-neutral-200
            border-neutral-400;
   }

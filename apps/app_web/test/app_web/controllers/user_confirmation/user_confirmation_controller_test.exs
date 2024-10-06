@@ -22,7 +22,7 @@ defmodule AppWeb.UserConfirmationControllerTest do
       conn = get(conn, ~p"/users/confirm/#{token}")
 
       assert Phoenix.Flash.get(conn.assigns.flash, :info) ==
-               "Your account was confirmed successfully."
+               "Your account was confirmed."
 
       assert redirected_to(conn) == ~p"/users/settings"
       assert Repo.reload!(user).confirmed_at != nil

@@ -12,7 +12,7 @@ defmodule AppWeb.UserConfirmationController do
     else
       _ ->
         conn
-        |> put_flash(:info, gettext("Your account was confirmed successfully."))
+        |> put_flash(:info, gettext("Your account was confirmed."))
         |> redirect(to: ~p"/users/settings")
     end
   end

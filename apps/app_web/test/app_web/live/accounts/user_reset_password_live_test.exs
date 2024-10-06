@@ -66,7 +66,7 @@ defmodule AppWeb.UserResetPasswordLiveTest do
         |> follow_redirect(conn, ~p"/users/log_in")
 
       refute get_session(conn, :user_token)
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Password reset successfully"
+      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Password reset."
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
     end
 

@@ -30,12 +30,18 @@ defmodule AppWeb.BookTransfersLive do
       </:breadcrumb>
       <:title><%= @page_title %></:title>
 
-      <.link navigate={~p"/books/#{@book}/transfers/new"}>
-        <.tile kind={:primary} class="mb-4">
-          <.icon name={:plus} />
-          <%= gettext("New transfer") %>
-        </.tile>
-      </.link>
+      <.card_grid class="mb-4">
+        <.link navigate={~p"/books/#{@book}/transfers/new?type=income"}>
+          <.card_button icon={:arrow_down_on_square}>
+            <%= gettext("New income") %>
+          </.card_button>
+        </.link>
+        <.link navigate={~p"/books/#{@book}/transfers/new"}>
+          <.card_button icon={:arrow_up_on_square} color={:primary}>
+            <%= gettext("New payment") %>
+          </.card_button>
+        </.link>
+      </.card_grid>
       <div
         id="transfers"
         phx-update="stream"
@@ -156,7 +162,7 @@ defmodule AppWeb.BookTransfersLive do
   def handle_event("delete", %{"id" => money_transfer_id}, socket) do
     book = socket.assigns.book
 
-    money_transfer = Transfers.get_money_transfer_of_book!(money_transfer_id, book.id)
+    money_transfer = Transfers.get_money_transfer_of_book!(money_transfer_id, book)
 
     {:ok, _} = Transfers.delete_money_transfer(money_transfer)
 

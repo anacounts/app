@@ -9,8 +9,6 @@ defmodule AppWeb.CoreComponents do
   """
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
-
   # Some components need to pass attributes down to a <.link> component. The attributes
   # of the <.link> component are sometimes out of scope of the `:global` type, but this
   # can be overriden using the `:include` option of `attr/3`.
@@ -100,8 +98,7 @@ defmodule AppWeb.CoreComponents do
 
   attr :src, :string, required: true
   attr :alt, :string, required: true
-  # TODO(v2,end) remove `:md` and `:lg` values
-  attr :size, :atom, default: :sm, values: [:sm, :hero, :md, :lg]
+  attr :size, :atom, default: :sm, values: [:sm, :hero]
 
   attr :rest, :global
 
@@ -115,7 +112,6 @@ defmodule AppWeb.CoreComponents do
 
   defp avatar_size_class(:sm), do: "avatar--sm"
   defp avatar_size_class(:hero), do: "avatar--hero"
-  defp avatar_size_class(deprecated) when deprecated in [:sm, :lg], do: nil
 
   ## breadcrumb
 
@@ -235,18 +231,14 @@ defmodule AppWeb.CoreComponents do
   """
 
   attr :kind, :atom,
-    # TODO(v2,end) make `:kind` attribute required
-    # required: true,
-    default: :secondary,
+    required: true,
     values: [:primary, :secondary, :ghost]
 
   attr :navigate, :string, doc: "A URL to navigate to when clicking the button"
 
-  # TODO(v2,end) remove `:color` attribute
-  attr :color, :atom, values: [:cta, :feature, :ghost]
-
   attr :rest, :global,
-    include: @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget)
+    include:
+      @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget disabled)
 
   slot :inner_block, required: true
 
@@ -426,124 +418,16 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  ## Dropdown
-
-  # TODO(v2,end) drop `dropdown/1` component
-
-  @doc """
-  Generates a dropdown.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.dropdown>
-        <:toggle>
-          <.icon name="more-vert" alt={gettext("Contextual menu")} size={:lg} />
-        </:toggle>
-
-        <.list_item>
-          <.icon name="settings" />
-          Settings
-        </.list_item>
-        <.list_item>
-          <.icon name="out" />
-          Disconnect
-        </.list_item>
-      </.dropdown>
-
-  """
-
-  attr :id, :string, required: true, doc: "The id of the dropdown"
-  attr :class, :any, default: nil, doc: "Extra classes to add to the dropdown"
-
-  slot :toggle, required: true, doc: "The content of the toggle button"
-  slot :inner_block
-
-  def dropdown(assigns) do
-    ~H"""
-    <div class={["dropdown", @class]} id={@id} phx-click-away={close_dropdown(@id)}>
-      <.button
-        color={:ghost}
-        id={"#{@id}-toggle"}
-        phx-click={toggle_dropdown(@id)}
-        aria-expanded="false"
-        aria-controls={"#{@id}-toggle"}
-      >
-        <%= render_slot(@toggle) %>
-      </.button>
-      <menu class="dropdown__menu list" id={"#{@id}-popover"} aria-labelledby={"#{@id}-toggle"}>
-        <%= render_slot(@inner_block) %>
-      </menu>
-    </div>
-    """
-  end
-
-  defp close_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "false"}, to: "#{id}-toggle")
-    |> JS.hide(to: "##{id}-popover")
-  end
-
-  defp toggle_dropdown(id) do
-    JS.set_attribute({"aria-expanded", "true"}, to: "#{id}-toggle")
-    |> JS.toggle(to: "##{id}-popover")
-  end
-
-  # TODO(v2,end) drop `heading/1` component
-
-  @doc """
-  Generates a heading element.
-
-  [INSERT LVATTRDOCS]
-
-  ## Examples
-
-      <.heading level={:section}>
-        Section title
-      </.heading>
-
-  """
-
-  attr :level, :atom, required: true, values: [:section], doc: "The level of the heading"
-  attr :class, :any, default: nil, doc: "Extra classes to add to the heading"
-  attr :rest, :global
-
-  slot :inner_block, required: true
-
-  def heading(assigns) do
-    ~H"""
-    <.dynamic_tag
-      name={heading_level_tag(@level)}
-      class={["heading", heading_level_class(@level), @class]}
-      {@rest}
-    >
-      <%= render_slot(@inner_block) %>
-    </.dynamic_tag>
-    """
-  end
-
-  defp heading_level_tag(:section), do: "h2"
-
-  defp heading_level_class(:section), do: "heading--section"
-
   ## Icon
 
   @doc """
   Icons may be used in a variety of contexts to provide visual cues and enhance the user
   experience.
   """
-
-  # TODO (v2,end) drop binary name support, set type to `:atom`
-  attr :name, :any, required: true, doc: "The name of the icon"
+  attr :name, :atom, required: true, doc: "The name of the icon"
   attr :alt, :string, default: nil, doc: "The alt text of the icon"
   attr :class, :any, default: nil, doc: "Extra classes to add to the icon"
   attr :rest, :global
-
-  # TODO (v2,end) deprecated, remove
-  attr :size, :atom, default: nil, values: [nil, :md, :lg], doc: "The size of the icon"
-
-  # TODO (v2,end) drop binary name support
-  def icon(%{name: name} = assigns) when is_binary(name), do: ~H""
 
   def icon(assigns) do
     ~H"""
@@ -842,29 +726,6 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
-  def input(%{type: "toggle-group"} = assigns) do
-    ~H"""
-    <div class={@label_class} phx-feedback-for={@name}>
-      <%= @label %>
-      <div class="toggle-group">
-        <label :for={option <- @options} class="toggle-group__label">
-          <input
-            type="radio"
-            name={@name}
-            id={option[:id]}
-            value={option[:value]}
-            checked={{:safe, option[:value]} == Phoenix.HTML.html_escape(@value)}
-            class="toggle-group__input"
-            {@rest}
-          />
-          <%= option[:key] %>
-        </label>
-      </div>
-      <.error :for={msg <- @errors}><%= msg %></.error>
-    </div>
-    """
-  end
-
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
@@ -892,7 +753,7 @@ defmodule AppWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="phx-no-feedback:hidden text-error">
+    <p class="phx-no-feedback:hidden text-red-500">
       <%= render_slot(@inner_block) %>
     </p>
     """

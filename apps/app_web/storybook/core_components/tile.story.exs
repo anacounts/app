@@ -54,7 +54,7 @@ defmodule Storybook.CoreComponents.Tile do
         slots: [
           """
           <.icon name={:plus} />
-          New transfer
+          New payment
           """
         ]
       }

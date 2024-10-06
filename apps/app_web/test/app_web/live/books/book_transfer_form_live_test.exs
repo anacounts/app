@@ -1,4 +1,4 @@
-defmodule AppWeb.MoneyTransferFormLiveTest do
+defmodule AppWeb.BookTransferFormLiveTest do
   use AppWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
@@ -8,28 +8,6 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
 
   alias App.Repo
   alias App.Transfers.Peer
-
-  @create_attrs %{
-    label: "Created transfer",
-    amount: "10.60",
-    type: "payment",
-    date: "2022-04-08",
-    balance_means_code: "divide_equally"
-  }
-  @update_attrs %{
-    label: "Updated transfer",
-    amount: "6.70",
-    type: "income",
-    date: "2022-04-10",
-    balance_means_code: "weight_by_income"
-  }
-  @invalid_attrs %{
-    label: nil,
-    amount: "-10.10",
-    type: "income",
-    date: "08/04/2022",
-    balance_means_code: "divide_equally"
-  }
 
   setup [
     :register_and_log_in_user,
@@ -48,33 +26,57 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
     {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/new")
 
     assert form_live
-           |> form("#money-transfer-form", money_transfer: @invalid_attrs)
-           |> render_change() =~ "is invalid"
+           |> form("form",
+             money_transfer: %{
+               label: nil,
+               amount: "-10.10"
+             }
+           )
+           |> render_change() =~ "can&#39;t be blank"
 
     {:ok, _, html} =
       form_live
-      |> form("#money-transfer-form", money_transfer: @create_attrs)
+      |> form("form",
+        money_transfer: %{
+          label: "Created transfer",
+          amount: "10.60",
+          date: "2022-04-08",
+          balance_means_code: "divide_equally"
+        }
+      )
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
-    assert html =~ @create_attrs.label
+    assert html =~ "Created transfer"
   end
 
   test "updates money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
     {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
 
     assert form_live
-           |> form("#money-transfer-form", money_transfer: @invalid_attrs)
-           |> render_change() =~ "is invalid"
+           |> form("form",
+             money_transfer: %{
+               label: nil,
+               amount: "-10.10"
+             }
+           )
+           |> render_change() =~ "can&#39;t be blank"
 
     {:ok, _, html} =
       form_live
-      |> form("#money-transfer-form", money_transfer: @update_attrs)
+      |> form("form",
+        money_transfer: %{
+          label: "Updated transfer",
+          amount: "6.70",
+          date: "2022-04-10",
+          balance_means_code: "weight_by_income"
+        }
+      )
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
     refute html =~ money_transfer.label
-    assert html =~ @update_attrs.label
+    assert html =~ "Updated transfer"
   end
 
   test "update the peers instead of recreating them", %{conn: conn, book: book} do
@@ -92,31 +94,26 @@ defmodule AppWeb.MoneyTransferFormLiveTest do
 
     {:ok, _, html} =
       form_live
-      |> form("#money-transfer-form", money_transfer: @update_attrs)
+      |> form("form",
+        money_transfer: %{
+          label: "Updated transfer",
+          amount: "6.70",
+          date: "2022-04-10",
+          balance_means_code: "weight_by_income"
+        }
+      )
       |> render_submit()
       |> follow_redirect(conn, ~p"/books/#{book}/transfers")
 
     refute html =~ money_transfer.label
-    assert html =~ @update_attrs.label
+    assert html =~ "Updated transfer"
 
     new_peer_ids =
       Peer
-      |> Repo.all(transfer_id: money_transfer.id)
+      |> Repo.all()
       |> Enum.map(& &1.id)
 
     assert [peer.id] == new_peer_ids
-  end
-
-  test "deletes money transfer", %{conn: conn, book: book, money_transfer: money_transfer} do
-    {:ok, form_live, _html} = live(conn, ~p"/books/#{book}/transfers/#{money_transfer}/edit")
-
-    {:ok, _, html} =
-      form_live
-      |> element("#delete-money-transfer", "Delete")
-      |> render_click()
-      |> follow_redirect(conn, ~p"/books/#{book}/transfers")
-
-    refute html =~ money_transfer.label
   end
 
   # Depends on :register_and_log_in_user

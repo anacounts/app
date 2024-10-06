@@ -81,16 +81,16 @@
   /* ### Neutral */
 
   .card--neutral {
-    @apply bg-gray-500 text-white
-           outline-gray-800;
+    @apply bg-neutral-500 text-white
+           outline-neutral-800;
   }
 
   a .card--neutral:hover {
-    @apply bg-gray-600;
+    @apply bg-neutral-600;
   }
 
   a .card--neutral:active {
-    @apply bg-gray-700;
+    @apply bg-neutral-700;
   }
 
   /* # Elements */

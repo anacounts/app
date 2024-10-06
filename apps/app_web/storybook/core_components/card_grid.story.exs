@@ -46,7 +46,7 @@ defmodule Storybook.CoreComponents.CardGrid do
           </.link>
           <.link href="#">
             <.card_button icon={:arrows_right_left} class="h-24">
-              New transfer
+              New payment
             </.card_button>
           </.link>
           <.link href="#">

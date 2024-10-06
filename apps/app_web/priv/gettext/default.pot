@@ -19,11 +19,15 @@ msgid "%{count} unlinked"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{transfer_name} · %{book_name}"
+msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "A link to confirm your email change has been sent to the new address."
+msgid "Add another member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Add everyone"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -111,10 +115,6 @@ msgid "Confirmation instructions were sent when you created your account. If you
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Contextual menu"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Continue"
 msgstr ""
 
@@ -163,6 +163,10 @@ msgid "Describe the purpose of the book in a few words."
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Details"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Disconnect"
 msgstr ""
 
@@ -176,10 +180,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Edit"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Edit Transfer"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -204,10 +204,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Go back"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -248,10 +244,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -323,14 +315,6 @@ msgid "Members created manually will appear alongside invited members, but are n
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Money transfer created successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Money transfer updated successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "My account"
 msgstr ""
 
@@ -347,10 +331,6 @@ msgid "Name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New Transfer"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "New book"
 msgstr ""
 
@@ -359,11 +339,15 @@ msgid "New email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "New income"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New transfer"
+msgid "New payment"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -399,11 +383,7 @@ msgid "Password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Password reset successfully."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Payment"
+msgid "Password reset."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -424,6 +404,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Remove all"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -455,10 +439,6 @@ msgid "Save"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Saving..."
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Send confirmation instructions for your account"
 msgstr ""
 
@@ -479,7 +459,7 @@ msgid "Share this link so people can join your book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Sharing"
+msgid "Show weight"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -543,19 +523,11 @@ msgid "This member revenues were not set yet."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "This page is not accessible while the book is closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "This will prevent prevent any modification from being made to the book. The book can be reopened later. Are you sure you want to close the book?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "To edit your avatar, create an account and personalize your Gravatar."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Transfer deleted successfully"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -568,6 +540,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "View profile"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Weight"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -631,7 +607,7 @@ msgid "You will join as the following member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Your account was confirmed successfully."
+msgid "Your account was confirmed."
 msgstr ""
 
 #, elixir-autogen, elixir-format
