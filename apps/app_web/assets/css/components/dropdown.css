@@ -1,0 +1,13 @@
+@layer components {
+  .dropdown {
+    @apply absolute inset-0
+             p-2 m-0
+             w-[20rem]
+             rounded-container
+             shadow;
+  }
+
+  .dropdown > .button {
+    @apply w-full justify-start;
+  }
+}

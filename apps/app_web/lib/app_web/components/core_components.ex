@@ -9,6 +9,8 @@ defmodule AppWeb.CoreComponents do
   """
   use Phoenix.Component
 
+  alias Phoenix.LiveView.JS
+
   # Some components need to pass attributes down to a <.link> component. The attributes
   # of the <.link> component are sometimes out of scope of the `:global` type, but this
   # can be overriden using the `:include` option of `attr/3`.
@@ -238,7 +240,10 @@ defmodule AppWeb.CoreComponents do
 
   attr :rest, :global,
     include:
-      @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget disabled)
+      @link_attrs ++
+        ~w(disabled) ++
+        ~w(form formaction formenctype formmethod formnovalidate formtarget) ++
+        ~w(popovertarget)
 
   slot :inner_block, required: true
 
@@ -415,6 +420,49 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <hr {@rest} />
+    """
+  end
+
+  @doc """
+  Dropdowns are used to display a list of options to the user.
+
+  They only appear when the user clicks on the trigger.
+  """
+  attr :id, :any, required: true
+
+  attr :rest, :global
+
+  slot :trigger,
+    requied: true,
+    doc: """
+    The trigger of the dropdown.
+
+    The trigger is required to have some attributes, which are passed through the `:let`
+    attributes.
+
+    ## Example
+
+        <.dropdown id="dropdown">
+          <:trigger :let={attrs}>
+            <.breadcrumb_ellipsis {attrs} />
+          </:trigger>
+          ...
+        </.dropdown>
+    """
+
+  slot :inner_block, required: true
+
+  def dropdown(assigns) do
+    assigns = prepend_class(assigns, "dropdown")
+
+    ~H"""
+    <%= render_slot(@trigger, %{
+      popovertarget: @id,
+      "phx-mounted": JS.dispatch("dropdown:mounted", to: "##{@id}")
+    }) %>
+    <div id={@id} popover {@rest}>
+      <%= render_slot(@inner_block) %>
+    </div>
     """
   end
 
