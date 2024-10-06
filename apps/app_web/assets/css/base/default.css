@@ -6,7 +6,7 @@
 
   html {
     @apply text-theme-950 font-sans
-           accent-theme
+           accent-theme-500
            bg-theme-50;
   }
 

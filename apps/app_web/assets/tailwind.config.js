@@ -17,12 +17,6 @@ module.exports = {
       component: "0.375rem",
       container: "1rem",
       full: "9999px",
-
-      // TODO(v2,end) remove default border radius values
-      DEFAULT: "0.25rem",
-      md: "0.375rem",
-      lg: "0.5rem",
-      "3xl": "1.5rem",
     },
     extend: {
       colors: {
@@ -39,40 +33,7 @@ module.exports = {
           800: "#741c00",
           900: "#461100",
           950: "#170600",
-          // TODO deprecated shades, to be removed
-          darker: "#cc3000",
-          DEFAULT: "#ff3d00",
-          lighter: "#ff501a",
-          contrast: "#ffffff",
         },
-
-        // TODO(v2,end) remove all custom colors but `theme`
-        // Action colors
-        action: {
-          DEFAULT: "#485fc7",
-        },
-        // Gray colors
-        white: "#ffffff",
-        gray: {
-          5: "#f8f9fa",
-          10: "#f1f3f4",
-          20: "#e9ecef",
-          30: "#dadce0",
-          40: "#c6c8ce",
-          50: "#9aa0a6",
-          60: "#80868b",
-          70: "#5f6368",
-          80: "#3c4043",
-          90: "#202124",
-        },
-        black: "#000000",
-        background: "#f8f9fa",
-        // Status colors
-        info: "#0b61ec",
-        error: "#cd0000",
-        // Helper colors
-        transparent: "transparent",
-        current: "currentColor",
       },
       spacing: {
         xs: "1.5rem",
@@ -107,8 +68,6 @@ module.exports = {
     },
   },
   plugins: [
-    // TODO(v2,end) remove typography plugin
-    require("@tailwindcss/typography"),
     plugin(({ addVariant }) =>
       addVariant("phx-no-feedback", [".phx-no-feedback&", ".phx-no-feedback &"])
     ),

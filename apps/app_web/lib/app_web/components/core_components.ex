@@ -753,7 +753,7 @@ defmodule AppWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="phx-no-feedback:hidden text-error">
+    <p class="phx-no-feedback:hidden text-red-500">
       <%= render_slot(@inner_block) %>
     </p>
     """
