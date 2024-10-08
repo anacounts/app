@@ -7,6 +7,7 @@ defmodule AppWeb.BookTransfersLive do
   use AppWeb, :live_view
 
   import Ecto.Query
+  import AppWeb.FiltersComponents
   import AppWeb.TransfersComponents, only: [transfer_details: 1]
 
   alias App.Books.BookMember
@@ -42,6 +43,31 @@ defmodule AppWeb.BookTransfersLive do
           </.card_button>
         </.link>
       </.card_grid>
+
+      <.filters
+        id="transfers-filters"
+        phx-change="filters"
+        filters={[
+          multi_select(
+            name: "tenanted_by",
+            label: gettext("Tenanted by"),
+            options: [
+              me: gettext("Me"),
+              others: gettext("Others")
+            ]
+          ),
+          sort_by(
+            options: [
+              most_recent: gettext("Most recent"),
+              oldest: gettext("Oldest"),
+              last_created: gettext("Last created"),
+              first_created: gettext("First created")
+            ],
+            default: :most_recent
+          )
+        ]}
+      />
+
       <div
         id="transfers"
         phx-update="stream"
@@ -96,15 +122,16 @@ defmodule AppWeb.BookTransfersLive do
         page: 1,
         per_page: 25
       )
+      |> assign_filters(%{"sort_by" => "most_recent"})
       |> paginate_transfers(1)
 
     {:ok, socket}
   end
 
   defp paginate_transfers(socket, new_page) when new_page >= 1 do
-    %{book: book, per_page: per_page, page: cur_page} = socket.assigns
+    %{book: book, filters: filters, per_page: per_page, page: cur_page} = socket.assigns
 
-    transfers = list_transfers(book, new_page, per_page)
+    transfers = list_transfers(book, filters, new_page, per_page)
     superior_page? = new_page >= cur_page
 
     {transfers, at, limit} =
@@ -126,9 +153,10 @@ defmodule AppWeb.BookTransfersLive do
     end
   end
 
-  defp list_transfers(book, page, per_page) do
+  defp list_transfers(book, filters, page, per_page) do
     book
     |> Transfers.list_transfers_of_book(
+      filters: filters,
       offset: (page - 1) * per_page,
       limit: per_page
     )
@@ -143,6 +171,16 @@ defmodule AppWeb.BookTransfersLive do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("filters", filters, socket) do
+    socket =
+      socket
+      |> assign_filters(filters)
+      |> stream(:transfers, [], reset: true)
+      |> paginate_transfers(1)
+
+    {:noreply, socket}
+  end
+
   def handle_event("next-page", _params, socket) do
     {:noreply, paginate_transfers(socket, socket.assigns.page + 1)}
   end
@@ -169,5 +207,18 @@ defmodule AppWeb.BookTransfersLive do
     socket = stream_delete(socket, :transfers, money_transfer)
 
     {:noreply, socket}
+  end
+
+  defp assign_filters(socket, filters) do
+    current_member = socket.assigns.current_member
+
+    filters =
+      Map.update(filters, "tenanted_by", nil, fn
+        ["me"] -> current_member.id
+        ["others"] -> {:not, current_member.id}
+        _nil_or_multiple -> nil
+      end)
+
+    assign(socket, :filters, filters)
   end
 end

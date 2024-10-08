@@ -71,7 +71,7 @@ defmodule App.TransfersTest do
       member2 = book_member_fixture(book)
       transfer2 = money_transfer_fixture(book, tenant_id: member2.id)
 
-      assert Transfers.list_transfers_of_book(book, filters: %{tenanted_by: :anyone})
+      assert Transfers.list_transfers_of_book(book, filters: %{tenanted_by: nil})
              |> Enum.map(& &1.id)
              |> Enum.sort() == [transfer1.id, transfer2.id]
     end

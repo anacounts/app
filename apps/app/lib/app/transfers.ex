@@ -78,14 +78,14 @@ defmodule App.Transfers do
 
   @filters_default %{
     sort_by: :most_recent,
-    tenanted_by: :anyone
+    tenanted_by: nil
   }
   @filters_types %{
     sort_by:
       Ecto.ParameterizedType.init(Ecto.Enum,
         values: [:most_recent, :oldest, :last_created, :first_created]
       ),
-    # Values are `:anyone`, `member_id` or `{:not, member_id}`
+    # Values are `nil`, `member_id` or `{:not, member_id}`
     tenanted_by: :any
   }
 
@@ -100,35 +100,31 @@ defmodule App.Transfers do
     |> filter_money_transfers_by_tenancy(filters[:tenanted_by])
   end
 
-  defp sort_money_transfers_by(query, :most_recent),
-    do: from([money_transfer: money_transfer] in query, order_by: [desc: money_transfer.date])
+  defp sort_money_transfers_by(query, :most_recent) do
+    from [money_transfer: money_transfer] in query, order_by: [desc: money_transfer.date]
+  end
 
-  defp sort_money_transfers_by(query, :oldest),
-    do: from([money_transfer: money_transfer] in query, order_by: [asc: money_transfer.date])
+  defp sort_money_transfers_by(query, :oldest) do
+    from [money_transfer: money_transfer] in query, order_by: [asc: money_transfer.date]
+  end
 
-  defp sort_money_transfers_by(query, :last_created),
-    do:
-      from([money_transfer: money_transfer] in query,
-        order_by: [desc: money_transfer.inserted_at]
-      )
+  defp sort_money_transfers_by(query, :last_created) do
+    from [money_transfer: money_transfer] in query, order_by: [desc: money_transfer.inserted_at]
+  end
 
-  defp sort_money_transfers_by(query, :first_created),
-    do:
-      from([money_transfer: money_transfer] in query, order_by: [asc: money_transfer.inserted_at])
+  defp sort_money_transfers_by(query, :first_created) do
+    from [money_transfer: money_transfer] in query, order_by: [asc: money_transfer.inserted_at]
+  end
 
-  defp filter_money_transfers_by_tenancy(query, :anyone), do: query
+  defp filter_money_transfers_by_tenancy(query, {:not, member_id}) when is_integer(member_id) do
+    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id != ^member_id
+  end
 
-  defp filter_money_transfers_by_tenancy(query, {:not, member_id}),
-    do:
-      from([money_transfer: money_transfer] in query,
-        where: money_transfer.tenant_id != ^member_id
-      )
+  defp filter_money_transfers_by_tenancy(query, member_id) when is_integer(member_id) do
+    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id == ^member_id
+  end
 
-  defp filter_money_transfers_by_tenancy(query, member_id),
-    do:
-      from([money_transfer: money_transfer] in query,
-        where: money_transfer.tenant_id == ^member_id
-      )
+  defp filter_money_transfers_by_tenancy(query, nil), do: query
 
   ## Pagination
 
