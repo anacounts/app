@@ -560,6 +560,23 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  ## Radio input
+
+  @doc """
+  Radio inputs are used to let the user choose one option from a list of options.
+
+  For usage with Phoenix's forms, consider using the `input/1` component.
+  """
+  attr :rest, :global, include: @input_attrs
+
+  def radio(assigns) do
+    assigns = prepend_class(assigns, "radio")
+
+    ~H"""
+    <input type="radio" {@rest} />
+    """
+  end
+
   ## Select
 
   @doc """
