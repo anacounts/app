@@ -6,6 +6,8 @@ defmodule AppWeb.BooksLive do
 
   use AppWeb, :live_view
 
+  import AppWeb.FiltersComponents
+
   alias App.Accounts.Avatars
   alias App.Books
 
@@ -28,6 +30,39 @@ defmodule AppWeb.BooksLive do
             <%= gettext("Create a new book") %>
           </.tile>
         </.link>
+
+        <.filters
+          id="books-filters"
+          phx-change="filters"
+          filters={[
+            multi_select(
+              name: "owned_by",
+              label: gettext("Owned by"),
+              options: [
+                me: gettext("Me"),
+                others: gettext("Others")
+              ]
+            ),
+            multi_select(
+              name: "close_state",
+              label: gettext("State"),
+              options: [
+                open: gettext("Open"),
+                closed: gettext("Closed")
+              ],
+              default: [:open]
+            ),
+            sort_by(
+              options: [
+                last_created: gettext("Last created"),
+                first_created: gettext("First created"),
+                alphabetically: gettext("Alphabetically")
+              ],
+              default: :last_created
+            )
+          ]}
+        />
+
         <div id="books" phx-update="stream">
           <.link :for={{dom_id, book} <- @streams.books} id={dom_id} navigate={~p"/books/#{book.id}"}>
             <.tile class="mt-4">
@@ -45,7 +80,7 @@ defmodule AppWeb.BooksLive do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    books = Books.list_books_of_user(socket.assigns.current_user)
+    books = list_books(socket.assigns.current_user)
 
     socket =
       socket
@@ -53,5 +88,21 @@ defmodule AppWeb.BooksLive do
       |> stream(:books, books)
 
     {:ok, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("filters", params, socket) do
+    books = list_books(socket.assigns.current_user, params)
+
+    {:noreply, stream(socket, :books, books, reset: true)}
+  end
+
+  @default_filters %{
+    close_state: [:open],
+    sort_by: :last_created
+  }
+
+  defp list_books(current_user, filters \\ @default_filters) do
+    Books.list_books_of_user(current_user, filters)
   end
 end
