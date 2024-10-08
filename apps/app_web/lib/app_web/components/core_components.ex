@@ -431,7 +431,7 @@ defmodule AppWeb.CoreComponents do
 
   def icon(assigns) do
     ~H"""
-    <.heroicon name={@name} aria-label={@alt} class={["icon icon--hero", @class]} {@rest} />
+    <.heroicon name={@name} aria-label={@alt} class={["icon", @class]} {@rest} />
     """
   end
 
