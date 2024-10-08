@@ -18,6 +18,10 @@ defmodule Storybook.CoreComponents.Button do
           variation(
             id: :primary_disabled,
             attributes: %{kind: :primary, disabled: true}
+          ),
+          variation(
+            id: :primary_small,
+            attributes: %{kind: :primary, size: :sm}
           )
         ]
       },
@@ -31,6 +35,10 @@ defmodule Storybook.CoreComponents.Button do
           variation(
             id: :secondary_disabled,
             attributes: %{kind: :secondary, disabled: true}
+          ),
+          variation(
+            id: :secondary_small,
+            attributes: %{kind: :secondary, size: :sm}
           )
         ]
       },
@@ -44,6 +52,10 @@ defmodule Storybook.CoreComponents.Button do
           variation(
             id: :ghost_disabled,
             attributes: %{kind: :ghost, disabled: true}
+          ),
+          variation(
+            id: :ghost_small,
+            attributes: %{kind: :ghost, size: :sm}
           )
         ]
       },
@@ -58,6 +70,11 @@ defmodule Storybook.CoreComponents.Button do
           variation(
             id: :icon_end,
             attributes: %{style: nil},
+            slots: [~s|Label <.icon name={:chevron_down} />|]
+          ),
+          variation(
+            id: :icon_small,
+            attributes: %{size: :sm, style: nil},
             slots: [~s|Label <.icon name={:chevron_down} />|]
           )
         ]

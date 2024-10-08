@@ -236,6 +236,8 @@ defmodule AppWeb.CoreComponents do
     required: true,
     values: [:primary, :secondary, :ghost]
 
+  attr :size, :atom, default: :md, values: [:sm, :md]
+
   attr :navigate, :string, doc: "A URL to navigate to when clicking the button"
 
   attr :rest, :global,
@@ -264,12 +266,19 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp prepend_button_classes(assigns) do
-    prepend_class(assigns, ["button", button_kind_class(assigns.kind)])
+    prepend_class(assigns, [
+      "button",
+      button_kind_class(assigns.kind),
+      button_size_class(assigns.size)
+    ])
   end
 
   defp button_kind_class(:primary), do: "button--primary"
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
+
+  defp button_size_class(:sm), do: "button--sm"
+  defp button_size_class(:md), do: nil
 
   @doc """
   Button groups are used to group buttons together.

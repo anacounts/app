@@ -74,4 +74,14 @@
     @apply border-neutral-800
            outline outline-neutral-800;
   }
+
+  /* ## Sizes */
+
+  .button--sm {
+    @apply gap-2 h-sm px-3;
+  }
+
+  .button--sm .icon {
+    @apply size-4;
+  }
 }
