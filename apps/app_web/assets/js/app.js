@@ -25,6 +25,9 @@ import topbar from "../vendor/topbar";
 // Initialize app events handlers
 import "./app_events";
 
+// Initialize components
+import "./components/dropdown.js";
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");

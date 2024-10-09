@@ -1,0 +1,56 @@
+@layer components {
+    .radio {
+        --radio-check-color: transparent;
+    
+        @apply shrink-0
+               relative
+               size-[22px]
+               p-1
+               rounded-full bg-white
+               border-2 border-neutral-200
+               appearance-none
+               outline-none
+               transition-colors;
+      }
+
+  .radio::after {
+    @apply absolute
+           top-[2px] left-[2px]
+           block
+           size-[14px]
+           rounded-full
+           transition-colors;
+
+    content: "";
+    background-color: var(--radio-check-color);
+  }
+
+  .radio:hover {
+    @apply bg-neutral-100 border-neutral-300;
+    /* color: neutral-300 */
+    --radio-check-color: rgb(212 212 212);
+  }
+
+  .radio:checked {
+    @apply bg-theme-500 border-theme-500;
+    /* color: white */
+    --radio-check-color: rgb(255 255 255);
+  }
+
+  .radio:checked:where(:hover) {
+    @apply bg-theme-600 border-theme-600;
+  }
+
+  .radio:disabled {
+    @apply bg-neutral-100 border-neutral-300;
+  }
+
+  .radio:disabled:where(:hover) {
+    --radio-check-color: transparent;
+  }
+
+  .radio:disabled:checked {
+    /* color: neutral-300 */
+    --radio-check-color: rgb(212 212 212);
+  }
+}

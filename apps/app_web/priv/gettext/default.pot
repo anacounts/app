@@ -31,6 +31,10 @@ msgid "Add everyone"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Alphabetically"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr ""
 
@@ -96,6 +100,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Close book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -199,6 +207,10 @@ msgid "Finish"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "First created"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Fix it"
 msgstr ""
 
@@ -291,6 +303,10 @@ msgid "Label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Last created"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Latest transfers"
 msgstr ""
 
@@ -303,6 +319,10 @@ msgid "Manual reimbursement"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Me"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Member"
 msgstr ""
 
@@ -312,6 +332,10 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Most recent"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -371,7 +395,23 @@ msgid "Not %{user_name}?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Oldest"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Open"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Others"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Owned by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -476,6 +516,18 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "Someone new"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Sort by"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "State"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Tenanted by"
 msgstr ""
 
 #, elixir-autogen, elixir-format

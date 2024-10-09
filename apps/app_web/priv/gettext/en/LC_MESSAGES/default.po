@@ -32,6 +32,10 @@ msgid "Add everyone"
 msgstr "Add everyone"
 
 #, elixir-autogen, elixir-format
+msgid "Alphabetically"
+msgstr "Alphabetically"
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -98,6 +102,10 @@ msgstr "Change password"
 #, elixir-autogen, elixir-format
 msgid "Close book"
 msgstr "Close book"
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
+msgstr "Closed"
 
 #, elixir-autogen, elixir-format
 msgid "Configuration"
@@ -200,6 +208,10 @@ msgid "Finish"
 msgstr "Finish"
 
 #, elixir-autogen, elixir-format
+msgid "First created"
+msgstr "First created"
+
+#, elixir-autogen, elixir-format
 msgid "Fix it"
 msgstr "Fix it"
 
@@ -292,6 +304,10 @@ msgid "Label"
 msgstr "Label"
 
 #, elixir-autogen, elixir-format
+msgid "Last created"
+msgstr "Last created"
+
+#, elixir-autogen, elixir-format
 msgid "Latest transfers"
 msgstr "Latest transfers"
 
@@ -304,6 +320,10 @@ msgid "Manual reimbursement"
 msgstr "Manual reimbursement"
 
 #, elixir-autogen, elixir-format
+msgid "Me"
+msgstr "Me"
+
+#, elixir-autogen, elixir-format
 msgid "Member"
 msgstr "Member"
 
@@ -314,6 +334,10 @@ msgstr "Members"
 #, elixir-autogen, elixir-format
 msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 msgstr "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
+
+#, elixir-autogen, elixir-format
+msgid "Most recent"
+msgstr "Most recent"
 
 #, elixir-autogen, elixir-format
 msgid "My account"
@@ -372,8 +396,24 @@ msgid "Not %{user_name}?"
 msgstr "Not %{user_name}?"
 
 #, elixir-autogen, elixir-format
+msgid "Oldest"
+msgstr "Oldest"
+
+#, elixir-autogen, elixir-format
 msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
 msgstr "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
+
+#, elixir-autogen, elixir-format
+msgid "Open"
+msgstr "Open"
+
+#, elixir-autogen, elixir-format
+msgid "Others"
+msgstr "Others"
+
+#, elixir-autogen, elixir-format
+msgid "Owned by"
+msgstr "Owned by"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -478,6 +518,18 @@ msgstr "Some information is missing to balance the book"
 #, elixir-autogen, elixir-format
 msgid "Someone new"
 msgstr "Someone new"
+
+#, elixir-autogen, elixir-format
+msgid "Sort by"
+msgstr "Sort by"
+
+#, elixir-autogen, elixir-format
+msgid "State"
+msgstr "State"
+
+#, elixir-autogen, elixir-format
+msgid "Tenanted by"
+msgstr "Tenanted by"
 
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"

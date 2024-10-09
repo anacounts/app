@@ -121,16 +121,17 @@ defmodule App.BooksTest do
     end
 
     test "filters by owned by anyone", %{user: user} do
-      book1 = book_fixture()
+      book1 = book_fixture(inserted_at: ~N[2020-01-01 00:00:00Z])
       _member1 = book_member_fixture(book1, user_id: user.id)
-      book2 = book_fixture()
+
+      book2 = book_fixture(inserted_at: ~N[2020-01-02 00:00:00Z])
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :anyone})
-             |> Enum.map(& &1.id) == [book1.id, book2.id]
+             |> Books.list_books_of_user(%{owned_by: [:me, :others]})
+             |> Enum.map(& &1.id) == [book2.id, book1.id]
     end
 
     test "filters by owned by me", %{user: user} do
@@ -142,7 +143,7 @@ defmodule App.BooksTest do
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :me})
+             |> Books.list_books_of_user(%{owned_by: [:me]})
              |> Enum.map(& &1.id) == [book1.id]
     end
 
@@ -155,7 +156,7 @@ defmodule App.BooksTest do
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :others})
+             |> Books.list_books_of_user(%{owned_by: [:others]})
              |> Enum.map(& &1.id) == [book2.id]
     end
 
@@ -166,7 +167,7 @@ defmodule App.BooksTest do
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       assert user
-             |> Books.list_books_of_user(%{close_state: :closed})
+             |> Books.list_books_of_user(%{close_state: [:closed]})
              |> Enum.map(& &1.id) == [book2.id]
     end
 
@@ -177,7 +178,7 @@ defmodule App.BooksTest do
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       assert user
-             |> Books.list_books_of_user(%{close_state: :open})
+             |> Books.list_books_of_user(%{close_state: [:open]})
              |> Enum.map(& &1.id) == [book1.id]
     end
   end

@@ -9,6 +9,8 @@ defmodule AppWeb.CoreComponents do
   """
   use Phoenix.Component
 
+  alias Phoenix.LiveView.JS
+
   # Some components need to pass attributes down to a <.link> component. The attributes
   # of the <.link> component are sometimes out of scope of the `:global` type, but this
   # can be overriden using the `:include` option of `attr/3`.
@@ -234,11 +236,16 @@ defmodule AppWeb.CoreComponents do
     required: true,
     values: [:primary, :secondary, :ghost]
 
+  attr :size, :atom, default: :md, values: [:sm, :md]
+
   attr :navigate, :string, doc: "A URL to navigate to when clicking the button"
 
   attr :rest, :global,
     include:
-      @link_attrs ++ ~w(form formaction formenctype formmethod formnovalidate formtarget disabled)
+      @link_attrs ++
+        ~w(disabled) ++
+        ~w(form formaction formenctype formmethod formnovalidate formtarget) ++
+        ~w(popovertarget)
 
   slot :inner_block, required: true
 
@@ -259,12 +266,19 @@ defmodule AppWeb.CoreComponents do
   end
 
   defp prepend_button_classes(assigns) do
-    prepend_class(assigns, ["button", button_kind_class(assigns.kind)])
+    prepend_class(assigns, [
+      "button",
+      button_kind_class(assigns.kind),
+      button_size_class(assigns.size)
+    ])
   end
 
   defp button_kind_class(:primary), do: "button--primary"
   defp button_kind_class(:secondary), do: "button--secondary"
   defp button_kind_class(:ghost), do: "button--ghost"
+
+  defp button_size_class(:sm), do: "button--sm"
+  defp button_size_class(:md), do: nil
 
   @doc """
   Button groups are used to group buttons together.
@@ -418,6 +432,49 @@ defmodule AppWeb.CoreComponents do
     """
   end
 
+  @doc """
+  Dropdowns are used to display a list of options to the user.
+
+  They only appear when the user clicks on the trigger.
+  """
+  attr :id, :any, required: true
+
+  attr :rest, :global
+
+  slot :trigger,
+    requied: true,
+    doc: """
+    The trigger of the dropdown.
+
+    The trigger is required to have some attributes, which are passed through the `:let`
+    attributes.
+
+    ## Example
+
+        <.dropdown id="dropdown">
+          <:trigger :let={attrs}>
+            <.breadcrumb_ellipsis {attrs} />
+          </:trigger>
+          ...
+        </.dropdown>
+    """
+
+  slot :inner_block, required: true
+
+  def dropdown(assigns) do
+    assigns = prepend_class(assigns, "dropdown")
+
+    ~H"""
+    <%= render_slot(@trigger, %{
+      popovertarget: @id,
+      "phx-mounted": JS.dispatch("dropdown:mounted", to: "##{@id}")
+    }) %>
+    <div id={@id} popover {@rest}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   ## Icon
 
   @doc """
@@ -431,7 +488,7 @@ defmodule AppWeb.CoreComponents do
 
   def icon(assigns) do
     ~H"""
-    <.heroicon name={@name} aria-label={@alt} class={["icon icon--hero", @class]} {@rest} />
+    <.heroicon name={@name} aria-label={@alt} class={["icon", @class]} {@rest} />
     """
   end
 
@@ -509,6 +566,23 @@ defmodule AppWeb.CoreComponents do
     <.link role="listitem" {@rest}>
       <%= render_slot(@inner_block) %>
     </.link>
+    """
+  end
+
+  ## Radio input
+
+  @doc """
+  Radio inputs are used to let the user choose one option from a list of options.
+
+  For usage with Phoenix's forms, consider using the `input/1` component.
+  """
+  attr :rest, :global, include: @input_attrs
+
+  def radio(assigns) do
+    assigns = prepend_class(assigns, "radio")
+
+    ~H"""
+    <input type="radio" {@rest} />
     """
   end
 
