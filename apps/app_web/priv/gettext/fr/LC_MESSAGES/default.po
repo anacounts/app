@@ -32,6 +32,10 @@ msgid "Add everyone"
 msgstr "Ajouter tout le monde"
 
 #, elixir-autogen, elixir-format
+msgid "Alphabetically"
+msgstr "Par ordre alphabétique"
+
+#, elixir-autogen, elixir-format
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
@@ -98,6 +102,10 @@ msgstr "Modifier mon mot de passe"
 #, elixir-autogen, elixir-format
 msgid "Close book"
 msgstr "Fermer le livret"
+
+#, elixir-autogen, elixir-format
+msgid "Closed"
+msgstr "Fermé"
 
 #, elixir-autogen, elixir-format
 msgid "Configuration"
@@ -200,6 +208,10 @@ msgid "Finish"
 msgstr "Terminer"
 
 #, elixir-autogen, elixir-format
+msgid "First created"
+msgstr "Premier créé"
+
+#, elixir-autogen, elixir-format
 msgid "Fix it"
 msgstr "Corriger"
 
@@ -292,6 +304,10 @@ msgid "Label"
 msgstr "Nom"
 
 #, elixir-autogen, elixir-format
+msgid "Last created"
+msgstr "Dernier créé"
+
+#, elixir-autogen, elixir-format
 msgid "Latest transfers"
 msgstr "Derniers transferts"
 
@@ -304,6 +320,10 @@ msgid "Manual reimbursement"
 msgstr "Remboursement manuel"
 
 #, elixir-autogen, elixir-format
+msgid "Me"
+msgstr "Moi"
+
+#, elixir-autogen, elixir-format
 msgid "Member"
 msgstr "Membre"
 
@@ -314,6 +334,10 @@ msgstr "Membres"
 #, elixir-autogen, elixir-format
 msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 msgstr "Les membres créés manuellement apparaissent avec les membres invités, mais ne sont pas lié à un utilisateur avant qu'un utilisateur invité ne les réclame."
+
+#, elixir-autogen, elixir-format
+msgid "Most recent"
+msgstr "Le plus récent"
 
 #, elixir-autogen, elixir-format
 msgid "My account"
@@ -372,8 +396,24 @@ msgid "Not %{user_name}?"
 msgstr "Vous n'êtes pas %{user_name} ?"
 
 #, elixir-autogen, elixir-format
+msgid "Oldest"
+msgstr "Le plus ancien"
+
+#, elixir-autogen, elixir-format
 msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
 msgstr "Seul le livret actuel sera affecté. Les pseudos peuvent être changés autant de fois que souhaité ou nécessaire."
+
+#, elixir-autogen, elixir-format
+msgid "Open"
+msgstr "Ouvert"
+
+#, elixir-autogen, elixir-format
+msgid "Others"
+msgstr "Les autres"
+
+#, elixir-autogen, elixir-format
+msgid "Owned by"
+msgstr "Appartenant à"
 
 #, elixir-autogen, elixir-format
 msgid "Paid by"
@@ -478,6 +518,18 @@ msgstr "Certaines informations manquent pour pouvoir équilibrer le livret"
 #, elixir-autogen, elixir-format
 msgid "Someone new"
 msgstr "Quelqu'un d'autre"
+
+#, elixir-autogen, elixir-format
+msgid "Sort by"
+msgstr "Trier"
+
+#, elixir-autogen, elixir-format
+msgid "State"
+msgstr "État"
+
+#, elixir-autogen, elixir-format
+msgid "Tenanted by"
+msgstr "Appartenant à"
 
 #, elixir-autogen, elixir-format
 msgid "The confirmation email will be sent to this address"
