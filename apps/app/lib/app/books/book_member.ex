@@ -23,7 +23,6 @@ defmodule App.Books.BookMember do
           user: User.t() | Ecto.Association.NotLoaded.t() | nil,
           deleted_at: NaiveDateTime.t() | nil,
           nickname: String.t() | nil,
-          display_name: String.t() | nil,
           email: String.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
           balance_config: BalanceConfig.t() | Ecto.Association.NotLoaded.t() | nil,
@@ -44,8 +43,6 @@ defmodule App.Books.BookMember do
     # member's `:nickname`, set at creation
     field :nickname, :string
 
-    # Filled with the user `:display_name` if there is one, otherwise `:nickname`
-    field :display_name, :string, virtual: true
     # Filled with the user `:email` if there is one
     field :email, :string, virtual: true
 
@@ -58,9 +55,10 @@ defmodule App.Books.BookMember do
     timestamps()
   end
 
-  ## Changeset
+  ## Changesets
 
-  def changeset(struct, attrs) do
+  @spec nickname_changeset(t(), map()) :: Ecto.Changeset.t()
+  def nickname_changeset(struct, attrs) do
     struct
     |> cast(attrs, [:nickname])
     |> validate_nickname()
@@ -72,22 +70,28 @@ defmodule App.Books.BookMember do
     |> validate_length(:nickname, min: 1, max: 255)
   end
 
+  @spec change_balance_config(t(), BalanceConfig.t()) :: Ecto.Changeset.t()
+  def change_balance_config(struct, %BalanceConfig{} = balance_config) do
+    change(struct, balance_config_id: balance_config.id)
+  end
+
   ## Queries
 
   @doc """
   Returns an `%Ecto.Query{}` fetching all book members.
   """
+  @spec base_query() :: Ecto.Query.t()
   def base_query do
     from __MODULE__, as: :book_member
   end
 
   @doc """
-  Updates an `%Ecto.Query{}` to select the `:display_name` of book members.
+  Returns an `%Ecto.Query{}` fetching all book members of a given book.
   """
-  @spec select_display_name(Ecto.Query.t()) :: Ecto.Query.t()
-  def select_display_name(query) do
-    from [book_member: book_member, user: user] in join_user(query),
-      select_merge: %{display_name: coalesce(user.display_name, book_member.nickname)}
+  @spec book_query(Ecto.Queryable.t(), Book.t()) :: Ecto.Query.t()
+  def book_query(query \\ base_query(), book) do
+    from [book_member: book_member] in query,
+      where: book_member.book_id == ^book.id
   end
 
   @doc """

@@ -1,0 +1,17 @@
+@layer components {
+  .title-1 {
+    @apply text-3xl font-bold mb-4;
+  }
+
+  .title-2 {
+    @apply text-2xl font-bold mb-4;
+  }
+
+  .label {
+    @apply text-base font-bold;
+  }
+
+  .paragraph {
+    @apply text-base max-w-prose;
+  }
+}

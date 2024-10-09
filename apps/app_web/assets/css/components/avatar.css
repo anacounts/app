@@ -1,10 +1,16 @@
 @layer components {
   .avatar {
-    @apply w-10 h-10
-         rounded-full;
+    @apply flex-none
+           object-cover
+           rounded-full;
   }
 
-  .avatar--lg {
-    @apply w-12 h-12;
+  .avatar--sm {
+    @apply size-sm;
+  }
+
+  .avatar--hero {
+    height: 8rem;
+    width: 8rem;
   }
 }

@@ -1,9 +1,13 @@
-<.flash_group flash={@flash} />
-
-<header>
-  <img class="mt-8 mx-auto mb-6" src={~p"/images/icons-48.png"} alt="Anacounts" />
-  <h1 class="mb-8 text-center text-3xl font-bold"><%= @page_title %></h1>
-</header>
-<main class="max-w-lg p-8 mx-auto bg-white rounded">
-  <%= @inner_content %>
-</main>
+<div class="flex flex-col justify-center h-full">
+  <header>
+    <h1 class="title-1 text-center align-middle">
+      <img class="inline" src={~p"/images/icons-48.png"} alt="" /> Anacounts
+    </h1>
+  </header>
+  <main class="container w-full">
+    <h2 class="title-2"><%= @page_title %></h2>
+    <.alert_flash flash={@flash} kind={:error} class="mb-2" />
+    <.alert_flash flash={@flash} kind={:info} class="mb-2" />
+    <%= @inner_content %>
+  </main>
+</div>

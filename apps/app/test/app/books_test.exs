@@ -1,20 +1,15 @@
 defmodule App.BooksTest do
   use App.DataCase, async: true
 
-  import App.BalanceFixtures
   import App.AccountsFixtures
-  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
 
-  alias App.Balance.TransferParams
   alias App.Books
   alias App.Books.Book
   alias App.Books.Members
 
   @valid_book_name "A valid book name !"
-
-  @invalid_book_attrs %{name: nil, default_balance_params: %{}}
 
   ## Database getters
 
@@ -126,16 +121,17 @@ defmodule App.BooksTest do
     end
 
     test "filters by owned by anyone", %{user: user} do
-      book1 = book_fixture()
+      book1 = book_fixture(inserted_at: ~N[2020-01-01 00:00:00Z])
       _member1 = book_member_fixture(book1, user_id: user.id)
-      book2 = book_fixture()
+
+      book2 = book_fixture(inserted_at: ~N[2020-01-02 00:00:00Z])
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :anyone})
-             |> Enum.map(& &1.id) == [book1.id, book2.id]
+             |> Books.list_books_of_user(%{owned_by: [:me, :others]})
+             |> Enum.map(& &1.id) == [book2.id, book1.id]
     end
 
     test "filters by owned by me", %{user: user} do
@@ -147,7 +143,7 @@ defmodule App.BooksTest do
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :me})
+             |> Books.list_books_of_user(%{owned_by: [:me]})
              |> Enum.map(& &1.id) == [book1.id]
     end
 
@@ -160,7 +156,7 @@ defmodule App.BooksTest do
       _not_member_of_book = book_fixture()
 
       assert user
-             |> Books.list_books_of_user(%{owned_by: :others})
+             |> Books.list_books_of_user(%{owned_by: [:others]})
              |> Enum.map(& &1.id) == [book2.id]
     end
 
@@ -171,7 +167,7 @@ defmodule App.BooksTest do
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       assert user
-             |> Books.list_books_of_user(%{close_state: :closed})
+             |> Books.list_books_of_user(%{close_state: [:closed]})
              |> Enum.map(& &1.id) == [book2.id]
     end
 
@@ -182,12 +178,12 @@ defmodule App.BooksTest do
       _member2 = book_member_fixture(book2, user_id: user.id)
 
       assert user
-             |> Books.list_books_of_user(%{close_state: :open})
+             |> Books.list_books_of_user(%{close_state: [:open]})
              |> Enum.map(& &1.id) == [book1.id]
     end
   end
 
-  ## CRUD
+  ## Creation
 
   describe "create_book/2" do
     setup do
@@ -195,26 +191,18 @@ defmodule App.BooksTest do
     end
 
     test "creates a new book and sets the user the creator", %{user: user} do
-      user_balance_config_fixture(user)
-
       {:ok, book} =
-        book_attributes(
-          name: @valid_book_name,
-          default_balance_params: transfer_params_attributes()
-        )
+        book_attributes(nickname: "Creator nickname")
         |> Books.create_book(user)
 
       assert book.name == @valid_book_name
 
-      assert book.default_balance_params ==
-               struct!(TransferParams, transfer_params_attributes())
-
       assert member = Members.get_membership(book, user)
       assert member.role == :creator
-      assert member.balance_config_id == user.balance_config_id
+      assert member.nickname == "Creator nickname"
     end
 
-    test "fails when not given a name", %{user: user} do
+    test "returns an error when the name is empty", %{user: user} do
       {:error, changeset} =
         book_attributes(name: nil)
         |> Books.create_book(user)
@@ -222,57 +210,47 @@ defmodule App.BooksTest do
       assert errors_on(changeset) == %{name: ["can't be blank"]}
     end
 
-    test "fails when not given balance params", %{user: user} do
+    test "returns an error when the nickname is empty", %{user: user} do
       {:error, changeset} =
-        book_attributes(default_balance_params: nil)
+        book_attributes(nickname: nil)
         |> Books.create_book(user)
 
-      assert errors_on(changeset) == %{default_balance_params: ["can't be blank"]}
-    end
-
-    test "fails when given invalid balance params means code", %{user: user} do
-      {:error, changeset} =
-        book_attributes(
-          default_balance_params: %{means_code: :thisaintnovalidoption, params: %{}}
-        )
-        |> Books.create_book(user)
-
-      assert errors_on(changeset) == %{default_balance_params: ["is invalid"]}
-    end
-
-    test "fails when given invalid balance params parameters", %{user: user} do
-      {:error, changeset} =
-        book_attributes(
-          default_balance_params: %{means_code: :divide_equally, params: %{foo: :bar}}
-        )
-        |> Books.create_book(user)
-
-      assert errors_on(changeset) == %{default_balance_params: ["did not expect any parameter"]}
+      assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
   end
 
-  describe "update_book/2" do
+  ## Name update
+
+  describe "update_book_name/2" do
     setup :book_with_creator_context
 
-    test "updates the book", %{book: book} do
+    test "updates the name of the book", %{book: book} do
       assert {:ok, updated} =
-               Books.update_book(book, %{
-                 name: "My awesome new never seen name !",
-                 default_balance_params: %{means_code: :weight_by_income}
+               Books.update_book_name(book, %{
+                 name: "My awesome new never seen name !"
                })
 
       assert updated.name == "My awesome new never seen name !"
-
-      assert updated.default_balance_params == %TransferParams{
-               means_code: :weight_by_income,
-               params: nil
-             }
     end
 
     test "returns error changeset with invalid data", %{book: book} do
-      assert {:error, %Ecto.Changeset{}} = Books.update_book(book, @invalid_book_attrs)
+      assert {:error, changeset} = Books.update_book_name(book, %{name: nil})
+
+      assert errors_on(changeset) == %{name: ["can't be blank"]}
     end
   end
+
+  describe "change_book_name/2" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "returns a book changeset", %{book: book} do
+      assert %Ecto.Changeset{} = Books.change_book_name(book)
+    end
+  end
+
+  ## Deletion
 
   describe "delete_book!/2" do
     setup :book_with_creator_context
@@ -283,16 +261,6 @@ defmodule App.BooksTest do
 
       assert deleted_book = Repo.get(Book, book.id)
       assert deleted_book.deleted_at
-    end
-  end
-
-  describe "change_book/1" do
-    setup do
-      %{book: book_fixture()}
-    end
-
-    test "returns a book changeset", %{book: book} do
-      assert %Ecto.Changeset{} = Books.change_book(book)
     end
   end
 

@@ -8,8 +8,6 @@ defmodule App.AccountsTest do
   alias App.Accounts.UserToken
 
   @valid_user_password "initial valid password"
-  @valid_user_display_name "valid display name"
-  @invalid_user_display_name nil
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -54,12 +52,11 @@ defmodule App.AccountsTest do
   end
 
   describe "register_user/1" do
-    test "requires email, display_name and password to be set" do
+    test "requires email and password to be set" do
       {:error, changeset} = Accounts.register_user(%{})
 
       assert %{
                email: ["can't be blank"],
-               display_name: ["can't be blank"],
                password: ["can't be blank"]
              } = errors_on(changeset)
     end
@@ -86,7 +83,6 @@ defmodule App.AccountsTest do
       {:error, changeset} =
         Accounts.register_user(%{
           email: email,
-          display_name: "Hey, I'm valid !",
           password: @valid_user_password
         })
 
@@ -96,7 +92,6 @@ defmodule App.AccountsTest do
       {:error, changeset_upcase} =
         Accounts.register_user(%{
           email: String.upcase(email),
-          display_name: "Oh no, email was taken already",
           password: @valid_user_password
         })
 
@@ -116,7 +111,7 @@ defmodule App.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :display_name, :email]
+      assert changeset.required == [:password, :email]
     end
 
     test "allows fields to be set" do
@@ -133,41 +128,6 @@ defmodule App.AccountsTest do
       assert get_change(changeset, :email) == email
       assert get_change(changeset, :password) == password
       assert is_nil(get_change(changeset, :hashed_password))
-    end
-  end
-
-  describe "change_user_display_name/2" do
-    test "returns a changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_display_name(%User{})
-      assert changeset.required == [:display_name]
-    end
-
-    test "allows fields to be set" do
-      changeset =
-        Accounts.change_user_display_name(%User{}, %{display_name: @valid_user_display_name})
-
-      assert changeset.valid?
-      assert get_change(changeset, :display_name) == @valid_user_display_name
-    end
-  end
-
-  describe "update_user_display_name/2" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "updates the display name", %{user: user} do
-      {:ok, user} =
-        Accounts.update_user_display_name(user, %{display_name: @valid_user_display_name})
-
-      assert user.display_name == @valid_user_display_name
-    end
-
-    test "check display name is valid", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_display_name(user, %{display_name: @invalid_user_display_name})
-
-      assert "can't be blank" in errors_on(changeset).display_name
     end
   end
 
@@ -434,7 +394,7 @@ defmodule App.AccountsTest do
     end
   end
 
-  describe "confirm_user/1" do
+  describe "confirm_user/2" do
     setup do
       user = user_fixture()
 
@@ -447,24 +407,30 @@ defmodule App.AccountsTest do
     end
 
     test "confirms the email with a valid token", %{user: user, token: token} do
-      assert {:ok, confirmed_user} = Accounts.confirm_user(token)
+      assert {:ok, confirmed_user} = Accounts.confirm_user(user, token)
       assert confirmed_user.confirmed_at
       assert confirmed_user.confirmed_at != user.confirmed_at
-      assert Repo.get!(User, user.id).confirmed_at
+      assert Repo.reload!(user).confirmed_at
       refute Repo.get_by(UserToken, user_id: user.id)
     end
 
     test "does not confirm with invalid token", %{user: user} do
-      assert Accounts.confirm_user("oops") == :error
-      refute Repo.get!(User, user.id).confirmed_at
+      assert Accounts.confirm_user(user, "oops") == :error
+      refute Repo.reload!(user).confirmed_at
       assert Repo.get_by(UserToken, user_id: user.id)
     end
 
     test "does not confirm email if token expired", %{user: user, token: token} do
       {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
-      assert Accounts.confirm_user(token) == :error
-      refute Repo.get!(User, user.id).confirmed_at
+      assert Accounts.confirm_user(user, token) == :error
+      refute Repo.reload!(user).confirmed_at
       assert Repo.get_by(UserToken, user_id: user.id)
+    end
+
+    test "does not confirm email if the user does not match", %{user: user, token: token} do
+      user2 = user_fixture()
+      assert Accounts.confirm_user(user2, token) == :error
+      refute Repo.reload!(user).confirmed_at
     end
   end
 

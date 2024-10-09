@@ -7,8 +7,6 @@ defmodule App.Books.Members do
   alias App.Repo
 
   alias App.Accounts.User
-  alias App.Balance.BalanceConfig
-  alias App.Balance.BalanceConfigs
   alias App.Books.Book
   alias App.Books.BookMember
 
@@ -20,7 +18,6 @@ defmodule App.Books.Members do
   @spec get_book_member!(BookMember.id()) :: BookMember.t()
   def get_book_member!(id) do
     BookMember.base_query()
-    |> BookMember.select_display_name()
     |> Repo.get!(id)
   end
 
@@ -57,12 +54,10 @@ defmodule App.Books.Members do
   end
 
   defp members_of_book_query(book) do
-    from([book_member: book_member] in BookMember.base_query(),
+    from([book_member: book_member] in BookMember.book_query(book),
       left_join: user in assoc(book_member, :user),
-      where: book_member.book_id == ^book.id,
-      order_by: [asc: coalesce(user.display_name, book_member.nickname)]
+      order_by: [asc: book_member.nickname]
     )
-    |> BookMember.select_display_name()
     |> BookMember.select_email()
   end
 
@@ -86,27 +81,27 @@ defmodule App.Books.Members do
       book_id: book.id,
       role: :member
     }
-    |> BookMember.changeset(attrs)
+    |> BookMember.nickname_changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Update a book member.
+  Update the nickname of a book member.
   """
-  @spec update_book_member(BookMember.t(), map()) ::
+  @spec update_book_member_nickname(BookMember.t(), map()) ::
           {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
-  def update_book_member(book_member, attrs) do
+  def update_book_member_nickname(book_member, attrs) do
     book_member
-    |> BookMember.changeset(attrs)
+    |> BookMember.nickname_changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Return an `%Ecto.Changeset{}` for tracking book member changes.
+  Return an `%Ecto.Changeset{}` for tracking changes to a book member nickname.
   """
-  @spec change_book_member(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
-  def change_book_member(book_member, attrs \\ %{}) do
-    BookMember.changeset(book_member, attrs)
+  @spec change_book_member_nickname(BookMember.t(), map()) :: Ecto.Changeset.t(BookMember.t())
+  def change_book_member_nickname(book_member, attrs \\ %{}) do
+    BookMember.nickname_changeset(book_member, attrs)
   end
 
   ## User invitations
@@ -114,15 +109,16 @@ defmodule App.Books.Members do
   @doc """
   Create a new book member within a book and link it to a user.
   """
-  @spec create_book_member_for_user(Book.t(), User.t()) :: BookMember.t()
-  def create_book_member_for_user(book, user) do
+  @spec create_book_member_for_user(Book.t(), User.t(), map()) ::
+          {:ok, BookMember.t()} | {:error, Ecto.Changeset.t()}
+  def create_book_member_for_user(book, user, params) do
     %BookMember{
       book_id: book.id,
       role: :member,
-      user_id: user.id,
-      nickname: user.display_name
+      user_id: user.id
     }
-    |> Repo.insert!()
+    |> BookMember.nickname_changeset(params)
+    |> Repo.insert()
   end
 
   @doc """
@@ -130,34 +126,10 @@ defmodule App.Books.Members do
   """
   @spec link_book_member_to_user(BookMember.t(), User.t()) :: :ok
   def link_book_member_to_user(book_member, user) do
-    {:ok, _results} =
-      Ecto.Multi.new()
-      |> Ecto.Multi.update_all(
-        :book_member,
-        from(BookMember, where: [id: ^book_member.id]),
-        set: [user_id: user.id]
-      )
-      |> link_user_balance_configs_multi(book_member, user)
-      |> maybe_try_to_delete_balance_config_multi(book_member.balance_config_id)
-      |> Repo.transaction()
+    {1, nil} =
+      from(BookMember, where: [id: ^book_member.id])
+      |> Repo.update_all(set: [user_id: user.id])
 
     :ok
-  end
-
-  defp link_user_balance_configs_multi(multi, book_member, user) do
-    Ecto.Multi.run(multi, :balance_config, fn _repo, _changes ->
-      BalanceConfigs.link_user_balance_configs_to_member!(user, book_member)
-      {:ok, nil}
-    end)
-  end
-
-  defp maybe_try_to_delete_balance_config_multi(multi, nil), do: multi
-
-  defp maybe_try_to_delete_balance_config_multi(multi, balance_config_id) do
-    Ecto.Multi.run(multi, :delete_balance_config, fn _repo, _changes ->
-      balance_config = %BalanceConfig{id: balance_config_id}
-      BalanceConfigs.try_to_delete_balance_config(balance_config)
-      {:ok, nil}
-    end)
   end
 end

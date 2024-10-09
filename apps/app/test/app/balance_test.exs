@@ -7,6 +7,7 @@ defmodule App.BalanceTest do
   import App.TransfersFixtures
 
   alias App.Balance
+  alias App.Balance.TransferParams
 
   describe "fill_members_balance/1" do
     setup do
@@ -17,12 +18,14 @@ defmodule App.BalanceTest do
       member1 = book_member_fixture(book)
       member2 = book_member_fixture(book)
 
-      _money_transfer =
-        deprecated_money_transfer_fixture(book,
+      money_transfer =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 10),
-          tenant_id: member1.id,
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+          tenant_id: member1.id
         )
+
+      _peer = peer_fixture(money_transfer, member_id: member1.id)
+      _peer = peer_fixture(money_transfer, member_id: member2.id)
 
       [member1, member2] = Balance.fill_members_balance([member1, member2])
       assert Money.equal?(member1.balance, Money.new!(:EUR, 5))
@@ -35,29 +38,27 @@ defmodule App.BalanceTest do
       member3 = book_member_fixture(book)
       member4 = book_member_fixture(book)
 
-      _transfer1 =
-        deprecated_money_transfer_fixture(book,
+      transfer1 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 400),
-          tenant_id: member1.id,
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id},
-            %{member_id: member4.id}
-          ]
+          tenant_id: member1.id
         )
 
-      _transfer2 =
-        deprecated_money_transfer_fixture(book,
+      _peer = peer_fixture(transfer1, member_id: member1.id)
+      _peer = peer_fixture(transfer1, member_id: member2.id)
+      _peer = peer_fixture(transfer1, member_id: member3.id)
+      _peer = peer_fixture(transfer1, member_id: member4.id)
+
+      transfer2 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 400),
-          tenant_id: member2.id,
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id},
-            %{member_id: member4.id}
-          ]
+          tenant_id: member2.id
         )
+
+      _peer = peer_fixture(transfer2, member_id: member1.id)
+      _peer = peer_fixture(transfer2, member_id: member2.id)
+      _peer = peer_fixture(transfer2, member_id: member3.id)
+      _peer = peer_fixture(transfer2, member_id: member4.id)
 
       [member1, member2, member3, member4] =
         Balance.fill_members_balance([member1, member2, member3, member4])
@@ -73,27 +74,25 @@ defmodule App.BalanceTest do
       member2 = book_member_fixture(book)
       member3 = book_member_fixture(book)
 
-      _transfer1 =
-        deprecated_money_transfer_fixture(book,
+      transfer1 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
-          tenant_id: member1.id,
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id}
-          ]
+          tenant_id: member1.id
         )
 
-      _transfer2 =
-        deprecated_money_transfer_fixture(book,
+      _peer = peer_fixture(transfer1, member_id: member1.id)
+      _peer = peer_fixture(transfer1, member_id: member2.id)
+      _peer = peer_fixture(transfer1, member_id: member3.id)
+
+      transfer2 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
-          tenant_id: member2.id,
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id}
-          ]
+          tenant_id: member2.id
         )
+
+      _peer = peer_fixture(transfer2, member_id: member1.id)
+      _peer = peer_fixture(transfer2, member_id: member2.id)
+      _peer = peer_fixture(transfer2, member_id: member3.id)
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, 100))
@@ -106,16 +105,15 @@ defmodule App.BalanceTest do
       member2 = book_member_fixture(book)
       member3 = book_member_fixture(book)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          amount: Money.new!(:EUR, 6),
-          peers: [
-            %{member_id: member1.id, weight: 3},
-            %{member_id: member2.id, weight: 2},
-            %{member_id: member3.id}
-          ]
+          amount: Money.new!(:EUR, 6)
         )
+
+      _peer = peer_fixture(transfer, member_id: member1.id, weight: 3)
+      _peer = peer_fixture(transfer, member_id: member2.id, weight: 2)
+      _peer = peer_fixture(transfer, member_id: member3.id)
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, 3))
@@ -130,14 +128,9 @@ defmodule App.BalanceTest do
 
       transfer = money_transfer_fixture(book, tenant_id: member1.id, amount: Money.new!(:EUR, 10))
 
-      _peer1 =
-        peer_fixture(member_id: member1.id, transfer_id: transfer.id, weight: Decimal.new(10))
-
-      _peer2 =
-        peer_fixture(member_id: member2.id, transfer_id: transfer.id, weight: Decimal.new(10))
-
-      _peer3 =
-        peer_fixture(member_id: member3.id, transfer_id: transfer.id, weight: Decimal.new(10))
+      _peer1 = peer_fixture(transfer, member_id: member1.id, weight: Decimal.new(10))
+      _peer2 = peer_fixture(transfer, member_id: member2.id, weight: Decimal.new(10))
+      _peer3 = peer_fixture(transfer, member_id: member3.id, weight: Decimal.new(10))
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, "6.67"))
@@ -149,12 +142,14 @@ defmodule App.BalanceTest do
       member1 = book_member_fixture(book)
       member2 = book_member_fixture(book)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          amount: Money.new!(:EUR, "0.03"),
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+          amount: Money.new!(:EUR, "0.03")
         )
+
+      _peer = peer_fixture(transfer, member_id: member1.id)
+      _peer = peer_fixture(transfer, member_id: member2.id)
 
       assert Balance.fill_members_balance([member1, member2]) == [
                %{member1 | balance: Money.new!(:EUR, "0.01")},
@@ -164,18 +159,20 @@ defmodule App.BalanceTest do
 
     test "weight transfer amount using peers income #1", %{book: book} do
       member1 = book_member_fixture(book)
-      _balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
+      balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
 
       member2 = book_member_fixture(book)
-      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %{means_code: :weight_by_income},
-          amount: Money.new!(:EUR, 30),
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+          balance_params: %TransferParams{means_code: :weight_by_income},
+          amount: Money.new!(:EUR, 30)
         )
+
+      _peer = peer_fixture(transfer, member_id: member1.id, balance_config_id: balance_config1.id)
+      _peer = peer_fixture(transfer, member_id: member2.id, balance_config_id: balance_config2.id)
 
       [member1, member2] = Balance.fill_members_balance([member1, member2])
 
@@ -185,29 +182,28 @@ defmodule App.BalanceTest do
 
     test "weight transfer amount using peers income #2", %{book: book} do
       member1 = book_member_fixture(book)
-      _balance_config1 = member_balance_config_fixture(member1, annual_income: 2)
+      balance_config1 = member_balance_config_fixture(member1, annual_income: 2)
 
       member2 = book_member_fixture(book)
-      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
       member3 = book_member_fixture(book)
-      _balance_config3 = member_balance_config_fixture(member3, annual_income: 2)
+      balance_config3 = member_balance_config_fixture(member3, annual_income: 2)
 
       member4 = book_member_fixture(book)
-      _balance_config4 = member_balance_config_fixture(member4, annual_income: 3)
+      balance_config4 = member_balance_config_fixture(member4, annual_income: 3)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %{means_code: :weight_by_income},
-          amount: Money.new!(:EUR, 9),
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id},
-            %{member_id: member4.id}
-          ]
+          balance_params: %TransferParams{means_code: :weight_by_income},
+          amount: Money.new!(:EUR, 9)
         )
+
+      _peer = peer_fixture(transfer, member_id: member1.id, balance_config_id: balance_config1.id)
+      _peer = peer_fixture(transfer, member_id: member2.id, balance_config_id: balance_config2.id)
+      _peer = peer_fixture(transfer, member_id: member3.id, balance_config_id: balance_config3.id)
+      _peer = peer_fixture(transfer, member_id: member4.id, balance_config_id: balance_config4.id)
 
       [member1, member2, member3, member4] =
         Balance.fill_members_balance([member1, member2, member3, member4])
@@ -220,24 +216,40 @@ defmodule App.BalanceTest do
 
     test "weighting by incomes takes user-defined weight into account", %{book: book} do
       member1 = book_member_fixture(book)
-      _balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
+      balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
 
       member2 = book_member_fixture(book)
-      _balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
 
       member3 = book_member_fixture(book)
-      _balance_config3 = member_balance_config_fixture(member3, annual_income: 3)
+      balance_config3 = member_balance_config_fixture(member3, annual_income: 3)
 
-      _transfer =
-        deprecated_money_transfer_fixture(book,
+      transfer =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %{means_code: :weight_by_income},
-          amount: Money.new!(:EUR, 100),
-          peers: [
-            %{member_id: member1.id, weight: Decimal.new(1)},
-            %{member_id: member2.id, weight: Decimal.new(2)},
-            %{member_id: member3.id, weight: Decimal.new(3)}
-          ]
+          balance_params: %TransferParams{means_code: :weight_by_income},
+          amount: Money.new!(:EUR, 100)
+        )
+
+      _peer =
+        peer_fixture(transfer,
+          member_id: member1.id,
+          weight: Decimal.new(1),
+          balance_config_id: balance_config1.id
+        )
+
+      _peer =
+        peer_fixture(transfer,
+          member_id: member2.id,
+          weight: Decimal.new(2),
+          balance_config_id: balance_config2.id
+        )
+
+      _peer =
+        peer_fixture(transfer,
+          member_id: member3.id,
+          weight: Decimal.new(3),
+          balance_config_id: balance_config3.id
         )
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
@@ -247,50 +259,63 @@ defmodule App.BalanceTest do
     end
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
-      member1 = book_member_fixture(book, display_name: "member1")
-      _balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
+      member1 = book_member_fixture(book, nickname: "member1")
+      balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
 
       member2 = book_member_fixture(book)
-      _balance_config2 = member_balance_config_fixture(member2, annual_income: 1)
+      balance_config2 = member_balance_config_fixture(member2, annual_income: 1)
 
       member3 = book_member_fixture(book)
-      _balance_config3 = member_balance_config_fixture(member3, annual_income: 1)
+      balance_config3 = member_balance_config_fixture(member3, annual_income: 1)
 
-      _transfer1 =
-        deprecated_money_transfer_fixture(book,
+      transfer1 =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %{means_code: :weight_by_income},
-          amount: Money.new!(:EUR, 30),
-          peers: [%{member_id: member1.id}, %{member_id: member2.id}]
+          balance_params: %TransferParams{means_code: :weight_by_income},
+          amount: Money.new!(:EUR, 30)
         )
 
-      _transfer2 =
-        deprecated_money_transfer_fixture(book,
+      _peer =
+        peer_fixture(transfer1, member_id: member1.id, balance_config_id: balance_config1.id)
+
+      _peer =
+        peer_fixture(transfer1, member_id: member2.id, balance_config_id: balance_config2.id)
+
+      transfer2 =
+        money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %{means_code: :weight_by_income},
-          amount: Money.new!(:EUR, 40),
-          peers: [%{member_id: member2.id}, %{member_id: member3.id}]
+          balance_params: %TransferParams{means_code: :weight_by_income},
+          amount: Money.new!(:EUR, 40)
         )
+
+      _peer =
+        peer_fixture(transfer2, member_id: member2.id, balance_config_id: balance_config2.id)
+
+      _peer =
+        peer_fixture(transfer2, member_id: member3.id, balance_config_id: balance_config3.id)
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
 
-      assert member1.balance ==
-               {:error,
-                [
-                  %{
-                    message: "member1 did not set their annual income",
-                    uniq_hash: "income_not_set_#{member1.id}"
-                  }
-                ]}
+      member1_id = member1.id
+      expected_hash = "revenues_missing_#{member1_id}"
 
-      assert member2.balance ==
-               {:error,
-                [
-                  %{
-                    message: "member1 did not set their annual income",
-                    uniq_hash: "income_not_set_#{member1.id}"
-                  }
-                ]}
+      assert {:error,
+              [
+                %{
+                  kind: :revenues_missing,
+                  uniq_hash: ^expected_hash,
+                  extra: %{member: %{id: ^member1_id}}
+                }
+              ]} = member1.balance
+
+      assert {:error,
+              [
+                %{
+                  kind: :revenues_missing,
+                  uniq_hash: ^expected_hash,
+                  extra: %{member: %{id: ^member1_id}}
+                }
+              ]} = member2.balance
 
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end
@@ -300,32 +325,33 @@ defmodule App.BalanceTest do
       member2 = book_member_fixture(book)
       member3 = book_member_fixture(book)
 
-      _transfer1 =
-        deprecated_money_transfer_fixture(book,
+      transfer1 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 300),
-          tenant_id: member1.id,
-          peers: [
-            %{member_id: member1.id},
-            %{member_id: member2.id},
-            %{member_id: member3.id}
-          ]
+          tenant_id: member1.id
         )
 
-      _reimbursement1 =
-        deprecated_money_transfer_fixture(book,
+      _peer = peer_fixture(transfer1, member_id: member1.id)
+      _peer = peer_fixture(transfer1, member_id: member2.id)
+      _peer = peer_fixture(transfer1, member_id: member3.id)
+
+      reimbursement1 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 100),
           type: :reimbursement,
-          tenant_id: member1.id,
-          peers: [%{member_id: member2.id}]
+          tenant_id: member1.id
         )
 
-      _reimbursement1 =
-        deprecated_money_transfer_fixture(book,
+      _reimbursement_peer = peer_fixture(reimbursement1, member_id: member2.id)
+
+      reimbursement2 =
+        money_transfer_fixture(book,
           amount: Money.new!(:EUR, 100),
           type: :reimbursement,
-          tenant_id: member1.id,
-          peers: [%{member_id: member3.id}]
+          tenant_id: member1.id
         )
+
+      _reimbursement_peer = peer_fixture(reimbursement2, member_id: member3.id)
 
       [member1, member2, member3] = Balance.fill_members_balance([member1, member2, member3])
       assert Money.equal?(member1.balance, Money.new!(:EUR, 0))

@@ -4,13 +4,4 @@
            shrink-0
            w-6 h-6;
   }
-
-  /* TODO deprecated, remove */
-  .icon--md {
-    @apply w-7 h-7;
-  }
-
-  .icon--lg {
-    @apply w-8 h-8;
-  }
 }

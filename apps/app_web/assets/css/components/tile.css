@@ -1,70 +1,80 @@
 @layer components {
   .tile {
-    @apply block
-           m-2
-           rounded-lg
-           bg-white
-           shadow;
-  }
-
-  /* ## Clickable */
-
-  .tile--clickable {
-    @apply transition-colors cursor-pointer;
-  }
-
-  .tile--clickable:hover {
-    @apply bg-gray-10;
-  }
-
-  /* # Summary */
-
-  .tile__summary {
-    @apply flex items-center gap-4
-           p-4;
-  }
-
-  summary.tile__summary {
-    @apply cursor-pointer;
-  }
-
-  [open] .tile__summary {
-    @apply shadow-sm;
-  }
-
-  /* # Icon */
-
-  .tile__collapse-icon {
-    @apply transition-transform;
-  }
-
-  [open] .tile__collapse-icon {
-    @apply rotate-180;
-  }
-
-  /* # Body */
-
-  .tile__description {
-    @apply p-4;
-  }
-
-  /* # Footer */
-
-  .tile__footer {
-    @apply flex
-           border-t border-gray-20;
-  }
-
-  .tile__button {
-    @apply flex items-center justify-center
-           w-full
-           px-4 py-3
-           text-action
-           border-x border-gray-20
+    @apply flex justify-center items-center gap-2
+           h-12
+           py-2 pr-1 pl-4
+           rounded-component
+           font-bold
            transition-colors;
   }
 
-  .tile__button:hover {
-    @apply bg-gray-5;
+  .tile--primary {
+    @apply text-white bg-theme-500
+           outline-theme-800;
+  }
+
+  .tile--primary:hover {
+    @apply bg-theme-600;
+  }
+
+  .tile--primary:active {
+    @apply bg-theme-700;
+  }
+  
+  .tile--secondary {
+    @apply text-theme-950 bg-white
+           outline-neutral-800;
+  }
+
+  .tile--secondary:hover {
+    @apply bg-neutral-500/10;
+  }
+
+  .tile--secondary:active {
+    @apply bg-neutral-500/20;
+  }
+
+  /* ## Transfer tile specific */
+
+  /* ### Red */
+
+  .tile--red {
+    @apply bg-red-100 text-red-500;
+  }
+  
+  .tile--red .divider {
+    @apply border-red-200;
+  }
+
+  .tile--red .\[custom\]tile__text {
+    @apply text-red-950;
+  }
+
+  /* ### Green */
+
+  .tile--green {
+    @apply bg-green-100 text-green-500;
+  }
+
+  .tile--green .divider {
+    @apply border-green-200;
+  }
+
+  .tile--green .\[custom\]tile__text {
+    @apply text-green-950;
+  }
+
+  /* ### Neutral */
+
+  .tile--neutral {
+    @apply bg-neutral-100 text-neutral-500;
+  }
+
+  .tile--neutral .divider {
+    @apply border-neutral-200;
+  }
+
+  .tile--neutral .\[custom\]tile__text {
+    @apply text-neutral-950;
   }
 }

@@ -1,0 +1,9 @@
+@layer components {
+  .anchor {
+    @apply text-theme-500 transition-colors;
+  }
+
+  .anchor:hover {
+    @apply text-theme-600;
+  }
+}

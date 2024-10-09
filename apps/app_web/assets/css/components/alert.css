@@ -1,0 +1,19 @@
+@layer components {
+  .alert {
+    @apply flex items-start gap-2
+           py-2 px-4
+           rounded-container;
+  }
+
+  .alert--info {
+    @apply bg-blue-500 text-white;
+  }
+
+  .alert--warning {
+    @apply bg-amber-500;
+  }
+
+  .alert--error {
+    @apply bg-red-500;
+  }
+}

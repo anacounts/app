@@ -2,10 +2,8 @@ defmodule App.Books.MembersTest do
   use App.DataCase, async: true
 
   import App.AccountsFixtures
-  import App.Balance.BalanceConfigsFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
-  import App.TransfersFixtures
 
   alias App.Books.Members
 
@@ -89,7 +87,7 @@ defmodule App.Books.MembersTest do
     end
   end
 
-  describe "update_book_member/2" do
+  describe "update_book_member_nickname/2" do
     setup do
       book = book_fixture()
       book_member = book_member_fixture(book)
@@ -99,25 +97,25 @@ defmodule App.Books.MembersTest do
 
     test "updates the book member", %{book_member: book_member} do
       assert {:ok, book_member} =
-               Members.update_book_member(book_member, %{nickname: "New Nickname"})
+               Members.update_book_member_nickname(book_member, %{nickname: "New Nickname"})
 
       assert book_member.nickname == "New Nickname"
     end
 
     test "fails if given invalid values", %{book_member: book_member} do
       assert {:error, changeset} =
-               Members.update_book_member(book_member, %{nickname: ""})
+               Members.update_book_member_nickname(book_member, %{nickname: ""})
 
       assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
 
     test "cannot set the user_id", %{book_member: book_member} do
-      assert {:ok, book_member} = Members.update_book_member(book_member, %{user_id: 1})
+      assert {:ok, book_member} = Members.update_book_member_nickname(book_member, %{user_id: 1})
       assert book_member.user_id == nil
     end
   end
 
-  describe "change_book_member/2" do
+  describe "change_book_member_nickname/2" do
     setup do
       book = book_fixture()
       book_member = book_member_fixture(book)
@@ -126,34 +124,43 @@ defmodule App.Books.MembersTest do
     end
 
     test "returns a changeset for the given book member", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member)
+      assert changeset = Members.change_book_member_nickname(book_member)
       assert changeset.valid?
       assert changeset.params == %{}
     end
 
     test "validates the user attributes", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member, %{nickname: ""})
+      assert changeset = Members.change_book_member_nickname(book_member, %{nickname: ""})
       assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
 
     test "cannot set the user_id", %{book_member: book_member} do
-      assert changeset = Members.change_book_member(book_member, %{user_id: 1})
+      assert changeset = Members.change_book_member_nickname(book_member, %{user_id: 1})
       assert changeset.valid?
       refute Ecto.Changeset.changed?(changeset, :user_id)
     end
   end
 
-  describe "create_book_member_for_user/2" do
+  describe "create_book_member_for_user/3" do
     setup do
       %{book: book_fixture(), user: user_fixture()}
     end
 
     test "creates a book member with the user", %{book: book, user: user} do
-      assert book_member = Members.create_book_member_for_user(book, user)
+      assert {:ok, book_member} =
+               Members.create_book_member_for_user(book, user, %{nickname: "Member"})
+
       assert book_member.book_id == book.id
       assert book_member.role == :member
       assert book_member.user_id == user.id
-      assert book_member.nickname == user.display_name
+      assert book_member.nickname == "Member"
+    end
+
+    test "returns an error if the parameters are invalid", %{book: book, user: user} do
+      assert {:error, changeset} =
+               Members.create_book_member_for_user(book, user, %{nickname: ""})
+
+      assert errors_on(changeset) == %{nickname: ["can't be blank"]}
     end
   end
 
@@ -170,55 +177,6 @@ defmodule App.Books.MembersTest do
 
       book_member = Repo.reload(book_member)
       assert book_member.user_id == user.id
-    end
-
-    test "link the balance config of the user to the member", %{
-      book_member: book_member,
-      user: user
-    } do
-      balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      book_member = Repo.reload(book_member)
-      assert book_member.balance_config_id == balance_config.id
-    end
-
-    test "delete the former balance config of the member if it is not used", %{
-      book_member: book_member,
-      user: user
-    } do
-      member_balance_config = member_balance_config_fixture(book_member)
-      book_member = Repo.reload(book_member)
-
-      _user_balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      refute Repo.reload(member_balance_config)
-    end
-
-    test "does not delete the balance config of the member if it is used", %{
-      book_member: book_member,
-      user: user
-    } do
-      member_balance_config = member_balance_config_fixture(book_member)
-      book_member = Repo.reload(book_member)
-
-      _transfer =
-        deprecated_money_transfer_fixture(book_fixture(),
-          tenant_id: book_member.id,
-          peers: [%{member_id: book_member.id, balance_config_id: member_balance_config.id}]
-        )
-
-      _user_balance_config = user_balance_config_fixture(user)
-      user = Repo.reload(user)
-
-      :ok = Members.link_book_member_to_user(book_member, user)
-
-      assert Repo.reload(member_balance_config)
     end
   end
 

@@ -1,15 +1,13 @@
 @layer components {
   .dropdown {
-    position: relative;
+    @apply absolute inset-0
+             p-2 m-0
+             w-[20rem]
+             rounded-container
+             shadow;
   }
 
-  .dropdown__menu {
-    @apply hidden
-           absolute right-0 top-full
-           m-0 p-0
-           bg-white
-           text-black text-base uppercase
-           shadow
-           z-10;
+  .dropdown > .button {
+    @apply w-full justify-start;
   }
 }

@@ -1,0 +1,16 @@
+<.invitation_layout book={@book} current_user={@current_user}>
+  <.form
+    for={%{}}
+    action={~p"/invitations/#{@token}/members/#{@member}"}
+    method="put"
+    class="space-y-4"
+  >
+    <p>
+      <%= gettext("You will join as the following member") %><br />
+      <span class="label"><%= @member.nickname %></span>
+    </p>
+    <.button_group>
+      <.button kind={:primary} type="submit"><%= gettext("Join") %></.button>
+    </.button_group>
+  </.form>
+</.invitation_layout>

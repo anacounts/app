@@ -11,17 +11,11 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{count} transfer"
-msgid_plural "%{count} transfers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "%{member_name} in %{book_name}"
+msgid "%{count} members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "%{transfer_name} · %{book_name}"
+msgid "%{count} unlinked"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -29,7 +23,11 @@ msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Account created successfully!"
+msgid "Add another member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Add everyone"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -45,13 +43,11 @@ msgid "Amount"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "An error occured while balancing the transactions:"
-msgid_plural "Errors occured while balancing the transactions:"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Anacounts is a free and open-source software that helps you share expensenses for a trip with your friend or in your household in a more fair way."
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Anacounts uses <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">Gravatar</a> to display user avatars."
+msgid "Anacounts uses Gravatar to display user avatars."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -59,15 +55,15 @@ msgid "Are you sure you want to delete the transfer?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Are you sure you want to delete this book?"
+msgid "Are you sure you want to delete this book? This operation is irreversible."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Attempting to reconnect"
+msgid "As every member, you need a nickname. What do you want to be called?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Back to the app"
+msgid "As the creator, you will be the first member of the book, and will be in charge of inviting the first other members."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -75,27 +71,11 @@ msgid "Balance"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Balance Settings"
+msgid "Before making the change effective, a confirmation email will be sent to the new address."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Balance settings updated"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Book closed successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Book deleted successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Book reopened successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Cancel"
+msgid "By default, only new transfers will use the new revenues. Here, you can select existing transfers that should use the new revenues."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -111,15 +91,15 @@ msgid "Change name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Change nickname"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Change password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Changing..."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Close"
+msgid "Close book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -127,11 +107,11 @@ msgid "Closed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Confirm new password"
+msgid "Configuration"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Confirm password"
+msgid "Confirm new password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -139,15 +119,19 @@ msgid "Confirm your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Confirming..."
+msgid "Confirmation instructions were sent when you created your account. If you did not receive them, check out your spam, or send the instructions again."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Contextual menu"
+msgid "Continue"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Copied to clipboard"
+msgid "Copied to clipboard !"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Create"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -163,19 +147,7 @@ msgid "Create manually"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Create one here"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Create your first book"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Created on %{date}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Creating account..."
+msgid "Create reimbursement"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -191,11 +163,19 @@ msgid "Delete"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Disconnect"
+msgid "Delete book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Display name"
+msgid "Describe the purpose of the book in a few words."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Details"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Disconnect"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -203,7 +183,7 @@ msgid "Divide equally"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Don't have an account?"
+msgid "Divided"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -211,35 +191,11 @@ msgid "Edit"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Edit %{member_name} · %{book_name}"
+msgid "Email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Edit Book"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Edit Book · %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Edit Member"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Edit Transfer"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Email address"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Email change link is invalid or it has expired."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Email changed successfully."
+msgid "Email change link is invalid or it has expired. You can create a new one."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -247,11 +203,7 @@ msgid "Enter your user account's email address and we will send you a password r
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Error!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Filter by"
+msgid "Finish"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -259,27 +211,35 @@ msgid "First created"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Fix it"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Go back"
+msgid "Go back to sign in page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Gravatar is a service providing globally unique avatars"
+msgid "Go to Gravatar"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Hang in there while we get back on track"
+msgid "Go to my account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Hi %{user_name} 👋"
+msgid "Gravatar is a service providing globally unique avatars."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "How to balance by default?"
+msgid "Hello 👋 You have been invited to join a new book:"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Home"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -287,23 +247,15 @@ msgid "How to balance?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgid "If you want to update revenues accross multiple books, you will have go to these books and update the revenues there too."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "If your email has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Income"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Incomes"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Indicate your income from last year. To do so, we adivise you to go on your bank website, and sum all incomes from 1 year ago to today."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -315,7 +267,7 @@ msgid "Invitation link is invalid or it has expired"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invitations · %{book_name}"
+msgid "Invitations"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -323,7 +275,11 @@ msgid "Invite people"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Invite people to join"
+msgid "It can be changed at any time after joining"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "It can be changed later after the book creation."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -331,7 +287,11 @@ msgid "Join"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Join %{book_name}"
+msgid "Join book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Joined on"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -347,19 +307,23 @@ msgid "Last created"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Last year incomes"
+msgid "Latest transfers"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Logged out successfully."
+msgid "Log in here."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member created successfully"
+msgid "Manual reimbursement"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Member updated successfully"
+msgid "Me"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Member"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -367,11 +331,7 @@ msgid "Members"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Money transfer created successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Money transfer updated successfully"
+msgid "Members created manually will appear alongside invited members, but are not linked to a user until someone invited through the invitation link claims them."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -379,7 +339,15 @@ msgid "Most recent"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "My account"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "My books"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "My profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -387,19 +355,7 @@ msgid "Name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Name updated successfully."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New Book"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New Member"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "New Transfer"
+msgid "New book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -407,7 +363,7 @@ msgid "New email"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New name"
+msgid "New income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -415,7 +371,7 @@ msgid "New password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "New reimbursement"
+msgid "New payment"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -423,11 +379,19 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Not %{user_name}? Disconnect"
+msgid "Nicknames can be changed later on."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Not owned by me"
+msgid "No transfers yet"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Not %{email}?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Not %{user_name}?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -435,23 +399,19 @@ msgid "Oldest"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "Only the current book will be affected. Nicknames can be changed as many times as you want or need to."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Open"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Open and closed"
+msgid "Others"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Or continue to"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Owned by anyone"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Owned by me"
+msgid "Owned by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -459,39 +419,15 @@ msgid "Paid by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Paid by %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by anyone"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by me"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Paid by others"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Password reset successfully."
+msgid "Password reset."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Password updated successfully!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Payment"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Payments"
+msgid "People clicking this link will be asked either to join as an existing member, or to create a new one."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -499,15 +435,7 @@ msgid "Please enter a new password for your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Profile"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Received by"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Received by %{name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -515,23 +443,15 @@ msgid "Register"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Reimbursed to %{name}"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Reimbursement created successfully"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Reimbursement from %{debtor_name} to %{creditor_name}"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Reopen"
+msgid "Remove all"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Resend confirmation instructions"
+msgid "Reopen book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -547,7 +467,11 @@ msgid "Reset your password"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Resetting..."
+msgid "Revenues"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Revenues are set by book. Choose the most fair way to compute revenues (before or after taxes, including gifts or not) with the other members of the book, and enter it here."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -555,19 +479,15 @@ msgid "Save"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Saving..."
+msgid "Send confirmation instructions for your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Send password reset instructions"
+msgid "Send instructions"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Sending..."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "Settings"
+msgid "Set revenues"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -579,7 +499,7 @@ msgid "Share this link so people can join your book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Sharing"
+msgid "Show weight"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -591,7 +511,7 @@ msgid "Sign in to your account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Signing in..."
+msgid "Some information is missing to balance the book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -599,43 +519,67 @@ msgid "Someone new"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Something went wrong!"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "Sort by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Success!"
+msgid "State"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The book is not balanced. Are you sure you want to close it?"
+msgid "Tenanted by"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The member's avatar"
+msgid "The confirmation email will be sent to this address"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "The transactions are balanced already!"
+msgid "The main difference with invited members is that you can see and edit revenues of unlinked members from their member page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "This invitation is irrelevant?"
+msgid "There is no transfer in the book for now. You can finish the operation safely!"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "This page is not accessible while the book is closed"
+msgid "This confirmation link is invalid or it has expired."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "To edit your avatar, <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">create an account</a> and <a class=\"text-action\" href=\"https://en.gravatar.com/\" target=\"_blank\" rel=\"noreferrer\">personalize your Gravatar</a>."
+msgid "This email will be your identifier"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Transfer deleted successfully"
+msgid "This is the current name of the book"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This is the current nickname of the member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This is the current revenues of the member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This is your current nickname"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This is your current revenues"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This member revenues were not set yet."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "This will prevent prevent any modification from being made to the book. The book can be reopened later. Are you sure you want to close the book?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "To edit your avatar, create an account and personalize your Gravatar."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -643,19 +587,15 @@ msgid "Transfers"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Transfers · %{book_name}"
+msgid "Type your new password again here"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "User confirmation link is invalid or it has expired."
+msgid "View profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "User confirmed successfully."
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "We can't find the internet"
+msgid "Weight"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -663,15 +603,39 @@ msgid "Weight by income"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Welcome back!"
+msgid "Weighted"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Who are you?"
+msgid "What do you want to call your new book?"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "You are already member of this book"
+msgid "What nickname do you want to use?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "What would you like to change it to?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "What would you like to set them to?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You are already part of this book."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You are not allowed to set the revenues of this member."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see the current revenues of this member, but you are allowed to change them."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You cannot see your current revenues because they were set by someone else."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -679,7 +643,7 @@ msgid "You have been added to the book"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "You have been invited to join a new book:"
+msgid "You have not set your revenues yet."
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -687,17 +651,33 @@ msgid "You must log in to access this page."
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "You need to identify yourself. Who are you?"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "You will join as the following member"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your account was confirmed."
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "Your avatar"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Your incomes"
+msgid "Your current password is required to make this change"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "Your payments"
+msgid "Your email address was not confirmed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "gives"
+msgid "Your password must be at least 12 characters long"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Your revenues are not set"
 msgstr ""

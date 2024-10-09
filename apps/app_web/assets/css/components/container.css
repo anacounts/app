@@ -1,0 +1,9 @@
+@layer components {
+  .container {
+    @apply mx-4 sm:mx-auto
+           p-4
+           max-w-lg
+           bg-white
+           rounded-container;
+  }
+}

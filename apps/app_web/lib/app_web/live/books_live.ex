@@ -6,109 +6,103 @@ defmodule AppWeb.BooksLive do
 
   use AppWeb, :live_view
 
+  import AppWeb.FiltersComponents
+
+  alias App.Accounts.Avatars
   alias App.Books
 
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <main class="flex justify-center mx-auto">
-      <div class="grow basis-3/4 max-w-prose">
-        <div class="md:hidden mx-2 text-right">
-          <.button color={:ghost} phx-click={show_dialog("#filters")}>
-            <.icon name="tune" />
-          </.button>
+    <div class="app-page">
+      <header class="flex justify-between">
+        <h1 class="title-1"><%= @page_title %></h1>
+        <.button kind={:ghost} navigate={~p"/users/settings"} class="p-1">
+          <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("My account")} />
+        </.button>
+      </header>
+      <main>
+        <.alert_flash flash={@flash} kind={:error} class="mb-4" />
+
+        <.link navigate={~p"/books/new"}>
+          <.tile kind={:primary}>
+            <.icon name={:plus} />
+            <%= gettext("Create a new book") %>
+          </.tile>
+        </.link>
+
+        <.filters
+          id="books-filters"
+          phx-change="filters"
+          filters={[
+            multi_select(
+              name: "owned_by",
+              label: gettext("Owned by"),
+              options: [
+                me: gettext("Me"),
+                others: gettext("Others")
+              ]
+            ),
+            multi_select(
+              name: "close_state",
+              label: gettext("State"),
+              options: [
+                open: gettext("Open"),
+                closed: gettext("Closed")
+              ],
+              default: [:open]
+            ),
+            sort_by(
+              options: [
+                last_created: gettext("Last created"),
+                first_created: gettext("First created"),
+                alphabetically: gettext("Alphabetically")
+              ],
+              default: :last_created
+            )
+          ]}
+        />
+
+        <div id="books" phx-update="stream">
+          <.link :for={{dom_id, book} <- @streams.books} id={dom_id} navigate={~p"/books/#{book.id}"}>
+            <.tile class="mt-4">
+              <span class="label grow leading-none line-clamp-2"><%= book.name %></span>
+              <.button kind={:ghost}>
+                Open <.icon name={:chevron_right} />
+              </.button>
+            </.tile>
+          </.link>
         </div>
-
-        <.tile :if={Enum.empty?(@books)} summary_class="text-xl" navigate={~p"/books/new"}>
-          <.icon name="add" />
-          <%= gettext("Create your first book") %>
-        </.tile>
-        <.tile :for={book <- @books} navigate={~p"/books/#{book.id}/transfers"} data-book-id={book.id}>
-          <.avatar src={~p"/images/book-default-avatar.png"} alt="" />
-          <div class="grow text-lg line-clamp-2"><%= book.name %></div>
-        </.tile>
-      </div>
-
-      <.filters id="filters" phx-change="filter">
-        <:section icon="arrow_downward" title={gettext("Sort by")}>
-          <.filter_options field={@filters[:sort_by]} options={sort_by_options()} />
-        </:section>
-
-        <:section icon="filter_alt" title={gettext("Filter by")}>
-          <.filter_options field={@filters[:owned_by]} options={owned_by_options()} />
-          <.filter_options field={@filters[:close_state]} options={close_state_options()} />
-        </:section>
-      </.filters>
-
-      <.fab_container>
-        <:item>
-          <.fab navigate={~p"/books/new"}>
-            <.icon name="add" alt={gettext("Create a new book")} />
-          </.fab>
-        </:item>
-      </.fab_container>
-    </main>
+      </main>
+    </div>
     """
   end
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    books = Books.list_books_of_user(socket.assigns.current_user)
-
-    filters =
-      to_form(
-        %{
-          "sort_by" => "last_created",
-          "owned_by" => "anyone",
-          "close_state" => "open"
-        },
-        as: :filters
-      )
+    books = list_books(socket.assigns.current_user)
 
     socket =
-      assign(socket,
-        page_title: gettext("My books"),
-        books: books,
-        filters: filters
-      )
+      socket
+      |> assign(:page_title, gettext("My books"))
+      |> stream(:books, books)
 
-    {:ok, socket, layout: {AppWeb.Layouts, :home}, temporary_assigns: [books: [], filters: nil]}
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("filter", %{"filters" => filters}, socket) do
-    books = Books.list_books_of_user(socket.assigns.current_user, filters)
+  def handle_event("filters", params, socket) do
+    books = list_books(socket.assigns.current_user, params)
 
-    socket =
-      assign(socket,
-        books: books,
-        filters: to_form(filters, as: :filters)
-      )
-
-    {:noreply, socket}
+    {:noreply, stream(socket, :books, books, reset: true)}
   end
 
-  defp sort_by_options do
-    [
-      {gettext("Last created"), "last_created"},
-      {gettext("First created"), "first_created"},
-      {gettext("Alphabetically"), "alphabetically"}
-    ]
-  end
+  @default_filters %{
+    close_state: [:open],
+    sort_by: :last_created
+  }
 
-  defp owned_by_options do
-    [
-      {gettext("Owned by anyone"), "anyone"},
-      {gettext("Owned by me"), "me"},
-      {gettext("Not owned by me"), "others"}
-    ]
-  end
-
-  defp close_state_options do
-    [
-      {gettext("Open and closed"), "any"},
-      {gettext("Open"), "open"},
-      {gettext("Closed"), "closed"}
-    ]
+  defp list_books(current_user, filters \\ @default_filters) do
+    Books.list_books_of_user(current_user, filters)
   end
 end

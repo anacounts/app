@@ -1,0 +1,108 @@
+@layer components {
+
+  /* # Block */
+
+  .card {
+    @apply p-4 pt-2
+           rounded-container
+           transition-colors;
+  }
+
+  /* ## Variants */
+
+  .card--button {
+    @apply label;
+    @apply flex flex-col justify-center items-center
+           pt-4;
+  }
+
+  /* ## Colors */
+
+  /* ### Primary */
+
+  .card--primary {
+    @apply bg-theme-500 text-white
+           outline-theme-800;
+  }
+
+  a .card--primary:hover {
+    @apply bg-theme-600;
+  }
+
+  a .card--primary:active {
+    @apply bg-theme-700;
+  }
+
+  /* ### Secondary */
+
+  .card--secondary {
+    @apply bg-white
+           outline-neutral-800;
+  }
+
+  a .card--secondary:hover {
+    @apply bg-neutral-500/10;
+  }
+
+  a .card--secondary:active {
+    @apply bg-neutral-500/20;
+  }
+
+  /* ### Green */
+
+  .card--green {
+    @apply bg-green-500 text-white
+           outline-green-800;
+  }
+
+  a .card--green:hover {
+    @apply bg-green-600;
+  }
+
+  a .card--green:active {
+    @apply bg-green-700;
+  }
+
+  /* ### Red */
+
+  .card--red {
+    @apply bg-red-500 text-white
+           outline-red-800;
+  }
+
+  a .card--red:hover {
+    @apply bg-red-600;
+  }
+
+  a .card--red:active {
+    @apply bg-red-700;
+  }
+
+  /* ### Neutral */
+
+  .card--neutral {
+    @apply bg-neutral-500 text-white
+           outline-neutral-800;
+  }
+
+  a .card--neutral:hover {
+    @apply bg-neutral-600;
+  }
+
+  a .card--neutral:active {
+    @apply bg-neutral-700;
+  }
+
+  /* # Elements */
+
+  .card__title {
+    @apply label;
+    @apply flex justify-between items-center gap-2;
+  }
+
+  .card__body {
+    @apply mt-2
+           text-xl/none
+           text-center;
+  }
+}

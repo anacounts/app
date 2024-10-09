@@ -48,7 +48,7 @@ defmodule AppWeb do
         layouts: [html: AppWeb.Layouts]
 
       # Import Phoenix form helpers
-      import Phoenix.Component, only: [to_form: 2]
+      import Phoenix.Component, only: [to_form: 1, to_form: 2]
 
       import Plug.Conn
       unquote(gettext())
@@ -93,6 +93,7 @@ defmodule AppWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
+      import Phoenix.HTML.Form, only: [input_value: 2]
 
       # Core UI components and translation
       import AppWeb.CoreComponents
