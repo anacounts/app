@@ -49,9 +49,10 @@ defmodule AppWeb.MixProject do
       {:phoenix_live_dashboard, "~> 0.8"},
       {:plug_cowboy, "~> 2.6"},
 
-      # Front tooling
+      # Front (tooling and assets)
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:heroicons, "~> 0.5.5"},
 
       # Internationalization
       {:gettext, "~> 0.24"},
@@ -75,7 +76,6 @@ defmodule AppWeb.MixProject do
 
       # Dev tools
       {:phoenix_storybook, "~> 0.6.3", runtime: Mix.env() == :dev},
-      {:heroicons, "~> 0.5.5", only: [:dev, :test]},
 
       # Umbrella
       {:app, in_umbrella: true}
