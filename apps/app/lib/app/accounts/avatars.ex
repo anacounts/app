@@ -13,12 +13,6 @@ defmodule App.Accounts.Avatars do
   @doc """
   Get the avatar URL for an entity. Currently, only entities with an `:email`
   field are supported.
-
-  ## Examples
-
-      iex> avatar_url(%{email: "avatar@example.com"})
-      "https://www.gravatar.com/avatar/7671d949664fc1fbce03b4ee41c509a4"
-
   """
   @spec avatar_url(entity()) :: String.t()
   def avatar_url(%{email: email}) do
@@ -31,7 +25,6 @@ defmodule App.Accounts.Avatars do
   #
   # ref: https://en.gravatar.com/site/implement/images/
   defp gravatar_email_url(nil) do
-    # TODO Add an actual default avatar, using the user initials for example
     "https://www.gravatar.com/avatar/default"
   end
 
