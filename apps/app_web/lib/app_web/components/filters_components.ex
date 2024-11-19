@@ -68,7 +68,7 @@ defmodule AppWeb.FiltersComponents do
       <.list_item :for={{value, label} <- @options}>
         <label class="form-control-container justify-between">
           <span class="label"><%= label %></span>
-          <.checkbox name={@name} value={value} checked={value in @default} phx-debounce />
+          <.checkbox name={[@name, "[]"]} value={value} checked={value in @default} phx-debounce />
         </label>
       </.list_item>
     </.list>
@@ -108,7 +108,6 @@ defmodule AppWeb.FiltersComponents do
       opts
       |> Keyword.validate!([:name, :label, :options, default: [], icon: nil])
       |> Keyword.merge(multiple: true)
-      |> Keyword.update!(:name, &[&1, "[]"])
 
     struct!(__MODULE__, attrs)
   end
