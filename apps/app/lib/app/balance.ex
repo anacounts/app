@@ -342,7 +342,7 @@ defmodule App.Balance do
          [creditor | _other_creditors] = all_creditors,
          transactions
        ) do
-    debt = Money.mult!(debtor.balance, -1)
+    debt = Money.negate!(debtor.balance)
 
     Money.compare!(creditor.balance, debt)
     |> add_transaction_from_cmp(all_debtors, all_creditors, transactions)
@@ -354,7 +354,7 @@ defmodule App.Balance do
          [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.mult!(debtor.balance, -1)
+    debt = Money.negate!(debtor.balance)
     new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
@@ -370,7 +370,7 @@ defmodule App.Balance do
          [creditor | other_creditors],
          transactions
        ) do
-    debt = Money.mult!(debtor.balance, -1)
+    debt = Money.negate!(debtor.balance)
     new_transaction = transaction_for(debtor, creditor, debt)
 
     make_transactions(
