@@ -41,7 +41,7 @@ defmodule AppWeb.FiltersComponents do
 
   def filters(assigns) do
     ~H"""
-    <form class="flex gap-4 my-4 overflow-auto" id={@id} phx-hook="Filters" {@rest}>
+    <form class="flex gap-4 my-4 overflow-auto" id={@id} {@rest}>
       <.dropdown :for={filter <- @filters} id={[@id, "_", filter.name]}>
         <:trigger :let={attrs}>
           <.button kind={:secondary} size={:sm} type="button" {attrs}>
