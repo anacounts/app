@@ -77,4 +77,11 @@
   .tile--neutral .\[custom\]tile__text {
     @apply text-neutral-950;
   }
+
+  /* ## Variants */
+
+  .variant\@tile--transfer {
+    @apply flex-col items-stretch
+           pr-4;
+  }
 }
