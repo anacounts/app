@@ -75,7 +75,7 @@ defmodule AppWeb.MixProject do
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
 
       # Dev tools
-      {:phoenix_storybook, "~> 0.6.3", runtime: Mix.env() == :dev},
+      {:phoenix_storybook, "~> 0.7.1", runtime: Mix.env() == :dev},
 
       # Umbrella
       {:app, in_umbrella: true}
