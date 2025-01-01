@@ -9,7 +9,7 @@ permissions:
 jobs:
   build:
     name: Validate code
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
 
   test:
     name: Build and test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     services:
       postgres:
@@ -47,7 +47,7 @@ jobs:
 
   dockerfile:
     name: Validate Dockerfile
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
