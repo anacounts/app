@@ -99,6 +99,23 @@ defmodule App.TransfersTest do
              |> Enum.map(& &1.id) == [transfer2.id]
     end
 
+    test "filters by creator", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
+
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id, creator_id: member1.id)
+      transfer2 = money_transfer_fixture(book, tenant_id: member1.id, creator_id: member2.id)
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member1.id]})
+             |> Enum.map(& &1.id) == [transfer1.id]
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member2.id]})
+             |> Enum.map(& &1.id) == [transfer2.id]
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member3.id]}) == []
+    end
+
     test "paginates results", %{book: book, member: member} do
       transfer1 = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-06-29])
       transfer2 = money_transfer_fixture(book, tenant_id: member.id, date: ~D[2020-06-30])
