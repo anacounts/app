@@ -2,7 +2,6 @@ defmodule Storybook.TransfersComponents.TransferDetails do
   alias App.Transfers.Peer
   use PhoenixStorybook.Story, :component
 
-  alias App.Balance.TransferParams
   alias App.Books.BookMember
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -26,10 +25,7 @@ defmodule Storybook.TransfersComponents.TransferDetails do
                   nickname: "Jane Doe"
                 },
                 peers: [%Peer{}, %Peer{}],
-                balance_params: %TransferParams{
-                  means_code: :weight_by_income,
-                  params: %{}
-                }
+                balance_means: :weight_by_income
               },
               style: "width: 20rem"
             }
@@ -46,10 +42,7 @@ defmodule Storybook.TransfersComponents.TransferDetails do
                   nickname: "Jane Doe"
                 },
                 peers: [%Peer{}, %Peer{}],
-                balance_params: %TransferParams{
-                  means_code: :divide_equally,
-                  params: %{}
-                }
+                balance_means: :divide_equally
               },
               style: "width: 20rem"
             }

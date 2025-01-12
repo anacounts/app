@@ -5,7 +5,6 @@ defmodule App.Transfers do
 
   import Ecto.Query
 
-  alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Repo
@@ -278,7 +277,6 @@ defmodule App.Transfers do
     %MoneyTransfer{
       book_id: book.id,
       type: :reimbursement,
-      balance_params: %TransferParams{means_code: :divide_equally},
       balance_means: :divide_equally
     }
     |> MoneyTransfer.reimbursement_changeset(attrs)

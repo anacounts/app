@@ -109,7 +109,7 @@ defmodule AppWeb.TransfersComponents do
         {gettext("%{count} members", count: Enum.count(@transfer.peers))}
       </span>
       <span class="label truncate text-right">
-        {format_balance_params_code(@transfer.balance_params.means_code)}
+        {format_balance_params_code(@transfer.balance_means)}
         <.icon name={:arrows_right_left} />
       </span>
     </div>

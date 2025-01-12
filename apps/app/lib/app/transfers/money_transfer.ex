@@ -9,7 +9,6 @@ defmodule App.Transfers.MoneyTransfer do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Transfers.Peer
@@ -25,7 +24,6 @@ defmodule App.Transfers.MoneyTransfer do
           creator_id: BookMember.id(),
           tenant: BookMember.t(),
           tenant_id: BookMember.id(),
-          balance_params: TransferParams.t(),
           balance_means: balance_means(),
           peers: [Peer.t()],
           total_peer_weight: Decimal.t(),
@@ -52,7 +50,6 @@ defmodule App.Transfers.MoneyTransfer do
     belongs_to :tenant, BookMember
 
     # balance
-    field :balance_params, TransferParams
     field :balance_means, Ecto.Enum, values: @balance_means
 
     has_many :peers, Peer,
@@ -73,7 +70,7 @@ defmodule App.Transfers.MoneyTransfer do
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:label, :date, :balance_params, :tenant_id, :amount])
+    |> cast(attrs, [:label, :date, :balance_means, :tenant_id, :amount])
     |> validate_label()
     |> validate_balance_means()
     |> validate_tenant_id()
@@ -111,14 +108,8 @@ defmodule App.Transfers.MoneyTransfer do
   end
 
   defp validate_balance_means(changeset) do
-    changeset = validate_required(changeset, :balance_params)
-
-    if changeset.valid? do
-      balance_params = Ecto.Changeset.fetch_field!(changeset, :balance_params)
-      put_change(changeset, :balance_means, balance_params.means_code)
-    else
-      changeset
-    end
+    changeset
+    |> validate_required(:balance_means)
   end
 
   defp validate_reimbursement_peers(changeset) do

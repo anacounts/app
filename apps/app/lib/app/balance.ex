@@ -59,7 +59,7 @@ defmodule App.Balance do
 
   defp compute_total_peer_weight(transfers) when is_list(transfers) do
     transfers
-    |> Enum.group_by(& &1.balance_params.means_code)
+    |> Enum.group_by(& &1.balance_means)
     |> Enum.flat_map(&compute_peers_total_weight/1)
     |> Enum.map(fn
       {:ok, transfer} ->

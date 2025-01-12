@@ -48,7 +48,7 @@ defmodule AppWeb.BookTransferFormLive do
           <.input field={@form[:date]} type="date" label={gettext("Date")} required phx-debounce />
 
           <.input
-            field={@form[:balance_means_code]}
+            field={@form[:balance_means]}
             type="select"
             label={gettext("How to balance?")}
             options={balance_params_options()}
@@ -324,7 +324,7 @@ defmodule AppWeb.BookTransferFormLive do
           :type,
           :label,
           :date,
-          :balance_params,
+          :balance_means,
           :tenant_id,
           :amount,
           peers: [
@@ -451,10 +451,6 @@ defmodule AppWeb.BookTransferFormLive do
   end
 
   defp normalize_params(params) do
-    # Balance params
-    {balance_means_code, params} = Map.pop(params, "balance_means_code")
-    params = Map.put(params, "balance_params", %{"means_code" => balance_means_code})
-
     # Amount
     params = Map.update(params, "amount", nil, &parse_money_or_nil/1)
 
@@ -480,16 +476,7 @@ defmodule AppWeb.BookTransferFormLive do
   end
 
   defp to_money_transfer_form(changeset) do
-    form = to_form(changeset, as: "money_transfer")
-
-    Map.update!(form, :params, fn params ->
-      balance_means_code =
-        if balance_params = Ecto.Changeset.get_field(form.source, :balance_params),
-          do: balance_params.means_code,
-          else: :divide_equally
-
-      Map.put(params, "balance_means_code", balance_means_code)
-    end)
+    to_form(changeset, as: "money_transfer")
   end
 
   defp update_form_peers(form, fun) do
