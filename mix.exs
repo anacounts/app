@@ -27,6 +27,14 @@ defmodule Anacounts.Umbrella.MixProject do
     ]
   end
 
+  def cli do
+    [
+      preferred_envs: [
+        dialyzer: :test
+      ]
+    ]
+  end
+
   # Dependencies can be Hex packages:
   #
   #   {:mydep, "~> 0.3.0"}
