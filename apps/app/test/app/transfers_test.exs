@@ -524,6 +524,7 @@ defmodule App.TransfersTest do
                  book,
                  money_transfer_attributes(
                    balance_params: %{means_code: :weighted_by_income},
+                   balance_means: :weighted_by_income,
                    tenant_id: member1.id,
                    peers: [%{member_id: member2.id, weight: Decimal.new(3)}]
                  )

@@ -15,7 +15,8 @@ defmodule App.TransfersFixtures do
       amount: Money.new!(:EUR, 1799),
       date: ~D[2022-06-23],
       type: :payment,
-      balance_params: transfer_params_attributes()
+      balance_params: transfer_params_attributes(),
+      balance_means: :divide_equally
     })
   end
 
