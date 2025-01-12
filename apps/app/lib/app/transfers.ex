@@ -197,12 +197,16 @@ defmodule App.Transfers do
   @doc """
   Creates a money_transfer.
   """
-  @spec create_money_transfer(Book.t(), MoneyTransfer.type(), map()) ::
+  @spec create_money_transfer(Book.t(), BookMember.t(), MoneyTransfer.type(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
-  def create_money_transfer(%Book{} = book, type, attrs)
+  def create_money_transfer(%Book{} = book, %BookMember{} = creator, type, attrs)
       when is_map(attrs) and type in [:payment, :income] do
     changeset =
-      %MoneyTransfer{book_id: book.id, type: type}
+      %MoneyTransfer{
+        book_id: book.id,
+        creator_id: creator.id,
+        type: type
+      }
       |> MoneyTransfer.changeset(attrs)
 
     result =

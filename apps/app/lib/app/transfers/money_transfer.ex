@@ -22,6 +22,7 @@ defmodule App.Transfers.MoneyTransfer do
           type: type(),
           date: Date.t(),
           book_id: Book.id(),
+          creator_id: BookMember.id(),
           tenant: BookMember.t(),
           tenant_id: BookMember.id(),
           balance_params: TransferParams.t(),
@@ -43,6 +44,7 @@ defmodule App.Transfers.MoneyTransfer do
     field :date, :date, read_after_writes: true
 
     field :book_id, :integer
+    field :creator_id, :integer
     belongs_to :tenant, BookMember
 
     # balance

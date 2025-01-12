@@ -425,9 +425,9 @@ defmodule AppWeb.BookTransferFormLive do
   end
 
   defp submit_form(socket, :new, money_transfer_params) do
-    %{book: book, type: type} = socket.assigns
+    %{book: book, current_member: current_member, type: type} = socket.assigns
 
-    case Transfers.create_money_transfer(book, type, money_transfer_params) do
+    case Transfers.create_money_transfer(book, current_member, type, money_transfer_params) do
       {:ok, _money_transfer} ->
         {:noreply, push_navigate(socket, to: ~p"/books/#{book}/transfers")}
 
