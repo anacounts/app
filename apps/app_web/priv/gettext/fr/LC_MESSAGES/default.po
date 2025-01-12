@@ -152,6 +152,10 @@ msgid "Create reimbursement"
 msgstr "Créer le remboursement"
 
 #, elixir-autogen, elixir-format
+msgid "Created by"
+msgstr "Créé par"
+
+#, elixir-autogen, elixir-format
 msgid "Current password"
 msgstr "Mot de passe actuel"
 

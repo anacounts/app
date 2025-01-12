@@ -12,6 +12,7 @@ defmodule App.TransfersTest do
 
   alias App.Balance.TransferParams
   alias App.Books.Book
+  alias App.Books.BookMember
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -96,6 +97,23 @@ defmodule App.TransfersTest do
 
       assert Transfers.list_transfers_of_book(book, filters: %{tenanted_by: {:not, member1.id}})
              |> Enum.map(& &1.id) == [transfer2.id]
+    end
+
+    test "filters by creator", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+      member3 = book_member_fixture(book)
+
+      transfer1 = money_transfer_fixture(book, tenant_id: member1.id, creator_id: member1.id)
+      transfer2 = money_transfer_fixture(book, tenant_id: member1.id, creator_id: member2.id)
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member1.id]})
+             |> Enum.map(& &1.id) == [transfer1.id]
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member2.id]})
+             |> Enum.map(& &1.id) == [transfer2.id]
+
+      assert Transfers.list_transfers_of_book(book, filters: %{created_by: [member3.id]}) == []
     end
 
     test "paginates results", %{book: book, member: member} do
@@ -203,13 +221,14 @@ defmodule App.TransfersTest do
     end
   end
 
-  describe "create_money_transfer/1" do
+  describe "create_money_transfer/4" do
     setup :book_with_member_context
 
     test "creates a money transfer", %{book: book, member: member} do
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
                  book,
+                 member,
                  :payment,
                  money_transfer_attributes(
                    tenant_id: member.id,
@@ -224,6 +243,7 @@ defmodule App.TransfersTest do
       assert transfer.type == :payment
       assert transfer.date == ~D[2022-06-23]
       assert transfer.balance_params == struct!(TransferParams, transfer_params_attributes())
+      assert transfer.creator_id == member.id
 
       transfer = Repo.preload(transfer, :peers)
       assert Enum.empty?(transfer.peers)
@@ -233,6 +253,7 @@ defmodule App.TransfersTest do
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
                  book,
+                 member,
                  :payment,
                  money_transfer_attributes(
                    tenant_id: member.id,
@@ -254,6 +275,7 @@ defmodule App.TransfersTest do
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
                  book,
+                 member,
                  :payment,
                  money_transfer_attributes(
                    tenant_id: member.id,
@@ -278,6 +300,7 @@ defmodule App.TransfersTest do
       assert_raise Ecto.ConstraintError, ~r/transfers_peers_transfer_id_member_id_index/, fn ->
         Transfers.create_money_transfer(
           book,
+          member,
           :payment,
           money_transfer_attributes(
             tenant_id: member.id,
@@ -291,6 +314,18 @@ defmodule App.TransfersTest do
       assert_raise Ecto.ConstraintError, ~r/money_transfers_book_id_fkey/, fn ->
         Transfers.create_money_transfer(
           %Book{id: 0},
+          member,
+          :payment,
+          money_transfer_attributes(tenant_id: member.id)
+        )
+      end
+    end
+
+    test "fails with invalid creator_id", %{book: book, member: member} do
+      assert_raise Ecto.ConstraintError, ~r/money_transfers_creator_id_fkey/, fn ->
+        Transfers.create_money_transfer(
+          book,
+          %BookMember{id: 0},
           :payment,
           money_transfer_attributes(tenant_id: member.id)
         )
@@ -301,23 +336,30 @@ defmodule App.TransfersTest do
       assert_raise FunctionClauseError, fn ->
         Transfers.create_money_transfer(
           book,
+          member,
           :reimbursement,
           money_transfer_attributes(tenant_id: member.id)
         )
       end
     end
 
-    test "fails with missing tenant_id", %{book: book} do
+    test "fails with missing tenant_id", %{book: book, member: member} do
       assert {:error, changeset} =
-               Transfers.create_money_transfer(book, :payment, money_transfer_attributes())
+               Transfers.create_money_transfer(
+                 book,
+                 member,
+                 :payment,
+                 money_transfer_attributes()
+               )
 
       assert errors_on(changeset) == %{tenant_id: ["can't be blank"]}
     end
 
-    test "fails with invalid tenant_id", %{book: book} do
+    test "fails with invalid tenant_id", %{book: book, member: member} do
       assert {:error, changeset} =
                Transfers.create_money_transfer(
                  book,
+                 member,
                  :payment,
                  money_transfer_attributes(tenant_id: 0)
                )

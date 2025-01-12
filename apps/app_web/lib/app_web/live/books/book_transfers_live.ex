@@ -56,6 +56,11 @@ defmodule AppWeb.BookTransfersLive do
               others: gettext("Others")
             ]
           ),
+          multi_select(
+            name: "created_by",
+            label: gettext("Created by"),
+            options: @book_members_options
+          ),
           sort_by(
             options: [
               most_recent: gettext("Most recent"),
@@ -122,6 +127,7 @@ defmodule AppWeb.BookTransfersLive do
         page: 1,
         per_page: 25
       )
+      |> assign_book_members_options()
       |> assign_filters(%{"sort_by" => "most_recent"})
       |> paginate_transfers(1)
 
@@ -207,6 +213,19 @@ defmodule AppWeb.BookTransfersLive do
     socket = stream_delete(socket, :transfers, money_transfer)
 
     {:noreply, socket}
+  end
+
+  defp assign_book_members_options(socket) do
+    book = socket.assigns.book
+
+    book_members_options =
+      from(book_member in BookMember.book_query(book),
+        order_by: [asc: book_member.nickname],
+        select: {book_member.id, book_member.nickname}
+      )
+      |> Repo.all()
+
+    assign(socket, :book_members_options, book_members_options)
   end
 
   defp assign_filters(socket, filters) do

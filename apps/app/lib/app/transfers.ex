@@ -77,16 +77,18 @@ defmodule App.Transfers do
   ## Filters
 
   @filters_default %{
-    sort_by: :most_recent,
-    tenanted_by: nil
+    tenanted_by: nil,
+    created_by: nil,
+    sort_by: :most_recent
   }
   @filters_types %{
+    # Values are `nil`, `member_id` or `{:not, member_id}`
+    tenanted_by: :any,
+    created_by: {:array, :integer},
     sort_by:
       Ecto.ParameterizedType.init(Ecto.Enum,
         values: [:most_recent, :oldest, :last_created, :first_created]
-      ),
-    # Values are `nil`, `member_id` or `{:not, member_id}`
-    tenanted_by: :any
+      )
   }
 
   defp filter_money_transfers_query(query, raw_filters) do
@@ -96,9 +98,27 @@ defmodule App.Transfers do
       |> Ecto.Changeset.apply_changes()
 
     query
-    |> sort_money_transfers_by(filters[:sort_by])
     |> filter_money_transfers_by_tenancy(filters[:tenanted_by])
+    |> filter_money_transfers_by_creator(filters[:created_by])
+    |> sort_money_transfers_by(filters[:sort_by])
   end
+
+  defp filter_money_transfers_by_tenancy(query, {:not, member_id}) when is_integer(member_id) do
+    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id != ^member_id
+  end
+
+  defp filter_money_transfers_by_tenancy(query, member_id) when is_integer(member_id) do
+    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id == ^member_id
+  end
+
+  defp filter_money_transfers_by_tenancy(query, nil), do: query
+
+  defp filter_money_transfers_by_creator(query, creator_ids) when is_list(creator_ids) do
+    from [money_transfer: money_transfer] in query,
+      where: money_transfer.creator_id in ^creator_ids
+  end
+
+  defp filter_money_transfers_by_creator(query, nil), do: query
 
   defp sort_money_transfers_by(query, :most_recent) do
     from [money_transfer: money_transfer] in query, order_by: [desc: money_transfer.date]
@@ -115,16 +135,6 @@ defmodule App.Transfers do
   defp sort_money_transfers_by(query, :first_created) do
     from [money_transfer: money_transfer] in query, order_by: [asc: money_transfer.inserted_at]
   end
-
-  defp filter_money_transfers_by_tenancy(query, {:not, member_id}) when is_integer(member_id) do
-    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id != ^member_id
-  end
-
-  defp filter_money_transfers_by_tenancy(query, member_id) when is_integer(member_id) do
-    from [money_transfer: money_transfer] in query, where: money_transfer.tenant_id == ^member_id
-  end
-
-  defp filter_money_transfers_by_tenancy(query, nil), do: query
 
   ## Pagination
 
@@ -197,12 +207,16 @@ defmodule App.Transfers do
   @doc """
   Creates a money_transfer.
   """
-  @spec create_money_transfer(Book.t(), MoneyTransfer.type(), map()) ::
+  @spec create_money_transfer(Book.t(), BookMember.t(), MoneyTransfer.type(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
-  def create_money_transfer(%Book{} = book, type, attrs)
+  def create_money_transfer(%Book{} = book, %BookMember{} = creator, type, attrs)
       when is_map(attrs) and type in [:payment, :income] do
     changeset =
-      %MoneyTransfer{book_id: book.id, type: type}
+      %MoneyTransfer{
+        book_id: book.id,
+        creator_id: creator.id,
+        type: type
+      }
       |> MoneyTransfer.changeset(attrs)
 
     result =

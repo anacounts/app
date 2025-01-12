@@ -21,8 +21,10 @@ defmodule App.Transfers.MoneyTransfer do
           amount: Money.t(),
           type: type(),
           date: Date.t(),
-          book: Book.t(),
+          book_id: Book.id(),
+          creator_id: BookMember.id(),
           tenant: BookMember.t(),
+          tenant_id: BookMember.id(),
           balance_params: TransferParams.t(),
           peers: [Peer.t()],
           total_peer_weight: Decimal.t(),
@@ -41,7 +43,8 @@ defmodule App.Transfers.MoneyTransfer do
     field :type, Ecto.Enum, values: @transfer_types
     field :date, :date, read_after_writes: true
 
-    belongs_to :book, Book
+    field :book_id, :integer
+    field :creator_id, :integer
     belongs_to :tenant, BookMember
 
     # balance
