@@ -442,7 +442,7 @@ defmodule AppWeb.CoreComponents do
   attr :rest, :global
 
   slot :trigger,
-    requied: true,
+    required: true,
     doc: """
     The trigger of the dropdown.
 
