@@ -34,7 +34,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
 
       assert {:ok, _live, html} =
                live
-               |> form("form", balance_config: %{annual_income: 1000})
+               |> form("form", balance_config: %{revenues: 1000})
                |> render_submit()
                |> follow_redirect(conn, ~p"/books/#{book}/profile/revenues/transfers")
 
@@ -43,7 +43,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
       member = Repo.reload!(member)
       assert balance_config = Repo.get(BalanceConfig, member.balance_config_id)
       assert balance_config.owner_id == user.id
-      assert balance_config.annual_income == 1000
+      assert balance_config.revenues == 1000
     end
 
     test "validates the revenues", %{conn: conn, book: book} do
@@ -51,7 +51,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
 
       assert html =
                live
-               |> form("form", balance_config: %{annual_income: -1})
+               |> form("form", balance_config: %{revenues: -1})
                |> render_submit()
 
       assert html =~ "must be greater than or equal to 0"
@@ -69,7 +69,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
       member: member,
       user: user
     } do
-      balance_config = balance_config_fixture(owner_id: user.id, annual_income: 7654)
+      balance_config = balance_config_fixture(owner_id: user.id, revenues: 7654)
       _member = member |> BookMember.change_balance_config(balance_config) |> Repo.update!()
 
       {:ok, _live, html} = live(conn, ~p"/books/#{book}/profile/revenues")
@@ -118,14 +118,14 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
       book: book,
       user: user
     } do
-      former_balance_config = balance_config_fixture(annual_income: 500)
+      former_balance_config = balance_config_fixture(revenues: 500)
       member = book_member_fixture(book, balance_config_id: former_balance_config.id)
 
       {:ok, live, _html} = live(conn, ~p"/books/#{book}/members/#{member}/revenues")
 
       assert {:ok, _live, html} =
                live
-               |> form("form", balance_config: %{annual_income: 1500})
+               |> form("form", balance_config: %{revenues: 1500})
                |> render_submit()
                |> follow_redirect(conn, ~p"/books/#{book}/members/#{member}/revenues/transfers")
 
@@ -137,7 +137,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
       member = Repo.reload!(member)
       assert balance_config = Repo.get(BalanceConfig, member.balance_config_id)
       assert balance_config.owner_id == user.id
-      assert balance_config.annual_income == 1500
+      assert balance_config.revenues == 1500
     end
 
     test "validates the revenues", %{conn: conn, book: book} do
@@ -147,7 +147,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
 
       assert html =
                live
-               |> form("form", balance_config: %{annual_income: -1})
+               |> form("form", balance_config: %{revenues: -1})
                |> render_submit()
 
       assert html =~ "must be greater than or equal to 0"
@@ -166,7 +166,7 @@ defmodule AppWeb.BookMemberRevenuesLiveTest do
       book: book,
       user: user
     } do
-      balance_config = balance_config_fixture(owner_id: user.id, annual_income: 6543)
+      balance_config = balance_config_fixture(owner_id: user.id, revenues: 6543)
       member = book_member_fixture(book, balance_config_id: balance_config.id)
 
       {:ok, _live, html} = live(conn, ~p"/books/#{book}/members/#{member}/revenues")

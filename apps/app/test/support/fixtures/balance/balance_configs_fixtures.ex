@@ -12,7 +12,7 @@ defmodule App.Balance.BalanceConfigsFixtures do
   def balance_config_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       owner_id: nil,
-      annual_income: 1234
+      revenues: 1234
     })
   end
 

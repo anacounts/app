@@ -24,7 +24,7 @@ defmodule AppWeb.BookMemberRevenuesLive do
           <p>{revenues_balance_config_paragraph(assigns)}</p>
           <p>{gettext("What would you like to set them to?")}</p>
           <.input
-            field={@form[:annual_income]}
+            field={@form[:revenues]}
             type="number"
             label={gettext("Revenues")}
             required
@@ -99,7 +99,7 @@ defmodule AppWeb.BookMemberRevenuesLive do
       balance_config.owner_id == current_user.id ->
         ~H"""
         {revenues_helper_owner(@live_action)}<br />
-        <span class="label">{@balance_config.annual_income}</span>
+        <span class="label">{@balance_config.revenues}</span>
         """
 
       true ->

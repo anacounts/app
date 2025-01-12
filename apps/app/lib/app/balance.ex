@@ -104,29 +104,29 @@ defmodule App.Balance do
     transfers = Repo.preload(transfers, peers: [:balance_config])
 
     Enum.map(transfers, fn transfer ->
-      peers_without_annual_income =
+      peers_without_revenues =
         Enum.filter(transfer.peers, fn peer ->
-          peer.balance_config == nil or peer.balance_config.annual_income == nil
+          peer.balance_config == nil or peer.balance_config.revenues == nil
         end)
 
-      maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
+      maybe_set_weight_by_income_total_weight(transfer, peers_without_revenues)
     end)
   end
 
-  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income)
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_revenues)
 
   defp maybe_set_weight_by_income_total_weight(transfer, []) do
     transfer =
       update_in(transfer.peers, fn peers ->
-        peers_with_total_weight(peers, &Decimal.mult(&1.weight, &1.balance_config.annual_income))
+        peers_with_total_weight(peers, &Decimal.mult(&1.weight, &1.balance_config.revenues))
       end)
 
     {:ok, transfer}
   end
 
-  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_annual_income) do
+  defp maybe_set_weight_by_income_total_weight(transfer, peers_without_revenues) do
     error_reasons =
-      Enum.map(peers_without_annual_income, fn peer ->
+      Enum.map(peers_without_revenues, fn peer ->
         %{
           uniq_hash: "revenues_missing_#{peer.member_id}",
           kind: :revenues_missing,

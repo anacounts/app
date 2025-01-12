@@ -31,7 +31,7 @@ defmodule AppWeb.BookLiveTest do
     end
 
     test "is hidden when them member incomes are set", %{conn: conn, book: book, member: member} do
-      _balance_config = member_balance_config_fixture(member, annual_income: 1234)
+      _balance_config = member_balance_config_fixture(member, revenues: 1234)
 
       {:ok, _live, html} = live(conn, ~p"/books/#{book}")
 
