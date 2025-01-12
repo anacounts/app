@@ -737,9 +737,11 @@ defmodule AppWeb.CoreComponents do
                                    pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
-    |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -756,7 +758,7 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <div phx-feedback-for={@name} class="form-control-container">
+    <div class="form-control-container">
       <input type="hidden" name={@name} value="false" />
       <.checkbox id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
       <label for={@id || @name}><%= @label %></label>
@@ -767,7 +769,7 @@ defmodule AppWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div>
       <label for={@id || @name} class="label"><%= @label %></label>
       <.select id={@id} name={@name} prompt={@prompt} options={@options} value={@value} {@rest} />
       <%= input_helper_or_errors(assigns) %>
@@ -784,7 +786,7 @@ defmodule AppWeb.CoreComponents do
       end)
 
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div>
       <label for={@id || @name} class="label"><%= @label %></label>
       <.text_input
         type="number"
@@ -802,7 +804,7 @@ defmodule AppWeb.CoreComponents do
 
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div>
       <label for={@id || @name} class="label"><%= @label %></label>
       <.text_input
         type={@type}
@@ -827,9 +829,7 @@ defmodule AppWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="phx-no-feedback:hidden text-red-500">
-      <%= render_slot(@inner_block) %>
-    </p>
+    <p class="text-red-500"><%= render_slot(@inner_block) %></p>
     """
   end
 
