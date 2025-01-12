@@ -11,16 +11,38 @@ runs:
         version-file: .tool-versions
         version-type: strict
 
-    - name: Restore dependencies cache
-      uses: actions/cache@v3
+    - name: Restore dependencies & _build cache
+      id: build_cache
+      uses: actions/cache/restore@v3
       with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
+        key: |
+          build-${{ runner.os }}-${{ steps.elixir-install.outputs.otp-version }}-${{ steps.elixir-install.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          build-${{ runner.os }}-${{ steps.elixir-install.outputs.otp-version }}-${{ steps.elixir-install.outputs.elixir-version }}
+        path: |
+          deps
+          _build
 
     - name: Install dependencies
+      if: steps.build_cache.outputs.cache-hit != 'true'
       shell: bash
       run: mix deps.get --check-locked
+
+    - name: Compile dependencies
+      if: steps.build_cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: mix deps.compile
+
+    - name: Save dependencies & _build cache
+      id: build_cache_save
+      uses: actions/cache/save@v3
+      if: steps.build_cache.outputs.cache-hit != 'true'
+      with:
+        key: |
+          build-${{ runner.os }}-${{ steps.elixir-install.outputs.otp-version }}-${{ steps.elixir-install.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+        path: |
+          deps
+          _build
 
     # Taken from dialyxir's documentation
     # https://github.com/jeremyjh/dialyxir/blob/0091928de1ec01e30f82c50856f2dfe0a8f918ce/docs/github_actions.md
