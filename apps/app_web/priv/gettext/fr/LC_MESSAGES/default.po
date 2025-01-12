@@ -604,7 +604,7 @@ msgid "Weight"
 msgstr "Poids"
 
 #, elixir-autogen, elixir-format
-msgid "Weight by income"
+msgid "Weight by revenues"
 msgstr "Pondérer par revenu"
 
 #, elixir-autogen, elixir-format
