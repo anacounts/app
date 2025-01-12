@@ -93,6 +93,11 @@ config :sentry,
   enable_source_code_context: true,
   root_source_code_path: File.cwd!()
 
+# ## Storybook
+#
+# The Storybook is disabled by default, only enabled in `:dev` environment.
+config :phoenix_storybook, enabled: false
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
