@@ -12,6 +12,11 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Ensure everything is run in the test environment,
+  # avoiding multiple compilations of the same code.
+  MIX_ENV: test
+
 jobs:
   build:
     name: Validate code
