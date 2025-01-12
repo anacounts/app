@@ -100,8 +100,8 @@ defmodule AppWeb.MixProject do
         "esbuild default"
       ],
       "assets.deploy": [
+        "cmd npm install --prefix assets",
         "tailwind default --minify",
-        "cmd npm --prefix ./assets ci",
         "esbuild default --minify",
         "phx.digest"
       ]
