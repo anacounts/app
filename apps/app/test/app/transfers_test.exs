@@ -3,14 +3,12 @@ defmodule App.TransfersTest do
 
   import App.AccountsFixtures
   import App.Balance.BalanceConfigsFixtures
-  import App.BalanceFixtures
   import App.Books.MembersFixtures
   import App.BooksFixtures
   import App.TransfersFixtures
 
   alias App.Repo
 
-  alias App.Balance.TransferParams
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Transfers
@@ -242,14 +240,14 @@ defmodule App.TransfersTest do
       assert transfer.amount == Money.new!(:EUR, 1799)
       assert transfer.type == :payment
       assert transfer.date == ~D[2022-06-23]
-      assert transfer.balance_params == struct!(TransferParams, transfer_params_attributes())
+      assert transfer.balance_means == :divide_equally
       assert transfer.creator_id == member.id
 
       transfer = Repo.preload(transfer, :peers)
       assert Enum.empty?(transfer.peers)
     end
 
-    test "sets balance params", %{book: book, member: member} do
+    test "sets balance means", %{book: book, member: member} do
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
                  book,
@@ -257,12 +255,11 @@ defmodule App.TransfersTest do
                  :payment,
                  money_transfer_attributes(
                    tenant_id: member.id,
-                   balance_params: transfer_params_attributes()
+                   balance_means: :weight_by_income
                  )
                )
 
-      assert transfer.balance_params ==
-               struct!(TransferParams, transfer_params_attributes())
+      assert transfer.balance_means == :weight_by_income
     end
 
     test "creates peers along the way", %{book: book, member: member} do
@@ -383,16 +380,14 @@ defmodule App.TransfersTest do
                  label: "my very own label !",
                  amount: Money.new!(:EUR, 299),
                  date: ~D[2020-06-29],
-                 balance_params: transfer_params_attributes(),
+                 balance_means: :weight_by_income,
                  peers: [%{member_id: other_member.id}]
                })
 
       assert updated.label == "my very own label !"
       assert updated.amount == Money.new!(:EUR, 299)
       assert updated.date == ~D[2020-06-29]
-
-      assert updated.balance_params ==
-               struct!(TransferParams, transfer_params_attributes())
+      assert updated.balance_means == :weight_by_income
 
       assert [peer] = updated.peers
       assert peer.member_id == other_member.id
@@ -497,7 +492,7 @@ defmodule App.TransfersTest do
       assert money_transfer.type == :reimbursement
       assert money_transfer.date == ~D[2020-06-29]
       assert money_transfer.tenant_id == member1.id
-      assert money_transfer.balance_params.means_code == :divide_equally
+      assert money_transfer.balance_means == :divide_equally
     end
 
     test "cannot create a payment or an income", %{book: book, member1: member1, member2: member2} do
@@ -523,14 +518,13 @@ defmodule App.TransfersTest do
                Transfers.create_reimbursement(
                  book,
                  money_transfer_attributes(
-                   balance_params: %{means_code: :weighted_by_income},
                    balance_means: :weighted_by_income,
                    tenant_id: member1.id,
                    peers: [%{member_id: member2.id, weight: Decimal.new(3)}]
                  )
                )
 
-      assert money_transfer.balance_params.means_code == :divide_equally
+      assert money_transfer.balance_means == :divide_equally
     end
 
     test "cannot create a money transfer withour peers", %{book: book, member1: member1} do

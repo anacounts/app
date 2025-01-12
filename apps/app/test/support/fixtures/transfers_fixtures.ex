@@ -3,8 +3,6 @@ defmodule App.TransfersFixtures do
   Fixtures for the `App.Transfers` context
   """
 
-  import App.BalanceFixtures
-
   alias App.Repo
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -15,7 +13,6 @@ defmodule App.TransfersFixtures do
       amount: Money.new!(:EUR, 1799),
       date: ~D[2022-06-23],
       type: :payment,
-      balance_params: transfer_params_attributes(),
       balance_means: :divide_equally
     })
   end

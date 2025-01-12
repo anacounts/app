@@ -7,7 +7,6 @@ defmodule App.BalanceTest do
   import App.TransfersFixtures
 
   alias App.Balance
-  alias App.Balance.TransferParams
 
   describe "fill_members_balance/1" do
     setup do
@@ -167,7 +166,7 @@ defmodule App.BalanceTest do
       transfer =
         money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %TransferParams{means_code: :weight_by_income},
+          balance_means: :weight_by_income,
           amount: Money.new!(:EUR, 30)
         )
 
@@ -196,7 +195,7 @@ defmodule App.BalanceTest do
       transfer =
         money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %TransferParams{means_code: :weight_by_income},
+          balance_means: :weight_by_income,
           amount: Money.new!(:EUR, 9)
         )
 
@@ -227,7 +226,7 @@ defmodule App.BalanceTest do
       transfer =
         money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %TransferParams{means_code: :weight_by_income},
+          balance_means: :weight_by_income,
           amount: Money.new!(:EUR, 100)
         )
 
@@ -271,7 +270,7 @@ defmodule App.BalanceTest do
       transfer1 =
         money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %TransferParams{means_code: :weight_by_income},
+          balance_means: :weight_by_income,
           amount: Money.new!(:EUR, 30)
         )
 
@@ -284,7 +283,7 @@ defmodule App.BalanceTest do
       transfer2 =
         money_transfer_fixture(book,
           tenant_id: member1.id,
-          balance_params: %TransferParams{means_code: :weight_by_income},
+          balance_means: :weight_by_income,
           amount: Money.new!(:EUR, 40)
         )
 

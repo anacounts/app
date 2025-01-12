@@ -7,8 +7,6 @@ defmodule AppWeb.BookBalanceLiveTest do
   import App.BooksFixtures
   import App.TransfersFixtures
 
-  alias App.Balance.TransferParams
-
   setup [:register_and_log_in_user]
 
   setup %{user: user} do
@@ -93,7 +91,7 @@ defmodule AppWeb.BookBalanceLiveTest do
       money_transfer_fixture(book,
         tenant_id: member.id,
         amount: Money.new!(:EUR, "100.00"),
-        balance_params: %TransferParams{means_code: :weight_by_income}
+        balance_means: :weight_by_income
       )
 
     balance_config = member_balance_config_fixture(member)

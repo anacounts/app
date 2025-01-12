@@ -41,7 +41,7 @@ defmodule AppWeb.BookTransferFormLiveTest do
           label: "Created transfer",
           amount: "10.60",
           date: "2022-04-08",
-          balance_means_code: "divide_equally"
+          balance_means: "divide_equally"
         }
       )
       |> render_submit()
@@ -69,7 +69,7 @@ defmodule AppWeb.BookTransferFormLiveTest do
           label: "Updated transfer",
           amount: "6.70",
           date: "2022-04-10",
-          balance_means_code: "weight_by_income"
+          balance_means: "weight_by_income"
         }
       )
       |> render_submit()
@@ -99,7 +99,7 @@ defmodule AppWeb.BookTransferFormLiveTest do
           label: "Updated transfer",
           amount: "6.70",
           date: "2022-04-10",
-          balance_means_code: "weight_by_income"
+          balance_means: "weight_by_income"
         }
       )
       |> render_submit()
