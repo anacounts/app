@@ -1,8 +1,6 @@
 name: Pull Request
-# TODO(v2,end) remove feat/design-v2
 on:
   pull_request:
-    branches: [main, feat/design-v2]
 
 jobs:
   validate:
