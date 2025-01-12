@@ -39,15 +39,15 @@ defmodule AppWeb.UserRegistrationLive do
 
       <.button_group>
         <.button kind={:primary}>
-          <%= gettext("Register") %>
+          {gettext("Register")}
         </.button>
       </.button_group>
     </.form>
 
     <div class="text-right">
-      <%= gettext("Already have an account?") %>
+      {gettext("Already have an account?")}
       <.anchor navigate={~p"/users/log_in"}>
-        <%= gettext("Log in here.") %>
+        {gettext("Log in here.")}
       </.anchor>
     </div>
     """

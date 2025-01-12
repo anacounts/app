@@ -45,8 +45,8 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <div {@rest}>
-      <%= alert_icon(assigns) %>
-      <%= render_slot(@inner_block) %>
+      {alert_icon(assigns)}
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -71,7 +71,7 @@ defmodule AppWeb.CoreComponents do
     assigns =
       assign(assigns, :message, Phoenix.Flash.get(assigns.flash, assigns.kind))
 
-    ~H|<.alert :if={@message} kind={@kind} {@rest}><%= @message %></.alert>|
+    ~H|<.alert :if={@message} kind={@kind} {@rest}>{@message}</.alert>|
   end
 
   ## Anchor
@@ -86,7 +86,7 @@ defmodule AppWeb.CoreComponents do
   def anchor(assigns) do
     assigns = prepend_class(assigns, "anchor")
 
-    ~H|<.link {@rest}><%= render_slot(@inner_block) %></.link>|
+    ~H|<.link {@rest}>{render_slot(@inner_block)}</.link>|
   end
 
   ## Avatar
@@ -137,7 +137,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <nav {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </nav>
     """
   end
@@ -183,7 +183,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <.icon name={:chevron_right} />
     <.link class="breadcrumb__item" navigate={@navigate}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -192,7 +192,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <.icon name={:chevron_right} />
     <span class="breadcrumb__item breadcrumb__item--active">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </span>
     """
   end
@@ -260,7 +260,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <button {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -290,7 +290,7 @@ defmodule AppWeb.CoreComponents do
   def button_group(assigns) do
     assigns = prepend_class(assigns, "button-group")
 
-    ~H|<div {@rest}><%= render_slot(@inner_block) %></div>|
+    ~H|<div {@rest}>{render_slot(@inner_block)}</div>|
   end
 
   ## Card
@@ -319,10 +319,10 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <div {@rest}>
       <div class="card__title">
-        <%= render_slot(@title) %>
+        {render_slot(@title)}
       </div>
       <div class="card__body">
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </div>
     </div>
     """
@@ -354,7 +354,7 @@ defmodule AppWeb.CoreComponents do
     ~H"""
     <div {@rest}>
       <.icon name={@icon} />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -385,7 +385,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <div {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -442,7 +442,7 @@ defmodule AppWeb.CoreComponents do
   attr :rest, :global
 
   slot :trigger,
-    requied: true,
+    required: true,
     doc: """
     The trigger of the dropdown.
 
@@ -465,12 +465,12 @@ defmodule AppWeb.CoreComponents do
     assigns = prepend_class(assigns, "dropdown")
 
     ~H"""
-    <%= render_slot(@trigger, %{
+    {render_slot(@trigger, %{
       popovertarget: @id,
       "phx-mounted": JS.dispatch("dropdown:mounted", to: "##{@id}")
-    }) %>
+    })}
     <div id={@id} popover {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -521,7 +521,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <ul {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </ul>
     """
   end
@@ -542,7 +542,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <li {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </li>
     """
   end
@@ -564,7 +564,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <.link role="listitem" {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
@@ -616,8 +616,8 @@ defmodule AppWeb.CoreComponents do
       @container_class
     ]}>
       <select {@rest}>
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value="">{@prompt}</option>
+        {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
     </div>
     """
@@ -649,9 +649,9 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <div class={["text-input", text_input_error_class(assigns.error), @container_class]}>
-      <%= text_input_prefix(assigns) %>
+      {text_input_prefix(assigns)}
       <input type={@type} {@rest} />
-      <%= text_input_suffix(assigns) %>
+      {text_input_suffix(assigns)}
     </div>
     """
   end
@@ -689,7 +689,7 @@ defmodule AppWeb.CoreComponents do
 
     ~H"""
     <div {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -737,9 +737,11 @@ defmodule AppWeb.CoreComponents do
                                    pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
-    |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -756,21 +758,21 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <div phx-feedback-for={@name} class="form-control-container">
+    <div class="form-control-container">
       <input type="hidden" name={@name} value="false" />
       <.checkbox id={@id || @name} name={@name} value="true" checked={@checked} {@rest} />
-      <label for={@id || @name}><%= @label %></label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <label for={@id || @name}>{@label}</label>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
-      <label for={@id || @name} class="label"><%= @label %></label>
+    <div>
+      <label for={@id || @name} class="label">{@label}</label>
       <.select id={@id} name={@name} prompt={@prompt} options={@options} value={@value} {@rest} />
-      <%= input_helper_or_errors(assigns) %>
+      {input_helper_or_errors(assigns)}
     </div>
     """
   end
@@ -784,8 +786,8 @@ defmodule AppWeb.CoreComponents do
       end)
 
     ~H"""
-    <div phx-feedback-for={@name}>
-      <label for={@id || @name} class="label"><%= @label %></label>
+    <div>
+      <label for={@id || @name} class="label">{@label}</label>
       <.text_input
         type="number"
         name={@name}
@@ -795,15 +797,15 @@ defmodule AppWeb.CoreComponents do
         step="0.01"
         {@rest}
       />
-      <%= input_helper_or_errors(assigns) %>
+      {input_helper_or_errors(assigns)}
     </div>
     """
   end
 
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
-      <label for={@id || @name} class="label"><%= @label %></label>
+    <div>
+      <label for={@id || @name} class="label">{@label}</label>
       <.text_input
         type={@type}
         name={@name}
@@ -811,14 +813,14 @@ defmodule AppWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         {@rest}
       />
-      <%= input_helper_or_errors(assigns) %>
+      {input_helper_or_errors(assigns)}
     </div>
     """
   end
 
-  defp input_helper_or_errors(%{errors: [], helper: _} = assigns), do: ~H|<%= @helper %>|
+  defp input_helper_or_errors(%{errors: [], helper: _} = assigns), do: ~H|{@helper}|
   defp input_helper_or_errors(%{errors: []} = _assigns), do: nil
-  defp input_helper_or_errors(assigns), do: ~H|<.error :for={msg <- @errors}><%= msg %></.error>|
+  defp input_helper_or_errors(assigns), do: ~H|<.error :for={msg <- @errors}>{msg}</.error>|
 
   @doc """
   Generates a generic error message.
@@ -827,9 +829,7 @@ defmodule AppWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="phx-no-feedback:hidden text-red-500">
-      <%= render_slot(@inner_block) %>
-    </p>
+    <p class="text-red-500">{render_slot(@inner_block)}</p>
     """
   end
 

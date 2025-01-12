@@ -8,13 +8,13 @@ defmodule AppWeb.UserSettingsPasswordLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/users/settings"}>
-          <%= gettext("My account") %>
+          {gettext("My account")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form
         for={@form}
@@ -56,7 +56,7 @@ defmodule AppWeb.UserSettingsPasswordLive do
 
         <.button_group>
           <.button kind={:primary}>
-            <%= gettext("Change password") %>
+            {gettext("Change password")}
           </.button>
         </.button_group>
       </.form>

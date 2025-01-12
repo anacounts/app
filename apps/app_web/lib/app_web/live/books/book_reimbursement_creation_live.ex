@@ -14,13 +14,13 @@ defmodule AppWeb.BookReimbursementCreationLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/balance"}>
-          <%= gettext("Balance") %>
+          {gettext("Balance")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={@form} phx-change="validate" phx-submit="submit" class="container">
         <section class="grid grid-cols-2 gap-y-2 gap-x-4 mb-4">
@@ -49,7 +49,7 @@ defmodule AppWeb.BookReimbursementCreationLive do
 
         <.button_group>
           <.button kind={:primary} type="submit">
-            <%= gettext("Create reimbursement") %>
+            {gettext("Create reimbursement")}
           </.button>
         </.button_group>
       </.form>

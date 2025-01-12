@@ -16,7 +16,7 @@ defmodule AppWeb.BooksLive do
     ~H"""
     <div class="app-page">
       <header class="flex justify-between">
-        <h1 class="title-1"><%= @page_title %></h1>
+        <h1 class="title-1">{@page_title}</h1>
         <.button kind={:ghost} navigate={~p"/users/settings"} class="p-1">
           <.avatar src={Avatars.avatar_url(@current_user)} alt={gettext("My account")} />
         </.button>
@@ -27,7 +27,7 @@ defmodule AppWeb.BooksLive do
         <.link navigate={~p"/books/new"}>
           <.tile kind={:primary}>
             <.icon name={:plus} />
-            <%= gettext("Create a new book") %>
+            {gettext("Create a new book")}
           </.tile>
         </.link>
 
@@ -66,7 +66,7 @@ defmodule AppWeb.BooksLive do
         <div id="books" phx-update="stream">
           <.link :for={{dom_id, book} <- @streams.books} id={dom_id} navigate={~p"/books/#{book.id}"}>
             <.tile class="mt-4">
-              <span class="label grow leading-none line-clamp-2"><%= book.name %></span>
+              <span class="label grow leading-none line-clamp-2">{book.name}</span>
               <.button kind={:ghost}>
                 Open <.icon name={:chevron_right} />
               </.button>

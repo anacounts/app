@@ -17,20 +17,20 @@ defmodule AppWeb.BookInvitationsLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
-          <%= gettext("Members") %>
+          {gettext("Members")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <div class="container">
         <p class="mb-4">
-          <%= gettext(
+          {gettext(
             "People clicking this link will be asked either to join as an existing member," <>
               " or to create a new one."
-          ) %>
+          )}
         </p>
 
         <.input
@@ -45,10 +45,10 @@ defmodule AppWeb.BookInvitationsLive do
           }
         />
         <p id="copy-to-clipboard-helper">
-          <%= gettext("Share this link so people can join your book") %>
+          {gettext("Share this link so people can join your book")}
         </p>
         <p id="copied-to-clipboard" class="hidden">
-          <%= gettext("Copied to clipboard !") %>
+          {gettext("Copied to clipboard !")}
         </p>
       </div>
     </.app_page>

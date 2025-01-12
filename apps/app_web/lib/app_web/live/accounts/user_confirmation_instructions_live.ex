@@ -6,20 +6,20 @@ defmodule AppWeb.UserConfirmationInstructionsLive do
   def render(assigns) do
     ~H"""
     <p class="mb-4">
-      <%= gettext(
+      {gettext(
         "Confirmation instructions were sent when you created your account." <>
           " If you did not receive them, check out your spam, or send the instructions again."
-      ) %>
+      )}
     </p>
 
     <p>
-      <%= gettext("Send confirmation instructions for your account") %><br />
-      <span class="label"><%= @current_user.email %></span>
+      {gettext("Send confirmation instructions for your account")}<br />
+      <span class="label">{@current_user.email}</span>
     </p>
 
     <.button_group>
       <.button kind={:primary} phx-click="send_instructions">
-        <%= gettext("Send instructions") %>
+        {gettext("Send instructions")}
       </.button>
     </.button_group>
     """

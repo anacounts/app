@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Anacounts"><%= @page_title %></.live_title>
+    <.live_title suffix=" · Anacounts">{@page_title}</.live_title>
     <link rel="icon" type="image/png" href={~p"/images/icons-32.png"} />
     <link rel="apple-touch-icon" href={~p"/images/icons-180-bg-white.png"} />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -16,6 +16,6 @@
     </script>
   </head>
   <body class="app-web">
-    <%= @inner_content %>
+    {@inner_content}
   </body>
 </html>

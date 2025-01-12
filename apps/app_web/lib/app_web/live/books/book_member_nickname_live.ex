@@ -12,9 +12,9 @@ defmodule AppWeb.BookMemberNicknameLive do
     ~H"""
     <.app_page>
       <:breadcrumb>
-        <%= nickname_breadcrumbs(assigns) %>
+        {nickname_breadcrumbs(assigns)}
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form
         for={@form}
@@ -24,21 +24,21 @@ defmodule AppWeb.BookMemberNicknameLive do
         class="container space-y-2"
       >
         <p>
-          <%= nickname_helper(@live_action) %><br />
-          <span class="label"><%= @book_member.nickname %></span>
+          {nickname_helper(@live_action)}<br />
+          <span class="label">{@book_member.nickname}</span>
         </p>
-        <p><%= gettext("What would you like to change it to?") %></p>
+        <p>{gettext("What would you like to change it to?")}</p>
         <.input field={@form[:nickname]} type="text" required phx-debounce />
         <p>
-          <%= gettext(
+          {gettext(
             "Only the current book will be affected." <>
               " Nicknames can be changed as many times as you want or need to."
-          ) %>
+          )}
         </p>
 
         <.button_group>
           <.button kind={:primary}>
-            <%= gettext("Change nickname") %>
+            {gettext("Change nickname")}
           </.button>
         </.button_group>
       </.form>
@@ -54,10 +54,10 @@ defmodule AppWeb.BookMemberNicknameLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/profile"}>
-      <%= gettext("My profile") %>
+      {gettext("My profile")}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Change nickname") %>
+      {gettext("Change nickname")}
     </.breadcrumb_item>
     """
   end
@@ -66,10 +66,10 @@ defmodule AppWeb.BookMemberNicknameLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= @book_member.nickname %>
+      {@book_member.nickname}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Change nickname") %>
+      {gettext("Change nickname")}
     </.breadcrumb_item>
     """
   end

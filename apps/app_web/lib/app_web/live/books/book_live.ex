@@ -19,15 +19,15 @@ defmodule AppWeb.BookLive do
     ~H"""
     <.app_page>
       <:breadcrumb>
-        <.breadcrumb_item><%= @page_title %></.breadcrumb_item>
+        <.breadcrumb_item>{@page_title}</.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.alert_flash flash={@flash} kind={:info} class="mb-4" />
 
       <.link :if={@no_revenues?} navigate={~p"/books/#{@book}/profile"}>
         <.alert kind={:warning}>
-          <span class="grow"><%= gettext("Your revenues are not set") %></span>
+          <span class="grow">{gettext("Your revenues are not set")}</span>
           <.icon name={:chevron_right} />
         </.alert>
       </.link>
@@ -36,16 +36,16 @@ defmodule AppWeb.BookLive do
         <.link navigate={~p"/books/#{@book}/profile"}>
           <.card>
             <:title>My profile <.icon name={:chevron_right} /></:title>
-            <%= @current_member.nickname %>
+            {@current_member.nickname}
           </.card>
         </.link>
         <.balance_card_link book_member={@current_member} />
         <.link navigate={~p"/books/#{@book}/transfers"} class="col-span-2">
           <.card>
-            <:title><%= gettext("Latest transfers") %> <.icon name={:chevron_right} /></:title>
+            <:title>{gettext("Latest transfers")} <.icon name={:chevron_right} /></:title>
             <div id="transfers" phx-update="stream" class="space-y-2">
               <.tile id="transfers-empty" class="hidden only:flex bg-transparent">
-                <%= gettext("No transfers yet") %>
+                {gettext("No transfers yet")}
               </.tile>
               <.transfer_tile
                 :for={{dom_id, transfer} <- @streams.latest_transfers}
@@ -57,23 +57,23 @@ defmodule AppWeb.BookLive do
         </.link>
         <.link navigate={~p"/books/#{@book}/transfers/new"}>
           <.card_button icon={:arrows_right_left} class="h-24">
-            <%= gettext("New payment") %>
+            {gettext("New payment")}
           </.card_button>
         </.link>
         <.link navigate={~p"/books/#{@book}/members"}>
           <.card class="h-24">
-            <:title><%= gettext("Members") %> <.icon name={:chevron_right} /></:title>
+            <:title>{gettext("Members")} <.icon name={:chevron_right} /></:title>
             <div class="flex justify-center items-center">
-              <%= @members_count.total %> <.icon name={:user} />
+              {@members_count.total} <.icon name={:user} />
             </div>
             <div class="text-sm">
-              <%= gettext("%{count} unlinked", count: @members_count.unlinked) %>
+              {gettext("%{count} unlinked", count: @members_count.unlinked)}
             </div>
           </.card>
         </.link>
         <.link navigate={~p"/books/#{@book}/configuration"}>
           <.card_button icon={:cog_6_tooth} class="h-24">
-            <%= gettext("Configuration") %>
+            {gettext("Configuration")}
           </.card_button>
         </.link>
       </.card_grid>

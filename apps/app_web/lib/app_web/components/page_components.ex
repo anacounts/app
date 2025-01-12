@@ -30,12 +30,12 @@ defmodule AppWeb.PageComponents do
       <header>
         <.breadcrumb>
           <.breadcrumb_home navigate={~p"/books"} alt={gettext("Home")} />
-          <%= render_slot(@breadcrumb) %>
+          {render_slot(@breadcrumb)}
         </.breadcrumb>
-        <h1 class="title-1 truncate"><%= render_slot(@title) %></h1>
+        <h1 class="title-1 truncate">{render_slot(@title)}</h1>
       </header>
       <main>
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </main>
     </div>
     """

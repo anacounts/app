@@ -22,20 +22,20 @@ defmodule AppWeb.BookMemberLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
-          <%= gettext("Members") %>
+          {gettext("Members")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <%= if @user do %>
         <.hero_avatar user={@user} alt={gettext("Your avatar")} book_member={@book_member} />
       <% else %>
         <div class="text-center my-4">
           <.icon name={:user_circle} class="block size-[8rem] mx-auto" />
-          <span class="label"><%= @book_member.nickname %></span>
+          <span class="label">{@book_member.nickname}</span>
         </div>
       <% end %>
 
@@ -44,20 +44,20 @@ defmodule AppWeb.BookMemberLive do
       <.card_grid>
         <.balance_card_link book_member={@book_member} />
         <.card>
-          <:title><%= gettext("Joined on") %></:title>
-          <%= format_date(@book_member.inserted_at) %>
+          <:title>{gettext("Joined on")}</:title>
+          {format_date(@book_member.inserted_at)}
         </.card>
         <.link
           navigate={is_nil(@user) && ~p"/books/#{@book}/members/#{@book_member}/revenues"}
           aria-disabled={@user && "true"}
         >
           <.card_button icon={:banknotes}>
-            <%= gettext("Set revenues") %>
+            {gettext("Set revenues")}
           </.card_button>
         </.link>
         <.link navigate={~p"/books/#{@book}/members/#{@book_member}/nickname"}>
           <.card_button icon={:identification}>
-            <%= gettext("Change nickname") %>
+            {gettext("Change nickname")}
           </.card_button>
         </.link>
       </.card_grid>

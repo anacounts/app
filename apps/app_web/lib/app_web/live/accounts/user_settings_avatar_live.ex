@@ -6,24 +6,24 @@ defmodule AppWeb.UserSettingsAvatarLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/users/settings"}>
-          <%= gettext("My account") %>
+          {gettext("My account")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <div class="container space-y-2">
         <p>
-          <%= gettext("Anacounts uses Gravatar to display user avatars.") %>
-          <%= gettext("Gravatar is a service providing globally unique avatars.") %>
+          {gettext("Anacounts uses Gravatar to display user avatars.")}
+          {gettext("Gravatar is a service providing globally unique avatars.")}
         </p>
-        <p><%= gettext("To edit your avatar, create an account and personalize your Gravatar.") %></p>
+        <p>{gettext("To edit your avatar, create an account and personalize your Gravatar.")}</p>
 
         <div class="text-right">
           <.anchor href="https://en.gravatar.com/" target="_blank" rel="noreferrer">
-            <%= gettext("Go to Gravatar") %>
+            {gettext("Go to Gravatar")}
           </.anchor>
         </div>
       </div>

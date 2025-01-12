@@ -13,8 +13,8 @@ defmodule AppWeb.UserResetPasswordLive do
       class="space-y-2"
     >
       <p>
-        <%= gettext("Please enter a new password for your account") %><br />
-        <span class="label"><%= @user.email %></span>
+        {gettext("Please enter a new password for your account")}<br />
+        <span class="label">{@user.email}</span>
       </p>
 
       <.input
@@ -37,15 +37,15 @@ defmodule AppWeb.UserResetPasswordLive do
 
       <.button_group>
         <.button kind={:primary}>
-          <%= gettext("Reset password") %>
+          {gettext("Reset password")}
         </.button>
       </.button_group>
     </.form>
 
     <div class="text-right">
-      <%= gettext("Not %{email}?", email: @user.email) %>
+      {gettext("Not %{email}?", email: @user.email)}
       <.anchor navigate={~p"/users/log_in"}>
-        <%= gettext("Go back to sign in page.") %>
+        {gettext("Go back to sign in page.")}
       </.anchor>
     </div>
     """
