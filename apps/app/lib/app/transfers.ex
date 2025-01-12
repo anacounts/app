@@ -278,7 +278,8 @@ defmodule App.Transfers do
     %MoneyTransfer{
       book_id: book.id,
       type: :reimbursement,
-      balance_params: %TransferParams{means_code: :divide_equally}
+      balance_params: %TransferParams{means_code: :divide_equally},
+      balance_means: :divide_equally
     }
     |> MoneyTransfer.reimbursement_changeset(attrs)
     |> Repo.insert()

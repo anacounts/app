@@ -26,6 +26,7 @@ defmodule App.Transfers.MoneyTransfer do
           tenant: BookMember.t(),
           tenant_id: BookMember.id(),
           balance_params: TransferParams.t(),
+          balance_means: balance_means(),
           peers: [Peer.t()],
           total_peer_weight: Decimal.t(),
           inserted_at: DateTime.t(),
@@ -36,6 +37,9 @@ defmodule App.Transfers.MoneyTransfer do
 
   @type type :: :payment | :income | :reimbursement
   @transfer_types [:payment, :income, :reimbursement]
+
+  @type balance_means :: :divide_equally | :weight_by_income
+  @balance_means [:divide_equally, :weight_by_income]
 
   schema "money_transfers" do
     field :label, :string
@@ -49,6 +53,7 @@ defmodule App.Transfers.MoneyTransfer do
 
     # balance
     field :balance_params, TransferParams
+    field :balance_means, Ecto.Enum, values: @balance_means
 
     has_many :peers, Peer,
       foreign_key: :transfer_id,
@@ -70,7 +75,7 @@ defmodule App.Transfers.MoneyTransfer do
     struct
     |> cast(attrs, [:label, :date, :balance_params, :tenant_id, :amount])
     |> validate_label()
-    |> validate_balance_params()
+    |> validate_balance_means()
     |> validate_tenant_id()
     |> validate_amount()
     |> cast_assoc(:peers, with: &Ecto.Changeset.cast(&1, &2, [:member_id, :weight]))
@@ -105,9 +110,15 @@ defmodule App.Transfers.MoneyTransfer do
     |> foreign_key_constraint(:tenant_id)
   end
 
-  defp validate_balance_params(changeset) do
-    changeset
-    |> validate_required(:balance_params)
+  defp validate_balance_means(changeset) do
+    changeset = validate_required(changeset, :balance_params)
+
+    if changeset.valid? do
+      balance_params = Ecto.Changeset.fetch_field!(changeset, :balance_params)
+      put_change(changeset, :balance_means, balance_params.means_code)
+    else
+      changeset
+    end
   end
 
   defp validate_reimbursement_peers(changeset) do
