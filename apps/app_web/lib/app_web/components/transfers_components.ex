@@ -50,7 +50,7 @@ defmodule AppWeb.TransfersComponents do
 
   def transfer_details(assigns) do
     ~H"""
-    <details class={[transfer_tile_classes(@transfer), "h-auto"]} {@rest}>
+    <details class={[transfer_tile_classes(@transfer), "block h-auto"]} {@rest}>
       <summary class="flex justify-center items-center gap-2">
         {transfer_icon(assigns)}
         <span class="label text-left grow">
