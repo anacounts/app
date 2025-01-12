@@ -69,7 +69,7 @@ defmodule AppWeb.BookTransferFormLiveTest do
           label: "Updated transfer",
           amount: "6.70",
           date: "2022-04-10",
-          balance_means: "weight_by_income"
+          balance_means: "weight_by_revenues"
         }
       )
       |> render_submit()
@@ -99,7 +99,7 @@ defmodule AppWeb.BookTransferFormLiveTest do
           label: "Updated transfer",
           amount: "6.70",
           date: "2022-04-10",
-          balance_means: "weight_by_income"
+          balance_means: "weight_by_revenues"
         }
       )
       |> render_submit()

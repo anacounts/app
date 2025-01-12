@@ -90,7 +90,7 @@ defmodule App.Balance do
   defp compute_peers_total_weight({:divide_equally, transfers}),
     do: compute_divide_equally_peers_total_weight(transfers)
 
-  defp compute_peers_total_weight({:weight_by_income, transfers}),
+  defp compute_peers_total_weight({:weight_by_revenues, transfers}),
     do: compute_weight_by_income_peers_total_weight(transfers)
 
   defp compute_divide_equally_peers_total_weight(transfers) do

@@ -193,7 +193,7 @@ defmodule AppWeb.BookTransferFormLive do
   defp balance_params_options do
     [
       {gettext("Divide equally"), "divide_equally"},
-      {gettext("Weight by income"), "weight_by_income"}
+      {gettext("Weight by revenues"), "weight_by_revenues"}
     ]
   end
 

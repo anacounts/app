@@ -91,7 +91,7 @@ defmodule AppWeb.BookBalanceLiveTest do
       money_transfer_fixture(book,
         tenant_id: member.id,
         amount: Money.new!(:EUR, "100.00"),
-        balance_means: :weight_by_income
+        balance_means: :weight_by_revenues
       )
 
     balance_config = member_balance_config_fixture(member)

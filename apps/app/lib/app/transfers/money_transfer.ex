@@ -36,8 +36,8 @@ defmodule App.Transfers.MoneyTransfer do
   @type type :: :payment | :income | :reimbursement
   @transfer_types [:payment, :income, :reimbursement]
 
-  @type balance_means :: :divide_equally | :weight_by_income
-  @balance_means [:divide_equally, :weight_by_income]
+  @type balance_means :: :divide_equally | :weight_by_revenues
+  @balance_means [:divide_equally, :weight_by_revenues]
 
   schema "money_transfers" do
     field :label, :string
