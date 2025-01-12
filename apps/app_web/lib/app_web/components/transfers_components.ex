@@ -67,7 +67,7 @@ defmodule AppWeb.TransfersComponents do
   end
 
   defp transfer_tile_classes(transfer) do
-    ["tile variant@tile--transfer", transfer_color_class(transfer.type)]
+    ["tile pr-4", transfer_color_class(transfer.type)]
   end
 
   defp transfer_color_class(:payment), do: "tile--red"

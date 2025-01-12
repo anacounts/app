@@ -20,7 +20,7 @@
   .tile--primary:active {
     @apply bg-theme-700;
   }
-  
+
   .tile--secondary {
     @apply text-theme-950 bg-white
            outline-neutral-800;
@@ -41,7 +41,7 @@
   .tile--red {
     @apply bg-red-100 text-red-500;
   }
-  
+
   .tile--red .divider {
     @apply border-red-200;
   }
@@ -76,12 +76,5 @@
 
   .tile--neutral .\[custom\]tile__text {
     @apply text-neutral-950;
-  }
-
-  /* ## Variants */
-
-  .variant\@tile--transfer {
-    @apply flex-col items-stretch
-           pr-4;
   }
 }
