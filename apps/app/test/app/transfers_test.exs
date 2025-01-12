@@ -255,11 +255,11 @@ defmodule App.TransfersTest do
                  :payment,
                  money_transfer_attributes(
                    tenant_id: member.id,
-                   balance_means: :weight_by_income
+                   balance_means: :weight_by_revenues
                  )
                )
 
-      assert transfer.balance_means == :weight_by_income
+      assert transfer.balance_means == :weight_by_revenues
     end
 
     test "creates peers along the way", %{book: book, member: member} do
@@ -380,14 +380,14 @@ defmodule App.TransfersTest do
                  label: "my very own label !",
                  amount: Money.new!(:EUR, 299),
                  date: ~D[2020-06-29],
-                 balance_means: :weight_by_income,
+                 balance_means: :weight_by_revenues,
                  peers: [%{member_id: other_member.id}]
                })
 
       assert updated.label == "my very own label !"
       assert updated.amount == Money.new!(:EUR, 299)
       assert updated.date == ~D[2020-06-29]
-      assert updated.balance_means == :weight_by_income
+      assert updated.balance_means == :weight_by_revenues
 
       assert [peer] = updated.peers
       assert peer.member_id == other_member.id

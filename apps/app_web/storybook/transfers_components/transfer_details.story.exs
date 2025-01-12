@@ -25,7 +25,7 @@ defmodule Storybook.TransfersComponents.TransferDetails do
                   nickname: "Jane Doe"
                 },
                 peers: [%Peer{}, %Peer{}],
-                balance_means: :weight_by_income
+                balance_means: :weight_by_revenues
               },
               style: "width: 20rem"
             }

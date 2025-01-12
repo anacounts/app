@@ -117,7 +117,7 @@ defmodule AppWeb.TransfersComponents do
   end
 
   defp format_balance_params_code(:divide_equally), do: gettext("Divided")
-  defp format_balance_params_code(:weight_by_income), do: gettext("Weighted")
+  defp format_balance_params_code(:weight_by_revenues), do: gettext("Weighted")
 
   @doc """
   Transfer icons are based on the transfer type.
