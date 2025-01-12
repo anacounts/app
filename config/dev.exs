@@ -84,6 +84,9 @@ config :logger, :default_formatter, format: "[$level] $message\n"
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+# Enable Phoenix Storybook in development
+config :phoenix_storybook, enabled: true
+
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 
