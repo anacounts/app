@@ -24,7 +24,6 @@ defmodule AppWeb.FiltersComponents do
 
   ## TODO
 
-  - store the state of the filter in local storage
   - display a badge with the number of active filters
   """
   attr :id, :string, required: true, doc: "the id of the filters container"
@@ -50,6 +49,7 @@ defmodule AppWeb.FiltersComponents do
         :for={filter <- @filters}
         id={[@id, "_", filter.name]}
         class="js-filters-filter"
+        data-name={filter.name}
         data-multiple={filter.multiple}
         data-default={JSON.encode!(filter.default)}
       >
