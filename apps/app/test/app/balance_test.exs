@@ -152,8 +152,8 @@ defmodule App.BalanceTest do
       _peer = peer_fixture(transfer, member_id: member2.id)
 
       assert Balance.fill_members_balance([member1, member2]) == [
-               %{member1 | balance: Money.new!(:EUR, "0.01")},
-               %{member2 | balance: Money.new!(:EUR, "-0.01")}
+               %{member1 | balance: Money.new!(:EUR, "0.02")},
+               %{member2 | balance: Money.new!(:EUR, "-0.02")}
              ]
     end
 
