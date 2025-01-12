@@ -25,7 +25,6 @@ defmodule AppWeb.FiltersComponents do
   ## TODO
 
   - store the state of the filter in local storage
-  - add a reset button
   - display a badge with the number of active filters
   """
   attr :id, :string, required: true, doc: "the id of the filters container"
@@ -41,8 +40,19 @@ defmodule AppWeb.FiltersComponents do
 
   def filters(assigns) do
     ~H"""
-    <form class="flex gap-4 my-4 overflow-auto" id={@id} {@rest}>
-      <.dropdown :for={filter <- @filters} id={[@id, "_", filter.name]}>
+    <form
+      class="flex gap-4 my-4 overflow-auto"
+      id={@id}
+      {@rest}
+      phx-mounted={JS.dispatch("filters:mounted")}
+    >
+      <.dropdown
+        :for={filter <- @filters}
+        id={[@id, "_", filter.name]}
+        class="js-filters-filter"
+        data-multiple={filter.multiple}
+        data-default={JSON.encode!(filter.default)}
+      >
         <:trigger :let={attrs}>
           <.button kind={:secondary} size={:sm} type="button" {attrs}>
             <.icon :if={icon = filter.icon} name={icon} />
@@ -58,6 +68,9 @@ defmodule AppWeb.FiltersComponents do
           default={filter.default}
         />
       </.dropdown>
+      <.button kind={:ghost} size={:sm} type="button" class="js-filters-reset">
+        {pgettext("Filters", "Reset")}
+      </.button>
     </form>
     """
   end

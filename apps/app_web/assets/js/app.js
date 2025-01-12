@@ -27,6 +27,7 @@ import "./app_events";
 
 // Initialize components
 import "./components/dropdown.js";
+import "./components/filters.js";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

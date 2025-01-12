@@ -460,6 +460,11 @@ msgid "Reopen book"
 msgstr "Reopen book"
 
 #, elixir-autogen, elixir-format
+msgctxt "Filters"
+msgid "Reset"
+msgstr "Reset"
+
+#, elixir-autogen, elixir-format
 msgid "Reset password"
 msgstr "Reset password"
 
