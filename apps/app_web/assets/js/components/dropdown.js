@@ -1,4 +1,4 @@
-import { computePosition, offset } from "@floating-ui/dom";
+import { computePosition, offset, shift } from "@floating-ui/dom";
 
 document.addEventListener("dropdown:mounted", (event) => {
   const $trigger = event.detail.dispatcher;
@@ -11,7 +11,7 @@ document.addEventListener("dropdown:mounted", (event) => {
 
     const { x, y } = await computePosition($trigger, $dropdown, {
       placement: "bottom-start",
-      middleware: [offset(4)],
+      middleware: [offset(4), shift()],
     });
     Object.assign($dropdown.style, { top: `${y}px`, left: `${x}px` });
   });
