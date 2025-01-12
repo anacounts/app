@@ -158,10 +158,10 @@ defmodule App.BalanceTest do
 
     test "weight transfer amount using peers income #1", %{book: book} do
       member1 = book_member_fixture(book)
-      balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
+      balance_config1 = member_balance_config_fixture(member1, revenues: 1)
 
       member2 = book_member_fixture(book)
-      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, revenues: 2)
 
       transfer =
         money_transfer_fixture(book,
@@ -181,16 +181,16 @@ defmodule App.BalanceTest do
 
     test "weight transfer amount using peers income #2", %{book: book} do
       member1 = book_member_fixture(book)
-      balance_config1 = member_balance_config_fixture(member1, annual_income: 2)
+      balance_config1 = member_balance_config_fixture(member1, revenues: 2)
 
       member2 = book_member_fixture(book)
-      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, revenues: 2)
 
       member3 = book_member_fixture(book)
-      balance_config3 = member_balance_config_fixture(member3, annual_income: 2)
+      balance_config3 = member_balance_config_fixture(member3, revenues: 2)
 
       member4 = book_member_fixture(book)
-      balance_config4 = member_balance_config_fixture(member4, annual_income: 3)
+      balance_config4 = member_balance_config_fixture(member4, revenues: 3)
 
       transfer =
         money_transfer_fixture(book,
@@ -215,13 +215,13 @@ defmodule App.BalanceTest do
 
     test "weighting by incomes takes user-defined weight into account", %{book: book} do
       member1 = book_member_fixture(book)
-      balance_config1 = member_balance_config_fixture(member1, annual_income: 1)
+      balance_config1 = member_balance_config_fixture(member1, revenues: 1)
 
       member2 = book_member_fixture(book)
-      balance_config2 = member_balance_config_fixture(member2, annual_income: 2)
+      balance_config2 = member_balance_config_fixture(member2, revenues: 2)
 
       member3 = book_member_fixture(book)
-      balance_config3 = member_balance_config_fixture(member3, annual_income: 3)
+      balance_config3 = member_balance_config_fixture(member3, revenues: 3)
 
       transfer =
         money_transfer_fixture(book,
@@ -259,13 +259,13 @@ defmodule App.BalanceTest do
 
     test "fails if a user config appropriate fields aren't set", %{book: book} do
       member1 = book_member_fixture(book, nickname: "member1")
-      balance_config1 = member_balance_config_fixture(member1, annual_income: nil)
+      balance_config1 = member_balance_config_fixture(member1, revenues: nil)
 
       member2 = book_member_fixture(book)
-      balance_config2 = member_balance_config_fixture(member2, annual_income: 1)
+      balance_config2 = member_balance_config_fixture(member2, revenues: 1)
 
       member3 = book_member_fixture(book)
-      balance_config3 = member_balance_config_fixture(member3, annual_income: 1)
+      balance_config3 = member_balance_config_fixture(member3, revenues: 1)
 
       transfer1 =
         money_transfer_fixture(book,

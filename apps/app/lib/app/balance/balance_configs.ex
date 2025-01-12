@@ -28,7 +28,7 @@ defmodule App.Balance.BalanceConfigs do
   Check if a member has revenues set in their balance configuration.
 
   Returns `false` both if the member has no balance configuration or if the balance
-  configuration has no annual income set.
+  configuration has no revenues set.
   """
   @spec member_has_revenues?(BookMember.t()) :: boolean()
   def member_has_revenues?(%BookMember{balance_config_id: nil} = _member), do: false
@@ -36,7 +36,7 @@ defmodule App.Balance.BalanceConfigs do
   def member_has_revenues?(%BookMember{} = member) do
     from(balance_config in BalanceConfig,
       where: balance_config.id == ^member.balance_config_id,
-      select: not is_nil(balance_config.annual_income)
+      select: not is_nil(balance_config.revenues)
     )
     |> Repo.one!()
   end
@@ -97,7 +97,7 @@ defmodule App.Balance.BalanceConfigs do
   end
 
   @doc """
-  Return an `%Ecto.Changeset{}` for tracking changes to a balance config annual income.
+  Return an `%Ecto.Changeset{}` for tracking changes to a balance config revenues.
   """
   @spec change_balance_config_revenues(BalanceConfig.t(), map()) :: Ecto.Changeset.t()
   def change_balance_config_revenues(balance_config, attrs \\ %{}) do

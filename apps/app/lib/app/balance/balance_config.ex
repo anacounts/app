@@ -38,7 +38,7 @@ defmodule App.Balance.BalanceConfig do
 
   The overall lifecycle of balance configurations was designed to answer two problems:
   - the balance configurations must have some kind of "history", so when the configuration
-    of a member changes their annual income, the old configuration is kept and is still
+    of a member changes their revenues, the old configuration is kept and is still
     referenced by peers,
   - an unlinked book member must be able to have their own balance configuration.
     This allows both to have members without users in the first place, and users to
@@ -84,7 +84,7 @@ defmodule App.Balance.BalanceConfig do
           id: id() | nil,
           owner: User.t() | Ecto.Association.NotLoaded.t() | nil,
           owner_id: User.id() | nil,
-          annual_income: non_neg_integer() | nil,
+          revenues: non_neg_integer() | nil,
           inserted_at: NaiveDateTime.t() | nil,
           updated_at: NaiveDateTime.t() | nil
         }
@@ -94,19 +94,19 @@ defmodule App.Balance.BalanceConfig do
     belongs_to :owner, User
 
     # Confidential information
-    field :annual_income, App.Encrypted.Integer
+    field :revenues, App.Encrypted.Integer
 
     timestamps()
   end
 
   def revenues_changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:annual_income])
-    |> validate_annual_income()
+    |> cast(attrs, [:revenues])
+    |> validate_revenues()
   end
 
-  defp validate_annual_income(changeset) do
+  defp validate_revenues(changeset) do
     changeset
-    |> validate_number(:annual_income, greater_than_or_equal_to: 0)
+    |> validate_number(:revenues, greater_than_or_equal_to: 0)
   end
 end

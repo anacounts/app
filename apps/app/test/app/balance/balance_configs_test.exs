@@ -34,15 +34,15 @@ defmodule App.Balance.BalanceConfigsTest do
       assert not BalanceConfigs.member_has_revenues?(member)
     end
 
-    test "returns false if the balance configuration has no annual income set", %{book: book} do
-      balance_config = balance_config_fixture(annual_income: nil)
+    test "returns false if the balance configuration has no revenues set", %{book: book} do
+      balance_config = balance_config_fixture(revenues: nil)
       member = book_member_fixture(book, balance_config_id: balance_config.id)
 
       assert not BalanceConfigs.member_has_revenues?(member)
     end
 
-    test "returns true if the balance configuration has an annual income set", %{book: book} do
-      balance_config = balance_config_fixture(annual_income: 2345)
+    test "returns true if the balance configuration has an revenues set", %{book: book} do
+      balance_config = balance_config_fixture(revenues: 2345)
       member = book_member_fixture(book, balance_config_id: balance_config.id)
 
       assert BalanceConfigs.member_has_revenues?(member)
@@ -55,10 +55,10 @@ defmodule App.Balance.BalanceConfigsTest do
       owner = user_fixture()
 
       assert {:ok, balance_config} =
-               BalanceConfigs.create_balance_config(member, owner, %{annual_income: 5432})
+               BalanceConfigs.create_balance_config(member, owner, %{revenues: 5432})
 
       assert balance_config.owner_id == owner.id
-      assert balance_config.annual_income == 5432
+      assert balance_config.revenues == 5432
 
       # updates the member
       member = Repo.reload!(member)
@@ -70,16 +70,16 @@ defmodule App.Balance.BalanceConfigsTest do
       owner = user_fixture()
 
       assert {:error, changeset} =
-               BalanceConfigs.create_balance_config(member, owner, %{annual_income: -1})
+               BalanceConfigs.create_balance_config(member, owner, %{revenues: -1})
 
-      assert errors_on(changeset) == %{annual_income: ["must be greater than or equal to 0"]}
+      assert errors_on(changeset) == %{revenues: ["must be greater than or equal to 0"]}
     end
 
     test "deletes the former balance configuration if it's not linked to any entity" do
       balance_config = balance_config_fixture()
       member = book_member_fixture(book_fixture(), balance_config_id: balance_config.id)
 
-      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{revenues: 0})
 
       refute Repo.reload(balance_config)
     end
@@ -93,7 +93,7 @@ defmodule App.Balance.BalanceConfigsTest do
       # There is no reason for this case to happen, but better be safe than sorry
       _member = book_member_fixture(book, balance_config_id: balance_config.id)
 
-      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{revenues: 0})
 
       assert Repo.reload(balance_config)
     end
@@ -106,7 +106,7 @@ defmodule App.Balance.BalanceConfigsTest do
       transfer = money_transfer_fixture(book, tenant_id: member.id)
       _peer = peer_fixture(transfer, member_id: member.id, balance_config_id: balance_config.id)
 
-      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{annual_income: 0})
+      {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{revenues: 0})
 
       assert Repo.reload(balance_config)
     end
@@ -121,11 +121,11 @@ defmodule App.Balance.BalanceConfigsTest do
       assert %Ecto.Changeset{} =
                changeset =
                BalanceConfigs.change_balance_config_revenues(balance_config, %{
-                 annual_income: 2345
+                 revenues: 2345
                })
 
       assert changeset.valid?
-      assert changeset.changes == %{annual_income: 2345}
+      assert changeset.changes == %{revenues: 2345}
     end
 
     test "cannot change the owner", %{balance_config: balance_config} do
