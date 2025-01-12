@@ -18,13 +18,13 @@ defmodule AppWeb.BookMemberCreationLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/members"}>
-          <%= gettext("Members") %>
+          {gettext("Members")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form
         for={@form}
@@ -34,17 +34,17 @@ defmodule AppWeb.BookMemberCreationLive do
         class="container space-y-2"
       >
         <p>
-          <%= gettext(
+          {gettext(
             "Members created manually will appear alongside invited members," <>
               " but are not linked to a user until someone invited through the invitation link" <>
               " claims them."
-          ) %>
+          )}
         </p>
         <p>
-          <%= gettext(
+          {gettext(
             "The main difference with invited members is that you can see and edit" <>
               " revenues of unlinked members from their member page."
-          ) %>
+          )}
         </p>
         <.input
           type="text"
@@ -57,7 +57,7 @@ defmodule AppWeb.BookMemberCreationLive do
 
         <.button_group>
           <.button kind={:primary}>
-            <%= gettext("Save") %>
+            {gettext("Save")}
           </.button>
         </.button_group>
       </.form>

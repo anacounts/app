@@ -11,24 +11,24 @@ defmodule AppWeb.BookConfigurationLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/books/#{@book}"}>
-          <%= @book.name %>
+          {@book.name}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.card_grid>
         <.link navigate={~p"/books/#{@book}/configuration/name"}>
           <.card_button icon={:book_open}>
-            <%= gettext("Change name") %>
+            {gettext("Change name")}
           </.card_button>
         </.link>
         <%= if Books.closed?(@book) do %>
           <.link phx-click="reopen">
             <.card_button icon={:lock_open}>
-              <%= gettext("Reopen book") %>
+              {gettext("Reopen book")}
             </.card_button>
           </.link>
         <% else %>
@@ -42,7 +42,7 @@ defmodule AppWeb.BookConfigurationLive do
             phx-click="close"
           >
             <.card_button icon={:lock_closed}>
-              <%= gettext("Close book") %>
+              {gettext("Close book")}
             </.card_button>
           </.link>
         <% end %>
@@ -53,7 +53,7 @@ defmodule AppWeb.BookConfigurationLive do
           phx-click="delete"
         >
           <.card_button icon={:trash}>
-            <%= gettext("Delete book") %>
+            {gettext("Delete book")}
           </.card_button>
         </.link>
       </.card_grid>

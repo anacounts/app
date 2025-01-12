@@ -23,11 +23,11 @@ defmodule AppWeb.TransfersComponents do
   def transfer_tile(assigns) do
     ~H"""
     <div class={transfer_tile_classes(@transfer)} {@rest}>
-      <%= render_slot(@start, @transfer) || transfer_icon(assigns) %>
+      {render_slot(@start, @transfer) || transfer_icon(assigns)}
       <span class="label text-left grow">
-        <%= @transfer.label %>
+        {@transfer.label}
       </span>
-      <%= transfer_amount(assigns) %>
+      {transfer_amount(assigns)}
     </div>
     """
   end
@@ -52,16 +52,16 @@ defmodule AppWeb.TransfersComponents do
     ~H"""
     <details class={[transfer_tile_classes(@transfer), "h-auto"]} {@rest}>
       <summary class="flex justify-center items-center gap-2">
-        <%= transfer_icon(assigns) %>
+        {transfer_icon(assigns)}
         <span class="label text-left grow">
-          <%= @transfer.label %>
+          {@transfer.label}
         </span>
-        <%= transfer_amount(assigns) %>
+        {transfer_amount(assigns)}
         <.icon name={:chevron_down} />
       </summary>
       <.divider />
-      <%= transfer_details_summary(assigns) %>
-      <%= render_slot(@extra, @transfer) %>
+      {transfer_details_summary(assigns)}
+      {render_slot(@extra, @transfer)}
     </details>
     """
   end
@@ -79,15 +79,15 @@ defmodule AppWeb.TransfersComponents do
     <div class="grid grid-cols-2 gap-2 [custom]tile__text">
       <span class="label truncate text-left">
         <.icon name={:credit_card} />
-        <%= @transfer.tenant.nickname %>
+        {@transfer.tenant.nickname}
       </span>
       <span class="label truncate text-right">
-        <%= format_date(@transfer.date) %>
+        {format_date(@transfer.date)}
         <.icon name={:calendar} />
       </span>
       <span class="label truncate text-left">
         <.icon name={:user} />
-        <%= hd(@transfer.peers).member.nickname %>
+        {hd(@transfer.peers).member.nickname}
       </span>
     </div>
     """
@@ -98,18 +98,18 @@ defmodule AppWeb.TransfersComponents do
     <div class="grid grid-cols-2 gap-2 [custom]tile__text">
       <span class="label truncate text-left">
         <.icon name={:credit_card} />
-        <%= @transfer.tenant.nickname %>
+        {@transfer.tenant.nickname}
       </span>
       <span class="label truncate text-right">
-        <%= format_date(@transfer.date) %>
+        {format_date(@transfer.date)}
         <.icon name={:calendar} />
       </span>
       <span class="label truncate text-left">
         <.icon name={:users} />
-        <%= gettext("%{count} members", count: Enum.count(@transfer.peers)) %>
+        {gettext("%{count} members", count: Enum.count(@transfer.peers))}
       </span>
       <span class="label truncate text-right">
-        <%= format_balance_params_code(@transfer.balance_params.means_code) %>
+        {format_balance_params_code(@transfer.balance_params.means_code)}
         <.icon name={:arrows_right_left} />
       </span>
     </div>
@@ -137,7 +137,7 @@ defmodule AppWeb.TransfersComponents do
   defp transfer_amount(assigns) do
     assigns = assign(assigns, :sign, transfer_sign(assigns.transfer.type))
 
-    ~H|<span class="label"><%= @sign <> Money.to_string!(@transfer.amount) %></span>|
+    ~H|<span class="label">{@sign <> Money.to_string!(@transfer.amount)}</span>|
   end
 
   defp transfer_sign(:payment), do: "-"

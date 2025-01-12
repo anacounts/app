@@ -16,19 +16,19 @@ defmodule AppWeb.BookBalanceLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/books/#{@book}"}>
-          <%= @book.name %>
+          {@book.name}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.card_grid class="mb-4">
         <.balance_card book_member={@current_member} />
         <.link navigate={~p"/books/#{@book}/reimbursements/new"}>
           <.card_button icon={:credit_card}>
-            <%= gettext("Manual reimbursement") %>
+            {gettext("Manual reimbursement")}
           </.card_button>
         </.link>
       </.card_grid>
@@ -36,7 +36,7 @@ defmodule AppWeb.BookBalanceLive do
       <%= if @transaction_errors != nil do %>
         <section class="space-y-4" id="transaction-errors">
           <.alert kind={:error}>
-            <%= gettext("Some information is missing to balance the book") %>
+            {gettext("Some information is missing to balance the book")}
           </.alert>
           <.transaction_error_tile
             :for={transaction_error <- @transaction_errors}
@@ -61,9 +61,9 @@ defmodule AppWeb.BookBalanceLive do
                   owes
                   <.member_nickname book_member={transaction.to} current_member={@current_member} />
                 </div>
-                <span class="label"><%= transaction.amount %></span>
+                <span class="label">{transaction.amount}</span>
                 <.button kind={:ghost} class="row-span-2">
-                  <%= gettext("Settle up") %> <.icon name={:chevron_right} />
+                  {gettext("Settle up")} <.icon name={:chevron_right} />
                 </.button>
               </div>
             </.tile>
@@ -83,11 +83,11 @@ defmodule AppWeb.BookBalanceLive do
     <.link navigate={~p"/books/#{@book}/members/#{@extra.member}"} class="block">
       <.tile class="justify-between">
         <div class="truncate">
-          <span class="label"><%= @extra.member.nickname %></span>
+          <span class="label">{@extra.member.nickname}</span>
           <span class="font-normal">did not set their revenues.</span>
         </div>
         <.button kind={:ghost}>
-          <%= gettext("Fix it") %> <.icon name={:chevron_right} />
+          {gettext("Fix it")} <.icon name={:chevron_right} />
         </.button>
       </.tile>
     </.link>
@@ -101,13 +101,13 @@ defmodule AppWeb.BookBalanceLive do
 
   defp member_nickname(%{book_member: %{id: id}, current_member: %{id: id}} = assigns) do
     ~H"""
-    <span class="label text-theme-500"><%= @book_member.nickname %></span>
+    <span class="label text-theme-500">{@book_member.nickname}</span>
     """
   end
 
   defp member_nickname(assigns) do
     ~H"""
-    <span class="label"><%= @book_member.nickname %></span>
+    <span class="label">{@book_member.nickname}</span>
     """
   end
 

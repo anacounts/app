@@ -8,13 +8,13 @@ defmodule AppWeb.UserSettingsEmailLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/users/settings"}>
-          <%= gettext("My account") %>
+          {gettext("My account")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.alert_flash flash={@flash} kind={:info} class="mb-4" />
       <.alert_flash flash={@flash} kind={:error} class="mb-4" />
@@ -27,10 +27,10 @@ defmodule AppWeb.UserSettingsEmailLive do
         class="container space-y-2"
       >
         <p>
-          <%= gettext(
+          {gettext(
             "Before making the change effective, a confirmation" <>
               " email will be sent to the new address."
-          ) %>
+          )}
         </p>
 
         <.input
@@ -55,7 +55,7 @@ defmodule AppWeb.UserSettingsEmailLive do
 
         <.button_group>
           <.button kind={:primary}>
-            <%= gettext("Change email") %>
+            {gettext("Change email")}
           </.button>
         </.button_group>
       </.form>

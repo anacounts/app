@@ -12,13 +12,13 @@ defmodule AppWeb.BookCreationLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={@form} phx-change="validate" phx-submit="submit" class="container space-y-4">
-        <p><%= gettext("What do you want to call your new book?") %></p>
+        <p>{gettext("What do you want to call your new book?")}</p>
 
         <.input
           field={@form[:name]}
@@ -31,11 +31,11 @@ defmodule AppWeb.BookCreationLive do
         />
 
         <p>
-          <%= gettext(
+          {gettext(
             "As the creator, you will be the first member of the book," <>
               " and will be in charge of inviting the first other members."
-          ) %><br />
-          <%= gettext("As every member, you need a nickname. What do you want to be called?") %>
+          )}<br />
+          {gettext("As every member, you need a nickname. What do you want to be called?")}
         </p>
 
         <.input
@@ -50,7 +50,7 @@ defmodule AppWeb.BookCreationLive do
 
         <.button_group>
           <.button kind={:primary}>
-            <%= gettext("Create") %>
+            {gettext("Create")}
           </.button>
         </.button_group>
       </.form>

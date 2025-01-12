@@ -19,26 +19,26 @@ defmodule AppWeb.BookMemberRevenuesTransfersLive do
     ~H"""
     <.app_page>
       <:breadcrumb>
-        <%= revenues_breadcrumbs(assigns) %>
+        {revenues_breadcrumbs(assigns)}
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={%{}} phx-submit="submit">
         <section class="container space-y-2 mb-4">
-          <h2 class="title-2"><%= gettext("Transfers") %></h2>
+          <h2 class="title-2">{gettext("Transfers")}</h2>
 
           <p>
-            <%= gettext(
+            {gettext(
               "By default, only new transfers will use the new revenues." <>
                 " Here, you can select existing transfers that should use the new revenues."
-            ) %>
+            )}
           </p>
 
           <section id="transfers" phx-update="stream" class="max-h-[33rem] overflow-auto space-y-2">
             <p id="transfers-empty" class="label hidden only:block">
-              <%= gettext(
+              {gettext(
                 "There is no transfer in the book for now. You can finish the operation safely!"
-              ) %>
+              )}
             </p>
             <label :for={{dom_id, transfer} <- @streams.transfers} id={dom_id} class="block">
               <.transfer_tile transfer={transfer}>
@@ -53,10 +53,10 @@ defmodule AppWeb.BookMemberRevenuesTransfersLive do
         <.button_group class="justify-between">
           <.button kind={:ghost} navigate={navigate_back_path(assigns)}>
             <.icon name={:chevron_left} />
-            <%= gettext("Revenues") %>
+            {gettext("Revenues")}
           </.button>
           <.button kind={:primary} type="submit">
-            <%= gettext("Finish") %>
+            {gettext("Finish")}
           </.button>
         </.button_group>
       </.form>
@@ -72,10 +72,10 @@ defmodule AppWeb.BookMemberRevenuesTransfersLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/profile"}>
-      <%= gettext("My profile") %>
+      {gettext("My profile")}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Set revenues") %>
+      {gettext("Set revenues")}
     </.breadcrumb_item>
     """
   end
@@ -84,10 +84,10 @@ defmodule AppWeb.BookMemberRevenuesTransfersLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= @book_member.nickname %>
+      {@book_member.nickname}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Set revenues") %>
+      {gettext("Set revenues")}
     </.breadcrumb_item>
     """
   end

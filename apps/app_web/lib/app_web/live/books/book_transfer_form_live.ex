@@ -26,15 +26,15 @@ defmodule AppWeb.BookTransferFormLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/transfers"}>
-          <%= gettext("Transfers") %>
+          {gettext("Transfers")}
         </.breadcrumb_item>
-        <%= form_breadcrumb_item(assigns) %>
+        {form_breadcrumb_item(assigns)}
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={@form} phx-change="validate" phx-submit="submit" class="space-y-4">
         <section id="details" class="container space-y-2">
-          <h2 class="title-2"><%= gettext("Details") %></h2>
+          <h2 class="title-2">{gettext("Details")}</h2>
 
           <.input
             field={@form[:label]}
@@ -56,7 +56,7 @@ defmodule AppWeb.BookTransferFormLive do
         </section>
 
         <section id="tenant" class="container space-y-2">
-          <h2 class="title-2"><%= tenant_label(@type) %></h2>
+          <h2 class="title-2">{tenant_label(@type)}</h2>
 
           <div class="grid sm:grid-cols-2 gap-x-4">
             <.input
@@ -77,7 +77,7 @@ defmodule AppWeb.BookTransferFormLive do
         </section>
 
         <section id="peers" class="container space-y-2">
-          <h2 class="title-2"><%= gettext("Members") %></h2>
+          <h2 class="title-2">{gettext("Members")}</h2>
 
           <div class="form-control-container" id="toggle-peer-weight-container" phx-update="ignore">
             <.checkbox
@@ -86,7 +86,7 @@ defmodule AppWeb.BookTransferFormLive do
               checked={@display_weight?}
               phx-change="toggle_display_weight"
             />
-            <label for="toggle-peer-weight"><%= gettext("Show weight") %></label>
+            <label for="toggle-peer-weight">{gettext("Show weight")}</label>
           </div>
 
           <.list>
@@ -141,7 +141,7 @@ defmodule AppWeb.BookTransferFormLive do
               phx-click="remove_all_peers"
             >
               <.icon name={:x_mark} />
-              <%= gettext("Remove all") %>
+              {gettext("Remove all")}
             </.button>
             <.button
               kind={:secondary}
@@ -150,14 +150,14 @@ defmodule AppWeb.BookTransferFormLive do
               phx-click="add_all_peers"
             >
               <.icon name={:users} />
-              <%= gettext("Add everyone") %>
+              {gettext("Add everyone")}
             </.button>
           </div>
         </section>
 
         <.button_group>
           <.button kind={:primary} type="submit">
-            <%= gettext("Save") %>
+            {gettext("Save")}
           </.button>
         </.button_group>
       </.form>
@@ -168,7 +168,7 @@ defmodule AppWeb.BookTransferFormLive do
   defp form_breadcrumb_item(%{live_action: :new} = assigns) do
     ~H"""
     <.breadcrumb_item>
-      <%= form_new_title(@type) %>
+      {form_new_title(@type)}
     </.breadcrumb_item>
     """
   end
@@ -176,7 +176,7 @@ defmodule AppWeb.BookTransferFormLive do
   defp form_breadcrumb_item(%{live_action: :edit} = assigns) do
     ~H"""
     <.breadcrumb_item>
-      <%= @page_title %>
+      {@page_title}
     </.breadcrumb_item>
     """
   end
@@ -205,7 +205,7 @@ defmodule AppWeb.BookTransferFormLive do
 
     ~H"""
     <.avatar src={Avatars.avatar_url(@member)} alt="" />
-    <span class="label truncate"><%= @member.nickname %></span>
+    <span class="label truncate">{@member.nickname}</span>
     """
   end
 

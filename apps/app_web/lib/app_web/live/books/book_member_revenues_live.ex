@@ -15,14 +15,14 @@ defmodule AppWeb.BookMemberRevenuesLive do
     ~H"""
     <.app_page>
       <:breadcrumb>
-        <%= revenues_breadcrumbs(assigns) %>
+        {revenues_breadcrumbs(assigns)}
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={@form} phx-change="validate" phx-submit="submit">
         <section class="container space-y-2 mb-4">
-          <p><%= revenues_balance_config_paragraph(assigns) %></p>
-          <p><%= gettext("What would you like to set them to?") %></p>
+          <p>{revenues_balance_config_paragraph(assigns)}</p>
+          <p>{gettext("What would you like to set them to?")}</p>
           <.input
             field={@form[:annual_income]}
             type="number"
@@ -32,23 +32,23 @@ defmodule AppWeb.BookMemberRevenuesLive do
           />
 
           <p>
-            <%= gettext(
+            {gettext(
               "Revenues are set by book. Choose the most fair way to compute revenues" <>
                 " (before or after taxes, including gifts or not) with the other members of" <>
                 " the book, and enter it here."
-            ) %>
+            )}
           </p>
           <p>
-            <%= gettext(
+            {gettext(
               "If you want to update revenues accross multiple books, you will have go to" <>
                 " these books and update the revenues there too."
-            ) %>
+            )}
           </p>
         </section>
 
         <.button_group>
           <.button kind={:ghost}>
-            <%= gettext("Continue") %>
+            {gettext("Continue")}
             <.icon name={:chevron_right} />
           </.button>
         </.button_group>
@@ -65,10 +65,10 @@ defmodule AppWeb.BookMemberRevenuesLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/profile"}>
-      <%= gettext("My profile") %>
+      {gettext("My profile")}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Set revenues") %>
+      {gettext("Set revenues")}
     </.breadcrumb_item>
     """
   end
@@ -77,10 +77,10 @@ defmodule AppWeb.BookMemberRevenuesLive do
     ~H"""
     <.breadcrumb_ellipsis />
     <.breadcrumb_item navigate={~p"/books/#{@book}/members/#{@book_member}"}>
-      <%= @book_member.nickname %>
+      {@book_member.nickname}
     </.breadcrumb_item>
     <.breadcrumb_item>
-      <%= gettext("Set revenues") %>
+      {gettext("Set revenues")}
     </.breadcrumb_item>
     """
   end
@@ -94,16 +94,16 @@ defmodule AppWeb.BookMemberRevenuesLive do
 
     cond do
       balance_config == nil ->
-        ~H|<%= revenues_helper_unset(@live_action) %>|
+        ~H|{revenues_helper_unset(@live_action)}|
 
       balance_config.owner_id == current_user.id ->
         ~H"""
-        <%= revenues_helper_owner(@live_action) %><br />
-        <span class="label"><%= @balance_config.annual_income %></span>
+        {revenues_helper_owner(@live_action)}<br />
+        <span class="label">{@balance_config.annual_income}</span>
         """
 
       true ->
-        ~H|<%= revenues_helper_forbidden(@live_action) %>|
+        ~H|{revenues_helper_forbidden(@live_action)}|
     end
   end
 

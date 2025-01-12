@@ -13,20 +13,20 @@ defmodule AppWeb.BookConfigurationNameLive do
       <:breadcrumb>
         <.breadcrumb_ellipsis />
         <.breadcrumb_item navigate={~p"/books/#{@book}/configuration"}>
-          <%= gettext("Configuration") %>
+          {gettext("Configuration")}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.form for={@form} phx-change="validate" phx-submit="submit" class="container space-y-2">
         <p>
-          <%= gettext("This is the current name of the book") %><br />
-          <span class="label"><%= @book.name %></span>
+          {gettext("This is the current name of the book")}<br />
+          <span class="label">{@book.name}</span>
         </p>
-        <p><%= gettext("What would you like to change it to?") %></p>
+        <p>{gettext("What would you like to change it to?")}</p>
 
         <.input
           field={@form[:name]}
@@ -40,7 +40,7 @@ defmodule AppWeb.BookConfigurationNameLive do
 
         <.button_group>
           <.button kind={:primary} type="submit">
-            <%= gettext("Change name") %>
+            {gettext("Change name")}
           </.button>
         </.button_group>
       </.form>

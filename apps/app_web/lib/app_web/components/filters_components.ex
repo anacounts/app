@@ -46,7 +46,7 @@ defmodule AppWeb.FiltersComponents do
         <:trigger :let={attrs}>
           <.button kind={:secondary} size={:sm} type="button" {attrs}>
             <.icon :if={icon = filter.icon} name={icon} />
-            <%= filter.label %>
+            {filter.label}
             <.icon name={:chevron_down} />
           </.button>
         </:trigger>
@@ -67,7 +67,7 @@ defmodule AppWeb.FiltersComponents do
     <.list>
       <.list_item :for={{value, label} <- @options}>
         <label class="form-control-container justify-between">
-          <span class="label"><%= label %></span>
+          <span class="label">{label}</span>
           <.checkbox name={[@name, "[]"]} value={value} checked={value in @default} phx-debounce />
         </label>
       </.list_item>
@@ -80,7 +80,7 @@ defmodule AppWeb.FiltersComponents do
     <.list>
       <.list_item :for={{value, label} <- @options}>
         <label class="form-control-container justify-between">
-          <span class="label"><%= label %></span>
+          <span class="label">{label}</span>
           <.radio name={@name} value={value} checked={value == @default} phx-debounce />
         </label>
       </.list_item>

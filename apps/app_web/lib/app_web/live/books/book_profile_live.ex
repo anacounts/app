@@ -15,35 +15,35 @@ defmodule AppWeb.BookProfileLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/books/#{@book}"}>
-          <%= @book.name %>
+          {@book.name}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.hero_avatar user={@current_user} alt={gettext("Your avatar")} book_member={@current_member} />
 
       <.card_grid>
         <.balance_card_link book_member={@current_member} />
         <.card>
-          <:title><%= gettext("Joined on") %></:title>
-          <%= format_date(@current_member.inserted_at) %>
+          <:title>{gettext("Joined on")}</:title>
+          {format_date(@current_member.inserted_at)}
         </.card>
         <.link navigate={~p"/books/#{@book}/profile/revenues"}>
           <.card_button icon={:banknotes}>
-            <%= gettext("Set revenues") %>
+            {gettext("Set revenues")}
           </.card_button>
         </.link>
         <.link navigate={~p"/books/#{@book}/profile/nickname"}>
           <.card_button icon={:identification}>
-            <%= gettext("Change nickname") %>
+            {gettext("Change nickname")}
           </.card_button>
         </.link>
         <.link navigate={~p"/users/settings"}>
           <.card_button icon={:cog_6_tooth}>
-            <%= gettext("Go to my account") %>
+            {gettext("Go to my account")}
           </.card_button>
         </.link>
       </.card_grid>

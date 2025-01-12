@@ -23,23 +23,23 @@ defmodule AppWeb.BookTransfersLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/books/#{@book}"}>
-          <%= @book.name %>
+          {@book.name}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.card_grid class="mb-4">
         <.link navigate={~p"/books/#{@book}/transfers/new?type=income"}>
           <.card_button icon={:arrow_down_on_square}>
-            <%= gettext("New income") %>
+            {gettext("New income")}
           </.card_button>
         </.link>
         <.link navigate={~p"/books/#{@book}/transfers/new"}>
           <.card_button icon={:arrow_up_on_square} color={:primary}>
-            <%= gettext("New payment") %>
+            {gettext("New payment")}
           </.card_button>
         </.link>
       </.card_grid>
@@ -93,7 +93,7 @@ defmodule AppWeb.BookTransfersLive do
                 navigate={~p"/books/#{@book}/transfers/#{transfer}/edit"}
               >
                 <.icon name={:pencil} />
-                <%= gettext("Edit") %>
+                {gettext("Edit")}
               </.button>
               <.button
                 kind={:secondary}
@@ -102,7 +102,7 @@ defmodule AppWeb.BookTransfersLive do
                 data-confirm={gettext("Are you sure you want to delete the transfer?")}
               >
                 <.icon name={:trash} />
-                <%= gettext("Delete") %>
+                {gettext("Delete")}
               </.button>
             </div>
           </:extra>

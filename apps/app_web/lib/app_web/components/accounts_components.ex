@@ -24,8 +24,8 @@ defmodule AppWeb.AccountsComponents do
     ~H"""
     <div class="text-center my-4">
       <.avatar src={Avatars.avatar_url(@user)} alt={@alt} size={:hero} class="mx-auto" />
-      <span :if={@book_member} class="label"><%= @book_member.nickname %></span>
-      <address class="not-italic"><%= @user.email %></address>
+      <span :if={@book_member} class="label">{@book_member.nickname}</span>
+      <address class="not-italic">{@user.email}</address>
     </div>
     """
   end

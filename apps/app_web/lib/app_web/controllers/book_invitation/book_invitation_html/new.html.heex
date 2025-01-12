@@ -1,5 +1,5 @@
 <.invitation_layout book={@book} current_user={@current_user}>
-  <p class="mb-2"><%= gettext("What nickname do you want to use?") %></p>
+  <p class="mb-2">{gettext("What nickname do you want to use?")}</p>
   <.form
     for={@form}
     action={~p"/invitations/#{@token}/members/new"}
@@ -13,7 +13,7 @@
       helper={gettext("It can be changed at any time after joining")}
     />
     <.button_group>
-      <.button kind={:primary} type="submit"><%= gettext("Join") %></.button>
+      <.button kind={:primary} type="submit">{gettext("Join")}</.button>
     </.button_group>
   </.form>
 </.invitation_layout>

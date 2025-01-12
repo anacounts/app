@@ -20,8 +20,8 @@ defmodule AppWeb.BooksComponents do
   def balance_card(assigns) do
     ~H"""
     <.card color={balance_card_color(@book_member)}>
-      <:title>Balance <%= render_slot(@extra_title) %></:title>
-      <%= balance_string(@book_member) %>
+      <:title>Balance {render_slot(@extra_title)}</:title>
+      {balance_string(@book_member)}
     </.card>
     """
   end
@@ -42,7 +42,7 @@ defmodule AppWeb.BooksComponents do
   def balance_text(assigns) do
     ~H"""
     <span class={["label", balance_text_class(@book_member)]}>
-      <%= balance_string(@book_member) %>
+      {balance_string(@book_member)}
     </span>
     """
   end

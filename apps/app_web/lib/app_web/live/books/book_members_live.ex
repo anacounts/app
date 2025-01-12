@@ -21,18 +21,18 @@ defmodule AppWeb.BookMembersLive do
     <.app_page>
       <:breadcrumb>
         <.breadcrumb_item navigate={~p"/books/#{@book}"}>
-          <%= @book.name %>
+          {@book.name}
         </.breadcrumb_item>
         <.breadcrumb_item>
-          <%= @page_title %>
+          {@page_title}
         </.breadcrumb_item>
       </:breadcrumb>
-      <:title><%= @page_title %></:title>
+      <:title>{@page_title}</:title>
 
       <.card_grid class="mb-4">
         <.link navigate={~p"/books/#{@book}/invite"} aria-disabled={Books.closed?(@book) && "true"}>
           <.card_button color={:primary} icon={:envelope}>
-            <%= gettext("Invite people") %>
+            {gettext("Invite people")}
           </.card_button>
         </.link>
         <.link
@@ -40,7 +40,7 @@ defmodule AppWeb.BookMembersLive do
           aria-disabled={Books.closed?(@book) && "true"}
         >
           <.card_button icon={:user_plus}>
-            <%= gettext("Create manually") %>
+            {gettext("Create manually")}
           </.card_button>
         </.link>
       </.card_grid>
@@ -56,13 +56,13 @@ defmodule AppWeb.BookMembersLive do
             <div class="grow grid grid-cols-[1fr_9rem] grid-flow-col">
               <div class="row-span-2 flex items-center gap-2 truncate">
                 <.member_avatar member={member} />
-                <span class="label"><%= member.nickname %></span>
+                <span class="label">{member.nickname}</span>
               </div>
               <div class="text-right pr-5">
                 <.balance_text book_member={member} />
               </div>
               <.button kind={:ghost} class="h-xs px-1">
-                <%= gettext("View profile") %>
+                {gettext("View profile")}
                 <.icon name={:chevron_right} />
               </.button>
             </div>

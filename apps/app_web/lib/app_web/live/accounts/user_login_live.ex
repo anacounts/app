@@ -24,32 +24,32 @@ defmodule AppWeb.UserLoginLive do
         <.input field={@form[:remember_me]} type="checkbox" label={gettext("Keep me logged in")} />
 
         <.anchor navigate={~p"/users/reset_password"}>
-          <%= gettext("Forgot your password?") %>
+          {gettext("Forgot your password?")}
         </.anchor>
       </div>
 
       <.button_group>
         <.button kind={:primary}>
-          <%= gettext("Sign in") %>
+          {gettext("Sign in")}
         </.button>
       </.button_group>
     </.form>
 
     <.divider class="my-4" />
 
-    <h2 class="title-2"><%= gettext("Create an account") %></h2>
+    <h2 class="title-2">{gettext("Create an account")}</h2>
 
     <p class="mb-4">
-      <%= gettext(
+      {gettext(
         "Anacounts is a free and open-source software that helps you share expensenses" <>
           " for a trip with your friend or in your household in a more fair way."
-      ) %>
+      )}
     </p>
 
     <.button_group>
       <.button kind={:secondary} navigate={~p"/users/register"}>
         <.icon name={:envelope} />
-        <%= gettext("Create an account") %>
+        {gettext("Create an account")}
       </.button>
     </.button_group>
     """

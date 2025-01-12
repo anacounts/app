@@ -7,9 +7,9 @@ defmodule AppWeb.UserForgotPasswordLive do
     ~H"""
     <.form for={@form} id="reset_password_form" phx-submit="send_email" class="space-y-2">
       <p>
-        <%= gettext(
+        {gettext(
           "Enter your user account's email address and we will send you a password reset link."
-        ) %>
+        )}
       </p>
 
       <.input
@@ -22,14 +22,14 @@ defmodule AppWeb.UserForgotPasswordLive do
 
       <.button_group>
         <.button kind={:primary}>
-          <%= gettext("Send instructions") %>
+          {gettext("Send instructions")}
         </.button>
       </.button_group>
     </.form>
 
     <div class="text-right">
       <.anchor navigate={~p"/users/log_in"}>
-        <%= gettext("Sign in to your account") %>
+        {gettext("Sign in to your account")}
       </.anchor>
     </div>
     """
