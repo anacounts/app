@@ -15,12 +15,6 @@ defmodule App.Balance do
 
   @doc """
   Compute the `:balance` field of book members.
-
-  ## Examples
-
-      iex> fill_members_balance([%BookMember{balance: nil}])
-      [%BookMember{balance: Decimal.new(0)}]
-
   """
   def fill_members_balance(members) do
     transfers =
@@ -303,18 +297,6 @@ defmodule App.Balance do
   Returns `:error` if any balance is set to an error state.
 
   The total sum of balanced money must be equal to 0, otherwise the function will crash.
-
-  ## Examples
-
-      iex> transactions([member1])
-      {:ok, []}
-
-      iex> transactions([member1, member2])
-      {:ok, [%{amount: Money.new!(:EUR, 10), from: member1, to: member2}]}
-
-      iex> transactions([member_with_error_in_balance, member2])
-      {:error, ["reason1", "reason2"]}
-
   """
   @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, error_reasons()}
   def transactions(members) do
