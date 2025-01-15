@@ -9,6 +9,16 @@ defmodule App.BalanceTest do
   alias App.Balance
   alias App.Balance.BalanceError
 
+  describe "schedule_balance_update/1" do
+    test "creates an Oban job when the book_id" do
+      book_id = 123
+
+      {:ok, job} = Balance.schedule_balance_update(book_id)
+      assert job.queue == "balance"
+      assert job.args == %{book_id: book_id}
+    end
+  end
+
   describe "update_book_members_balance/1" do
     setup do
       %{book: book_fixture()}

@@ -23,6 +23,7 @@ defmodule AppWeb.ConnCase do
       @endpoint AppWeb.Endpoint
 
       use AppWeb, :verified_routes
+      use Oban.Testing, repo: App.Repo
 
       # Import conveniences for testing with connections
       import Plug.Conn

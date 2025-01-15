@@ -5,12 +5,22 @@ defmodule App.Balance do
 
   import Ecto.Query
 
-  alias App.Repo
-
   alias App.Balance.BalanceError
+  alias App.Balance.CacheUpdaterWorker
+  alias App.Books.Book
   alias App.Books.BookMember
+  alias App.Books.Members
+  alias App.Repo
   alias App.Transfers
   alias App.Transfers.Peer
+
+  @doc """
+  Schedule a job to immediately update the balance of the members of a book.
+  """
+  @spec schedule_balance_update(Book.id()) :: Ecto.Multi.t()
+  def schedule_balance_update(book_id) when is_integer(book_id) do
+    CacheUpdaterWorker.update_book_balance(book_id)
+  end
 
   @doc """
   Compute the balance of book members and update it.

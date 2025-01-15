@@ -102,7 +102,7 @@ end
 config :app, Oban,
   engine: Oban.Engines.Basic,
   repo: App.Repo,
-  queues: [default: 10],
+  queues: [balance: 10],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 30},
     {Oban.Plugins.Lifeline, rescue_after: to_timeout(minute: 30)}
