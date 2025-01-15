@@ -84,17 +84,10 @@
              priority: :low,
              if_nested_deeper_than: 2,
              if_called_more_often_than: 0,
-             excluded_namespaces: [
-               "File",
-               "IO",
-               "Inspect",
-               "Kernel",
-               "Macro",
-               "Supervisor",
-               "Task",
-               "Version",
-               "Phoenix"
-             ]
+             # Only force aliasing for modules from the project.
+             # Aliasing modules from external libraries is not enforced,
+             # and can be done at the discretion of the developer.
+             only: ~r/^App(Web)?\./
            ]},
           {Credo.Check.Design.DuplicatedCode, []},
 
