@@ -24,7 +24,6 @@ defmodule App.Books.BookMember do
           nickname: String.t() | nil,
           email: String.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
-          balance_config: BalanceConfig.t() | Ecto.Association.NotLoaded.t() | nil,
           balance: Money.t() | nil,
           balance_errors: [String.t()],
           inserted_at: NaiveDateTime.t() | nil,
@@ -47,7 +46,7 @@ defmodule App.Books.BookMember do
     field :email, :string, virtual: true
 
     # the current balance configuration for this member
-    belongs_to :balance_config, BalanceConfig
+    field :balance_config_id, :integer
     # Filled by the `Balance` context. If the `:balance_errors` is set,  the balance
     # was not computed correctly.
     field :balance, Money.Ecto.Composite.Type, virtual: true
