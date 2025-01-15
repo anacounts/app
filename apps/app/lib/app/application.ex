@@ -17,9 +17,8 @@ defmodule App.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: App.PubSub},
       # Start Finch
-      {Finch, name: Swoosh.Finch}
-      # Start a worker by calling: App.Worker.start_link(arg)
-      # {App.Worker, arg}
+      {Finch, name: Swoosh.Finch},
+      {Oban, Application.fetch_env!(:app, Oban)}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: App.Supervisor)

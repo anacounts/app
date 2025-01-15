@@ -56,6 +56,9 @@ defmodule App.MixProject do
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.18"},
 
+      # Job scheduler
+      {:oban, "~> 2.18"},
+
       # Code analysis
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

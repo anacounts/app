@@ -96,3 +96,34 @@ if config_env() == :prod do
     secret: ses_secret_key,
     identity: ses_identity
 end
+
+# ## Oban
+
+config :app, Oban,
+  engine: Oban.Engines.Basic,
+  repo: App.Repo,
+  queues: [default: 10],
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 30},
+    {Oban.Plugins.Lifeline, rescue_after: to_timeout(minute: 30)}
+  ]
+
+# ## Monitoring
+
+## Sentry
+#
+# Configure the Sentry SDK. Requires to call `plug Sentry.PlugContext`
+# in the Endpoint.
+#
+# See the documentation of `:sentry` for more information.
+
+config :sentry,
+  client: Sentry.FinchClient,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!(),
+  integrations: [
+    oban: [
+      capture_errors: true,
+      cron: [enabled: true]
+    ]
+  ]
