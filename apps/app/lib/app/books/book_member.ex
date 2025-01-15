@@ -8,7 +8,6 @@ defmodule App.Books.BookMember do
   import Ecto.Query
 
   alias App.Accounts.User
-  alias App.Balance
   alias App.Balance.BalanceConfig
   alias App.Books.Book
 
@@ -26,7 +25,8 @@ defmodule App.Books.BookMember do
           email: String.t() | nil,
           balance_config_id: BalanceConfig.id() | nil,
           balance_config: BalanceConfig.t() | Ecto.Association.NotLoaded.t() | nil,
-          balance: Money.t() | {:error, Balance.error_reasons()} | nil,
+          balance: Money.t() | nil,
+          balance_errors: [String.t()],
           inserted_at: NaiveDateTime.t() | nil,
           updated_at: NaiveDateTime.t() | nil
         }
@@ -48,9 +48,10 @@ defmodule App.Books.BookMember do
 
     # the current balance configuration for this member
     belongs_to :balance_config, BalanceConfig
-    # Filled by the `Balance` context. Maybe be set to `{:error, reasons}` if the
-    # balance cannot be computed.
+    # Filled by the `Balance` context. If the `:balance_errors` is set,  the balance
+    # was not computed correctly.
     field :balance, Money.Ecto.Composite.Type, virtual: true
+    field :balance_errors, {:array, :string}, virtual: true, default: []
 
     timestamps()
   end
