@@ -209,7 +209,7 @@ defmodule App.Balance do
 
     Enum.map(members, fn
       # If a member's balance has already been corrupted, it cannot be computed correctly
-      %{balance: {:error, _}} = member ->
+      %{balance_errors: [_ | _]} = member ->
         member
 
       %{id: ^member_id} = member ->
@@ -252,14 +252,10 @@ defmodule App.Balance do
   end
 
   # add reasons to the balance error reason list, or initialize the list
-  defp add_balance_errors(member, new_reasons) do
-    reasons =
-      case member.balance do
-        {:error, old_reasons} -> Enum.uniq_by(new_reasons ++ old_reasons, & &1.uniq_hash)
-        _ -> new_reasons
-      end
+  defp add_balance_errors(member, new_errors) do
+    errors = Enum.uniq_by(member.balance_errors ++ new_errors, & &1.uniq_hash)
 
-    %{member | balance: {:error, reasons}}
+    %{member | balance_errors: errors}
   end
 
   @doc """
@@ -267,15 +263,7 @@ defmodule App.Balance do
   """
   @spec has_balance_error?(BookMember.t()) :: boolean()
   def has_balance_error?(member) do
-    match?({:error, _reasons}, member.balance)
-  end
-
-  @spec member_balance_error_reasons(BookMember.t()) :: error_reasons() | nil
-  defp member_balance_error_reasons(member) do
-    case member.balance do
-      {:error, reasons} -> reasons
-      _ -> nil
-    end
+    member.balance_errors != []
   end
 
   @typedoc """
@@ -300,7 +288,10 @@ defmodule App.Balance do
   """
   @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, error_reasons()}
   def transactions(members) do
-    error_reasons = Enum.find_value(members, &member_balance_error_reasons/1)
+    error_reasons =
+      Enum.find_value(members, fn member ->
+        if has_balance_error?(member), do: member.balance_errors
+      end)
 
     if error_reasons do
       {:error, error_reasons}

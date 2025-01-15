@@ -298,23 +298,21 @@ defmodule App.BalanceTest do
       member1_id = member1.id
       expected_hash = "revenues_missing_#{member1_id}"
 
-      assert {:error,
-              [
-                %{
-                  kind: :revenues_missing,
-                  uniq_hash: ^expected_hash,
-                  extra: %{member: %{id: ^member1_id}}
-                }
-              ]} = member1.balance
+      assert [
+               %{
+                 kind: :revenues_missing,
+                 uniq_hash: ^expected_hash,
+                 extra: %{member: %{id: ^member1_id}}
+               }
+             ] = member1.balance_errors
 
-      assert {:error,
-              [
-                %{
-                  kind: :revenues_missing,
-                  uniq_hash: ^expected_hash,
-                  extra: %{member: %{id: ^member1_id}}
-                }
-              ]} = member2.balance
+      assert [
+               %{
+                 kind: :revenues_missing,
+                 uniq_hash: ^expected_hash,
+                 extra: %{member: %{id: ^member1_id}}
+               }
+             ] = member2.balance_errors
 
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end
@@ -425,7 +423,12 @@ defmodule App.BalanceTest do
 
     test "returns :error when the balance of a member is corrupted", %{book: book} do
       member1 = book_member_fixture(book, balance: Money.new!(:EUR, 10))
-      member2 = book_member_fixture(book, balance: {:error, ["could not compute balance"]})
+
+      member2 =
+        book_member_fixture(book,
+          balance: Money.new!(:EUR, 10),
+          balance_errors: ["could not compute balance"]
+        )
 
       assert Balance.transactions([member1, member2]) == {:error, ["could not compute balance"]}
     end
