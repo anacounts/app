@@ -81,18 +81,6 @@ config :phoenix, :json_library, Jason
 config :gettext, :default_locale, "en"
 config :ex_cldr, default_backend: AppWeb.Cldr, default_locale: "en"
 
-# ## Error reporting
-#
-# Configure the Sentry SDK. Requires to call `plug Sentry.PlugContext`
-# in the Endpoint.
-#
-# See the documentation of `:sentry` for more information.
-
-config :sentry,
-  client: Sentry.FinchClient,
-  enable_source_code_context: true,
-  root_source_code_path: File.cwd!()
-
 # ## Storybook
 #
 # The Storybook is disabled by default, only enabled in `:dev` environment.
