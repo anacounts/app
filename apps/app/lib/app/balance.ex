@@ -13,6 +13,39 @@ defmodule App.Balance do
   alias App.Transfers.Peer
 
   @doc """
+  Compute the balance of book members and update it.
+  """
+  @spec update_book_members_balance(Book.t()) :: :ok
+  def update_book_members_balance(%Book{} = book) do
+    members =
+      book
+      |> Members.list_members_of_book()
+      |> fill_members_balance()
+
+    {:ok, _} =
+      Repo.transaction(fn ->
+        balance_error_fields = BalanceError.__schema__(:fields)
+
+        for member <- members do
+          # TODO once the BookMember `:balance` field is not virtual anymore,
+          # create and use a change to update the balance.
+          {:ok, balance} = Money.Ecto.Composite.Type.dump(member.balance)
+
+          "book_members"
+          |> where(id: ^member.id)
+          |> Repo.update_all(
+            set: [
+              balance: balance,
+              balance_errors: Enum.map(member.balance_errors, &Map.take(&1, balance_error_fields))
+            ]
+          )
+        end
+      end)
+
+    :ok
+  end
+
+  @doc """
   Compute the `:balance` field of book members.
   """
   def fill_members_balance(members) do

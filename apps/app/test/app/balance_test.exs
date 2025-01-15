@@ -9,6 +9,107 @@ defmodule App.BalanceTest do
   alias App.Balance
   alias App.Balance.BalanceError
 
+  describe "update_book_members_balance/1" do
+    setup do
+      %{book: book_fixture()}
+    end
+
+    test "updates the balance of the members of a book", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book, balance: Money.new!(:EUR, 10))
+
+      member3 =
+        book_member_fixture(book,
+          balance: Money.new!(:EUR, 0),
+          balance_errors: ["an error occured"]
+        )
+
+      member4 = book_member_fixture(book)
+
+      money_transfer =
+        money_transfer_fixture(book, tenant_id: member1.id, amount: Money.new!(:EUR, 10))
+
+      _peer = peer_fixture(money_transfer, member_id: member1.id)
+      _peer = peer_fixture(money_transfer, member_id: member2.id)
+      _peer = peer_fixture(money_transfer, member_id: member3.id)
+
+      Balance.update_book_members_balance(book)
+
+      member1 = get_member_balance(member1.id)
+      assert member1.balance == Money.new!(:EUR, "6.67")
+      assert member1.balance_errors == []
+      member2 = get_member_balance(member2.id)
+      assert member2.balance == Money.new!(:EUR, "-3.33")
+      assert member2.balance_errors == []
+      member3 = get_member_balance(member3.id)
+      assert member3.balance == Money.new!(:EUR, "-3.34")
+      assert member3.balance_errors == []
+      member4 = get_member_balance(member4.id)
+      assert member4.balance == Money.new!(:EUR, 0)
+      assert member4.balance_errors == []
+    end
+
+    test "sets the balance to 0 if there are no transfers", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      Balance.update_book_members_balance(book)
+
+      member1 = get_member_balance(member1.id)
+      assert member1.balance == Money.new!(:EUR, 0)
+      assert member1.balance_errors == []
+      member2 = get_member_balance(member2.id)
+      assert member2.balance == Money.new!(:EUR, 0)
+      assert member2.balance_errors == []
+    end
+
+    test "sets the `:balance_errors` if an error occurs", %{book: book} do
+      member1 = book_member_fixture(book)
+      member2 = book_member_fixture(book)
+
+      money_transfer =
+        money_transfer_fixture(book,
+          tenant_id: member1.id,
+          amount: Money.new!(:EUR, 10),
+          balance_means: :weight_by_revenues
+        )
+
+      _peer = peer_fixture(money_transfer, member_id: member1.id)
+      _peer = peer_fixture(money_transfer, member_id: member2.id)
+
+      Balance.update_book_members_balance(book)
+
+      expected_balance_errors = [
+        %{"kind" => "revenues_missing", "extra" => %{"member_id" => member1.id}},
+        %{"kind" => "revenues_missing", "extra" => %{"member_id" => member2.id}}
+      ]
+
+      member1 = get_member_balance(member1.id)
+      assert member1.balance == Money.new!(:EUR, 0)
+      assert member1.balance_errors == expected_balance_errors
+      member2 = get_member_balance(member2.id)
+      assert member2.balance == Money.new!(:EUR, 0)
+      assert member2.balance_errors == expected_balance_errors
+    end
+
+    # TODO once the BookMember `:balance` field is not virtual anymore,
+    # remove this request and use the BookMember fields directly
+    defp get_member_balance(member_id) do
+      from(book_member in "book_members",
+        where: book_member.id == ^member_id,
+        select: %{
+          balance: book_member.balance,
+          balance_errors: book_member.balance_errors
+        }
+      )
+      |> Repo.one!()
+      |> Map.update!(:balance, fn raw ->
+        {:ok, balance} = Money.Ecto.Composite.Type.load(raw)
+        balance
+      end)
+    end
+  end
+
   describe "fill_members_balance/1" do
     setup do
       %{book: book_fixture()}
