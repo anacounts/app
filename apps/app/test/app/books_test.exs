@@ -9,12 +9,15 @@ defmodule App.BooksTest do
   alias App.Books.Book
   alias App.Books.Members
 
-  @valid_book_name "A valid book name !"
-
   ## Database getters
 
   describe "get_book_of_user/2" do
-    setup :book_with_creator_context
+    setup do
+      book = book_fixture()
+      user = user_fixture()
+      _member = book_member_fixture(book, user_id: user.id, role: :creator)
+      %{book: book, user: user}
+    end
 
     test "returns the book", %{book: book, user: user} do
       user_book = Books.get_book_of_user(book.id, user)
@@ -38,7 +41,12 @@ defmodule App.BooksTest do
   end
 
   describe "get_book_of_user!/2" do
-    setup :book_with_creator_context
+    setup do
+      book = book_fixture()
+      user = user_fixture()
+      _member = book_member_fixture(book, user_id: user.id, role: :creator)
+      %{book: book, user: user}
+    end
 
     test "returns the book", %{book: book, user: user} do
       user_book = Books.get_book_of_user!(book.id, user)
@@ -195,7 +203,7 @@ defmodule App.BooksTest do
         book_attributes(nickname: "Creator nickname")
         |> Books.create_book(user)
 
-      assert book.name == @valid_book_name
+      assert book.name == "A valid book name !"
 
       assert member = Members.get_membership(book, user)
       assert member.role == :creator
@@ -222,7 +230,9 @@ defmodule App.BooksTest do
   ## Name update
 
   describe "update_book_name/2" do
-    setup :book_with_creator_context
+    setup do
+      %{book: book_fixture()}
+    end
 
     test "updates the name of the book", %{book: book} do
       assert {:ok, updated} =
@@ -253,7 +263,9 @@ defmodule App.BooksTest do
   ## Deletion
 
   describe "delete_book!/2" do
-    setup :book_with_creator_context
+    setup do
+      %{book: book_fixture()}
+    end
 
     test "deletes the book", %{book: book} do
       deleted = Books.delete_book!(book)
@@ -354,17 +366,5 @@ defmodule App.BooksTest do
     test "returns `nil` if the invitation token doesn't exist" do
       assert Books.get_book_by_invitation_token("foo") == nil
     end
-  end
-
-  defp book_with_creator_context(_context) do
-    book = book_fixture()
-    user = user_fixture()
-    member = book_member_fixture(book, user_id: user.id, role: :creator)
-
-    %{
-      book: book,
-      user: user,
-      member: member
-    }
   end
 end
