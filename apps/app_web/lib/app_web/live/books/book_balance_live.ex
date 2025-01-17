@@ -4,6 +4,7 @@ defmodule AppWeb.BookBalanceLive do
   import AppWeb.BooksComponents, only: [balance_card: 1]
 
   alias App.Balance
+  alias App.Balance.BalanceError
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Books.Members
@@ -33,15 +34,15 @@ defmodule AppWeb.BookBalanceLive do
         </.link>
       </.card_grid>
 
-      <%= if @transaction_errors != nil do %>
+      <%= if @balance_errors != nil do %>
         <section class="space-y-4" id="transaction-errors">
           <.alert kind={:error}>
             {gettext("Some information is missing to balance the book")}
           </.alert>
-          <.transaction_error_tile
-            :for={transaction_error <- @transaction_errors}
+          <.balance_error_tile
+            :for={balance_error <- @balance_errors}
             book={@book}
-            {transaction_error}
+            balance_error={balance_error}
           />
         </section>
       <% else %>
@@ -75,23 +76,25 @@ defmodule AppWeb.BookBalanceLive do
   end
 
   attr :book, Book, required: true
-  attr :kind, :atom, required: true
-  attr :extra, :map, required: true
+  attr :balance_error, BalanceError, required: true
 
-  defp transaction_error_tile(%{kind: :revenues_missing} = assigns) do
-    ~H"""
-    <.link navigate={~p"/books/#{@book}/members/#{@extra.member}"} class="block">
-      <.tile class="justify-between">
-        <div class="truncate">
-          <span class="label">{@extra.member.nickname}</span>
-          <span class="font-normal">did not set their revenues.</span>
-        </div>
-        <.button kind={:ghost}>
-          {gettext("Fix it")} <.icon name={:chevron_right} />
-        </.button>
-      </.tile>
-    </.link>
-    """
+  defp balance_error_tile(assigns) do
+    case assigns.balance_error.kind do
+      :revenues_missing ->
+        ~H"""
+        <.link navigate={~p"/books/#{@book}/members/#{@balance_error.extra.member_id}"} class="block">
+          <.tile class="justify-between">
+            <div class="truncate">
+              <span class="label">{@balance_error.private.member_nickname}</span>
+              <span class="font-normal">did not set their revenues.</span>
+            </div>
+            <.button kind={:ghost}>
+              {gettext("Fix it")} <.icon name={:chevron_right} />
+            </.button>
+          </.tile>
+        </.link>
+        """
+    end
   end
 
   # Highlight the nickname of the current member
@@ -130,18 +133,18 @@ defmodule AppWeb.BookBalanceLive do
       )
       |> assign_transactions(members)
 
-    {:ok, socket, temporary_assigns: [transaction_errors: []]}
+    {:ok, socket, temporary_assigns: [balance_errors: []]}
   end
 
   defp assign_transactions(socket, members) do
     case Balance.transactions(members) do
       {:ok, transactions} ->
         socket
-        |> assign(transaction_errors: nil)
+        |> assign(balance_errors: nil)
         |> stream(:transactions, transactions)
 
-      {:error, reasons} ->
-        assign(socket, transaction_errors: reasons)
+      {:error, balance_errors} ->
+        assign(socket, balance_errors: balance_errors)
     end
   end
 end
