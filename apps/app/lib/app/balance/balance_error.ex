@@ -14,7 +14,7 @@ defmodule App.Balance.BalanceError do
 
   @primary_key false
   embedded_schema do
-    field :kind, Ecto.Enum, values: [:missing_revenues]
+    field :kind, Ecto.Enum, values: [:revenues_missing]
     field :extra, :map
 
     field :uniq_hash, :string, virtual: true
