@@ -11,6 +11,19 @@ defmodule App.BooksTest do
 
   ## Database getters
 
+  describe "get_book!/1" do
+    test "returns the book" do
+      %{id: id} = book_fixture()
+      assert %{id: ^id} = Books.get_book!(id)
+    end
+
+    test "raises if the book doesn't exist" do
+      assert_raise Ecto.NoResultsError, fn ->
+        Books.get_book!(0)
+      end
+    end
+  end
+
   describe "get_book_of_user/2" do
     setup do
       book = book_fixture()

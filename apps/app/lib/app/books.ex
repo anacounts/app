@@ -15,6 +15,14 @@ defmodule App.Books do
   ## Database getters
 
   @doc """
+  Gets a single book.
+
+  Raises `Ecto.NoResultsError` if the book does not exist.
+  """
+  @spec get_book!(Book.id()) :: Book.t()
+  def get_book!(id), do: Repo.get!(Book, id)
+
+  @doc """
   Gets a single book if it belongs to the user.
 
   Returns `nil` if the book does not exist or does not belong to the user.
