@@ -7,6 +7,7 @@ defmodule App.BalanceTest do
   import App.TransfersFixtures
 
   alias App.Balance
+  alias App.Balance.BalanceError
 
   describe "fill_members_balance/1" do
     setup do
@@ -299,7 +300,7 @@ defmodule App.BalanceTest do
       expected_hash = "revenues_missing_#{member1_id}"
 
       assert member1.balance_errors == [
-               %{
+               %BalanceError{
                  kind: :revenues_missing,
                  uniq_hash: expected_hash,
                  extra: %{member_id: member1_id},
@@ -308,7 +309,7 @@ defmodule App.BalanceTest do
              ]
 
       assert member2.balance_errors == [
-               %{
+               %BalanceError{
                  kind: :revenues_missing,
                  uniq_hash: expected_hash,
                  extra: %{member_id: member1_id},

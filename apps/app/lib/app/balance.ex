@@ -7,11 +7,10 @@ defmodule App.Balance do
 
   alias App.Repo
 
+  alias App.Balance.BalanceError
   alias App.Books.BookMember
   alias App.Transfers
   alias App.Transfers.Peer
-
-  @type error_reasons :: [%{uniq_hash: String.t(), kind: atom(), extra: map(), private: map()}]
 
   @doc """
   Compute the `:balance` field of book members.
@@ -116,14 +115,9 @@ defmodule App.Balance do
   defp maybe_set_weight_by_income_total_weight(transfer, peers_without_revenues) do
     error_reasons =
       Enum.map(peers_without_revenues, fn peer ->
-        %{
-          uniq_hash: "revenues_missing_#{peer.member_id}",
-          kind: :revenues_missing,
-          extra: %{
-            member_id: peer.member_id
-          },
-          private: %{}
-        }
+        BalanceError.new(:revenues_missing, %{
+          member_id: peer.member_id
+        })
       end)
 
     {:error, error_reasons, transfer}
@@ -282,7 +276,7 @@ defmodule App.Balance do
 
   The total sum of balanced money must be equal to 0, otherwise the function will crash.
   """
-  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, error_reasons()}
+  @spec transactions([BookMember.t()]) :: {:ok, [transaction()]} | {:error, [BalanceError.t()]}
   def transactions(members) do
     error_reasons =
       Enum.find_value(members, fn member ->
