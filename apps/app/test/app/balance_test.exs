@@ -298,21 +298,23 @@ defmodule App.BalanceTest do
       member1_id = member1.id
       expected_hash = "revenues_missing_#{member1_id}"
 
-      assert [
+      assert member1.balance_errors == [
                %{
                  kind: :revenues_missing,
-                 uniq_hash: ^expected_hash,
-                 extra: %{member: %{id: ^member1_id}}
+                 uniq_hash: expected_hash,
+                 extra: %{member_id: member1_id},
+                 private: %{member_nickname: "member1"}
                }
-             ] = member1.balance_errors
+             ]
 
-      assert [
+      assert member2.balance_errors == [
                %{
                  kind: :revenues_missing,
-                 uniq_hash: ^expected_hash,
-                 extra: %{member: %{id: ^member1_id}}
+                 uniq_hash: expected_hash,
+                 extra: %{member_id: member1_id},
+                 private: %{member_nickname: "member1"}
                }
-             ] = member2.balance_errors
+             ]
 
       assert Money.equal?(member3.balance, Money.new!(:EUR, -20))
     end

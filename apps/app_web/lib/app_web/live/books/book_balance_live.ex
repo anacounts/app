@@ -77,13 +77,14 @@ defmodule AppWeb.BookBalanceLive do
   attr :book, Book, required: true
   attr :kind, :atom, required: true
   attr :extra, :map, required: true
+  attr :private, :map, required: true
 
   defp transaction_error_tile(%{kind: :revenues_missing} = assigns) do
     ~H"""
-    <.link navigate={~p"/books/#{@book}/members/#{@extra.member}"} class="block">
+    <.link navigate={~p"/books/#{@book}/members/#{@extra.member_id}"} class="block">
       <.tile class="justify-between">
         <div class="truncate">
-          <span class="label">{@extra.member.nickname}</span>
+          <span class="label">{@private.member_nickname}</span>
           <span class="font-normal">did not set their revenues.</span>
         </div>
         <.button kind={:ghost}>

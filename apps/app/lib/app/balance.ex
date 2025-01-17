@@ -11,7 +11,7 @@ defmodule App.Balance do
   alias App.Transfers
   alias App.Transfers.Peer
 
-  @type error_reasons :: [%{uniq_hash: String.t(), kind: atom(), extra: map()}]
+  @type error_reasons :: [%{uniq_hash: String.t(), kind: atom(), extra: map(), private: map()}]
 
   @doc """
   Compute the `:balance` field of book members.
@@ -20,35 +20,30 @@ defmodule App.Balance do
     transfers =
       members
       |> Transfers.list_transfers_of_members()
-      |> preload_peers(members)
+      # Ensure the peers are always returned in the same order,
+      # a different order would result in a different repartition
+      # of the transfers amount.
+      |> Repo.preload(peers: order_by(Peer, asc: :id))
       |> compute_total_peer_weight()
 
     members
     |> reset_members_balance()
     |> adjust_balance_from_transfers(transfers)
+    |> fill_members_balance_errors()
   end
 
-  # Preload peers of transfers and fill their `:member` field.
-  # The member of the peer can be used to create more precise
-  # errors if the computation of the balance is not possible.
-  defp preload_peers(transfers, members) when is_list(transfers) do
-    members_by_id = Map.new(members, &{&1.id, &1})
+  defp fill_members_balance_errors(members) do
+    member_nicknames_by_id = Map.new(members, &{&1.id, &1.nickname})
 
-    transfers
-    # Ensure the peers are always returned in the same order,
-    # a different order would result in a different repartition
-    # of the transfers amount.
-    |> Repo.preload(peers: order_by(Peer, asc: :id))
-    |> Enum.map(&fill_peers_members(&1, members_by_id))
-  end
+    for member <- members do
+      balance_errors =
+        Enum.map(member.balance_errors, fn %{kind: :revenues_missing} = balance_error ->
+          member_nickname = Map.fetch!(member_nicknames_by_id, balance_error.extra.member_id)
+          put_in(balance_error.private[:member_nickname], member_nickname)
+        end)
 
-  defp fill_peers_members(transfer, members_by_id) do
-    Map.update!(transfer, :peers, fn peers ->
-      Enum.map(peers, fn peer ->
-        member = Map.fetch!(members_by_id, peer.member_id)
-        %{peer | member: member}
-      end)
-    end)
+      %{member | balance_errors: balance_errors}
+    end
   end
 
   defp compute_total_peer_weight(transfers) when is_list(transfers) do
@@ -125,8 +120,9 @@ defmodule App.Balance do
           uniq_hash: "revenues_missing_#{peer.member_id}",
           kind: :revenues_missing,
           extra: %{
-            member: peer.member
-          }
+            member_id: peer.member_id
+          },
+          private: %{}
         }
       end)
 
