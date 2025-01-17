@@ -8,6 +8,7 @@ defmodule App.Balance.BalanceConfigsTest do
   import App.TransfersFixtures
 
   alias App.Balance.BalanceConfigs
+  alias App.Balance.CacheUpdaterWorker
 
   describe "get_balance_config_of_member/1" do
     test "returns the balance config of the member" do
@@ -109,6 +110,32 @@ defmodule App.Balance.BalanceConfigsTest do
       {:ok, _} = BalanceConfigs.create_balance_config(member, user_fixture(), %{revenues: 0})
 
       assert Repo.reload(balance_config)
+    end
+  end
+
+  describe "link_balance_config_to_peers/3" do
+    test "links a balance config to the given peers" do
+      balance_config = balance_config_fixture()
+      book = book_fixture()
+      member = book_member_fixture(book)
+      transfer = money_transfer_fixture(book, tenant_id: member.id)
+      peer = peer_fixture(transfer, member_id: member.id)
+
+      :ok = BalanceConfigs.link_balance_config_to_peers(balance_config, [peer], book)
+
+      assert Repo.reload!(peer).balance_config_id == balance_config.id
+    end
+
+    test "schedules a job to update the book members balance" do
+      balance_config = balance_config_fixture()
+      book = book_fixture()
+      member = book_member_fixture(book)
+      transfer = money_transfer_fixture(book, tenant_id: member.id)
+      peer = peer_fixture(transfer, member_id: member.id)
+
+      :ok = BalanceConfigs.link_balance_config_to_peers(balance_config, [peer], book)
+
+      assert_enqueued(worker: CacheUpdaterWorker, args: %{book_id: book.id})
     end
   end
 

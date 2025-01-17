@@ -7,10 +7,10 @@ defmodule App.TransfersTest do
   import App.BooksFixtures
   import App.TransfersFixtures
 
-  alias App.Repo
-
+  alias App.Balance.CacheUpdaterWorker
   alias App.Books.Book
   alias App.Books.BookMember
+  alias App.Repo
   alias App.Transfers
   alias App.Transfers.MoneyTransfer
   alias App.Transfers.Peer
@@ -247,6 +247,18 @@ defmodule App.TransfersTest do
       assert Enum.empty?(transfer.peers)
     end
 
+    test "schedules a job to update the book balance", %{book: book, member: member} do
+      {:ok, _transfer} =
+        Transfers.create_money_transfer(
+          book,
+          member,
+          :payment,
+          money_transfer_attributes(tenant_id: member.id)
+        )
+
+      assert_enqueued(worker: CacheUpdaterWorker, args: %{book_id: book.id})
+    end
+
     test "sets balance means", %{book: book, member: member} do
       assert {:ok, transfer} =
                Transfers.create_money_transfer(
@@ -393,6 +405,16 @@ defmodule App.TransfersTest do
       assert peer.member_id == other_member.id
     end
 
+    test "schedules a job to update the book balance", %{
+      book: book,
+      money_transfer: money_transfer
+    } do
+      assert {:ok, _updated} =
+               Transfers.update_money_transfer(money_transfer, %{})
+
+      assert_enqueued(worker: CacheUpdaterWorker, args: %{book_id: book.id})
+    end
+
     test "does not update book", %{book: book, money_transfer: money_transfer} do
       other_book = book_fixture()
 
@@ -458,6 +480,15 @@ defmodule App.TransfersTest do
       assert deleted_transfer.id == money_transfer.id
     end
 
+    test "schedules a job to update the book balance", %{
+      book: book,
+      money_transfer: money_transfer
+    } do
+      assert {:ok, _deleted_transfer} = Transfers.delete_money_transfer(money_transfer)
+
+      assert_enqueued(worker: CacheUpdaterWorker, args: %{book_id: book.id})
+    end
+
     test "deleted related peers", %{book: book, member: member} do
       money_transfer = money_transfer_fixture(book, tenant_id: member.id)
       _peer = peer_fixture(money_transfer, member_id: member.id)
@@ -493,6 +524,23 @@ defmodule App.TransfersTest do
       assert money_transfer.date == ~D[2020-06-29]
       assert money_transfer.tenant_id == member1.id
       assert money_transfer.balance_means == :divide_equally
+    end
+
+    test "schedules a job to update the book balance", %{
+      book: book,
+      member1: member1,
+      member2: member2
+    } do
+      {:ok, _transfer} =
+        Transfers.create_reimbursement(
+          book,
+          money_transfer_attributes(
+            tenant_id: member1.id,
+            peers: [%{member_id: member2.id}]
+          )
+        )
+
+      assert_enqueued(worker: CacheUpdaterWorker, args: %{book_id: book.id})
     end
 
     test "cannot create a payment or an income", %{book: book, member1: member1, member2: member2} do

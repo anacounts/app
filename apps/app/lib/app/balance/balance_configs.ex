@@ -7,6 +7,7 @@ defmodule App.Balance.BalanceConfigs do
   import Ecto.Query
 
   alias App.Accounts.User
+  alias App.Balance
   alias App.Balance.BalanceConfig
   alias App.Books.BookMember
   alias App.Repo
@@ -85,13 +86,21 @@ defmodule App.Balance.BalanceConfigs do
   @doc """
   Link a balance configuration to a list of peers.
   """
-  @spec link_balance_config_to_peers(BalanceConfig.t(), [Peer.t()]) :: :ok
-  def link_balance_config_to_peers(%BalanceConfig{} = balance_config, peers) do
+  @spec link_balance_config_to_peers(BalanceConfig.t(), [Peer.t()], Book.t()) :: :ok
+  def link_balance_config_to_peers(%BalanceConfig{} = balance_config, peers, book) do
     peer_ids = Enum.map(peers, & &1.id)
 
-    {_, nil} =
-      from([peer: peer] in Peer.base_query(), where: peer.id in ^peer_ids)
-      |> Repo.update_all(set: [balance_config_id: balance_config.id])
+    {:ok, _changes} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update_all(
+        :peers,
+        from([peer: peer] in Peer.base_query(), where: peer.id in ^peer_ids),
+        set: [balance_config_id: balance_config.id]
+      )
+      |> Ecto.Multi.run(:balance_job, fn _repo, _changes ->
+        Balance.schedule_balance_update(book.id)
+      end)
+      |> Repo.transaction()
 
     :ok
   end
