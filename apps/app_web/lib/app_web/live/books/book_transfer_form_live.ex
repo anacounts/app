@@ -321,12 +321,13 @@ defmodule AppWeb.BookTransferFormLive do
       select:
         struct(money_transfer, [
           :id,
-          :type,
           :label,
-          :date,
-          :balance_means,
-          :tenant_id,
           :amount,
+          :type,
+          :date,
+          :book_id,
+          :tenant_id,
+          :balance_means,
           peers: [
             :id,
             :member_id,

@@ -5,6 +5,7 @@ defmodule App.Transfers do
 
   import Ecto.Query
 
+  alias App.Balance
   alias App.Books.Book
   alias App.Books.BookMember
   alias App.Repo
@@ -173,6 +174,9 @@ defmodule App.Transfers do
         end,
         []
       )
+      |> Ecto.Multi.run(:balance_job, fn _repo, _changes ->
+        Balance.schedule_balance_update(book.id)
+      end)
       |> Repo.transaction()
 
     case result do
@@ -187,9 +191,18 @@ defmodule App.Transfers do
   @spec update_money_transfer(MoneyTransfer.t(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def update_money_transfer(%MoneyTransfer{} = money_transfer, attrs) do
-    money_transfer
-    |> MoneyTransfer.changeset(attrs)
-    |> Repo.update()
+    result =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:money_transfer, MoneyTransfer.changeset(money_transfer, attrs))
+      |> Ecto.Multi.run(:balance_job, fn _repo, _changes ->
+        Balance.schedule_balance_update(money_transfer.book_id)
+      end)
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{money_transfer: money_transfer}} -> {:ok, money_transfer}
+      {:error, :money_transfer, changeset, _changes} -> {:error, changeset}
+    end
   end
 
   @doc """
@@ -198,7 +211,18 @@ defmodule App.Transfers do
   @spec delete_money_transfer(MoneyTransfer.t()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def delete_money_transfer(%MoneyTransfer{} = money_transfer) do
-    Repo.delete(money_transfer)
+    result =
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete(:money_transfer, money_transfer)
+      |> Ecto.Multi.run(:balance_job, fn _repo, _changes ->
+        Balance.schedule_balance_update(money_transfer.book_id)
+      end)
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{money_transfer: money_transfer}} -> {:ok, money_transfer}
+      {:error, :money_transfer, changeset, _changes} -> {:error, changeset}
+    end
   end
 
   @doc """
@@ -216,13 +240,26 @@ defmodule App.Transfers do
   @spec create_reimbursement(Book.t(), map()) ::
           {:ok, MoneyTransfer.t()} | {:error, Ecto.Changeset.t()}
   def create_reimbursement(%Book{} = book, attrs) do
-    %MoneyTransfer{
-      book_id: book.id,
-      type: :reimbursement,
-      balance_means: :divide_equally
-    }
-    |> MoneyTransfer.reimbursement_changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %MoneyTransfer{
+        book_id: book.id,
+        type: :reimbursement,
+        balance_means: :divide_equally
+      }
+      |> MoneyTransfer.reimbursement_changeset(attrs)
+
+    result =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:reimbursement, changeset)
+      |> Ecto.Multi.run(:abalnce_job, fn _repo, _changes ->
+        Balance.schedule_balance_update(book.id)
+      end)
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{reimbursement: reimbursement}} -> {:ok, reimbursement}
+      {:error, :reimbursement, changeset, _changes} -> {:error, changeset}
+    end
   end
 
   @doc """

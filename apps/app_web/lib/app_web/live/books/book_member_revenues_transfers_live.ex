@@ -153,13 +153,13 @@ defmodule AppWeb.BookMemberRevenuesTransfersLive do
 
   @impl Phoenix.LiveView
   def handle_event("submit", params, socket) do
-    book_member = socket.assigns.book_member
+    %{book: book, book_member: book_member} = socket.assigns
 
     peer_ids = Map.get(params, "peer_ids", [])
     peers = list_peers_of_member(peer_ids, book_member)
 
     balance_config = BalanceConfigs.get_balance_config_of_member(book_member)
-    :ok = BalanceConfigs.link_balance_config_to_peers(balance_config, peers)
+    :ok = BalanceConfigs.link_balance_config_to_peers(balance_config, peers, book)
 
     redirect_path = redirect_path(book_member, socket.assigns.live_action)
     {:noreply, push_navigate(socket, to: redirect_path)}
