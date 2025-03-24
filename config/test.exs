@@ -26,9 +26,6 @@ config :app, App.Vault,
        iv_length: 12}
   ]
 
-# Prevent Oban from automatically running jobs and plugins during test runs
-config :app, Oban, testing: :manual
-
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :app_web, AppWeb.Endpoint,
