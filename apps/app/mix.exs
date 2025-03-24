@@ -57,7 +57,7 @@ defmodule App.MixProject do
       {:finch, "~> 0.18"},
 
       # Job scheduler
-      {:oban, "~> 2.18"},
+      {:oban, "~> 2.18", runtime: false},
 
       # Code analysis
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}

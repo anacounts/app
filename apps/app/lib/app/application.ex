@@ -17,8 +17,7 @@ defmodule App.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: App.PubSub},
       # Start Finch
-      {Finch, name: Swoosh.Finch},
-      {Oban, Application.fetch_env!(:app, Oban)}
+      {Finch, name: Swoosh.Finch}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: App.Supervisor)

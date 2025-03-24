@@ -97,17 +97,6 @@ if config_env() == :prod do
     identity: ses_identity
 end
 
-# ## Oban
-
-config :app, Oban,
-  engine: Oban.Engines.Basic,
-  repo: App.Repo,
-  queues: [default: 10],
-  plugins: [
-    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 30},
-    {Oban.Plugins.Lifeline, rescue_after: to_timeout(minute: 30)}
-  ]
-
 # ## Monitoring
 
 ## Sentry
@@ -120,10 +109,4 @@ config :app, Oban,
 config :sentry,
   client: Sentry.FinchClient,
   enable_source_code_context: true,
-  root_source_code_path: File.cwd!(),
-  integrations: [
-    oban: [
-      capture_errors: true,
-      cron: [enabled: true]
-    ]
-  ]
+  root_source_code_path: File.cwd!()

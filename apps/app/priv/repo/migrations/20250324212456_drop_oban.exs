@@ -2,7 +2,7 @@ defmodule App.Repo.Migrations.DropOban do
   use Ecto.Migration
 
   def up do
-    Oban.Migration.down()
+    Oban.Migration.down(version: 1)
   end
 
   def down do
