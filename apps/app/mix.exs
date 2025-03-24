@@ -55,10 +55,6 @@ defmodule App.MixProject do
       {:swoosh, "~> 1.13"},
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.18"},
-
-      # Job scheduler
-      {:oban, "~> 2.18", runtime: false},
-
       # Code analysis
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
